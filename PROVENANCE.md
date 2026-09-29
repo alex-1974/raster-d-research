@@ -15,6 +15,20 @@ Selected source paths:
 - `experiments/**`
 - `docs/research/**`
 
+## Snapshot
+
+- destination repository: `alex-1974/raster-d-research`
+- exact snapshot commit: `dee2e0097a335139362d936b4c8bd47c2d21af17`
+- selected files: **228**
+- selected bytes: **2,840,033**
+
+The imported research corpus was independently verified before commit:
+
+- identical relative paths;
+- identical file modes;
+- identical Git blob identities;
+- identical total byte count.
+
 ## History model
 
 This split intentionally does not rewrite `raster-d` history.
