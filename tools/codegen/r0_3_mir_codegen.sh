@@ -56,7 +56,10 @@ echo
 echo '=== RESOLVE DUB IMPORT PATHS ==='
 
 mapfile -t DUB_IMPORT_PATHS < <(
-    dub describe         --compiler=ldc2         --data=import-paths         --data-list
+    dub describe \
+        --compiler=ldc2 \
+        --data=import-paths \
+        --data-list
 )
 
 IMPORT_FLAGS=(
@@ -71,8 +74,8 @@ for path in "${DUB_IMPORT_PATHS[@]}"; do
     fi
 done
 
-printf '%s
-' "${DUB_IMPORT_PATHS[@]}"     > "$OUT/import-paths.txt"
+printf '%s\n' "${DUB_IMPORT_PATHS[@]}" \
+    > "$OUT/import-paths.txt"
 
 echo "resolved ${#DUB_IMPORT_PATHS[@]} DUB import path(s)"
 
@@ -95,16 +98,13 @@ echo '=== WRITE ENVIRONMENT METADATA ==='
     ldc2 --version
     echo
     echo 'common_flags:'
-    printf '%s
-' "${COMMON_FLAGS[@]}"
+    printf '%s\n' "${COMMON_FLAGS[@]}"
     echo
     echo 'cpu_flags:'
-    printf '%s
-' "${CPU_FLAGS[@]}"
+    printf '%s\n' "${CPU_FLAGS[@]}"
     echo
     echo 'import_paths:'
-    printf '%s
-' "${DUB_IMPORT_PATHS[@]}"
+    printf '%s\n' "${DUB_IMPORT_PATHS[@]}"
 } > "$OUT/environment.txt"
 
 echo
@@ -112,7 +112,14 @@ echo '=== GENERATE NATIVE ASSEMBLY ==='
 
 rm -f "$OUT/mir_codegen.s"
 
-ldc2     "${COMMON_FLAGS[@]}"     "${CPU_FLAGS[@]}"     "${IMPORT_FLAGS[@]}"     -c     -output-s     "-of=$OUT/mir_codegen.s"     mir_codegen.d
+ldc2 \
+    "${COMMON_FLAGS[@]}" \
+    "${CPU_FLAGS[@]}" \
+    "${IMPORT_FLAGS[@]}" \
+    -c \
+    -output-s \
+    "-of=$OUT/mir_codegen.s" \
+    mir_codegen.d
 
 test -s "$OUT/mir_codegen.s"
 
@@ -123,7 +130,14 @@ echo '=== GENERATE LLVM IR ==='
 
 rm -f "$OUT/mir_codegen.ll"
 
-ldc2     "${COMMON_FLAGS[@]}"     "${CPU_FLAGS[@]}"     "${IMPORT_FLAGS[@]}"     -c     -output-ll     "-of=$OUT/mir_codegen.ll"     mir_codegen.d
+ldc2 \
+    "${COMMON_FLAGS[@]}" \
+    "${CPU_FLAGS[@]}" \
+    "${IMPORT_FLAGS[@]}" \
+    -c \
+    -output-ll \
+    "-of=$OUT/mir_codegen.ll" \
+    mir_codegen.d
 
 test -s "$OUT/mir_codegen.ll"
 
@@ -160,21 +174,24 @@ echo '=== CODEGEN SUMMARY ==='
     if [ "$ARCH_NAME" = "x86-64" ]; then
         ymm_mentions="$(
             {
-                grep -Eo '\bymm[0-9]+\b'                     "$OUT/mir_codegen.s" || true
+                grep -Eo '\bymm[0-9]+\b' \
+                    "$OUT/mir_codegen.s" || true
             } |
             wc -l
         )"
 
         vmulps_mentions="$(
             {
-                grep -Eo '\bvmulps\b'                     "$OUT/mir_codegen.s" || true
+                grep -Eo '\bvmulps\b' \
+                    "$OUT/mir_codegen.s" || true
             } |
             wc -l
         )"
 
         vaddps_mentions="$(
             {
-                grep -Eo '\bvaddps\b'                     "$OUT/mir_codegen.s" || true
+                grep -Eo '\bvaddps\b' \
+                    "$OUT/mir_codegen.s" || true
             } |
             wc -l
         )"
@@ -185,28 +202,32 @@ echo '=== CODEGEN SUMMARY ==='
     else
         vector_4s_mentions="$(
             {
-                grep -Eo '\bv[0-9]+\.4s\b'                     "$OUT/mir_codegen.s" || true
+                grep -Eo '\bv[0-9]+\.4s\b' \
+                    "$OUT/mir_codegen.s" || true
             } |
             wc -l
         )"
 
         fmul_mentions="$(
             {
-                grep -Eo '\bfmul\b'                     "$OUT/mir_codegen.s" || true
+                grep -Eo '\bfmul\b' \
+                    "$OUT/mir_codegen.s" || true
             } |
             wc -l
         )"
 
         fadd_mentions="$(
             {
-                grep -Eo '\bfadd\b'                     "$OUT/mir_codegen.s" || true
+                grep -Eo '\bfadd\b' \
+                    "$OUT/mir_codegen.s" || true
             } |
             wc -l
         )"
 
         fmla_mentions="$(
             {
-                grep -Eo '\bfmla\b'                     "$OUT/mir_codegen.s" || true
+                grep -Eo '\bfmla\b' \
+                    "$OUT/mir_codegen.s" || true
             } |
             wc -l
         )"
@@ -235,7 +256,8 @@ awk '
     printing && count >= 100 {
         printing = 0
     }
-' "$OUT/mir_codegen.s"     | tee "$OUT/contiguous-flat-excerpt.txt"
+' "$OUT/mir_codegen.s" \
+    | tee "$OUT/contiguous-flat-excerpt.txt"
 
 echo
 echo '=== RAW FLAT ASSEMBLY EXCERPT ==='
@@ -254,7 +276,8 @@ awk '
     printing && count >= 100 {
         printing = 0
     }
-' "$OUT/mir_codegen.s"     | tee "$OUT/raw-flat-excerpt.txt"
+' "$OUT/mir_codegen.s" \
+    | tee "$OUT/raw-flat-excerpt.txt"
 
 echo
 echo "FAILURES=$failures"
