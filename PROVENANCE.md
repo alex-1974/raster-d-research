@@ -41,3 +41,21 @@ in `raster-d`.
 
 Research does not become public API merely by existing here. Promotion into
 production remains an explicit production change.
+
+## Supplemental preserved artifacts
+
+Two research-specific R0.3 support artifacts lived outside the initial
+experiments/** and docs/research/** snapshot and were preserved separately
+before their removal from the current raster-d production tree.
+
+Source repository: alex-1974/raster-d
+
+Preserved artifacts:
+
+- tools/codegen/r0_3_mir_codegen.sh
+  - Git blob: 03bad82511f3d42503c93766bef8ac3e45b541ae
+- .github/workflows/architecture.yml
+  - Git blob: 6872b60ec0ece0d8c2d73719591d3c2853af5620
+
+Both destination blobs were verified to be identical to their raster-d
+source blobs.
