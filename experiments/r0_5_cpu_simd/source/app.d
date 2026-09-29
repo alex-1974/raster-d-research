@@ -1,0 +1,283 @@
+module app;
+
+import affine_bench : runAffineMatrix;
+import conversion_bench : runConversionMatrix;
+import plane_extraction_bench : runPlaneExtractionMatrix;
+import lut_bench : runLutMatrix;
+import reduction_bench : runReductionMatrix;
+import float_reduction_bench : runFloatReductionMatrix;
+import float_reduction_semantics : runFloatReductionSemantics;
+import histogram_bench : runHistogramMatrix;
+import region_stride_bench : runRegionStrideMatrix;
+import neighbourhood_bench : runNeighbourhoodMatrix;
+import neighbourhood_address_shape_bench : runNeighbourhoodAddressShapeMatrix;
+import neighbourhood_alias_path_bench : runNeighbourhoodAliasPath;
+import neighbourhood_sliding_bench : runNeighbourhoodSliding;
+import neighbourhood_view_bench : runNeighbourhoodViewMatrix;
+import neighbourhood_qualification_bench : runNeighbourhoodQualificationMatrix;
+import neighbourhood_parallel_bench : runNeighbourhoodParallelMatrix;
+import neighbourhood_direction_matrix_bench : runNeighbourhoodDirectionMatrix;
+import neighbourhood_signed_stride_bench : runNeighbourhoodSignedStrideMatrix;
+import corpus : fillDeterministic, fingerprint;
+import harness : measurePair;
+import kernels :
+    copyScalar,
+    copySlice,
+    fillScalar,
+    fillSlice;
+
+import raster.internal.r0_5_abstraction_bench :
+    copyCheckedContiguous1D,
+    copyMirContiguous1D,
+    makeContiguousCopyFixture;
+
+import std.stdio : writefln, writeln;
+
+enum size_t elementCount = 1024 * 1024;
+enum size_t repetitions =  nineRepetitions;
+enum size_t warmupRounds = 2;
+enum size_t nineRepetitions = 9;
+enum float fillValue = 0.375f;
+
+private void printPair(
+    string family,
+    string firstLabel,
+    string secondLabel,
+    const(long)[] firstRaw,
+    const(long)[] secondRaw,
+    long firstMedian,
+    long secondMedian
+)
+{
+    writefln(
+        "%s %s_median_ns=%s %s_median_ns=%s ratio_second_over_first=%.6f",
+        family,
+        firstLabel,
+        firstMedian,
+        secondLabel,
+        secondMedian,
+        cast(double) secondMedian / cast(double) firstMedian
+    );
+
+    writefln(
+        "%s %s_raw_ns=%(%s,%)",
+        family,
+        firstLabel,
+        firstRaw
+    );
+
+    writefln(
+        "%s %s_raw_ns=%(%s,%)",
+        family,
+        secondLabel,
+        secondRaw
+    );
+}
+
+int main()
+{
+    auto source = new float[elementCount];
+    auto destination = new float[elementCount];
+
+    fillDeterministic(source, 0x5230_3500_2026_0929UL);
+    const sourceFingerprint = fingerprint(source);
+
+    copyScalar(source, destination);
+    if (fingerprint(destination) != sourceFingerprint)
+    {
+        writeln("copy_scalar correctness preflight failed");
+        return 1;
+    }
+
+    copySlice(source, destination);
+    if (fingerprint(destination) != sourceFingerprint)
+    {
+        writeln("copy_slice correctness preflight failed");
+        return 1;
+    }
+
+    fillScalar(destination, fillValue);
+    const fillFingerprint = fingerprint(destination);
+
+    fillSlice(destination, fillValue);
+    if (fingerprint(destination) != fillFingerprint)
+    {
+        writeln("fill_slice correctness preflight failed");
+        return 1;
+    }
+
+    const copySamples = measurePair!(
+        () => copyScalar(source, destination),
+        () => copySlice(source, destination)
+    )(
+        repetitions,
+        warmupRounds
+    );
+
+    if (fingerprint(destination) != sourceFingerprint)
+    {
+        writeln("copy benchmark postflight failed");
+        return 1;
+    }
+
+    printPair(
+        "copy",
+        "scalar",
+        "slice",
+        copySamples.first.nanoseconds,
+        copySamples.second.nanoseconds,
+        copySamples.first.median,
+        copySamples.second.median
+    );
+
+    enum size_t rasterWidth = 1024;
+    enum size_t rasterHeight = elementCount / rasterWidth;
+
+    auto rasterFixture =
+        makeContiguousCopyFixture(
+            source,
+            destination,
+            rasterWidth,
+            rasterHeight
+        );
+
+    if (!copyMirContiguous1D(
+        rasterFixture.source,
+        rasterFixture.target
+    ))
+    {
+        writeln("raster Mir contiguous1D preflight failed");
+        return 1;
+    }
+
+    if (fingerprint(destination) != sourceFingerprint)
+    {
+        writeln("raster Mir contiguous1D fingerprint failed");
+        return 1;
+    }
+
+    if (!copyCheckedContiguous1D(
+        rasterFixture.source,
+        rasterFixture.target
+    ))
+    {
+        writeln("raster checked contiguous1D preflight failed");
+        return 1;
+    }
+
+    if (fingerprint(destination) != sourceFingerprint)
+    {
+        writeln("raster checked contiguous1D fingerprint failed");
+        return 1;
+    }
+
+    const abstractionSamples = measurePair!(
+        () => copyMirContiguous1D(
+            rasterFixture.source,
+            rasterFixture.target
+        ),
+        () => copyCheckedContiguous1D(
+            rasterFixture.source,
+            rasterFixture.target
+        )
+    )(
+        repetitions,
+        warmupRounds
+    );
+
+    if (fingerprint(destination) != sourceFingerprint)
+    {
+        writeln("raster abstraction benchmark postflight failed");
+        return 1;
+    }
+
+    printPair(
+        "raster_copy",
+        "mir_contiguous1d",
+        "checked_contiguous1d",
+        abstractionSamples.first.nanoseconds,
+        abstractionSamples.second.nanoseconds,
+        abstractionSamples.first.median,
+        abstractionSamples.second.median
+    );
+
+    const fillSamples = measurePair!(
+        () => fillScalar(destination, fillValue),
+        () => fillSlice(destination, fillValue)
+    )(
+        repetitions,
+        warmupRounds
+    );
+
+    const finalFingerprint = fingerprint(destination);
+    if (finalFingerprint != fillFingerprint)
+    {
+        writeln("fill benchmark postflight failed");
+        return 1;
+    }
+
+    printPair(
+        "fill",
+        "scalar",
+        "slice",
+        fillSamples.first.nanoseconds,
+        fillSamples.second.nanoseconds,
+        fillSamples.first.median,
+        fillSamples.second.median
+    );
+
+    writefln(
+        "elements=%s source_fingerprint=%016x fill_fingerprint=%016x",
+        elementCount,
+        sourceFingerprint,
+        finalFingerprint
+    );
+
+    if (runAffineMatrix() != 0)
+        return 1;
+
+    if (runConversionMatrix() != 0)
+        return 1;
+
+    if (runPlaneExtractionMatrix() != 0)
+        return 1;
+
+    if (runLutMatrix() != 0)
+        return 1;
+
+    if (runReductionMatrix() != 0)
+        return 1;
+
+    if (runFloatReductionMatrix() != 0)
+        return 1;
+
+    runFloatReductionSemantics();
+
+    if (runHistogramMatrix() != 0)
+        return 1;
+
+    if (runRegionStrideMatrix() != 0)
+        return 1;
+
+    if (runNeighbourhoodMatrix() != 0)
+        return 1;
+
+    if (runNeighbourhoodSignedStrideMatrix() != 0)
+        return 1;
+    if (runNeighbourhoodDirectionMatrix() != 0)
+        return 1;
+    if (runNeighbourhoodAddressShapeMatrix() != 0)
+        return 1;
+    if (runNeighbourhoodAliasPath() != 0)
+        return 1;
+    if (runNeighbourhoodSliding() != 0)
+        return 1;
+    if (runNeighbourhoodViewMatrix() != 0)
+        return 1;
+    if (runNeighbourhoodQualificationMatrix() != 0)
+        return 1;
+    if (runNeighbourhoodParallelMatrix() != 0)
+        return 1;
+
+    return 0;
+}
