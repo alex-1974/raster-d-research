@@ -3,6 +3,9 @@ module app;
 import std.math : fma;
 import std.stdio : writeln;
 
+import raster.research.m2_point_transform_contract.raster_candidate :
+    runRasterCandidateMatrix;
+
 
 /*
  * This experiment deliberately isolates semantic questions from raster-d
@@ -160,6 +163,8 @@ void transformCollapsedDestination(
 
 void main()
 {
+    assert(runRasterCandidateMatrix());
+
     {
         const float[4] source =
             [1.0f, 2.0f, 3.0f, 4.0f];
