@@ -1,6 +1,6 @@
 # Cache Identity Boundary Research
 
-Status: active research. E8.1 complete.
+Status: active research. E8.1 through E8.3 complete.
 
 Issue: raster-d-research #5
 
@@ -160,3 +160,176 @@ Later experiments must compare whether raster-d should:
 
 The preferred production shape is the one that prevents false hits while
 requiring raster-d to know the least source-domain semantics.
+
+
+## 9. E8.2 — caller-owned generic key responsibility
+
+Status: **PASS** on DMD 2.111.0 and LDC 1.41.0.
+
+Verified research head:
+
+`3948ade028663d171e621d4b9bb2308748e5d135`
+
+Verified raster-d develop:
+
+`8dc3180979c908f305274adab8f78b61ecfe7f14`
+
+GitHub Actions run:
+
+`36708813685`
+
+Both compiler jobs produced:
+
+```text
+E8.2 PASS: caller-owned generic keys preserve semantics without raster-d source knowledge
+```
+
+The E8.2 cache is generic over `Key` and does not inspect any source-domain
+fields.
+
+The caller-owned key fixtures cover:
+
+- procedural sources;
+- in-memory sources;
+- scientific field schemas;
+- block-backed sources;
+- fully opaque caller keys;
+- automatically assigned source-instance IDs.
+
+Measured conclusions:
+
+1. raster-d cache machinery does not need to know the decomposition of source,
+   generation, region or schema identity if the caller supplies one key with
+   correct equality semantics;
+2. two separately constructed but semantically equivalent procedural sources
+   can deliberately share one key and reuse one value;
+3. two sources with equal logical extents but different behavior remain
+   distinct when the caller key distinguishes them;
+4. generation changes and schema changes can invalidate identity without cache
+   machinery understanding either concept;
+5. provider block geometry remains absent from identity;
+6. resident layout remains outside semantic identity;
+7. automatic source-instance IDs are safe against false hits but
+   over-discriminate semantically equivalent source instances and therefore
+   cause avoidable misses;
+8. D template instantiation already distinguishes typed cache values, so E8.2
+   does not justify a mandatory duplicate runtime sample-type token.
+
+### Interim ownership conclusion
+
+The strongest candidate is now:
+
+```text
+cache mechanics own storage / lookup
+caller owns semantic key construction
+```
+
+rather than:
+
+```text
+raster-d owns one universal source/schema/generation identity model
+```
+
+This remains an interim result until real retained RasterLease integration is
+tested.
+
+## 10. E8.3 — compile-time hash/equality specialization
+
+Status: **PASS** on DMD 2.111.0 and LDC 1.41.0.
+
+Final verified research head:
+
+`0bc7fd9d5c8815261eb50b839afdac5f8bcf4be2`
+
+Verified raster-d develop:
+
+`8dc3180979c908f305274adab8f78b61ecfe7f14`
+
+GitHub Actions run:
+
+`36709070680`
+
+Both compiler jobs produced:
+
+```text
+E8.3 PASS: compile-time hash/equality specialization keeps identity lookup @nogc
+```
+
+E8.3 uses:
+
+```d
+HashedIdentityCache!(
+    Key,
+    Value,
+    SlotCount,
+    hashKey,
+    sameKey
+)
+```
+
+where both `hashKey` and `sameKey` are alias template parameters.
+
+The fixed-capacity open-addressed lookup and insertion paths remain:
+
+```text
+@safe pure nothrow @nogc
+```
+
+in the experiment.
+
+This demonstrates that a generic caller-owned identity model does not require:
+
+- a boxed runtime key object;
+- inheritance;
+- a universal key base class;
+- dynamic allocation merely for identity dispatch;
+- runtime source-type switching.
+
+Different key domains instantiate specialized cache code.
+
+### D-language correction encountered
+
+The first E8.3 run failed identically on DMD and LDC because the test code used
+two invalid D source forms:
+
+1. `auto` initialized from a `const` struct retained the const qualification
+   and was then mutated;
+2. temporary struct rvalues were passed to `ref const` parameters.
+
+The experiment was corrected by constructing the changed keys explicitly and by
+passing named lvalue keys.
+
+No hash/equality design change was needed.
+
+This is ordinary D type/reference semantics, not evidence against the generic
+key approach.
+
+## 11. Identity candidate comparison
+
+| Candidate | False-hit safety | Semantic reuse across equivalent source instances | raster-d source-domain coupling | Specializable hot path | Current result |
+| --- | --- | --- | --- | --- | --- |
+| Universal raster-d structural source/schema key | potentially strong | possible only if raster-d understands equivalence | high | yes | reject as mandatory generic contract |
+| Source capability returning identity token | strong if source implements correctly | source-dependent | medium | yes | defer / possibly optional adapter capability |
+| Caller-owned generic key | strong if caller contract is correct | yes | minimal | yes, E8.3 | strongest KEEP candidate |
+| Automatic source-instance ID | strong against false hits | no | low | yes | reject as sole generic identity |
+| Structural source configuration derived by raster-d | unknowable generically | potentially | high / domain-specific | possible | caller responsibility, not raster-d |
+| No reusable cache machinery in raster-d | avoids raster-d identity contract | consumer-specific | none | consumer-specific | still possible, but duplicates generic mechanics |
+
+The remaining major gate is real retained-value integration.
+
+## 12. Next experiment — E8.4 retained identity integration
+
+E8.4 must combine caller-owned identity with real raster-d ownership:
+
+- cache values are real `RasterLease`;
+- same semantic key reuses retained data;
+- a copied lease survives independently of cache storage;
+- generation changes produce misses;
+- different source behavior with equal logical extent produces no false hit;
+- provider block geometry remains source-local;
+- retained scientific/multi-plane storage remains compatible with caller-owned
+  identity;
+- semantic identity remains separate from resident stride/padding.
+
+Only after E8.4 passes should Issue #5 move toward final KEEP / REJECT / DEFER
+conclusions.
