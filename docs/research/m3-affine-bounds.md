@@ -69,3 +69,75 @@ If the correctness gates hold, Production should prefer one reusable checked
 physical-bounds stage inside or immediately adjacent to the affine relation
 layer. Individual operations should not duplicate unchecked min/max stride
 arithmetic.
+
+
+## Gate 1 result — bounded-domain correctness
+
+Research head:
+
+```text
+ea98f22ce8ca619cd8d18ad175788b8d3891d88b
+```
+
+Workflow:
+
+```text
+M3 Affine Bounds Research #4
+run 36768200508
+DMD 2.111: success
+LDC 1.41: success
+```
+
+Both compilers produced the same deterministic result:
+
+```text
+m3_affine_bounds_sparse_counterexample PASS
+m3_affine_bounds_correctness PASS
+cases=100000
+fast_rejects=68105
+overlapping_bounds_but_disjoint=4160
+exact_mismatches=0
+```
+
+Interpretation:
+
+- no tested case produced a false `disjoint` fast-reject;
+- the fast-reject discharged 68.105 / 100.000 cases without needing the exact
+  relation;
+- 4.160 cases explicitly demonstrated why bounding-range overlap cannot be
+  treated as sample overlap;
+- the existing exact relation agreed with direct finite enumeration whenever
+  it returned a non-arithmetic-failure result;
+- positive/negative/zero row and sample strides, empty/small rectangles,
+  multiple sample sizes and differently shaped rectangles are represented in
+  the deterministic corpus.
+
+Gate 1 therefore supports the one-way rule:
+
+```text
+provably disjoint bounds -> exact sample relation is disjoint
+```
+
+It does not justify:
+
+```text
+overlapping bounds -> sample overlap
+```
+
+## Remaining gates
+
+Before Production promotion:
+
+1. implement checked address/offset arithmetic covering `size_t.max`,
+   `ptrdiff_t.min`, large extents and overflow boundaries;
+2. prove the checked fast-reject never changes an exact overlap result into
+   disjoint;
+3. preserve the current exact classifier whenever bounds overlap or cannot be
+   represented;
+4. benchmark the relation stage itself and representative Production consumers;
+5. decide whether the optimization belongs inside
+   `classifySameTypeAffine2DRectanglesByteOverlap` or in one reusable
+   validated-plane prefilter immediately above it;
+6. qualify differently shaped neighbourhood source/output rectangles;
+7. assess cross-type reuse separately rather than assuming same-type evidence
+   applies.
