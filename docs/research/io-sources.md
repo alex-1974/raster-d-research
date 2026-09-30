@@ -437,6 +437,133 @@ One remaining experiment is required before synthesis: demonstrate that a
 source adapter whose own internal storage uses fixed blocks can still satisfy
 arbitrary logical requests without leaking provider/block alignment into the
 generic materialization contract.
+## 16. Prototype D result — provider/block independence
+
+Status: PASS on both DMD and LDC.
+
+Verified:
+
+- source-internal fixed blocks of 16 x 8;
+- logical request origin deliberately misaligned on both axes;
+- logical request spanning multiple internal blocks;
+- caller-owned padded resident destination;
+- correct logical reconstruction independent of internal block geometry;
+- generic materialization boundary receives no provider-block metadata.
+
+Conclusion:
+
+Provider-native block/tile geometry is not required in the generic
+materialization contract. It remains an adapter/source implementation detail.
+
+## 17. R0.6 synthesis
+
+R0.6 now has four passing prototype classes on both DMD and LDC:
+
+A. caller-owned contiguous and padded destination;
+B. source-owned retained/adopted result with PRE-COMMIT ownership preservation;
+C. non-image two-plane interleaved padded scientific/vector-field source;
+D. arbitrary logical request over a fixed-block internal source representation.
+
+Together these establish the following production direction.
+
+### KEEP
+
+- logical request geometry independent of provider/source block geometry;
+- request/dependency planning separate from materialization;
+- caller-owned resident destination as the primary materialization path;
+- `WritableRasterView!T` as the resident write capability;
+- explicit resident layout/stride semantics already carried by raster-d;
+- retained/adopted source output as an optional secondary capability;
+- logical/global placement outside resident `RasterView` geometry;
+- package-internal source/materialization orchestration first;
+- generic source logic independent of image semantics.
+
+### REJECT from the minimal M1.3 contract
+
+- provider tile/block identity;
+- cache-block identity;
+- scheduler/task ownership;
+- thread-pool ownership;
+- GDAL dataset/band objects;
+- codec-specific objects;
+- image metadata, CRS or pyramid semantics;
+- mandatory contiguous storage;
+- mandatory source-owned allocation;
+- mandatory runtime inheritance/virtual dispatch;
+- border policy;
+- resampling policy.
+
+### DEFER
+
+- public `RasterSource` abstraction;
+- public source metadata type;
+- asynchronous/future-based materialization;
+- cancellation token shape;
+- prefetch hints;
+- cache integration;
+- public source-error hierarchy;
+- borrowed source-output capability;
+- zero-copy retained-output promotion beyond the existing owned-import path.
+
+## 18. Recommended minimal M1.3 production slice
+
+M1.3 should not introduce a public source interface.
+
+The recommended first production slice is a package-internal synchronous
+materialization orchestration helper that combines:
+
+    RequestMaterializationPlan
+        + source callable/capability
+        + caller-owned WritableRasterView!T
+        -> materialization success/failure
+
+Required semantics:
+
+1. the logical source region is exactly `plan.dependency.validInput`;
+2. the destination geometry must match `plan.residentInput`;
+3. logical placement is never encoded into resident pointer geometry;
+4. the source receives no provider/cache/scheduler concepts;
+5. caller owns destination allocation and lifetime;
+6. materialization performs no hidden allocation in the generic orchestration layer;
+7. failure is reported before execution proceeds;
+8. context deficit remains observable from the plan and is not interpreted as border policy;
+9. source-specific diagnostics remain adapter-owned;
+10. the first orchestration helper remains package-internal until multiple production consumers justify public promotion.
+
+### Candidate shape
+
+Conceptually only, not yet frozen syntax:
+
+    bool tryMaterializeRequest(
+        plan,
+        source,
+        writableDestination
+    );
+
+`source` should initially be a compile-time/callable capability rather than a
+public inheritance hierarchy.
+
+Prototype B remains evidence that adapters may separately produce retained
+`RasterLease` values when zero-copy adoption is appropriate, but that path
+does not need to be part of the first M1.3 orchestration contract.
+
+## 19. R0.6 completion decision
+
+R0.6 is COMPLETE as research evidence.
+
+The completion gate is satisfied:
+
+- multiple materially different source/materialization shapes passed;
+- a non-image consumer passed;
+- multi-plane and strided resident storage passed;
+- caller-owned and source-owned ownership models passed;
+- PRE-COMMIT ownership failure semantics were exercised;
+- provider block geometry was proven unnecessary at the generic boundary;
+- DMD and LDC passed;
+- a specific minimal M1.3 production slice is now justified.
+
+Promotion into `raster-d` must still occur through a separate production ADR,
+package-internal implementation, tests, and public-surface review.
 ## 13. Promotion gate
 
 R0.6 must not promote a production M1.3 source API until experiments show:
