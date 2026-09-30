@@ -1284,7 +1284,7 @@ int runRelationPerfCase(
         fastBatchTimes[r] = measureRelation({
             foreach (i; 0 .. fastBatchIterations)
             {
-                auto variedTarget = target;
+                Rect variedTarget = target;
 
                 variedTarget.base +=
                     cast(size_t)(i & 1)
