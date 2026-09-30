@@ -75,3 +75,24 @@ KEEP for continued qualification of the shared checked prefilter. Production
 promotion, exact integration point and stable XPS measurement remain pending.
 Point-transform Issue #14 stays deferred until the relation handoff. Cross-type
 reuse stays deferred.
+
+## XPS reference result
+
+Three independent process executions per compiler are now qualified on the
+Intel Core i7-9750H with DMD 2.111.0 and LDC 1.41.0 / LLVM 19.1.7.
+Both semantic suites and all complete consumer matrices passed. Hosted CI for
+the harness head also passed in run `36774234927`.
+
+Raw logs, provenance and detailed results are in
+`evidence/2026-09-30-xps/SUMMARY.md`. Recompute and verify their summary:
+
+```sh
+python3 experiments/m3_affine_consumer/summarize.py \
+  experiments/m3_affine_consumer/evidence/2026-09-30-xps
+```
+
+Across all four large row-direction combinations and three executions,
+transform speedup is 9.765–10.141× on DMD and 11.350–11.796× on LDC;
+neighbourhood speedup is 1.322–1.391× and 1.955–2.027× respectively.
+The local consumer gate is satisfied; production integration and its independent
+contract/visibility tests are the next step.

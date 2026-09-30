@@ -362,3 +362,46 @@ Decision: KEEP for continued qualification. Before production promotion:
 4. preserve existing exact classifier and all consumer error/fallback semantics.
 
 Issue #14, Canonical transform execution and cross-type reuse remain deferred.
+
+## Gate 4 result — XPS reference consumers qualified
+
+The three independent process executions per compiler are retained at:
+
+`experiments/m3_affine_consumer/evidence/2026-09-30-xps/`
+
+See `SUMMARY.md` there for raw-log provenance, environment, per-layout timings
+and spread. `experiments/m3_affine_consumer/summarize.py` independently validates
+reported medians against all raw arrays and compares fingerprints across runs
+and compilers.
+
+Reference platform: Intel Core i7-9750H, DMD 2.111.0, LDC 1.41.0 / LLVM 19.1.7,
+DUB 1.40.0. Harness head: `3f8733a0b8019ee1f078d5c216300a1ed6a6ce24`.
+Its hosted DMD/LDC CI also passed in run `36774234927`.
+
+Both local semantic suites passed. All six process executions completed:
+72 layout/consumer cases and 1,296 measured operation calls, plus warmups and
+shared-backing probes. Fingerprints match across all repetitions and compilers.
+
+For 2048×512 outputs, paired median speedups over every process and all four
+row-direction combinations are:
+
+| Consumer | DMD | LDC / LLVM 19.1.7 |
+|---|---:|---:|
+| Point transform | 9.765–10.141× | 11.350–11.796× |
+| 3×3 neighbourhood | 1.322–1.391× | 1.955–2.027× |
+
+These are complete-consumer comparisons with unchanged execution kernels,
+not relation-only ratios. The local differently shaped neighbourhood case is
+2050×514 required source versus 2048×512 destination. Candidate large-case
+median spread is at most 7.06% across the three process executions. Tiny
+Universal cases are correctness evidence and diagnostic timing, not tight
+performance thresholds.
+
+Decision: KEEP for production handoff. The XPS consumer requirement is met.
+Recommended integration is a shared package-internal validated-raster wrapper
+adjacent to the exact relation, preserving its wider algebraic domain and every
+operation's defensive arithmetic-failure fallback. Exact production placement
+and contract tests must be finalized in the separate production patch.
+
+No production code or public API was changed. Point-transform execution,
+cross-type reuse and AArch64 performance remain separately qualified work.
