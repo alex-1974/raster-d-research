@@ -1,6 +1,7 @@
 module app;
 
 import raster : Region2D;
+import e9_2_retained_assembly : runE92;
 
 
 private struct BlockGridPolicy
@@ -708,10 +709,15 @@ void main()
     assert(runPartialEdgeBlocks());
     assert(runHugeOrigin());
     assert(runProviderIndependence());
+    assert(runE92());
 
     import std.stdio : writeln;
 
     writeln(
         "E9.1 PASS: cache-block grid anchor is policy, not raster semantics"
+    );
+
+    writeln(
+        "E9.2 PASS: retained cold warm overlap assembly matches direct materialization"
     );
 }
