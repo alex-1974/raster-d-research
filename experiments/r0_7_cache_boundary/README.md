@@ -2,7 +2,7 @@
 
 Issue: raster-d-research #3
 
-Status: E7.1 semantic reference model.
+Status: E7.1 PASS on DMD 2.111.0 and LDC 1.41.0.
 
 ## E7.1
 
@@ -34,3 +34,14 @@ From this directory:
 Expected final line:
 
     E7.1 PASS: cache identity, byte budget, pinning and deterministic eviction
+
+
+## Verified matrix
+
+GitHub Actions run: `36705940582`
+
+- DMD 2.111.0 / DUB 1.40.0 — PASS
+- LDC 1.41.0 / DUB 1.40.0 — PASS
+- raster-d develop: `2ea33562ca217ef9f552d0be397100326847c08d`
+
+Both jobs printed the expected final line.
