@@ -52,3 +52,31 @@ It does not establish a production source API.
 
 Promotion still requires at least one structurally different source shape and
 the remaining R0.6 ownership/error-boundary experiments.
+
+## Prototype B — retained/adopted source output
+
+Purpose:
+
+Test the structurally different case where the source allocates and fills
+resident storage itself, then transfers ownership into raster-d retained
+storage.
+
+Contract under test:
+
+- source allocates and fills one resident buffer;
+- source wraps the allocation in `OwnedByteResource`;
+- successful `tryImportOwnedRaster` transfers the release obligation to a
+  `RasterLease`;
+- the published resident raster is still rebased to `(0,0)`;
+- logical origin remains source metadata, not pointer geometry;
+- a deliberately invalid backing layout fails before ownership commit;
+- PRE-COMMIT failure leaves the `OwnedByteResource` armed and the output lease
+  empty.
+
+Expected additional result:
+
+`R0.6 Prototype B PASS: retained source transfer and PRE-COMMIT ownership preservation`
+
+Prototype B does not prove that source-owned allocation should be the primary
+production path. It tests whether retained/adopted output can coexist cleanly
+as a secondary capability beside caller-owned materialization.
