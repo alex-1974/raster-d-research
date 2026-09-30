@@ -1,0 +1,65 @@
+name: M3 Affine Bounds Research
+
+on:
+  push:
+    branches:
+      - research/m3-affine-bounds
+    paths:
+      - 'experiments/m3_affine_bounds/**'
+      - 'docs/research/m3-affine-bounds.md'
+      - '.github/workflows/m3-affine-bounds.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  correctness:
+    name: ${{ matrix.name }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: Linux x86-64 / DMD
+            compiler: dmd-2.111.0
+            dub: 1.40.0
+
+          - name: Linux x86-64 / LDC
+            compiler: ldc-1.41.0
+            dub: 1.40.0
+
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Checkout research
+        uses: actions/checkout@v7
+
+      - name: Checkout raster-d develop
+        uses: actions/checkout@v7
+        with:
+          repository: alex-1974/raster-d
+          ref: develop
+          path: raster-d
+
+      - name: Expose sibling workspace layout
+        shell: bash
+        run: |
+          ln -s "$GITHUB_WORKSPACE/raster-d" "$GITHUB_WORKSPACE/../raster-d"
+
+      - name: Install D compiler
+        uses: dlang-community/setup-dlang@v2
+        with:
+          compiler: ${{ matrix.compiler }}
+          dub: ${{ matrix.dub }}
+          dc_format: shortname
+
+      - name: Run affine-bounds correctness probe
+        shell: bash
+        run: |
+          "$DC" --version
+          dub run \
+            --root=experiments/m3_affine_bounds \
+            --compiler="$DC" \
+            --build=release \
+            --force
