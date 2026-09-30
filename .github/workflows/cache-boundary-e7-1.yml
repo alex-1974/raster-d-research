@@ -1,4 +1,4 @@
-name: Cache Boundary E7.1
+name: Cache Boundary Research
 
 on:
   push:
@@ -64,7 +64,7 @@ jobs:
           "$DC" --version
           dub --version
 
-      - name: Run E7.1
+      - name: Run cache-boundary experiments
         shell: bash
         run: |
           dub run             --root=experiments/r0_7_cache_boundary             --compiler="$DC"
