@@ -4,6 +4,7 @@ import core.stdc.stdlib : malloc;
 
 import raster :
     OwnedByteResource,
+    OwnedRasterResourceDisposition,
     PlaneByteLayout,
     RasterLease,
     Region2D,
@@ -318,14 +319,224 @@ private bool runPaddedCase()
 }
 
 
+struct RetainedProceduralUbyteSource
+{
+    bool materializeRetained(
+        Region2D logicalRegion,
+        out RasterLease!ubyte lease
+    )
+    @system
+    {
+        lease = RasterLease!ubyte.init;
+
+        if (
+            logicalRegion.empty()
+            || logicalRegion.width > cast(size_t) ptrdiff_t.max
+            || logicalRegion.height > size_t.max / logicalRegion.width
+        )
+        {
+            return false;
+        }
+
+        const byteLength =
+            logicalRegion.width * logicalRegion.height;
+
+        auto memory =
+            cast(ubyte*) malloc(byteLength);
+
+        if (memory is null)
+        {
+            return false;
+        }
+
+        foreach (y; 0 .. logicalRegion.height)
+        {
+            foreach (x; 0 .. logicalRegion.width)
+            {
+                memory[
+                    y * logicalRegion.width + x
+                ] =
+                    proceduralValue(
+                        logicalRegion.x + x,
+                        logicalRegion.y + y
+                    );
+            }
+        }
+
+        OwnedByteResource resource;
+
+        if (
+            !tryAdoptMallocResource(
+                memory,
+                byteLength,
+                resource
+            )
+        )
+        {
+            return false;
+        }
+
+        const importResult =
+            tryImportOwnedRaster!ubyte(
+                resource,
+                [
+                    PlaneByteLayout(
+                        0,
+                        cast(ptrdiff_t) logicalRegion.width,
+                        1
+                    )
+                ],
+                Region2D(
+                    0,
+                    0,
+                    logicalRegion.width,
+                    logicalRegion.height
+                ),
+                lease
+            );
+
+        return
+            importResult.ok
+            && importResult.resourceDisposition
+                == OwnedRasterResourceDisposition.transferredToLease
+            && !resource.ownsResource;
+    }
+
+
+    bool provePreCommitFailurePreservesOwnership(
+        Region2D logicalRegion
+    )
+    @system
+    {
+        if (
+            logicalRegion.empty()
+            || logicalRegion.width > cast(size_t) ptrdiff_t.max
+            || logicalRegion.height > size_t.max / logicalRegion.width
+        )
+        {
+            return false;
+        }
+
+        const byteLength =
+            logicalRegion.width * logicalRegion.height;
+
+        auto memory =
+            cast(ubyte*) malloc(byteLength);
+
+        if (memory is null)
+        {
+            return false;
+        }
+
+        OwnedByteResource resource;
+
+        if (
+            !tryAdoptMallocResource(
+                memory,
+                byteLength,
+                resource
+            )
+        )
+        {
+            return false;
+        }
+
+        RasterLease!ubyte lease;
+
+        const invalidRowStride =
+            cast(ptrdiff_t) logicalRegion.width + 1;
+
+        const importResult =
+            tryImportOwnedRaster!ubyte(
+                resource,
+                [
+                    PlaneByteLayout(
+                        0,
+                        invalidRowStride,
+                        1
+                    )
+                ],
+                Region2D(
+                    0,
+                    0,
+                    logicalRegion.width,
+                    logicalRegion.height
+                ),
+                lease
+            );
+
+        return
+            !importResult.ok
+            && importResult.resourceDisposition
+                == OwnedRasterResourceDisposition.unchanged
+            && resource.ownsResource
+            && !lease.hasBacking;
+    }
+}
+
+
+private bool runRetainedSourceCase()
+@system
+{
+    const logicalRegion =
+        Region2D(
+            4_000_000,
+            7_000_000,
+            19,
+            8
+        );
+
+    RetainedProceduralUbyteSource source;
+
+    RasterLease!ubyte lease;
+
+    if (
+        !source.materializeRetained(
+            logicalRegion,
+            lease
+        )
+    )
+    {
+        return false;
+    }
+
+    return verifyResident(
+        lease,
+        logicalRegion
+    );
+}
+
+
+private bool runRetainedPreCommitFailureCase()
+@system
+{
+    RetainedProceduralUbyteSource source;
+
+    return source.provePreCommitFailurePreservesOwnership(
+        Region2D(
+            1234,
+            5678,
+            11,
+            4
+        )
+    );
+}
+
+
 void main()
 {
     assert(runContiguousCase());
     assert(runPaddedCase());
+    assert(runRetainedSourceCase());
+    assert(runRetainedPreCommitFailureCase());
 
     import std.stdio : writeln;
 
     writeln(
         "R0.6 Prototype A PASS: caller-owned contiguous and padded materialization"
+    );
+
+    writeln(
+        "R0.6 Prototype B PASS: retained source transfer and PRE-COMMIT ownership preservation"
     );
 }
