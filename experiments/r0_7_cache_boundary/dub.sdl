@@ -1,0 +1,5 @@
+name "raster-cache-boundary-e7-1"
+description "Semantic cache identity and bounded-residency research"
+targetType "executable"
+
+dependency "raster-d" path="../../../raster-d"
