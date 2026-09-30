@@ -1,0 +1,7 @@
+name "raster-m3-point-transform"
+description "M3.2 production-shaped point-transform performance research"
+targetType "executable"
+
+dependency "raster-d" path="../../../raster-d"
+
+dflags "-preview=dip1000"
