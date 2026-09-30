@@ -1,0 +1,5 @@
+name "raster-r0-6-io-sources"
+description "R0.6 generic source/materialization boundary experiments"
+targetType "executable"
+
+dependency "raster-d" path="../../../raster-d"
