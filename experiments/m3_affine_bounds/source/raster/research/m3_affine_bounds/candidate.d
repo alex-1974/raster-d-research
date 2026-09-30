@@ -1,6 +1,9 @@
 module raster.research.m3_affine_bounds.candidate;
 
-import std.stdio : writeln;
+import core.time : MonoTime;
+
+import std.algorithm : sort;
+import std.stdio : writeln, writefln;
 
 import raster.internal.affine_relation :
     AffineByteOverlapRelation,
@@ -998,6 +1001,364 @@ int extremeCheckedCorrectness()
 }
 
 
+
+private enum size_t perfRepetitions = 7;
+private __gshared ulong relationSink;
+
+
+private
+AffineByteOverlapRelation classifyWithCheckedFastReject(
+    Rect a,
+    Rect b,
+    size_t sampleSize
+)
+@safe pure nothrow @nogc
+{
+    if (
+        checkedFastRejectDisjoint(
+            a,
+            b,
+            sampleSize
+        )
+    )
+    {
+        return AffineByteOverlapRelation.disjoint;
+    }
+
+    return classifySameTypeAffine2DRectanglesByteOverlap(
+        a.width,
+        a.height,
+        a.base,
+        a.rowStride,
+        a.sampleStride,
+        b.width,
+        b.height,
+        b.base,
+        b.rowStride,
+        b.sampleStride,
+        sampleSize
+    );
+}
+
+
+private
+long relationMedian(ref long[perfRepetitions] values)
+{
+    auto copy = values;
+    sort(copy[]);
+    return copy[copy.length / 2];
+}
+
+
+private
+long measureRelation(scope void delegate() operation)
+{
+    const start = MonoTime.currTime;
+    operation();
+    return (MonoTime.currTime - start).total!"nsecs";
+}
+
+
+private
+void consumeRelation(AffineByteOverlapRelation relation)
+@trusted nothrow @nogc
+{
+    relationSink =
+        relationSink * 0x100000001b3UL
+        ^ cast(ulong)relation
+        ^ 0x9e3779b97f4a7c15UL;
+}
+
+
+private
+int runRelationPerfCase(
+    size_t sourceWidth,
+    size_t sourceHeight,
+    size_t targetWidth,
+    size_t targetHeight,
+    size_t pitch
+)
+{
+    const sourceElements =
+        pitch * sourceHeight;
+
+    const targetElements =
+        pitch * targetHeight;
+
+    auto sourceStorage =
+        new float[sourceElements];
+
+    auto targetStorage =
+        new float[targetElements];
+
+    const source =
+        Rect(
+            sourceWidth,
+            sourceHeight,
+            cast(size_t)sourceStorage.ptr,
+            cast(ptrdiff_t)pitch,
+            1
+        );
+
+    const target =
+        Rect(
+            targetWidth,
+            targetHeight,
+            cast(size_t)targetStorage.ptr,
+            cast(ptrdiff_t)pitch,
+            1
+        );
+
+    const checkedSource =
+        checkedAffineBound(
+            source,
+            float.sizeof
+        );
+
+    const checkedTarget =
+        checkedAffineBound(
+            target,
+            float.sizeof
+        );
+
+    if (
+        !checkedSource.valid
+        || !checkedTarget.valid
+        || !boundsDisjoint(
+            checkedSource,
+            checkedTarget
+        )
+    )
+    {
+        writeln(
+            "RELATION_PERF_SETUP_FAIL ",
+            source,
+            " ",
+            target
+        );
+        return 1;
+    }
+
+    foreach (_; 0 .. 2)
+    {
+        const exact =
+            classifySameTypeAffine2DRectanglesByteOverlap(
+                source.width,
+                source.height,
+                source.base,
+                source.rowStride,
+                source.sampleStride,
+                target.width,
+                target.height,
+                target.base,
+                target.rowStride,
+                target.sampleStride,
+                float.sizeof
+            );
+
+        const fast =
+            classifyWithCheckedFastReject(
+                source,
+                target,
+                float.sizeof
+            );
+
+        if (
+            exact != AffineByteOverlapRelation.disjoint
+            || fast != exact
+        )
+            return 1;
+
+        consumeRelation(exact);
+        consumeRelation(fast);
+    }
+
+    long[perfRepetitions] exactTimes;
+    long[perfRepetitions] fastTimes;
+
+    bool ok = true;
+
+    foreach (r; 0 .. perfRepetitions)
+    {
+        if ((r & 1) == 0)
+        {
+            exactTimes[r] = measureRelation({
+                const relation =
+                    classifySameTypeAffine2DRectanglesByteOverlap(
+                        source.width,
+                        source.height,
+                        source.base,
+                        source.rowStride,
+                        source.sampleStride,
+                        target.width,
+                        target.height,
+                        target.base,
+                        target.rowStride,
+                        target.sampleStride,
+                        float.sizeof
+                    );
+
+                ok =
+                    ok
+                    && relation
+                        == AffineByteOverlapRelation.disjoint;
+
+                consumeRelation(relation);
+            });
+
+            fastTimes[r] = measureRelation({
+                const relation =
+                    classifyWithCheckedFastReject(
+                        source,
+                        target,
+                        float.sizeof
+                    );
+
+                ok =
+                    ok
+                    && relation
+                        == AffineByteOverlapRelation.disjoint;
+
+                consumeRelation(relation);
+            });
+        }
+        else
+        {
+            fastTimes[r] = measureRelation({
+                const relation =
+                    classifyWithCheckedFastReject(
+                        source,
+                        target,
+                        float.sizeof
+                    );
+
+                ok =
+                    ok
+                    && relation
+                        == AffineByteOverlapRelation.disjoint;
+
+                consumeRelation(relation);
+            });
+
+            exactTimes[r] = measureRelation({
+                const relation =
+                    classifySameTypeAffine2DRectanglesByteOverlap(
+                        source.width,
+                        source.height,
+                        source.base,
+                        source.rowStride,
+                        source.sampleStride,
+                        target.width,
+                        target.height,
+                        target.base,
+                        target.rowStride,
+                        target.sampleStride,
+                        float.sizeof
+                    );
+
+                ok =
+                    ok
+                    && relation
+                        == AffineByteOverlapRelation.disjoint;
+
+                consumeRelation(relation);
+            });
+        }
+    }
+
+    if (!ok)
+        return 1;
+
+    const exactMedian =
+        relationMedian(exactTimes);
+
+    const fastMedian =
+        relationMedian(fastTimes);
+
+    writefln(
+        "m3_affine_bounds_perf source=%sx%s target=%sx%s pitch=%s exact_ns=%s fast_ns=%s speedup=%.3f sink=%s",
+        sourceWidth,
+        sourceHeight,
+        targetWidth,
+        targetHeight,
+        pitch,
+        exactMedian,
+        fastMedian,
+        cast(double)exactMedian
+            / cast(double)fastMedian,
+        relationSink
+    );
+
+    writefln(
+        "m3_affine_bounds_perf_raw source=%sx%s target=%sx%s exact=%(%s,%) fast=%(%s,%)",
+        sourceWidth,
+        sourceHeight,
+        targetWidth,
+        targetHeight,
+        exactTimes,
+        fastTimes
+    );
+
+    return 0;
+}
+
+
+private
+int relationPerformance()
+{
+    if (
+        runRelationPerfCase(
+            128,
+            64,
+            128,
+            64,
+            192
+        ) != 0
+    )
+        return 1;
+
+    if (
+        runRelationPerfCase(
+            512,
+            256,
+            512,
+            256,
+            640
+        ) != 0
+    )
+        return 1;
+
+    if (
+        runRelationPerfCase(
+            2048,
+            512,
+            2048,
+            512,
+            2304
+        ) != 0
+    )
+        return 1;
+
+    /*
+     * Neighbourhood-shaped relation:
+     *
+     * source dependency has a one-sample halo around the target shape.
+     */
+    if (
+        runRelationPerfCase(
+            2050,
+            514,
+            2048,
+            512,
+            2304
+        ) != 0
+    )
+        return 1;
+
+    return 0;
+}
+
+
 int runAffineBoundsProbe()
 {
     explicitSparseCounterexample();
@@ -1006,6 +1367,9 @@ int runAffineBoundsProbe()
         return 1;
 
     if (extremeCheckedCorrectness() != 0)
+        return 1;
+
+    if (relationPerformance() != 0)
         return 1;
 
     return 0;
