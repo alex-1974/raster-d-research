@@ -1,0 +1,7 @@
+name "raster-m2-neighbourhood-contract"
+description "M2.3 neighbourhood semantic contract research"
+targetType "executable"
+
+dependency "raster-d" path="../../../raster-d"
+
+dflags "-preview=dip1000"
