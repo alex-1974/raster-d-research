@@ -43,6 +43,11 @@ jobs:
           ref: develop
           path: raster-d
 
+      - name: Expose sibling workspace layout
+        shell: bash
+        run: |
+          ln -s "$GITHUB_WORKSPACE/raster-d" "$GITHUB_WORKSPACE/../raster-d"
+
       - name: Install D compiler
         uses: dlang-community/setup-dlang@v2
         with:
