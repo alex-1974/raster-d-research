@@ -1,0 +1,5 @@
+name "raster-retained-block-assembly-e9"
+description "Retained block assembly research"
+targetType "executable"
+
+dependency "raster-d" path="../../../raster-d"
