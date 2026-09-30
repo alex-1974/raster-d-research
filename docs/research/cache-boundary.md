@@ -1,6 +1,6 @@
 # Cache Boundary and Bounded Residency Research
 
-Status: active research.
+Status: active research. E7.1 complete.
 
 Issue: raster-d-research #3
 
@@ -145,6 +145,29 @@ the same condition.
 ## 8. Experiments
 
 ### E7.1 — semantic cache accounting
+
+Status: **PASS** on the workspace baseline compilers.
+
+Verified against:
+
+- raster-d-research branch head `5f2a4ab35d41b42a62fd13a1f5a1ebf0fc01ed4b`;
+- raster-d `develop` head `2ea33562ca217ef9f552d0be397100326847c08d`;
+- DMD 2.111.0 + DUB 1.40.0;
+- LDC 1.41.0 + DUB 1.40.0.
+
+GitHub Actions run: `36705940582`.
+
+Both compiler jobs produced:
+
+```text
+E7.1 PASS: cache identity, byte budget, pinning and deterministic eviction
+```
+
+The preceding run `36705822444` failed before compilation because CI had
+checked out raster-d inside the research repository while the experiment's
+workspace-local path dependency expects raster-d as a sibling repository. The
+CI harness was corrected to mirror the sibling workspace layout; the experiment
+source itself was unchanged.
 
 Questions:
 
