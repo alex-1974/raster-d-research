@@ -408,6 +408,35 @@ R0.6 promotion is still not complete. The remaining gate requires:
 - at least one materially different non-image source shape;
 - explicit failure semantics across those variants;
 - a final KEEP / REJECT / DEFER synthesis for M1.3.
+## 15. Prototype C result — non-image multi-plane strided consumer
+
+Status: PASS on both DMD and LDC.
+
+Verified:
+
+- non-image scientific/vector-field source shape;
+- two logical planes;
+- one physical interleaved allocation;
+- explicit sample stride of two bytes;
+- padded rows;
+- large non-zero logical origin;
+- resident descriptor geometry independent of logical placement;
+- caller-owned materialization through the same public `WritableRasterView`
+  capability used by Prototype A;
+- readback through the public `RasterView` path.
+
+Conclusion:
+
+The candidate caller-owned materialization boundary is not accidentally tied
+to image semantics, single-plane storage or contiguous rows.
+
+Prototype C satisfies the non-image and representative multi-plane/strided
+parts of the R0.6 promotion gate.
+
+One remaining experiment is required before synthesis: demonstrate that a
+source adapter whose own internal storage uses fixed blocks can still satisfy
+arbitrary logical requests without leaking provider/block alignment into the
+generic materialization contract.
 ## 13. Promotion gate
 
 R0.6 must not promote a production M1.3 source API until experiments show:
