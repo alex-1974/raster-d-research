@@ -201,7 +201,8 @@ nothrow
 }
 
 
-bool tryCanonicalCandidate(alias kernel, T)(
+private
+bool tryCanonicalCandidateImpl(alias kernel, bool noInline, T)(
     scope RasterView!T source,
     size_t sourcePlaneIndex,
     Region2D sourceOutputRegion,
@@ -346,15 +347,77 @@ nothrow
 
     assert(fullSourceBase !is null);
 
-    return executeCanonicalApproved!kernel(
-        fullSourceBase,
-        sourceRowStride,
-        sourceOutputRegion.x,
-        sourceOutputRegion.y,
-        destination.width,
-        destination.height,
-        destinationBase,
-        destinationRowStride
+    static if (noInline)
+    {
+        return executeCanonicalNoInline!kernel(
+            fullSourceBase,
+            sourceRowStride,
+            sourceOutputRegion.x,
+            sourceOutputRegion.y,
+            destination.width,
+            destination.height,
+            destinationBase,
+            destinationRowStride
+        );
+    }
+    else
+    {
+        return executeCanonicalApproved!kernel(
+            fullSourceBase,
+            sourceRowStride,
+            sourceOutputRegion.x,
+            sourceOutputRegion.y,
+            destination.width,
+            destination.height,
+            destinationBase,
+            destinationRowStride
+        );
+    }
+}
+
+
+bool tryCanonicalCandidate(alias kernel, T)(
+    scope RasterView!T source,
+    size_t sourcePlaneIndex,
+    Region2D sourceOutputRegion,
+    scope ref WritableRasterView!T destination,
+    size_t destinationPlaneIndex,
+    out RasterNeighbourhood3x3Error error
+)
+@safe
+nothrow
+@nogc
+{
+    return tryCanonicalCandidateImpl!(kernel, false)(
+        source,
+        sourcePlaneIndex,
+        sourceOutputRegion,
+        destination,
+        destinationPlaneIndex,
+        error
+    );
+}
+
+
+bool tryCanonicalNoInlineCandidate(alias kernel, T)(
+    scope RasterView!T source,
+    size_t sourcePlaneIndex,
+    Region2D sourceOutputRegion,
+    scope ref WritableRasterView!T destination,
+    size_t destinationPlaneIndex,
+    out RasterNeighbourhood3x3Error error
+)
+@safe
+nothrow
+@nogc
+{
+    return tryCanonicalCandidateImpl!(kernel, true)(
+        source,
+        sourcePlaneIndex,
+        sourceOutputRegion,
+        destination,
+        destinationPlaneIndex,
+        error
     );
 }
 
