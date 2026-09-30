@@ -80,3 +80,29 @@ Expected additional result:
 Prototype B does not prove that source-owned allocation should be the primary
 production path. It tests whether retained/adopted output can coexist cleanly
 as a secondary capability beside caller-owned materialization.
+
+## Prototype C — non-image multi-plane strided consumer
+
+Purpose:
+
+Test the candidate caller-owned contract with a structurally different
+non-image source: a two-component scientific vector field.
+
+Storage under test:
+
+- two logical planes (U and V components);
+- one physical allocation;
+- interleaved samples;
+- explicit sample stride of 2 bytes;
+- padded rows;
+- logical origin independent of resident descriptor origin.
+
+The source writes through the same public `WritableRasterView!ubyte` capability
+used by Prototype A.
+
+This checks that the candidate contract is not accidentally image-specific or
+restricted to single-plane contiguous storage.
+
+Expected additional result:
+
+`R0.6 Prototype C PASS: non-image two-plane interleaved padded vector field`
