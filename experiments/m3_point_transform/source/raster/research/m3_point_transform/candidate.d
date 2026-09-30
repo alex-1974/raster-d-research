@@ -313,6 +313,33 @@ nothrow
 
 
 private
+void consumeLogicalLast(
+    scope const(float)[] storage,
+    size_t width,
+    size_t height,
+    size_t pitch,
+    bool negativeRows
+)
+@trusted
+nothrow
+@nogc
+{
+    assert(width != 0);
+    assert(height != 0);
+
+    const y = height - 1;
+    const physicalY =
+        negativeRows
+        ? 0
+        : y;
+
+    sink ^=
+        bits(storage[physicalY * pitch + (width - 1)])
+        + 0x9e3779b97f4a7c15UL;
+}
+
+
+private
 long measure(scope void delegate() operation)
 {
     const start = MonoTime.currTime;
@@ -501,9 +528,15 @@ int runCase(
                         source,0,publicDestination,0,error
                     );
                 publicOk = publicOk && ok;
-                consume(logicalFingerprint(
-                    publicOutput,width,height,pitch,negativeDestinationRows));
             });
+
+            consumeLogicalLast(
+                publicOutput,
+                width,
+                height,
+                pitch,
+                negativeDestinationRows
+            );
 
             candidateSamples[r] = measure({
                 const ok =
@@ -511,9 +544,15 @@ int runCase(
                         source,0,candidateDestination,0,error
                     );
                 candidateOk = candidateOk && ok;
-                consume(logicalFingerprint(
-                    candidateOutput,width,height,pitch,negativeDestinationRows));
             });
+
+            consumeLogicalLast(
+                candidateOutput,
+                width,
+                height,
+                pitch,
+                negativeDestinationRows
+            );
         }
         else
         {
@@ -523,9 +562,15 @@ int runCase(
                         source,0,candidateDestination,0,error
                     );
                 candidateOk = candidateOk && ok;
-                consume(logicalFingerprint(
-                    candidateOutput,width,height,pitch,negativeDestinationRows));
             });
+
+            consumeLogicalLast(
+                candidateOutput,
+                width,
+                height,
+                pitch,
+                negativeDestinationRows
+            );
 
             publicSamples[r] = measure({
                 const ok =
@@ -533,9 +578,15 @@ int runCase(
                         source,0,publicDestination,0,error
                     );
                 publicOk = publicOk && ok;
-                consume(logicalFingerprint(
-                    publicOutput,width,height,pitch,negativeDestinationRows));
             });
+
+            consumeLogicalLast(
+                publicOutput,
+                width,
+                height,
+                pitch,
+                negativeDestinationRows
+            );
         }
     }
 
