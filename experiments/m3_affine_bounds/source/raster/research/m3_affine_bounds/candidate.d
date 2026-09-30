@@ -770,7 +770,7 @@ int extremeCheckedCorrectness()
             "max-valid-address-separation"
         ),
         Fixture(
-            Rect(1,1,size_t.max - 7,ptrdiff_t.min,ptrdiff_t.min),
+            Rect(1,1,size_t.max - 8,ptrdiff_t.min,ptrdiff_t.min),
             Rect(1,1,0,ptrdiff_t.max,ptrdiff_t.max),
             8,
             true,
