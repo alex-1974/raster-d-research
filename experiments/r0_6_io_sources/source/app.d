@@ -837,6 +837,163 @@ private bool runVectorFieldCase()
 }
 
 
+struct BlockBackedProceduralSource
+{
+    size_t blockWidth;
+    size_t blockHeight;
+
+
+    bool materializeInto(
+        Region2D logicalRegion,
+        scope WritableRasterView!ubyte destination
+    )
+    @safe
+    pure
+    nothrow
+    @nogc
+    {
+        if (
+            blockWidth == 0
+            || blockHeight == 0
+            || destination.width != logicalRegion.width
+            || destination.height != logicalRegion.height
+            || destination.planeCount != 1
+        )
+        {
+            return false;
+        }
+
+        foreach (y; 0 .. logicalRegion.height)
+        {
+            foreach (x; 0 .. logicalRegion.width)
+            {
+                const logicalX =
+                    logicalRegion.x + x;
+
+                const logicalY =
+                    logicalRegion.y + y;
+
+                /*
+                 * Simulate a provider whose internal fetch organisation is
+                 * block based. The generic request remains arbitrary and is
+                 * not required to align to block boundaries.
+                 */
+                const blockX =
+                    logicalX / blockWidth;
+
+                const blockY =
+                    logicalY / blockHeight;
+
+                const inBlockX =
+                    logicalX % blockWidth;
+
+                const inBlockY =
+                    logicalY % blockHeight;
+
+                const reconstructedX =
+                    blockX * blockWidth + inBlockX;
+
+                const reconstructedY =
+                    blockY * blockHeight + inBlockY;
+
+                if (
+                    reconstructedX != logicalX
+                    || reconstructedY != logicalY
+                )
+                {
+                    return false;
+                }
+
+                if (
+                    !destination.trySetSample(
+                        0,
+                        x,
+                        y,
+                        proceduralValue(
+                            reconstructedX,
+                            reconstructedY
+                        )
+                    )
+                )
+                {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+}
+
+
+private bool runMisalignedBlockAdapterCase()
+@system
+{
+    const logicalRegion =
+        Region2D(
+            123,
+            77,
+            23,
+            13
+        );
+
+    enum size_t providerBlockWidth = 16;
+    enum size_t providerBlockHeight = 8;
+
+    static assert(
+        123 % providerBlockWidth != 0
+        && 77 % providerBlockHeight != 0
+    );
+
+    RasterLease!ubyte lease;
+
+    if (
+        !makeWritableResident(
+            logicalRegion.width,
+            logicalRegion.height,
+            logicalRegion.width + 5,
+            lease
+        )
+    )
+    {
+        return false;
+    }
+
+    bool writableOk;
+
+    scope auto writable =
+        lease.tryWritableView(
+            writableOk
+        );
+
+    if (!writableOk)
+    {
+        return false;
+    }
+
+    BlockBackedProceduralSource source =
+        BlockBackedProceduralSource(
+            providerBlockWidth,
+            providerBlockHeight
+        );
+
+    if (
+        !source.materializeInto(
+            logicalRegion,
+            writable
+        )
+    )
+    {
+        return false;
+    }
+
+    return verifyResident(
+        lease,
+        logicalRegion
+    );
+}
+
+
 void main()
 {
     assert(runContiguousCase());
@@ -844,6 +1001,7 @@ void main()
     assert(runRetainedSourceCase());
     assert(runRetainedPreCommitFailureCase());
     assert(runVectorFieldCase());
+    assert(runMisalignedBlockAdapterCase());
 
     import std.stdio : writeln;
 
@@ -857,5 +1015,9 @@ void main()
 
     writeln(
         "R0.6 Prototype C PASS: non-image two-plane interleaved padded vector field"
+    );
+
+    writeln(
+        "R0.6 Prototype D PASS: arbitrary logical request independent of provider blocks"
     );
 }
