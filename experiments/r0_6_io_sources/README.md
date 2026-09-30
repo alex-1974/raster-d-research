@@ -106,3 +106,27 @@ restricted to single-plane contiguous storage.
 Expected additional result:
 
 `R0.6 Prototype C PASS: non-image two-plane interleaved padded vector field`
+
+## Prototype D — provider/block independence
+
+Purpose:
+
+Test whether a source whose own internal organisation is fixed-block based can
+still satisfy an arbitrary logical request through the same generic
+caller-owned materialization boundary.
+
+Fixture:
+
+- source-internal blocks: 16 x 8;
+- logical request origin: (123,77), deliberately misaligned to both axes;
+- logical request size: 23 x 13, crossing multiple internal blocks;
+- caller-owned resident destination with padded rows.
+
+The source reconstructs each logical coordinate from simulated internal block
+coordinates before writing to the resident destination.
+
+The generic materialization contract receives no provider-block geometry.
+
+Expected additional result:
+
+`R0.6 Prototype D PASS: arbitrary logical request independent of provider blocks`
