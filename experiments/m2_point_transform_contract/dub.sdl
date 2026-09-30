@@ -1,0 +1,7 @@
+name "raster-m2-point-transform-contract"
+description "M2.2 point-transform semantic contract research"
+targetType "executable"
+
+dependency "raster-d" path="../../../raster-d"
+
+dflags "-preview=dip1000"

@@ -1,0 +1,71 @@
+name: M2 Point Transform Contract Research
+
+on:
+  push:
+    branches:
+      - research/m2-point-transform-contract
+    paths:
+      - 'experiments/m2_point_transform_contract/**'
+      - 'docs/research/m2-point-transform-contract.md'
+      - '.github/workflows/m2-point-transform-contract.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  contract:
+    name: ${{ matrix.name }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: Linux x86-64 / DMD
+            os: ubuntu-24.04
+            compiler: dmd-2.111.0
+            dub: 1.40.0
+
+          - name: Linux x86-64 / LDC
+            os: ubuntu-24.04
+            compiler: ldc-1.41.0
+            dub: 1.40.0
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Checkout research
+        uses: actions/checkout@v7
+
+      - name: Checkout raster-d develop
+        uses: actions/checkout@v7
+        with:
+          repository: alex-1974/raster-d
+          ref: develop
+          path: raster-d
+
+      - name: Expose sibling workspace layout
+        shell: bash
+        run: |
+          ln -s "$GITHUB_WORKSPACE/raster-d" "$GITHUB_WORKSPACE/../raster-d"
+
+      - name: Install D compiler
+        uses: dlang-community/setup-dlang@v2
+        with:
+          compiler: ${{ matrix.compiler }}
+          dub: ${{ matrix.dub }}
+          dc_format: shortname
+
+      - name: Environment
+        shell: bash
+        run: |
+          echo "Research: $(git rev-parse HEAD)"
+          echo "raster-d: $(git -C raster-d rev-parse HEAD)"
+          echo "DC: $DC"
+          "$DC" --version
+          dub --version
+
+      - name: Run M2 point-transform contract probe
+        shell: bash
+        run: |
+          dub run --root=experiments/m2_point_transform_contract --compiler="$DC"
