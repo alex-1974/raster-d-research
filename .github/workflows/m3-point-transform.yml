@@ -1,0 +1,74 @@
+name: M3 Point Transform Research
+
+on:
+  push:
+    branches:
+      - research/m3-point-transform
+    paths:
+      - 'experiments/m3_point_transform/**'
+      - 'docs/research/m3-point-transform-hotpath.md'
+      - '.github/workflows/m3-point-transform.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  benchmark:
+    name: ${{ matrix.name }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: Linux x86-64 / DMD
+            os: ubuntu-24.04
+            compiler: dmd-2.111.0
+            dub: 1.40.0
+
+          - name: Linux x86-64 / LDC
+            os: ubuntu-24.04
+            compiler: ldc-1.41.0
+            dub: 1.40.0
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Checkout research
+        uses: actions/checkout@v7
+
+      - name: Checkout raster-d develop
+        uses: actions/checkout@v7
+        with:
+          repository: alex-1974/raster-d
+          ref: develop
+          path: raster-d
+
+      - name: Expose sibling workspace layout
+        shell: bash
+        run: |
+          ln -s "$GITHUB_WORKSPACE/raster-d" "$GITHUB_WORKSPACE/../raster-d"
+
+      - name: Install D compiler
+        uses: dlang-community/setup-dlang@v2
+        with:
+          compiler: ${{ matrix.compiler }}
+          dub: ${{ matrix.dub }}
+          dc_format: shortname
+
+      - name: Environment
+        shell: bash
+        run: |
+          uname -a
+          lscpu
+          "$DC" --version
+          dub --version
+
+      - name: Run production-shaped point-transform benchmark
+        shell: bash
+        run: |
+          dub run \
+            --root=experiments/m3_point_transform \
+            --compiler="$DC" \
+            --build=release \
+            --force
