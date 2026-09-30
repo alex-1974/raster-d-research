@@ -1,6 +1,7 @@
 module app;
 
 import raster : Region2D;
+import e7_2_retained_cache : runE72;
 
 
 private struct CacheKey
@@ -454,10 +455,15 @@ void main()
     assert(runEvictionAndPinCase());
     assert(runOversizedCase());
     assert(runPinnedBudgetFailureCase());
+    assert(runE72());
 
     import std.stdio : writeln;
 
     writeln(
         "E7.1 PASS: cache identity, byte budget, pinning and deterministic eviction"
+    );
+
+    writeln(
+        "E7.2 PASS: RasterLease retention, eviction survival and physical-byte accounting"
     );
 }
