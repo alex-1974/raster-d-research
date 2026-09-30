@@ -396,17 +396,137 @@ A further LDC-negative no-inline selection may be layered internally only if
 stable-reference-machine measurement and final production-shaped code
 generation justify it.
 
+## Stable local reference-machine evidence
+
+The stable local reference-machine gate has now been run on the project XPS:
+
+```text
+CPU: Intel Core i7-9750H, 6 cores / 12 threads
+OS: Ubuntu Linux x86-64
+DMD: 2.111.0
+LDC: 1.41.0
+LLVM: 19.1.7
+Host CPU reported by LDC: skylake
+DUB: 1.40.0
+```
+
+This is especially important because the local LDC 1.41.0 toolchain uses LLVM
+19.1.7, while the current hosted package used by the diagnostic workflow
+reports LLVM 20.1.5.
+
+The exact Production and Research heads were verified before measurement:
+
+```text
+raster-d/develop
+5bc269b9455e28c4e5d6454e72fe254ace51dcff
+
+raster-d-research/research/m3-production-neighbourhood
+b71a546b7da190a9ce0baf40f8d09eab3fb5c7df
+```
+
+Three independent release-build runs were executed for DMD and LDC. The
+Universal/sample-strided negative-destination fallback probe passed in all six
+runs.
+
+### Large-region medians across the three local runs
+
+Workload:
+
+```text
+width  = 2048
+height = 512
+```
+
+Pitch 2304:
+
+| Compiler | Rows | Public | Canonical | Canonical/Public | Speedup | no-inline | no-inline/Canonical |
+| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| DMD 2.111 | positive | 119.060 ms | 32.562 ms | 0.2769 | 3.61x | 33.649 ms | 1.0173 |
+| DMD 2.111 | negative | 116.340 ms | 31.861 ms | 0.2773 | 3.61x | 38.100 ms | 1.1442 |
+| LDC 1.41 / LLVM 19.1.7 | positive | 26.735 ms | 11.145 ms | 0.4184 | 2.39x | 11.058 ms | 0.9825 |
+| LDC 1.41 / LLVM 19.1.7 | negative | 27.045 ms | 12.923 ms | 0.4698 | 2.13x | 11.334 ms | 0.8797 |
+
+Pitch 4096:
+
+| Compiler | Rows | Public | Canonical | Canonical/Public | Speedup | no-inline | no-inline/Canonical |
+| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| DMD 2.111 | positive | 115.325 ms | 31.074 ms | 0.2744 | 3.64x | 31.760 ms | 1.0221 |
+| DMD 2.111 | negative | 116.141 ms | 35.557 ms | 0.3062 | 3.27x | 35.895 ms | 1.0307 |
+| LDC 1.41 / LLVM 19.1.7 | positive | 26.898 ms | 11.233 ms | 0.4067 | 2.46x | 10.865 ms | 0.9886 |
+| LDC 1.41 / LLVM 19.1.7 | negative | 27.328 ms | 12.990 ms | 0.4756 | 2.10x | 11.415 ms | 0.8787 |
+
+The complete width matrix around 127/128/129, 511/512/513 and
+2047/2048/2049 shows the same qualitative behavior.
+
+### Interpretation
+
+The general Canonical candidate is now supported by both hosted diagnostic
+evidence and stable local reference-machine evidence.
+
+It is not a marginal optimization:
+
+- DMD large-region local speedup is roughly 3.3--3.6x;
+- LDC large-region local speedup is roughly 2.1--2.5x;
+- positive and negative source-row directions remain exact;
+- Universal/sample-strided source layouts remain on the existing generic path.
+
+The no-inline row boundary remains compiler/layout specific:
+
+- DMD positive is approximately neutral and DMD negative is materially worse;
+- LDC positive is approximately neutral;
+- LDC negative improves the integrated Canonical path by roughly 12--14 percent
+  on the stable local reference machine, consistently across the large-region
+  runs and both tested pitches.
+
+Therefore the measurement evidence selects:
+
+```text
+general Canonical fast path
+        +
+candidate narrow LDC-negative no-inline specialization
+```
+
+but the LDC-negative specialization still requires final production-shaped
+code-generation inspection before Promotion.
+
+The general Canonical path itself has now passed the stable local performance
+gate.
+
+## Current M3.1 decision
+
+KEEP for Production promotion:
+
+- unchanged public M2.3 semantic/error API;
+- existing full validation before execution;
+- Canonical-compatible execution classification;
+- narrow check-free Canonical hot kernel;
+- generic fallback for Universal/sample-strided and otherwise unqualified
+  affine layouts.
+
+CONDITIONALLY KEEP pending final code-generation qualification:
+
+- LDC 1.41 / LLVM 19.1.7 negative-Canonical out-of-line row-kernel boundary.
+
+REJECT:
+
+- no-inline specialization for DMD;
+- no-inline specialization for all Canonical layouts;
+- compiler-name-only selection that ignores optimizer generation;
+- replacing the generic fallback;
+- handwritten SIMD.
+
 ## Next evidence
 
-Before Production promotion:
+One gate remains before opening the Production optimization PR:
 
-1. run the current benchmark on the stable local reference machine with both
-   baseline compilers;
-2. inspect final production-shaped LDC code generation for positive/negative
-   Canonical and the no-inline candidate;
-3. record the Universal fallback probe result on both compilers;
-4. decide whether M3.1 promotes only the ordinary Canonical fast path or also a
-   narrow LDC-negative specialization.
+1. inspect final production-shaped local LDC 1.41 / LLVM 19.1.7 assembly for:
+   - integrated positive Canonical;
+   - integrated negative Canonical;
+   - negative Canonical with the out-of-line row boundary;
+2. identify the actual inner loop/version selected rather than merely noting
+   that SIMD instructions exist somewhere;
+3. decide whether the LDC-negative specialization is retained.
 
-Final Production promotion still requires stable local reference-machine
-measurement and final code-generation inspection.
+The general Canonical fast path no longer requires additional performance
+evidence before Production implementation. It still requires normal Fast CI
+and regression qualification once integrated.
