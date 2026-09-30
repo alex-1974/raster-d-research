@@ -1069,3 +1069,69 @@ int runBenchmarkMatrix()
 
     return 0;
 }
+
+
+/*
+ * Stable code-generation qualification entry points.
+ *
+ * These wrappers intentionally expose fixed C symbols so the local reference
+ * toolchain can emit and inspect the exact hot-loop source forms without
+ * relying on D template mangling.
+ *
+ * They are research-only and do not define Production API.
+ */
+
+extern(C)
+void m3_codegen_integrated(
+    scope const(float)* sourceBase,
+    ptrdiff_t sourceRowStride,
+    size_t width,
+    size_t height,
+    scope float* destinationBase,
+    ptrdiff_t destinationRowStride
+)
+@trusted
+pure
+nothrow
+@nogc
+{
+    cast(void)
+        executeCanonicalApproved!productionKernel(
+            sourceBase,
+            sourceRowStride,
+            1,
+            1,
+            width,
+            height,
+            destinationBase,
+            destinationRowStride
+        );
+}
+
+
+extern(C)
+void m3_codegen_noinline(
+    scope const(float)* sourceBase,
+    ptrdiff_t sourceRowStride,
+    size_t width,
+    size_t height,
+    scope float* destinationBase,
+    ptrdiff_t destinationRowStride
+)
+@trusted
+pure
+nothrow
+@nogc
+{
+    cast(void)
+        executeCanonicalNoInline!productionKernel(
+            sourceBase,
+            sourceRowStride,
+            1,
+            1,
+            width,
+            height,
+            destinationBase,
+            destinationRowStride
+        );
+}
