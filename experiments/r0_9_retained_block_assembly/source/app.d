@@ -2,6 +2,7 @@ module app;
 
 import raster : Region2D;
 import e9_2_retained_assembly : runE92;
+import e9_3_retention_failure : runE93;
 
 
 private struct BlockGridPolicy
@@ -710,6 +711,7 @@ void main()
     assert(runHugeOrigin());
     assert(runProviderIndependence());
     assert(runE92());
+    assert(runE93());
 
     import std.stdio : writeln;
 
@@ -719,5 +721,9 @@ void main()
 
     writeln(
         "E9.2 PASS: retained cold warm overlap assembly matches direct materialization"
+    );
+
+    writeln(
+        "E9.3 PASS: retention failure degrades reuse without breaking request correctness"
     );
 }
