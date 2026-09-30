@@ -253,7 +253,7 @@ Pair swapPair(Pair value)
 
 
 bool runRasterCandidateMatrix()
-@safe
+@system
 nothrow
 @nogc
 {
