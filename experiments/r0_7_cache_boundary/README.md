@@ -2,7 +2,7 @@
 
 Issue: raster-d-research #3
 
-Status: E7.1 and E7.2 PASS on DMD 2.111.0 and LDC 1.41.0.
+Status: E7.1 through E7.4 PASS on DMD 2.111.0 and LDC 1.41.0.
 
 ## E7.1
 
@@ -60,3 +60,30 @@ It demonstrates:
 - one interleaved two-plane physical allocation is counted once;
 - physical byte cost must currently be carried beside a lease rather than
   derived from the public RasterLease surface.
+
+
+## E7.3
+
+Verified by GitHub Actions run `36706677585`.
+
+- provider blocks: 16 x 8
+- cache blocks: 12 x 10
+- first unaligned request: 4 misses / 4 materializations
+- second halo-expanded request: +4 hits / +2 misses
+- six padded cache blocks: 780 retained physical bytes
+
+This demonstrates provider/cache/request geometry independence and observable
+overlap reuse.
+
+## E7.4
+
+Verified by GitHub Actions run `36706970424`.
+
+It demonstrates:
+
+- valid empty requests are zero work;
+- source failure before commit leaves existing cache state intact;
+- failed candidates are not published;
+- a 288-byte minimum working set is rejected by a 256-byte residency budget;
+- cache-retention and request-residency admission are separate accounting
+  contracts.
