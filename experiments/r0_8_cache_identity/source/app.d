@@ -3,6 +3,7 @@ module app;
 import raster : Region2D;
 import e8_2_key_ownership : runE82;
 import e8_3_hashed_key_specialization : runE83;
+import e8_4_retained_identity_integration : runE84;
 
 
 private struct SourceIdentity
@@ -327,6 +328,7 @@ void main()
     assert(runGenerationInvalidation());
     assert(runE82());
     assert(runE83());
+    assert(runE84());
 
     import std.stdio : writeln;
 
@@ -340,5 +342,9 @@ void main()
 
     writeln(
         "E8.3 PASS: compile-time hash/equality specialization keeps identity lookup @nogc"
+    );
+
+    writeln(
+        "E8.4 PASS: caller-owned identity integrates with retained RasterLease and source generations"
     );
 }
