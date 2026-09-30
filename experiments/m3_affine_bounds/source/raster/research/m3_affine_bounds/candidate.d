@@ -1003,6 +1003,7 @@ int extremeCheckedCorrectness()
 
 
 private enum size_t perfRepetitions = 7;
+private enum size_t fastBatchIterations = 100_000;
 private __gshared ulong relationSink;
 
 
@@ -1089,7 +1090,7 @@ int runRelationPerfCase(
         new float[sourceElements];
 
     auto targetStorage =
-        new float[targetElements];
+        new float[targetElements + 1];
 
     const source =
         Rect(
@@ -1275,8 +1276,49 @@ int runRelationPerfCase(
     const fastMedian =
         relationMedian(fastTimes);
 
+    long[perfRepetitions] fastBatchTimes;
+    bool batchOk = true;
+
+    foreach (r; 0 .. perfRepetitions)
+    {
+        fastBatchTimes[r] = measureRelation({
+            foreach (i; 0 .. fastBatchIterations)
+            {
+                auto variedTarget = target;
+
+                variedTarget.base +=
+                    cast(size_t)(i & 1)
+                    * float.sizeof;
+
+                const relation =
+                    classifyWithCheckedFastReject(
+                        source,
+                        variedTarget,
+                        float.sizeof
+                    );
+
+                batchOk =
+                    batchOk
+                    && relation
+                        == AffineByteOverlapRelation.disjoint;
+
+                consumeRelation(relation);
+            }
+        });
+    }
+
+    if (!batchOk)
+        return 1;
+
+    const fastBatchMedian =
+        relationMedian(fastBatchTimes);
+
+    const fastBatchPerCall =
+        cast(double)fastBatchMedian
+        / cast(double)fastBatchIterations;
+
     writefln(
-        "m3_affine_bounds_perf source=%sx%s target=%sx%s pitch=%s exact_ns=%s fast_ns=%s speedup=%.3f sink=%s",
+        "m3_affine_bounds_perf source=%sx%s target=%sx%s pitch=%s exact_ns=%s fast_single_ns=%s fast_batch_ns=%s fast_batch_per_call_ns=%.3f exact_over_batch_per_call=%.3f sink=%s",
         sourceWidth,
         sourceHeight,
         targetWidth,
@@ -1284,19 +1326,22 @@ int runRelationPerfCase(
         pitch,
         exactMedian,
         fastMedian,
+        fastBatchMedian,
+        fastBatchPerCall,
         cast(double)exactMedian
-            / cast(double)fastMedian,
+            / fastBatchPerCall,
         relationSink
     );
 
     writefln(
-        "m3_affine_bounds_perf_raw source=%sx%s target=%sx%s exact=%(%s,%) fast=%(%s,%)",
+        "m3_affine_bounds_perf_raw source=%sx%s target=%sx%s exact=%(%s,%) fast_single=%(%s,%) fast_batch=%(%s,%)",
         sourceWidth,
         sourceHeight,
         targetWidth,
         targetHeight,
         exactTimes,
-        fastTimes
+        fastTimes,
+        fastBatchTimes
     );
 
     return 0;
