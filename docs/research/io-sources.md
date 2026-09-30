@@ -327,6 +327,22 @@ DEFER:
 - public source-error hierarchy;
 - public source metadata type.
 
+## 12.1 Empty-lease observation
+
+During Prototype B qualification, calling `RasterLease.init.view()` triggered
+the underlying `SafeRefCounted` uninitialized-payload assertion on both DMD
+and LDC.
+
+This is consistent with the current production contract: `view()` is not the
+fallible probe for an uninitialized lease, while `tryWritableView(out success)`
+explicitly documents and handles `RasterLease.init` by returning failure plus
+`WritableRasterView.init`.
+
+R0.6 therefore uses the fallible writable-borrow API to verify that a
+PRE-COMMIT import failure did not publish a retained backing.
+
+This observation does not by itself require a production API change, but it
+must be respected by source/materialization code.
 ## 13. Prototype A result — caller-owned destination
 
 Status: PASS on both supported fast-floor compilers used locally for this research run.
