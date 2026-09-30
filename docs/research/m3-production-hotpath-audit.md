@@ -515,18 +515,115 @@ REJECT:
 - replacing the generic fallback;
 - handwritten SIMD.
 
-## Next evidence
+## Final local code-generation qualification
 
-One gate remains before opening the Production optimization PR:
+The final local code-generation report was produced from research head:
 
-1. inspect final production-shaped local LDC 1.41 / LLVM 19.1.7 assembly for:
-   - integrated positive Canonical;
-   - integrated negative Canonical;
-   - negative Canonical with the out-of-line row boundary;
-2. identify the actual inner loop/version selected rather than merely noting
-   that SIMD instructions exist somewhere;
-3. decide whether the LDC-negative specialization is retained.
+```text
+5836bcf598751ad91de141c87f3ae1fbf29d93ca
+```
 
-The general Canonical fast path no longer requires additional performance
-evidence before Production implementation. It still requires normal Fast CI
-and regression qualification once integrated.
+on:
+
+```text
+Intel Core i7-9750H
+LDC 1.41.0
+D frontend 2.111.0
+LLVM 19.1.7
+Host CPU: skylake
+```
+
+The integrated source form contains a vectorized eight-float inner loop, but
+LLVM guards that loop with runtime versioning checks.
+
+Crucially, the integrated guard combines the signed source row stride with
+other legality state before choosing the vector loop. A negative source row
+stride therefore selects the scalar version even though each individual row is
+locally vectorizable.
+
+The out-of-line row-kernel source form changes the optimizer boundary:
+
+- the outer loop advances rows with arbitrary signed row stride;
+- each row call receives three concrete source-row pointers and one concrete
+  destination-row pointer;
+- alias/versioning checks are therefore local to one row;
+- the row kernel contains an eight-float AVX2 loop followed by a scalar tail;
+- the outer negative row direction no longer prevents the row-local vector
+  version from being selected.
+
+This directly explains the stable local timing result instead of merely
+correlating it with the presence of SIMD instructions.
+
+The no-inline source form is therefore not a generic micro-optimization. It is
+an optimizer-boundary workaround for the qualified LDC/frontend generation and
+negative Canonical source-row direction.
+
+## Final M3.1 research decision
+
+KEEP:
+
+- unchanged public M2.3 API and structural semantics;
+- complete existing validation before entering an optimized executor;
+- Canonical source/destination fast path with sample stride one;
+- signed Canonical row-stride support;
+- generic existing path for Universal/sample-strided or otherwise unqualified
+  layouts;
+- narrow check-free internal hot loop;
+- LDC negative-Canonical out-of-line row-kernel specialization for the
+  qualified frontend generation;
+- central compiler/capability selection;
+- portable/reference path retained for all supported compilers.
+
+REJECT:
+
+- no-inline row boundary for DMD;
+- no-inline for positive Canonical rows as a general rule;
+- no-inline for every LDC generation without evidence;
+- public compiler/layout switches;
+- public raw-pointer execution API;
+- handwritten SIMD;
+- weakening negative-stride semantics;
+- hidden worker threads or scheduler policy.
+
+DEFER:
+
+- LDC frontend generations after 2.111 until measured;
+- DMD-specific lower-level source-form tuning beyond the general Canonical
+  executor;
+- AArch64-specific fast-path selection;
+- point-transform fast paths;
+- fill fast paths;
+- strict-reduction optimization;
+- multithreaded execution;
+- GPU work.
+
+## Production handoff
+
+Promote one M3.1 production slice:
+
+```text
+existing public M2.3 validation
+        |
+        +-- sampleStride == 1 for source and destination
+        |       |
+        |       +-- ordinary Canonical check-free executor
+        |       |
+        |       '-- LDC + frontend 2.111 + negative source row stride
+        |               -> preserved out-of-line row executor
+        |
+        '-- otherwise
+                -> existing generic semantic executor
+```
+
+The LDC specialization gate must be centralized and testable.
+
+The evidence covers LDC 1.41 builds using both LLVM 19.1.7 on the stable local
+reference machine and LLVM 20.1.5 on the hosted diagnostic runner. The gate
+should therefore identify the qualified LDC/frontend generation rather than one
+specific LLVM patch build.
+
+Later supported LDC/frontend generations must use the ordinary Canonical path
+until separate benchmark/code-generation evidence justifies extending or
+replacing the specialization.
+
+M3.1 research is complete.
