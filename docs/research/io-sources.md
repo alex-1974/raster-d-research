@@ -373,6 +373,41 @@ Caller-owned destination materialization is viable with the current public
 Prototype A alone is not sufficient for production promotion. R0.6 still
 requires a structurally different retained/adopted source path and ownership
 failure-boundary evidence.
+## 14. Prototype B result — retained/adopted source output
+
+Status: PASS on both DMD and LDC.
+
+Verified:
+
+- source-owned allocation and population;
+- transfer into `OwnedByteResource`;
+- successful retained import into `RasterLease!ubyte`;
+- release obligation transferred to the lease;
+- logical origin remains external to resident descriptor coordinates;
+- resident result rebased to `(0,0)`;
+- PRE-COMMIT import failure preserves source ownership;
+- failed import leaves the output lease unpublished;
+- fallible `tryWritableView()` is the correct public probe for an uninitialized lease.
+
+Conclusion:
+
+A retained/adopted source-output path is also viable with the current public
+`raster-d` ownership/import surface.
+
+This path should remain secondary to caller-owned destination materialization
+unless later evidence shows that a particular source class materially benefits
+from zero-copy retained adoption.
+
+Together, Prototypes A and B establish that the existing core can support both
+consumer-owned and source-owned materialization without introducing provider
+tiles, cache blocks or scheduler concepts.
+
+R0.6 promotion is still not complete. The remaining gate requires:
+
+- representative multi-plane/strided materialization;
+- at least one materially different non-image source shape;
+- explicit failure semantics across those variants;
+- a final KEEP / REJECT / DEFER synthesis for M1.3.
 ## 13. Promotion gate
 
 R0.6 must not promote a production M1.3 source API until experiments show:
