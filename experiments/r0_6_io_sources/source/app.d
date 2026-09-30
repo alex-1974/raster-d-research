@@ -465,12 +465,15 @@ struct RetainedProceduralUbyteSource
                 lease
             );
 
+        auto published =
+            lease.view();
+
         return
             !importResult.ok
             && importResult.resourceDisposition
                 == OwnedRasterResourceDisposition.unchanged
             && resource.ownsResource
-            && !lease.hasBacking;
+            && published.planeCount == 0;
     }
 }
 
