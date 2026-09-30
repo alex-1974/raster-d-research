@@ -531,12 +531,319 @@ private bool runRetainedPreCommitFailureCase()
 }
 
 
+private ubyte vectorComponentU(
+    size_t logicalX,
+    size_t logicalY
+)
+@safe
+pure
+nothrow
+@nogc
+{
+    return cast(ubyte)(
+        cast(ubyte) (logicalX * 3)
+        + cast(ubyte) logicalY
+    );
+}
+
+
+private ubyte vectorComponentV(
+    size_t logicalX,
+    size_t logicalY
+)
+@safe
+pure
+nothrow
+@nogc
+{
+    return cast(ubyte)(
+        cast(ubyte) logicalX
+        ^ cast(ubyte) (logicalY * 5)
+    );
+}
+
+
+struct ProceduralVectorFieldSource
+{
+    bool materializeInto(
+        Region2D logicalRegion,
+        scope WritableRasterView!ubyte destination
+    )
+    @safe
+    pure
+    nothrow
+    @nogc
+    {
+        if (
+            destination.width != logicalRegion.width
+            || destination.height != logicalRegion.height
+            || destination.planeCount != 2
+        )
+        {
+            return false;
+        }
+
+        foreach (y; 0 .. logicalRegion.height)
+        {
+            foreach (x; 0 .. logicalRegion.width)
+            {
+                const logicalX =
+                    logicalRegion.x + x;
+
+                const logicalY =
+                    logicalRegion.y + y;
+
+                if (
+                    !destination.trySetSample(
+                        0,
+                        x,
+                        y,
+                        vectorComponentU(
+                            logicalX,
+                            logicalY
+                        )
+                    )
+                )
+                {
+                    return false;
+                }
+
+                if (
+                    !destination.trySetSample(
+                        1,
+                        x,
+                        y,
+                        vectorComponentV(
+                            logicalX,
+                            logicalY
+                        )
+                    )
+                )
+                {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+}
+
+
+private bool makeWritableInterleavedVectorResident(
+    size_t width,
+    size_t height,
+    size_t rowPaddingBytes,
+    out RasterLease!ubyte lease
+)
+@system
+{
+    lease = RasterLease!ubyte.init;
+
+    if (
+        width == 0
+        || height == 0
+        || width > (size_t.max - rowPaddingBytes) / 2
+    )
+    {
+        return false;
+    }
+
+    const rowStrideBytes =
+        width * 2 + rowPaddingBytes;
+
+    if (
+        rowStrideBytes > cast(size_t) ptrdiff_t.max
+        || height > size_t.max / rowStrideBytes
+    )
+    {
+        return false;
+    }
+
+    const byteLength =
+        height * rowStrideBytes;
+
+    auto memory =
+        malloc(byteLength);
+
+    if (memory is null)
+    {
+        return false;
+    }
+
+    OwnedByteResource resource;
+
+    if (
+        !tryAdoptMallocResource(
+            memory,
+            byteLength,
+            resource
+        )
+    )
+    {
+        return false;
+    }
+
+    const importResult =
+        tryImportOwnedRaster!ubyte(
+            resource,
+            [
+                PlaneByteLayout(
+                    0,
+                    cast(ptrdiff_t) rowStrideBytes,
+                    2
+                ),
+                PlaneByteLayout(
+                    1,
+                    cast(ptrdiff_t) rowStrideBytes,
+                    2
+                )
+            ],
+            Region2D(
+                0,
+                0,
+                width,
+                height
+            ),
+            lease
+        );
+
+    return importResult.ok;
+}
+
+
+private bool verifyVectorResident(
+    ref RasterLease!ubyte lease,
+    Region2D logicalRegion
+)
+@safe
+{
+    auto view =
+        lease.view();
+
+    if (
+        view.width != logicalRegion.width
+        || view.height != logicalRegion.height
+        || view.planeCount != 2
+    )
+    {
+        return false;
+    }
+
+    foreach (y; 0 .. logicalRegion.height)
+    {
+        foreach (x; 0 .. logicalRegion.width)
+        {
+            const logicalX =
+                logicalRegion.x + x;
+
+            const logicalY =
+                logicalRegion.y + y;
+
+            ubyte u;
+            ubyte v;
+
+            if (
+                !view.trySample(
+                    0,
+                    x,
+                    y,
+                    u
+                )
+                || !view.trySample(
+                    1,
+                    x,
+                    y,
+                    v
+                )
+            )
+            {
+                return false;
+            }
+
+            if (
+                u != vectorComponentU(
+                    logicalX,
+                    logicalY
+                )
+                || v != vectorComponentV(
+                    logicalX,
+                    logicalY
+                )
+            )
+            {
+                return false;
+            }
+        }
+    }
+
+    return true;
+}
+
+
+private bool runVectorFieldCase()
+@system
+{
+    const logicalRegion =
+        Region2D(
+            900_000,
+            1_700_000,
+            15,
+            6
+        );
+
+    RasterLease!ubyte lease;
+
+    if (
+        !makeWritableInterleavedVectorResident(
+            logicalRegion.width,
+            logicalRegion.height,
+            7,
+            lease
+        )
+    )
+    {
+        return false;
+    }
+
+    bool writableOk;
+
+    scope auto writable =
+        lease.tryWritableView(
+            writableOk
+        );
+
+    if (!writableOk)
+    {
+        return false;
+    }
+
+    ProceduralVectorFieldSource source;
+
+    if (
+        !source.materializeInto(
+            logicalRegion,
+            writable
+        )
+    )
+    {
+        return false;
+    }
+
+    return verifyVectorResident(
+        lease,
+        logicalRegion
+    );
+}
+
+
 void main()
 {
     assert(runContiguousCase());
     assert(runPaddedCase());
     assert(runRetainedSourceCase());
     assert(runRetainedPreCommitFailureCase());
+    assert(runVectorFieldCase());
 
     import std.stdio : writeln;
 
@@ -546,5 +853,9 @@ void main()
 
     writeln(
         "R0.6 Prototype B PASS: retained source transfer and PRE-COMMIT ownership preservation"
+    );
+
+    writeln(
+        "R0.6 Prototype C PASS: non-image two-plane interleaved padded vector field"
     );
 }
