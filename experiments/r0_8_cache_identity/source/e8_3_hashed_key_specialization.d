@@ -327,10 +327,16 @@ nothrow
     assert(cache.tryGet(base, value));
     assert(value == 700);
 
-    auto nextGeneration =
-        base;
-
-    ++nextGeneration.generation;
+    const nextGeneration =
+        CompositeKey(
+            base.source,
+            base.generation + 1,
+            base.regionX,
+            base.regionY,
+            base.regionWidth,
+            base.regionHeight,
+            base.schema
+        );
 
     assert(
         !cache.tryGet(
@@ -339,10 +345,16 @@ nothrow
         )
     );
 
-    auto differentSchema =
-        base;
-
-    ++differentSchema.schema;
+    const differentSchema =
+        CompositeKey(
+            base.source,
+            base.generation,
+            base.regionX,
+            base.regionY,
+            base.regionWidth,
+            base.regionHeight,
+            base.schema + 1
+        );
 
     assert(
         !cache.tryGet(
@@ -383,9 +395,12 @@ nothrow
     {
         int value;
 
+        const key =
+            CollisionKey(i);
+
         assert(
             cache.tryGet(
-                CollisionKey(i),
+                key,
                 value
             )
         );
@@ -398,9 +413,12 @@ nothrow
 
     int missing;
 
+    const missingKey =
+        CollisionKey(99);
+
     assert(
         !cache.tryGet(
-            CollisionKey(99),
+            missingKey,
             missing
         )
     );
