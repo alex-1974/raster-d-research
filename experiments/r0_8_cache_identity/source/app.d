@@ -4,6 +4,7 @@ import raster : Region2D;
 import e8_2_key_ownership : runE82;
 import e8_3_hashed_key_specialization : runE83;
 import e8_4_retained_identity_integration : runE84;
+import e8_5_identity_contract_failure : runE85;
 
 
 private struct SourceIdentity
@@ -329,6 +330,7 @@ void main()
     assert(runE82());
     assert(runE83());
     assert(runE84());
+    assert(runE85());
 
     import std.stdio : writeln;
 
@@ -346,5 +348,9 @@ void main()
 
     writeln(
         "E8.4 PASS: caller-owned identity integrates with retained RasterLease and source generations"
+    );
+
+    writeln(
+        "E8.5 PASS: identity correctness is an explicit caller contract"
     );
 }
