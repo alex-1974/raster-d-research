@@ -218,11 +218,11 @@ private struct RetainedRasterCache(size_t SlotCount)
     private bool acquireWithoutStats(
         RetainedCacheKey key,
         out RasterLease!ubyte lease
-    ) const
+    )
     {
         lease = RasterLease!ubyte.init;
 
-        foreach (ref const entry; entries)
+        foreach (ref entry; entries)
         {
             if (
                 entry.occupied
@@ -240,7 +240,7 @@ private struct RetainedRasterCache(size_t SlotCount)
 
     bool contains(
         RetainedCacheKey key
-    ) const
+    )
     {
         RasterLease!ubyte lease;
 
