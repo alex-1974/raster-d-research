@@ -2,7 +2,7 @@
 
 Issue: raster-d-research #3
 
-Status: E7.1 PASS on DMD 2.111.0 and LDC 1.41.0.
+Status: E7.1 and E7.2 PASS on DMD 2.111.0 and LDC 1.41.0.
 
 ## E7.1
 
@@ -45,3 +45,18 @@ GitHub Actions run: `36705940582`
 - raster-d develop: `2ea33562ca217ef9f552d0be397100326847c08d`
 
 Both jobs printed the expected final line.
+
+
+## E7.2
+
+E7.2 integrates real `RasterLease!ubyte` retention.
+
+Verified by GitHub Actions run `36706421827`.
+
+It demonstrates:
+
+- copied leases survive cache eviction;
+- cache-retained bytes and total resident bytes are distinct quantities;
+- one interleaved two-plane physical allocation is counted once;
+- physical byte cost must currently be carried beside a lease rather than
+  derived from the public RasterLease surface.
