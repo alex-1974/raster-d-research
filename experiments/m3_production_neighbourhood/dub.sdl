@@ -1,0 +1,7 @@
+name "raster-m3-production-neighbourhood"
+description "M3.1 production-shaped neighbourhood performance research"
+targetType "executable"
+
+dependency "raster-d" path="../../../raster-d"
+
+dflags "-preview=dip1000"
