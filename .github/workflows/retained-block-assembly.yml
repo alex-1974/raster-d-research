@@ -1,0 +1,71 @@
+name: Retained Block Assembly Research
+
+on:
+  push:
+    branches:
+      - research/retained-block-assembly
+    paths:
+      - 'experiments/r0_9_retained_block_assembly/**'
+      - 'docs/research/retained-block-assembly.md'
+      - '.github/workflows/retained-block-assembly.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  e9:
+    name: ${{ matrix.name }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: Linux x86-64 / DMD
+            os: ubuntu-24.04
+            compiler: dmd-2.111.0
+            dub: 1.40.0
+
+          - name: Linux x86-64 / LDC
+            os: ubuntu-24.04
+            compiler: ldc-1.41.0
+            dub: 1.40.0
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Checkout research
+        uses: actions/checkout@v7
+
+      - name: Checkout raster-d develop
+        uses: actions/checkout@v7
+        with:
+          repository: alex-1974/raster-d
+          ref: develop
+          path: raster-d
+
+      - name: Expose sibling workspace layout
+        shell: bash
+        run: |
+          ln -s "$GITHUB_WORKSPACE/raster-d" "$GITHUB_WORKSPACE/../raster-d"
+
+      - name: Install D compiler
+        uses: dlang-community/setup-dlang@v2
+        with:
+          compiler: ${{ matrix.compiler }}
+          dub: ${{ matrix.dub }}
+          dc_format: shortname
+
+      - name: Environment
+        shell: bash
+        run: |
+          echo "Research: $(git rev-parse HEAD)"
+          echo "raster-d: $(git -C raster-d rev-parse HEAD)"
+          echo "DC: $DC"
+          "$DC" --version
+          dub --version
+
+      - name: Run retained block assembly experiments
+        shell: bash
+        run: |
+          dub run             --root=experiments/r0_9_retained_block_assembly             --compiler="$DC"
