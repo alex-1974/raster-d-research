@@ -1,0 +1,5 @@
+name "raster-cache-identity-e8"
+description "Generic raster cache identity research"
+targetType "executable"
+
+dependency "raster-d" path="../../../raster-d"
