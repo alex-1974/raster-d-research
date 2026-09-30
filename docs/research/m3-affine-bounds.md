@@ -141,3 +141,117 @@ Before Production promotion:
 6. qualify differently shaped neighbourhood source/output rectangles;
 7. assess cross-type reuse separately rather than assuming same-type evidence
    applies.
+
+
+## Gate 2 result — checked integer/address limits
+
+Research head:
+
+```text
+4e19754a0e8e83198c6dfa998952e9e94f59b00b
+```
+
+Workflow:
+
+```text
+M3 Affine Bounds Research #9
+run 36769995996
+DMD 2.111: success
+LDC 1.41: success
+```
+
+Both compilers produced:
+
+```text
+m3_affine_bounds_sparse_counterexample PASS
+m3_affine_bounds_correctness PASS
+cases=100000
+fast_rejects=68105
+overlapping_bounds_but_disjoint=4160
+exact_mismatches=0
+
+m3_affine_bounds_extreme PASS
+fixtures=12
+checked_oracle_cases=8
+conservative_unknown_cases=4
+fast_rejects=6
+exact_arithmetic_failures=0
+```
+
+The checked research implementation mirrors the arithmetic structure already
+used by Production backing validation:
+
+```text
+checked coordinate * stride
+    -> axis min/max offsets
+    -> checked signed offset addition
+    -> checked element-offset to byte magnitude
+    -> checked base +/- byte offset
+    -> checked half-open upper endpoint
+```
+
+The gate covers:
+
+- `ptrdiff_t.min`;
+- `ptrdiff_t.max`;
+- the signed-address midpoint;
+- near-`size_t.max` valid intervals;
+- sample-end overflow;
+- coordinate/stride overflow;
+- combined affine-offset overflow;
+- byte-scaling overflow;
+- negative traversal near the upper address boundary;
+- opposite address-space edges;
+- overlapping bounds with sparse-disjoint samples;
+- overlapping bounds with genuine sample overlap.
+
+In every arithmetic-uncertain case the fast-reject remains conservative:
+it returns no proof and therefore preserves the exact relation path.
+
+### Domain discrepancy found during Gate 2
+
+The existing affine-relation unit tests include algebraic address cases such as
+a one-byte sample beginning at `size_t.max`.
+
+That is valid input for the relation's integer algebra but it is not a possible
+already-validated RasterView backing sample, because the required half-open
+sample interval
+
+```text
+[size_t.max, size_t.max + 1)
+```
+
+cannot be represented and would fail retained-resource validation.
+
+This is not a Production correctness bug because the affine relation documents
+validated raster views as its consumer precondition.
+
+It does matter for the optimization boundary:
+
+- a Production fast-reject should be defined over validated reachable raster
+  bytes rather than silently broadening its contract to every algebraic
+  relation input;
+- relation-only tests may continue to exercise the wider algebraic domain;
+- consumer-facing optimization must preserve the current exact classifier for
+  any case where the validated-byte bound cannot be established.
+
+## Gate 2 conclusion
+
+KEEP for further qualification:
+
+- checked conservative affine byte bounds;
+- one-way `bounds disjoint -> sample sets disjoint` fast-reject;
+- exact-classifier fallback for overlapping or unrepresentable bounds.
+
+REJECT:
+
+- unchecked pointer/stride min-max arithmetic in individual consumers;
+- treating a bounding-envelope overlap as exact sample overlap.
+
+Still required before Production promotion:
+
+1. relation-stage benchmark using the checked implementation;
+2. representative point-transform and neighbourhood consumer measurements;
+3. differently shaped source/output rectangles;
+4. decide the single package-internal integration point;
+5. verify that exact overlap/error ordering is unchanged after integration.
