@@ -1,6 +1,6 @@
 # Cache Boundary and Bounded Residency Research
 
-Status: active research. E7.1 and E7.2 complete.
+Status: complete. E7.1 through E7.4 passed on the workspace baseline compilers.
 
 Issue: raster-d-research #3
 
@@ -229,38 +229,186 @@ behind one counter.
 
 ### E7.3 — geometry and reuse
 
-Planned after E7.2.
+Status: **PASS** on DMD 2.111.0 and LDC 1.41.0.
 
-Test:
+Verified research head:
 
-- source/provider blocks misaligned with cache blocks;
-- cache blocks misaligned with logical requests;
-- one request assembled from multiple cache entries;
-- overlapping halo/dependency requests reuse existing cached resident data;
-- huge logical origins remain outside resident pointer geometry.
+`d75798fcc2cf73de37f8522a6bbf31c64027b5aa`
 
-## 9. Promotion gate
+Verified raster-d develop:
 
-No production cache API is justified merely by a passing E7.1.
+`2ea33562ca217ef9f552d0be397100326847c08d`
 
-Promotion requires evidence for:
+GitHub Actions run:
 
-- stable identity;
-- ownership/lifetime;
-- truthful byte accounting;
-- pinned/borrowed eviction safety;
-- source/cache/request geometry independence;
-- explicit failure semantics;
-- DMD/LDC verification;
-- public-surface review.
+`36706677585`
 
-Possible result states remain:
+Both compiler jobs produced:
 
 ```text
-KEEP
-REJECT
-DEFER
+E7.3 PASS: provider/cache/request independence and overlap reuse
 ```
 
-A production M1 follow-up is created only if the research supports a narrowly
-scoped contract.
+Fixture geometry:
+
+```text
+provider blocks: 16 x 8
+cache blocks:    12 x 10
+request 1:       (13,11,23,13)
+```
+
+The first request required four cache blocks and produced:
+
+```text
+materializations = 4
+misses           = 4
+hits             = 0
+```
+
+A second halo-expanded dependency request reused four existing blocks and
+materialized only two new blocks:
+
+```text
+cumulative materializations = 6
+cumulative misses           = 6
+cumulative hits             = 4
+```
+
+Six padded cache blocks retained 780 physical bytes in total.
+
+The experiment demonstrates that:
+
+- provider block geometry can remain entirely inside the source adapter;
+- cache-block geometry can be chosen independently of provider and request
+  geometry;
+- one logical request can be assembled from several cache entries;
+- overlapping neighbourhood/halo dependencies can reuse cache entries without
+  making halo geometry part of cache identity;
+- cache identity need not contain provider-native tile coordinates.
+
+### E7.4 — failure isolation and residency admission
+
+Status: **PASS** on DMD 2.111.0 and LDC 1.41.0.
+
+Verified research head:
+
+`4aaa631f7c81353a008807775e8b7fd17525fdf4`
+
+Verified raster-d develop:
+
+`2ea33562ca217ef9f552d0be397100326847c08d`
+
+GitHub Actions run:
+
+`36706970424`
+
+Both compiler jobs produced:
+
+```text
+E7.4 PASS: empty work, failure isolation and separate residency admission
+```
+
+The experiment demonstrates that:
+
+1. a valid empty logical request is zero work: no allocation, source call,
+   cache hit or cache miss is required;
+2. source/materialization failure before cache commit leaves existing cached
+   state unchanged and readable;
+3. a failed candidate is not published into cache state;
+4. a request whose minimum simultaneous resident working set is 288 bytes is
+   explicitly rejected by a 256-byte residency-admission budget;
+5. a smaller 192-byte working set can be admitted and released;
+6. cache-retention budget and request-residency admission are separate
+   accounting domains.
+
+## 9. Research conclusions
+
+The evidence supports a narrower architecture than a monolithic cache manager.
+
+### KEEP
+
+Keep these semantics for production design:
+
+- `ProviderBlock != CacheBlock != Region != ProcessingTask`;
+- cache identity is independent of provider-native block/tile coordinates;
+- logical cache-block regions may differ from source/provider and processing
+  request geometry;
+- retained cache values can use existing `RasterLease` ownership;
+- consumer-retained leases may outlive cache eviction safely;
+- cache ownership must be accounted in physical resource bytes;
+- one shared/interleaved physical allocation is counted once, independent of
+  logical plane count;
+- failed materialization is not committed into cache state;
+- empty requests remain zero work;
+- cache-retention accounting and total/request residency admission are distinct
+  contracts;
+- an operation whose minimum admitted working set exceeds its residency budget
+  fails explicitly rather than silently oversubscribing memory.
+
+### REJECT
+
+Do not build production semantics around these assumptions:
+
+- provider tile/block identity as the generic cache key;
+- cache block equal to processing region;
+- cache block equal to provider block;
+- logical plane spans as a substitute for physical resource byte cost;
+- cache eviction implies immediate physical deallocation;
+- cache byte budget equals total engine memory budget;
+- cache policy embedded in RasterView, Region2D or source materialization;
+- scheduler or worker-pool semantics required merely to make cache reuse work.
+
+### DEFER
+
+The experiments do not yet justify:
+
+- a public `RasterCache` API;
+- a public source-identity type;
+- the exact production schema-identity representation;
+- one mandatory cache-block size or geometry policy;
+- LRU as the required production eviction policy;
+- borrowed cache outputs whose lifetime depends directly on cache mutation;
+- concurrent cache mutation/locking semantics;
+- async materialization, prefetch, scheduling or worker pools;
+- GPU residency accounting;
+- a unified total-engine memory manager;
+- cache policy for imagery pyramids or provider-specific encoded data.
+
+## 10. Promotion decision
+
+**Do not promote the research cache implementation itself.**
+
+The fixed-size arrays, research-local keys, LRU oracle, source fixture and
+assembly code are disposable evidence.
+
+The evidence does justify a smaller production follow-up focused first on
+package-internal bounded-residency accounting and retained-resource cost
+metadata. That production slice must remain independent of:
+
+- source/provider identity;
+- cache replacement policy;
+- scheduler policy;
+- imagery semantics;
+- public cache API.
+
+A later cache-reuse production slice can build on that accounting contract once
+its concrete source/schema identity requirements are justified by consumers.
+
+## 11. Completion gate result
+
+Issue #3's research completion gate is satisfied:
+
+- stable provider-independent cache identity shape was demonstrated;
+- retained ownership and eviction lifetime were exercised with real
+  `RasterLease`;
+- strict cache byte accounting was demonstrated;
+- cache and total residency accounting were separated;
+- provider/cache/request geometry independence was demonstrated;
+- multi-block assembly and halo-overlap reuse were demonstrated;
+- multi-plane padded/interleaved physical accounting was demonstrated;
+- empty-work and materialization-failure semantics were demonstrated;
+- over-budget working-set admission was demonstrated;
+- DMD 2.111.0 and LDC 1.41.0 both pass.
+
+The next step is explicit promotion review in raster-d, not additional cache
+machinery in this research branch.
