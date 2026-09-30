@@ -1,6 +1,6 @@
 # Cache Boundary and Bounded Residency Research
 
-Status: active research. E7.1 complete.
+Status: active research. E7.1 and E7.2 complete.
 
 Issue: raster-d-research #3
 
@@ -182,16 +182,50 @@ No raster storage ownership is tested yet.
 
 ### E7.2 — retained raster integration
 
-Planned only after E7.1 passes.
+Status: **PASS** on DMD 2.111.0 and LDC 1.41.0.
 
-Use existing raster-d retained ownership and RasterLease semantics to test:
+Verified research head:
 
-- cache owns/retains resident raster state;
-- borrowers remain valid while pinned/retained;
-- eviction releases cache ownership but does not invalidate independent retained
-  ownership;
-- multi-plane and padded/strided retained values;
-- exact byte accounting for retained physical resources.
+`0e126982f40d658decbd6708be64501f6efdb60a`
+
+Verified raster-d develop:
+
+`2ea33562ca217ef9f552d0be397100326847c08d`
+
+GitHub Actions run:
+
+`36706421827`
+
+Both compiler jobs produced:
+
+```text
+E7.2 PASS: RasterLease retention, eviction survival and physical-byte accounting
+```
+
+Measured semantic results:
+
+1. A cache entry may be evicted while an independently copied `RasterLease`
+   continues to retain and read the same backing correctly.
+2. Therefore:
+   ```text
+   cache-retained bytes != total process-resident raster bytes
+   ```
+   whenever lease copies escape the cache.
+3. A strict cache byte budget remains truthful for cache ownership, but cannot by
+   itself serve as the complete engine residency budget.
+4. Multi-plane interleaved storage must be accounted by physical resource bytes,
+   not by summing logical plane spans. The two-plane fixture occupied one 145-byte
+   physical allocation and was counted once.
+5. The current public `RasterLease` capability does not expose physical-resource
+   byte cost. E7.2 therefore carries materializer-known byte cost beside the lease
+   in research-local cache metadata.
+6. `RasterLease` copying requires mutable access to the source lease because the
+   retained-owner refcount changes. A `const RasterLease` is therefore not a
+   copy source, which is consistent with its ownership semantics.
+
+This narrows the next research question: cache retention and total residency
+admission must be treated as distinct accounting layers rather than hidden
+behind one counter.
 
 ### E7.3 — geometry and reuse
 
