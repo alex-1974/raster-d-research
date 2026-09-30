@@ -1,0 +1,7 @@
+name "raster-m3-affine-bounds"
+description "M3 affine bounding-range fast-reject research"
+targetType "executable"
+
+dependency "raster-d" path="../../../raster-d"
+
+dflags "-preview=dip1000"
