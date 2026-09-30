@@ -529,40 +529,81 @@ int runCase(
     long[repetitions] publicSamples;
     long[repetitions] candidateSamples;
 
+    bool publicExecutionOk = true;
+    bool candidateExecutionOk = true;
+
     foreach (r; 0 .. repetitions)
     {
         if ((r & 1) == 0)
         {
             publicSamples[r] = measure({
-                assert(tryApplyRasterNeighbourhood3x3!productionKernel(
-                    source,0,Region2D(1,1,width,height),publicDestination,0,error));
+                const ok =
+                    tryApplyRasterNeighbourhood3x3!productionKernel(
+                        source,
+                        0,
+                        Region2D(1,1,width,height),
+                        publicDestination,
+                        0,
+                        error
+                    );
+
+                publicExecutionOk = publicExecutionOk && ok;
                 consume(publicOutput);
             });
 
             candidateSamples[r] = measure({
-                assert(tryCanonicalCandidate!productionKernel(
-                    source,0,Region2D(1,1,width,height),candidateDestination,0,error));
+                const ok =
+                    tryCanonicalCandidate!productionKernel(
+                        source,
+                        0,
+                        Region2D(1,1,width,height),
+                        candidateDestination,
+                        0,
+                        error
+                    );
+
+                candidateExecutionOk = candidateExecutionOk && ok;
                 consume(candidateOutput);
             });
         }
         else
         {
             candidateSamples[r] = measure({
-                assert(tryCanonicalCandidate!productionKernel(
-                    source,0,Region2D(1,1,width,height),candidateDestination,0,error));
+                const ok =
+                    tryCanonicalCandidate!productionKernel(
+                        source,
+                        0,
+                        Region2D(1,1,width,height),
+                        candidateDestination,
+                        0,
+                        error
+                    );
+
+                candidateExecutionOk = candidateExecutionOk && ok;
                 consume(candidateOutput);
             });
 
             publicSamples[r] = measure({
-                assert(tryApplyRasterNeighbourhood3x3!productionKernel(
-                    source,0,Region2D(1,1,width,height),publicDestination,0,error));
+                const ok =
+                    tryApplyRasterNeighbourhood3x3!productionKernel(
+                        source,
+                        0,
+                        Region2D(1,1,width,height),
+                        publicDestination,
+                        0,
+                        error
+                    );
+
+                publicExecutionOk = publicExecutionOk && ok;
                 consume(publicOutput);
             });
         }
     }
 
     if (
-        fingerprint(publicOutput) != expectedFingerprint
+        !publicExecutionOk
+        || !candidateExecutionOk
+        || fingerprint(publicOutput) != expectedFingerprint
         || fingerprint(candidateOutput) != expectedFingerprint
     )
         return 1;
