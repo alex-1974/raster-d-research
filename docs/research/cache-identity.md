@@ -1,6 +1,6 @@
 # Cache Identity Boundary Research
 
-Status: active research. E8.1 through E8.3 complete.
+Status: complete. E8.1 through E8.5 passed on the workspace baseline compilers.
 
 Issue: raster-d-research #5
 
@@ -333,3 +333,195 @@ E8.4 must combine caller-owned identity with real raster-d ownership:
 
 Only after E8.4 passes should Issue #5 move toward final KEEP / REJECT / DEFER
 conclusions.
+
+
+## 13. E8.4 — retained RasterLease identity integration
+
+Status: **PASS** on DMD 2.111.0 and LDC 1.41.0.
+
+Verified research head:
+
+`f5e20a3f446db8d70e0d3f670abdeb287c8cd4ee`
+
+Verified raster-d develop:
+
+`8dc3180979c908f305274adab8f78b61ecfe7f14`
+
+GitHub Actions run:
+
+`36709522454`
+
+Both compiler jobs produced:
+
+```text
+E8.4 PASS: caller-owned identity integrates with retained RasterLease and source generations
+```
+
+E8.4 uses real `RasterLease!ubyte` values.
+
+It demonstrates:
+
+1. two separately constructed procedural source objects can reuse one retained
+   value when the caller deliberately assigns them the same semantic identity;
+2. those source objects may use different provider-native block geometry without
+   changing semantic identity;
+3. different source behavior over the same logical region produces a miss when
+   the caller key distinguishes the behavior;
+4. source generation changes invalidate identity without the cache
+   understanding what a generation means;
+5. an externally copied RasterLease remains valid after the cache container
+   releases its copy;
+6. a scientific two-plane padded/interleaved retained raster works with the same
+   caller-owned identity approach;
+7. incompatible scientific schema identity prevents false reuse;
+8. huge logical origins remain ordinary caller-key coordinates.
+
+This closes the main gap between the abstract E8.2/E8.3 key model and actual
+raster-d retained ownership.
+
+## 14. E8.5 — caller identity correctness contract
+
+Status: **PASS** on DMD 2.111.0 and LDC 1.41.0.
+
+Verified research head:
+
+`683ae8beadcf98d191287e633c59975c2fec4aa2`
+
+Verified raster-d develop:
+
+`8dc3180979c908f305274adab8f78b61ecfe7f14`
+
+GitHub Actions run:
+
+`36709677358`
+
+Both compiler jobs produced:
+
+```text
+E8.5 PASS: identity correctness is an explicit caller contract
+```
+
+E8.5 demonstrates the failure boundary directly:
+
+- if the caller omits a semantic distinction from the key, the generic cache
+  can produce a false hit and cannot detect that the reused value is wrong;
+- if the caller includes unstable accidental state in the key, semantically
+  identical data produces avoidable misses;
+- a complete semantic key prevents the false hit;
+- hash/equality implementations must satisfy:
+
+```text
+sameKey(a, b) => hashKey(a) == hashKey(b)
+```
+
+The cache cannot infer or repair contradictory semantic identity supplied by
+the caller.
+
+Therefore identity correctness is a caller contract, while cache mechanics are
+responsible only for honoring the supplied equality/hash semantics.
+
+## 15. Final conclusions
+
+### KEEP
+
+Keep these semantics for any production reusable-retained layer:
+
+- semantic value identity is distinct from resident representation;
+- provider block/tile geometry is not generic cache identity;
+- resident stride, padding and allocation address are not semantic identity;
+- caller-owned key construction is the generic identity boundary;
+- mutable/changing sources express invalidation through caller-owned identity,
+  commonly by generation/version;
+- schema distinctions belong to caller identity when they change sample
+  semantics;
+- cache machinery may be templated over `Key` without understanding source,
+  generation, Region2D or schema fields;
+- equality and hashing may be compile-time alias/template parameters;
+- specialized fixed-capacity lookup can remain `@safe pure nothrow @nogc`;
+- real retained `RasterLease` values are compatible with this model;
+- independent retained leases may outlive cache storage;
+- the caller must guarantee stable, complete identity and consistent
+  hash/equality semantics.
+
+### REJECT
+
+Do not make these the mandatory generic raster-d identity model:
+
+- provider-native tile/block ID;
+- one universal raster-d `SourceId + Generation + Region + Schema` runtime
+  struct;
+- automatically assigned source-instance ID as the sole semantic source
+  identity;
+- resident stride/layout/padding as semantic identity;
+- structural introspection of arbitrary source configuration by raster-d;
+- boxed runtime key hierarchy or mandatory inheritance;
+- duplicate runtime sample-type identity when D template instantiation already
+  separates typed cache values;
+- cache-side attempts to infer whether a caller key is semantically complete.
+
+### DEFER
+
+This research does not yet require:
+
+- a public cache-key API;
+- a public `RasterSourceId`;
+- one standardized schema-identity type;
+- cross-process/persistent cache identity;
+- serialization of keys;
+- distributed/network cache identity;
+- source identity capabilities on every source type;
+- concurrent cache lookup/mutation;
+- replacement/eviction policy;
+- async/prefetch/scheduler behavior;
+- imagery pyramid or HTTP cache-control semantics.
+
+## 16. Promotion recommendation
+
+Do **not** promote `SemanticKey`, `ProceduralKey`, or any other research key
+type.
+
+The reusable production concept is smaller:
+
+```text
+generic retained lookup/store over caller-owned Key
+```
+
+with identity semantics supplied by the caller.
+
+A narrowly scoped production follow-up may therefore evaluate a package-internal
+retained lookup/store that:
+
+- is templated on caller-owned `Key`;
+- stores typed `RasterLease!T`;
+- accepts caller-compatible equality/hash specialization;
+- preserves the M1.4 bounded-residency contract;
+- has explicit full/admission/miss failure behavior;
+- introduces no provider/source/schema type of its own;
+- introduces no scheduler;
+- does not yet require one replacement policy.
+
+The research cache implementations themselves remain disposable evidence.
+
+## 17. Completion gate
+
+Issue #5's completion gate is satisfied.
+
+Evidence now covers:
+
+- procedural equivalent and different-behavior sources;
+- mutable generation invalidation;
+- retained/in-memory ownership behavior;
+- scientific two-plane retained storage;
+- block-backed/provider-independent source geometry;
+- huge logical origins;
+- semantic versus resident-representation separation;
+- caller-owned opaque and composite keys;
+- compile-time specialized hash/equality;
+- real RasterLease reuse/lifetime;
+- incorrect/incomplete/unstable identity failure modes;
+- DMD 2.111.0 and LDC 1.41.0 verification.
+
+The minimum identity required to prevent false hits is therefore not one
+raster-d-defined field layout. It is a caller-owned key whose equality/hash
+contract completely and stably represents the semantic value the caller wishes
+to reuse.
