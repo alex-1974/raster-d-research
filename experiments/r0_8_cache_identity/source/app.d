@@ -2,6 +2,7 @@ module app;
 
 import raster : Region2D;
 import e8_2_key_ownership : runE82;
+import e8_3_hashed_key_specialization : runE83;
 
 
 private struct SourceIdentity
@@ -325,6 +326,7 @@ void main()
     assert(runHugeOrigin());
     assert(runGenerationInvalidation());
     assert(runE82());
+    assert(runE83());
 
     import std.stdio : writeln;
 
@@ -334,5 +336,9 @@ void main()
 
     writeln(
         "E8.2 PASS: caller-owned generic keys preserve semantics without raster-d source knowledge"
+    );
+
+    writeln(
+        "E8.3 PASS: compile-time hash/equality specialization keeps identity lookup @nogc"
     );
 }
