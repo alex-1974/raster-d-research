@@ -1,6 +1,6 @@
 # Retained Block Assembly Research
 
-Status: active research. E9.1 complete.
+Status: active research. E9.1 and E9.2 complete.
 
 Issue: raster-d-research #7
 
@@ -141,3 +141,114 @@ The production M1.5 store is package-internal and is deliberately not bypassed
 from this external research repository. E9.2 therefore reproduces only the
 minimum lookup/retention semantics in research code while using real public
 RasterLease ownership.
+
+
+## 7. E9.2 result — retained cold/warm/overlap assembly
+
+Status: **PASS** on DMD 2.111.0 and LDC 1.41.0.
+
+Verified research head:
+
+`c0dfbff127a0889703bb824487ecc41a623df68c`
+
+Verified raster-d develop:
+
+`813e73c4fc2f3fd2be74e39989da10c6723e6f3a`
+
+GitHub Actions run:
+
+`36711688031`
+
+Both compiler jobs produced:
+
+```text
+E9.2 PASS: retained cold warm overlap assembly matches direct materialization
+```
+
+The E9.2 fixture uses:
+
+```text
+logical extent:          96 x 80
+provider blocks:         16 x 8
+cache blocks:            12 x 10
+first request:           (13,11,23,13)
+destination row padding: 3
+cache-block row padding: 1
+```
+
+The first request spans four cache blocks.
+
+Cold execution produced:
+
+```text
+source materializations = 4
+store misses            = 4
+```
+
+The experiment reacquires each newly inserted retained block before assembly,
+therefore store-hit instrumentation includes those four post-insert acquisitions.
+
+Repeating the same request produced no new source materialization and reused all
+four retained blocks.
+
+A second already-expanded halo/dependency request:
+
+```text
+(20,16,21,11)
+```
+
+spans six cache blocks:
+
+- four already retained blocks are reused;
+- two new blocks are materialized;
+- assembled output remains byte-identical to direct logical materialization.
+
+A separate reference source uses provider-native 7 x 5 blocks while the assembly
+source uses 16 x 8 blocks. Both produce the same logical result, proving again
+that provider geometry is source-local.
+
+### E9.2 conclusion
+
+These contracts compose cleanly:
+
+```text
+block decomposition policy
+    -> caller-owned block key
+    -> retained lookup
+    -> materialize miss
+    -> retained RasterLease
+    -> copy overlap into caller-owned destination
+```
+
+The destination/request remains independent of cache-block geometry.
+
+Assembly can consume one transient acquired block lease at a time and release
+that copy before the next block.
+
+The next required question is whether retention failure is non-fatal to current
+request correctness.
+
+## 8. Next experiment — E9.3 retention failure versus request correctness
+
+E9.3 must prove or reject:
+
+```text
+successful materialization
++
+failed retention
+->
+current request may still complete from transient block
+```
+
+Test separately:
+
+- retained-byte budget exhausted;
+- entry capacity exhausted;
+- store state unchanged after rejected retention;
+- transient just-materialized lease remains readable;
+- final assembled request remains byte-identical to direct materialization;
+- the same uncached block is rematerialized on a later request, demonstrating
+  degraded reuse rather than corrupted correctness.
+
+Request/working-set residency remains a separate accounting domain from
+store-retained bytes.
