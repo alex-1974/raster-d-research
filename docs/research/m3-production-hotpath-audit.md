@@ -277,11 +277,136 @@ A candidate may be recommended for Production only if:
 - multithreaded execution;
 - GPU work.
 
+## Production-shaped benchmark evidence
+
+### Harness correction
+
+The first release-build harness revision invoked the benchmark and timed
+operations through `assert(...)`.
+
+That shape is invalid for release benchmarking because assertions may be
+removed with their argument evaluation.
+
+The harness was corrected so that:
+
+- `main()` returns `runBenchmarkMatrix()` directly;
+- every timed operation is executed explicitly;
+- operation success is accumulated separately from timing;
+- correctness fingerprints are verified after timing;
+- no benchmark result from the assertion-wrapped revisions is retained.
+
+This repeats an important R0.5 lesson: correctness guards must not accidentally
+own the expression whose performance is being measured in release builds.
+
+### Hosted-runner diagnostic matrix
+
+Qualified head:
+
+```text
+0feee8fcd6def46a8b589da5df8e33ae756b0f1c
+workflow run 36761357770 / #7
+```
+
+Both DMD and LDC jobs completed successfully.
+
+The hosted environment is not an absolute baseline. It is retained only as
+same-run relative diagnostic evidence.
+
+The current LDC package identifies itself as:
+
+```text
+LDC 1.41.0
+DMD frontend 2.111.0
+LLVM 20.1.5
+x86-64
+```
+
+This differs from the older R0.5 LDC 1.41 evidence that was recorded with LLVM
+19.1.7. Compiler name/version alone is therefore not sufficient to infer one
+optimizer generation.
+
+Representative 2048 x 512, pitch 2304 medians:
+
+| Compiler | Rows | Public M2.3 | Canonical integrated | Candidate / public | no-inline | no-inline / integrated |
+| --- | --- | ---: | ---: | ---: | ---: | ---: |
+| DMD 2.111 | positive | 53.379 ms | 17.349 ms | 0.325 | 17.318 ms | 0.998 |
+| DMD 2.111 | negative | 53.789 ms | 17.493 ms | 0.325 | 19.719 ms | 1.127 |
+| LDC 1.41 / LLVM 20.1.5 | positive | 17.847 ms | 9.393 ms | 0.526 | 9.272 ms | 0.987 |
+| LDC 1.41 / LLVM 20.1.5 | negative | 17.909 ms | 10.471 ms | 0.585 | 9.341 ms | 0.892 |
+
+The width matrix around 127/128/129, 511/512/513 and 2047/2048/2049 preserves
+the same broad result:
+
+- the validated Canonical execution path materially outperforms the current
+  public sample-by-sample path on both compilers;
+- DMD generally benefits by roughly a factor of two or more and by roughly
+  threefold in the largest cases;
+- LDC also benefits materially, though the public baseline is already much
+  faster than DMD;
+- ordinary integrated Canonical execution supports both row signs;
+- the out-of-line row boundary is not a general optimization;
+- on DMD it is neutral or materially worse for the important large negative
+  case;
+- on current LDC positive rows it is effectively neutral;
+- on current LDC negative rows it reproducibly improves the integrated
+  Canonical candidate by about 9--11 percent for the large cases.
+
+The old R0.5 causal observation therefore still exists on the current hosted
+LDC optimizer generation, but in a reduced form. Any Production selector must
+remain compiler-generation/layout specific rather than selecting no-inline for
+all compilers.
+
+### Generic fallback
+
+The research branch also contains a Universal/sample-strided source probe with
+a negative-row destination.
+
+The intended dispatch rule is:
+
+```text
+Canonical-compatible source/destination
+        -> qualified check-free fast path
+
+other validated affine layouts
+        -> existing public semantic path
+```
+
+The Canonical candidate must decline the Universal/sample-strided fixture while
+the public operation remains exact.
+
+### Current interpretation
+
+The magnitude of the same-process relative gain is large enough to continue
+M3.1. It is not by itself sufficient for Production promotion because hosted
+absolute timing is non-gating.
+
+The likely smallest Production slice is now:
+
+```text
+keep the complete public M2.3 validation/error contract
+        ->
+classify Canonical-compatible execution
+        ->
+run narrow check-free Canonical kernel
+        ->
+otherwise retain existing generic path
+```
+
+A further LDC-negative no-inline selection may be layered internally only if
+stable-reference-machine measurement and final production-shaped code
+generation justify it.
+
 ## Next evidence
 
-Build a production-shaped M3.1 benchmark comparing current public M2.3 against
-the validated Canonical candidate on DMD 2.111 and LDC 1.41, initially using
-same-process relative timing for diagnostic evidence and exact fingerprints.
+Before Production promotion:
+
+1. run the current benchmark on the stable local reference machine with both
+   baseline compilers;
+2. inspect final production-shaped LDC code generation for positive/negative
+   Canonical and the no-inline candidate;
+3. record the Universal fallback probe result on both compilers;
+4. decide whether M3.1 promotes only the ordinary Canonical fast path or also a
+   narrow LDC-negative specialization.
 
 Final Production promotion still requires stable local reference-machine
 measurement and final code-generation inspection.
