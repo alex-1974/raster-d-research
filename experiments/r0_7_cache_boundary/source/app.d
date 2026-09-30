@@ -2,6 +2,7 @@ module app;
 
 import raster : Region2D;
 import e7_2_retained_cache : runE72;
+import e7_3_geometry_reuse : runE73;
 
 
 private struct CacheKey
@@ -456,6 +457,7 @@ void main()
     assert(runOversizedCase());
     assert(runPinnedBudgetFailureCase());
     assert(runE72());
+    assert(runE73());
 
     import std.stdio : writeln;
 
@@ -465,5 +467,9 @@ void main()
 
     writeln(
         "E7.2 PASS: RasterLease retention, eviction survival and physical-byte accounting"
+    );
+
+    writeln(
+        "E7.3 PASS: provider/cache/request independence and overlap reuse"
     );
 }
