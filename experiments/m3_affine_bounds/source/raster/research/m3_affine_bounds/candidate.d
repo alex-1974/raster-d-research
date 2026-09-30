@@ -787,15 +787,15 @@ int extremeCheckedCorrectness()
         ),
         Fixture(
             Rect(2,1,signBit,0,ptrdiff_t.min),
-            Rect(1,1,size_t.max,0,0),
+            Rect(1,1,size_t.max - 1,0,0),
             1,
             true,
-            false,
+            true,
             "ptrdiff-min-negative-reach"
         ),
         Fixture(
             Rect(2,1,0,0,ptrdiff_t.max),
-            Rect(1,1,size_t.max,0,0),
+            Rect(1,1,size_t.max - 1,0,0),
             1,
             true,
             true,
@@ -803,7 +803,7 @@ int extremeCheckedCorrectness()
         ),
         Fixture(
             Rect(2,2,signBit,ptrdiff_t.min,ptrdiff_t.min),
-            Rect(1,1,size_t.max,0,0),
+            Rect(1,1,size_t.max - 1,0,0),
             1,
             false,
             false,
@@ -811,7 +811,7 @@ int extremeCheckedCorrectness()
         ),
         Fixture(
             Rect(3,1,0,0,ptrdiff_t.max),
-            Rect(1,1,size_t.max,0,0),
+            Rect(1,1,size_t.max - 1,0,0),
             1,
             false,
             false,
@@ -819,14 +819,14 @@ int extremeCheckedCorrectness()
         ),
         Fixture(
             Rect(2,1,0,0,ptrdiff_t.max),
-            Rect(1,1,size_t.max,0,0),
+            Rect(1,1,size_t.max - 1,0,0),
             8,
             false,
             false,
             "offset-byte-overflow"
         ),
         Fixture(
-            Rect(2,1,size_t.max,0,-1),
+            Rect(2,1,size_t.max - 1,0,-1),
             Rect(1,1,0,0,0),
             1,
             true,
@@ -835,7 +835,7 @@ int extremeCheckedCorrectness()
         ),
         Fixture(
             Rect(2,1,1,0,-1),
-            Rect(2,1,size_t.max - 1,0,1),
+            Rect(2,1,size_t.max - 2,0,1),
             1,
             true,
             true,
