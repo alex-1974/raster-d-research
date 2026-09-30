@@ -1,6 +1,8 @@
 module app;
 
-import std.math : fma;
+import std.math :
+    fma,
+    isNaN;
 import std.stdio : writeln;
 
 import raster.research.m2_point_transform_contract.raster_candidate :
@@ -87,6 +89,35 @@ nothrow
 float plusOne(float x)
 {
     return x + 1.0f;
+}
+
+
+@safe
+pure
+nothrow
+@nogc
+float identityFloat(float x)
+{
+    return x;
+}
+
+
+private
+uint floatBits(float value)
+@system
+pure
+nothrow
+@nogc
+{
+    union Bits
+    {
+        float value;
+        uint bits;
+    }
+
+    Bits storage;
+    storage.value = value;
+    return storage.bits;
 }
 
 
@@ -245,6 +276,50 @@ void main()
 
         assert(reverseCollapsed == 11.0f);
         assert(reverseCollapsed != collapsed);
+    }
+
+
+    /*
+     * Floating special values belong to the caller-supplied transform
+     * semantics. The raster operation must preserve the returned T value
+     * without implicit clamp/conversion/canonicalization.
+     */
+    {
+        const nanValue =
+            identityFloat(float.nan);
+
+        assert(isNaN(nanValue));
+
+        assert(
+            identityFloat(float.infinity)
+            == float.infinity
+        );
+
+        assert(
+            identityFloat(-float.infinity)
+            == -float.infinity
+        );
+
+        const positiveZero =
+            identityFloat(+0.0f);
+
+        const negativeZero =
+            identityFloat(-0.0f);
+
+        assert(
+            floatBits(positiveZero)
+            != floatBits(negativeZero)
+        );
+
+        assert(
+            floatBits(positiveZero)
+            == floatBits(+0.0f)
+        );
+
+        assert(
+            floatBits(negativeZero)
+            == floatBits(-0.0f)
+        );
     }
 
 
