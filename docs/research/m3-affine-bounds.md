@@ -255,3 +255,58 @@ Still required before Production promotion:
 3. differently shaped source/output rectangles;
 4. decide the single package-internal integration point;
 5. verify that exact overlap/error ordering is unchanged after integration.
+
+
+## Gate 3 result — checked relation-stage performance
+
+Research head:
+
+```text
+498df051daee2a5bb86303c2847ed6b2aae49bce
+```
+
+Workflow:
+
+```text
+M3 Affine Bounds Research #13
+run 36770664732
+DMD 2.111: success
+LDC 1.41: success
+```
+
+The hardened timing uses real heap-backed float allocations and a batch of
+100,000 checked fast-reject calls per timing sample. The target base alternates
+between two runtime-valid addresses to prevent the simplest loop-invariant
+hoisting.
+
+Representative hosted medians:
+
+| Relation shape | DMD exact | DMD checked bound / call | LDC exact | LDC checked bound / call |
+|---|---:|---:|---:|---:|
+| 128x64 vs 128x64 | 1.784 ms | 85.2 ns | 0.744 ms | 20.7 ns |
+| 512x256 vs 512x256 | 28.637 ms | 85.2 ns | 11.869 ms | 21.9 ns |
+| 2048x512 vs 2048x512 | 112.179 ms | 85.3 ns | 47.840 ms | 20.6 ns |
+| 2050x514 vs 2048x512 | 115.317 ms | 85.2 ns | 48.121 ms | 21.7 ns |
+
+The exact relation scales with the finite line-pair search. The checked
+bounding reject remains effectively constant with rectangle dimensions.
+
+The resulting exact/fast ratios are intentionally **not** treated as stable
+Production speedup claims:
+
+- hosted runners are not the local reference machine;
+- the batch alternates only two disjoint runtime target addresses;
+- compiler optimization can simplify the repeated benchmark more aggressively
+  than a complete raster consumer;
+- a relation-only win does not by itself prove the same end-to-end consumer
+  gain.
+
+Gate 3 therefore establishes the engineering fact needed for the next step:
+
+> In the common provably-disjoint validated-raster case, checked conservative
+> bounds remove a relation stage whose cost currently grows with rectangle
+> dimensions, while the prefilter itself is dimension-independent and tiny
+> relative to the current exact search.
+
+The next required evidence is a complete Production-shaped consumer using the
+same checked arithmetic and preserving the current exact fallback.
