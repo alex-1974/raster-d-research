@@ -564,6 +564,7 @@ int runCase(
 
     auto publicOutput = new float[width * height];
     auto candidateOutput = new float[width * height];
+    auto noInlineOutput = new float[width * height];
 
     const sourceBase =
         negativeRows
@@ -587,6 +588,9 @@ int runCase(
     const PlaneDescriptor[1] candidateDescriptors =
         [PlaneDescriptor(candidateOutput.ptr, width, 1)];
 
+    const PlaneDescriptor[1] noInlineDescriptors =
+        [PlaneDescriptor(noInlineOutput.ptr, width, 1)];
+
     const ResourceEntry[1] publicResources =
     [
         ResourceEntry(
@@ -603,6 +607,17 @@ int runCase(
         ResourceEntry(
             candidateOutput.ptr,
             candidateOutput.length * float.sizeof,
+            null,
+            null,
+            ResourceAccess.readWrite
+        )
+    ];
+
+    const ResourceEntry[1] noInlineResources =
+    [
+        ResourceEntry(
+            noInlineOutput.ptr,
+            noInlineOutput.length * float.sizeof,
             null,
             null,
             ResourceAccess.readWrite
@@ -629,6 +644,13 @@ int runCase(
             Region2D(0,0,width,height)
         );
 
+    scope auto noInlineDestination =
+        makeWritable!float(
+            noInlineResources[],
+            noInlineDescriptors[],
+            Region2D(0,0,width,height)
+        );
+
     RasterNeighbourhood3x3Error error;
 
     if (!tryApplyRasterNeighbourhood3x3!productionKernel(
@@ -651,7 +673,20 @@ int runCase(
     ))
         return 1;
 
-    if (publicOutput != candidateOutput)
+    if (!tryCanonicalNoInlineCandidate!productionKernel(
+        source,
+        0,
+        Region2D(1,1,width,height),
+        noInlineDestination,
+        0,
+        error
+    ))
+        return 1;
+
+    if (
+        publicOutput != candidateOutput
+        || publicOutput != noInlineOutput
+    )
         return 1;
 
     const expectedFingerprint =
@@ -668,116 +703,173 @@ int runCase(
             source,0,Region2D(1,1,width,height),candidateDestination,0,error))
             return 1;
         consume(candidateOutput);
+
+        if (!tryCanonicalNoInlineCandidate!productionKernel(
+            source,0,Region2D(1,1,width,height),noInlineDestination,0,error))
+            return 1;
+        consume(noInlineOutput);
     }
 
     long[repetitions] publicSamples;
     long[repetitions] candidateSamples;
+    long[repetitions] noInlineSamples;
 
     bool publicExecutionOk = true;
     bool candidateExecutionOk = true;
+    bool noInlineExecutionOk = true;
 
     foreach (r; 0 .. repetitions)
     {
-        if ((r & 1) == 0)
+        final switch (r % 3)
         {
-            publicSamples[r] = measure({
-                const ok =
-                    tryApplyRasterNeighbourhood3x3!productionKernel(
-                        source,
-                        0,
-                        Region2D(1,1,width,height),
-                        publicDestination,
-                        0,
-                        error
-                    );
+            case 0:
+                publicSamples[r] = measure({
+                    const ok =
+                        tryApplyRasterNeighbourhood3x3!productionKernel(
+                            source,0,Region2D(1,1,width,height),
+                            publicDestination,0,error
+                        );
 
-                publicExecutionOk = publicExecutionOk && ok;
-                consume(publicOutput);
-            });
+                    publicExecutionOk = publicExecutionOk && ok;
+                    consume(publicOutput);
+                });
 
-            candidateSamples[r] = measure({
-                const ok =
-                    tryCanonicalCandidate!productionKernel(
-                        source,
-                        0,
-                        Region2D(1,1,width,height),
-                        candidateDestination,
-                        0,
-                        error
-                    );
+                candidateSamples[r] = measure({
+                    const ok =
+                        tryCanonicalCandidate!productionKernel(
+                            source,0,Region2D(1,1,width,height),
+                            candidateDestination,0,error
+                        );
 
-                candidateExecutionOk = candidateExecutionOk && ok;
-                consume(candidateOutput);
-            });
-        }
-        else
-        {
-            candidateSamples[r] = measure({
-                const ok =
-                    tryCanonicalCandidate!productionKernel(
-                        source,
-                        0,
-                        Region2D(1,1,width,height),
-                        candidateDestination,
-                        0,
-                        error
-                    );
+                    candidateExecutionOk = candidateExecutionOk && ok;
+                    consume(candidateOutput);
+                });
 
-                candidateExecutionOk = candidateExecutionOk && ok;
-                consume(candidateOutput);
-            });
+                noInlineSamples[r] = measure({
+                    const ok =
+                        tryCanonicalNoInlineCandidate!productionKernel(
+                            source,0,Region2D(1,1,width,height),
+                            noInlineDestination,0,error
+                        );
 
-            publicSamples[r] = measure({
-                const ok =
-                    tryApplyRasterNeighbourhood3x3!productionKernel(
-                        source,
-                        0,
-                        Region2D(1,1,width,height),
-                        publicDestination,
-                        0,
-                        error
-                    );
+                    noInlineExecutionOk = noInlineExecutionOk && ok;
+                    consume(noInlineOutput);
+                });
+                break;
 
-                publicExecutionOk = publicExecutionOk && ok;
-                consume(publicOutput);
-            });
+            case 1:
+                candidateSamples[r] = measure({
+                    const ok =
+                        tryCanonicalCandidate!productionKernel(
+                            source,0,Region2D(1,1,width,height),
+                            candidateDestination,0,error
+                        );
+
+                    candidateExecutionOk = candidateExecutionOk && ok;
+                    consume(candidateOutput);
+                });
+
+                noInlineSamples[r] = measure({
+                    const ok =
+                        tryCanonicalNoInlineCandidate!productionKernel(
+                            source,0,Region2D(1,1,width,height),
+                            noInlineDestination,0,error
+                        );
+
+                    noInlineExecutionOk = noInlineExecutionOk && ok;
+                    consume(noInlineOutput);
+                });
+
+                publicSamples[r] = measure({
+                    const ok =
+                        tryApplyRasterNeighbourhood3x3!productionKernel(
+                            source,0,Region2D(1,1,width,height),
+                            publicDestination,0,error
+                        );
+
+                    publicExecutionOk = publicExecutionOk && ok;
+                    consume(publicOutput);
+                });
+                break;
+
+            case 2:
+                noInlineSamples[r] = measure({
+                    const ok =
+                        tryCanonicalNoInlineCandidate!productionKernel(
+                            source,0,Region2D(1,1,width,height),
+                            noInlineDestination,0,error
+                        );
+
+                    noInlineExecutionOk = noInlineExecutionOk && ok;
+                    consume(noInlineOutput);
+                });
+
+                publicSamples[r] = measure({
+                    const ok =
+                        tryApplyRasterNeighbourhood3x3!productionKernel(
+                            source,0,Region2D(1,1,width,height),
+                            publicDestination,0,error
+                        );
+
+                    publicExecutionOk = publicExecutionOk && ok;
+                    consume(publicOutput);
+                });
+
+                candidateSamples[r] = measure({
+                    const ok =
+                        tryCanonicalCandidate!productionKernel(
+                            source,0,Region2D(1,1,width,height),
+                            candidateDestination,0,error
+                        );
+
+                    candidateExecutionOk = candidateExecutionOk && ok;
+                    consume(candidateOutput);
+                });
+                break;
         }
     }
 
     if (
         !publicExecutionOk
         || !candidateExecutionOk
+        || !noInlineExecutionOk
         || fingerprint(publicOutput) != expectedFingerprint
         || fingerprint(candidateOutput) != expectedFingerprint
+        || fingerprint(noInlineOutput) != expectedFingerprint
     )
         return 1;
 
     const publicMedian = median(publicSamples);
     const candidateMedian = median(candidateSamples);
+    const noInlineMedian = median(noInlineSamples);
 
     writefln(
-        "m3_neighbourhood width=%s height=%s pitch=%s rows=%s public_ns=%s candidate_ns=%s candidate_over_public=%.6f mpix_public=%.3f mpix_candidate=%.3f fingerprint=%016x sink=%s",
+        "m3_neighbourhood width=%s height=%s pitch=%s rows=%s public_ns=%s candidate_ns=%s noinline_ns=%s candidate_over_public=%.6f noinline_over_candidate=%.6f mpix_public=%.3f mpix_candidate=%.3f mpix_noinline=%.3f fingerprint=%016x sink=%s",
         width,
         height,
         pitch,
         negativeRows ? "negative" : "positive",
         publicMedian,
         candidateMedian,
+        noInlineMedian,
         cast(double) candidateMedian / cast(double) publicMedian,
+        cast(double) noInlineMedian / cast(double) candidateMedian,
         cast(double)(width * height) * 1000.0 / cast(double) publicMedian,
         cast(double)(width * height) * 1000.0 / cast(double) candidateMedian,
+        cast(double)(width * height) * 1000.0 / cast(double) noInlineMedian,
         expectedFingerprint,
         sink
     );
 
     writefln(
-        "m3_neighbourhood_raw width=%s height=%s pitch=%s rows=%s public=%(%s,%) candidate=%(%s,%)",
+        "m3_neighbourhood_raw width=%s height=%s pitch=%s rows=%s public=%(%s,%) candidate=%(%s,%) noinline=%(%s,%)",
         width,
         height,
         pitch,
         negativeRows ? "negative" : "positive",
         publicSamples,
-        candidateSamples
+        candidateSamples,
+        noInlineSamples
     );
 
     return 0;
