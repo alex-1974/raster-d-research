@@ -876,8 +876,162 @@ int runCase(
 }
 
 
+
+private
+int runUniversalFallbackProbe()
+{
+    enum size_t width = 31;
+    enum size_t height = 17;
+    enum size_t residentWidth = width + 2;
+    enum size_t residentHeight = height + 2;
+    enum size_t sampleStride = 2;
+    enum size_t sourcePitch = 80;
+    enum size_t destinationPitch = 40;
+
+    auto sourceStorage =
+        new float[sourcePitch * residentHeight];
+
+    foreach (y; 0 .. residentHeight)
+    {
+        foreach (x; 0 .. residentWidth)
+        {
+            sourceStorage[
+                y * sourcePitch
+                + x * sampleStride
+            ] =
+                logicalValue(x, y);
+        }
+    }
+
+    auto output =
+        new float[destinationPitch * height];
+
+    const PlaneDescriptor[1] sourceDescriptors =
+    [
+        PlaneDescriptor(
+            sourceStorage.ptr,
+            sourcePitch,
+            sampleStride
+        )
+    ];
+
+    const PlaneDescriptor[1] destinationDescriptors =
+    [
+        PlaneDescriptor(
+            output.ptr + (height - 1) * destinationPitch,
+            -cast(ptrdiff_t) destinationPitch,
+            1
+        )
+    ];
+
+    const ResourceEntry[1] destinationResources =
+    [
+        ResourceEntry(
+            output.ptr,
+            output.length * float.sizeof,
+            null,
+            null,
+            ResourceAccess.readWrite
+        )
+    ];
+
+    scope auto source =
+        makeRasterViewAssumeValidated!float(
+            sourceDescriptors[],
+            Region2D(
+                0,
+                0,
+                residentWidth,
+                residentHeight
+            )
+        );
+
+    scope auto destination =
+        makeWritable!float(
+            destinationResources[],
+            destinationDescriptors[],
+            Region2D(
+                0,
+                0,
+                width,
+                height
+            )
+        );
+
+    RasterNeighbourhood3x3Error error;
+
+    if (!tryApplyRasterNeighbourhood3x3!productionKernel(
+        source,
+        0,
+        Region2D(1,1,width,height),
+        destination,
+        0,
+        error
+    ))
+        return 1;
+
+    /*
+     * The Canonical candidate must decline this source because sample stride
+     * is two. A production dispatcher would keep the existing generic path.
+     */
+    if (tryCanonicalCandidate!productionKernel(
+        source,
+        0,
+        Region2D(1,1,width,height),
+        destination,
+        0,
+        error
+    ))
+        return 1;
+
+    foreach (y; 0 .. height)
+    {
+        foreach (x; 0 .. width)
+        {
+            float[9] n;
+            size_t index;
+
+            foreach (dy; 0 .. 3)
+            {
+                foreach (dx; 0 .. 3)
+                {
+                    n[index++] =
+                        logicalValue(
+                            x + dx,
+                            y + dy
+                        );
+                }
+            }
+
+            const expected =
+                productionKernel(n);
+
+            const actual =
+                output[
+                    (height - 1 - y)
+                        * destinationPitch
+                        + x
+                ];
+
+            if (bits(actual) != bits(expected))
+                return 1;
+        }
+    }
+
+    writefln(
+        "m3_neighbourhood_fallback source_sample_stride=%s destination_rows=negative result=PASS",
+        sampleStride
+    );
+
+    return 0;
+}
+
+
 int runBenchmarkMatrix()
 {
+    if (runUniversalFallbackProbe() != 0)
+        return 1;
+
     struct Case
     {
         size_t width;
