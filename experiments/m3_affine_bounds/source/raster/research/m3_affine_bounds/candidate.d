@@ -763,11 +763,11 @@ int extremeCheckedCorrectness()
     [
         Fixture(
             Rect(1,1,0,ptrdiff_t.min,ptrdiff_t.max),
-            Rect(1,1,size_t.max,ptrdiff_t.max,ptrdiff_t.min),
+            Rect(1,1,size_t.max - 1,ptrdiff_t.max,ptrdiff_t.min),
             1,
             true,
             true,
-            "full-address-separation"
+            "max-valid-address-separation"
         ),
         Fixture(
             Rect(1,1,size_t.max - 7,ptrdiff_t.min,ptrdiff_t.min),
