@@ -1,6 +1,6 @@
 # Retained Block Assembly Research
 
-Status: active research. E9.1 and E9.2 complete.
+Status: active research. E9.1 through E9.3 complete.
 
 Issue: raster-d-research #7
 
@@ -252,3 +252,108 @@ Test separately:
 
 Request/working-set residency remains a separate accounting domain from
 store-retained bytes.
+
+
+## 9. E9.3 result — retention failure is non-fatal to current request
+
+Status: **PASS** on DMD 2.111.0 and LDC 1.41.0.
+
+Verified research head:
+
+`f54447d75009301545de8ae58b6e82c881ba7440`
+
+Verified raster-d develop:
+
+`813e73c4fc2f3fd2be74e39989da10c6723e6f3a`
+
+GitHub Actions run:
+
+`36712057841`
+
+Both compiler jobs produced:
+
+```text
+E9.3 PASS: retention failure degrades reuse without breaking request correctness
+```
+
+Two independent rejection causes were exercised.
+
+### Retained-byte limit
+
+One 12 x 10 padded block occupies:
+
+```text
+(12 + 1) * 10 = 130 bytes
+```
+
+The research store byte limit was exactly 130 bytes.
+
+For a four-block request:
+
+- one block was retained;
+- three block-retention attempts were rejected by byte budget;
+- the request still completed exactly from the three transient materialized
+  leases plus the retained block;
+- a repeated request hit the retained block and rematerialized the other three;
+- store-retained byte accounting remained exactly 130 bytes.
+
+### Entry capacity
+
+A separate store had capacity for exactly one entry and effectively unlimited
+byte budget.
+
+For the same four-block request:
+
+- one block was retained;
+- three retention attempts were rejected by entry capacity;
+- the request still completed exactly;
+- a repeated request reused one retained block and rematerialized three.
+
+### E9.3 conclusion
+
+The evidence supports:
+
+```text
+materialization success
+is required for current-request correctness
+
+retention success
+is optional for current-request correctness
+```
+
+Therefore store insertion failure caused solely by:
+
+- retained-byte exhaustion; or
+- entry-capacity exhaustion
+
+must be treated as a **reuse outcome**, not a source/materialization failure.
+
+The just-materialized transient lease remains a valid input to the current
+assembly.
+
+This preserves the architectural separation:
+
+```text
+correct materialization
+!=
+successful cache retention
+```
+
+No eviction policy is needed to establish this behavior.
+
+## 10. Next experiment — E9.4 bounded incremental residency and edge/multi-plane assembly
+
+E9.4 must qualify:
+
+- request destination bytes separately from store-retained bytes;
+- one transient block at a time;
+- minimum cold incremental working-set residency;
+- explicit rejection when destination + one required transient block cannot fit
+  a request-residency budget;
+- partial edge cache blocks;
+- non-zero / huge logical origins;
+- at least one two-plane padded/interleaved retained source;
+- exact assembled versus direct equivalence.
+
+The experiment must not claim that M1.4 request residency and M1.5 store
+retention form one unified total-process memory budget.
