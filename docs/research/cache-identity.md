@@ -1,6 +1,6 @@
 # Cache Identity Boundary Research
 
-Status: active research.
+Status: active research. E8.1 complete.
 
 Issue: raster-d-research #5
 
@@ -114,6 +114,26 @@ This allows semantic identity to stay independent of stride/padding while still
 making representation compatibility explicit.
 
 ## 7. E8.1 — semantic false-hit matrix
+
+Status: **PASS** on DMD 2.111.0 and LDC 1.41.0.
+
+Verified research head:
+
+`8f91f84074db062f6047890988c4995e08fd87ff`
+
+Verified raster-d develop:
+
+`8dc3180979c908f305274adab8f78b61ecfe7f14`
+
+GitHub Actions run:
+
+`36708342513`
+
+Both compiler jobs produced:
+
+```text
+E8.1 PASS: semantic identity prevents false hits without resident-layout coupling
+```
 
 E8.1 tests:
 
