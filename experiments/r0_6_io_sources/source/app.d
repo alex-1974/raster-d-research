@@ -152,7 +152,7 @@ private bool makeWritableResident(
 
 
 private bool verifyResident(
-    scope const ref RasterLease!ubyte lease,
+    scope ref RasterLease!ubyte lease,
     Region2D logicalRegion
 )
 @safe
