@@ -1,0 +1,6 @@
+name "raster-m3-affine-consumer"
+description "Pinned production-shaped same-type bounds consumer qualification"
+targetType "executable"
+dependency "raster-d" path="../../../raster-d"
+sourcePaths "source" "../m3_affine_bounds/source/raster"
+dflags "-preview=dip1000"

@@ -310,3 +310,55 @@ Gate 3 therefore establishes the engineering fact needed for the next step:
 
 The next required evidence is a complete Production-shaped consumer using the
 same checked arithmetic and preserving the current exact fallback.
+
+## Gate 4 harness — complete same-type consumers
+
+Implemented in `experiments/m3_affine_consumer/` against pinned production
+`252bc9ab0c868820a9dc5b2432119d8ac0f15903`.
+
+The generator verifies both source hashes and changes only module/operation
+identity, error-type import and relation import. Validation, error ordering,
+execution and defensive arithmetic-failure enumeration stay source-identical.
+There is no Canonical point-transform candidate in this gate: B isolates the
+relation gain over A, the current public operation.
+
+The shared wrapper reuses the Gate-2 checked arithmetic implementation rather
+than the earlier point-transform probe's unchecked envelope arithmetic.
+Overlapping/unrepresentable bounds preserve exact classification.
+
+Container qualification passed on DMD 2.111 and LDC 1.41 / LLVM 20.1.5:
+
+- 10 inherited transform unittest blocks;
+- 12 inherited neighbourhood unittest blocks;
+- explicit relation fallback unittest;
+- four differential shared-backing consumers (sparse-disjoint and real overlap);
+- both complete release matrices, including 2050×514 neighbourhood source versus
+  2048×512 destination, both row directions, padding and sample stride +2/-2;
+- full output/padding fingerprint after every measured operation;
+- repeated original Gates 1–3: identical correctness counts and no mismatches.
+
+Raw consumer logs and environment are retained under
+`experiments/m3_affine_consumer/evidence/2026-09-30-container/`.
+Timing is diagnostic only, with no performance threshold. This container is
+not the stable XPS reference machine; noisy workload and operation-dispatch
+overhead preclude treating its ratios as production promises.
+
+CI now pins the production baseline and includes inherited consumer tests,
+complete release execution, and uploaded raw evidence. The pushed-head CI
+result must be verified separately.
+
+Workspace note: these standalone checkouts did not contain `.workspace/`.
+Both tracked `AGENTS.md` explicitly permit following tracked repository
+documentation in that case. Supplied historical workspace README/ROADMAP still
+describe raster-d as a future extraction; current production README and ADR
+0003 establish the accepted pivot. No canonical workspace files were changed.
+
+Decision: KEEP for continued qualification. Before production promotion:
+
+1. verify DMD/LDC CI for this harness;
+2. run three independent measurements on the XPS, including its LLVM 19.1.7;
+3. decide the single internal integration point from the validated-byte versus
+   algebraic-domain evidence;
+4. preserve existing exact classifier and all consumer error/fallback semantics.
+
+Issue #14, Canonical transform execution and cross-type reuse remain deferred.

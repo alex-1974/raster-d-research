@@ -1,0 +1,11 @@
+             Generating test runner configuration 'raster-m3-affine-consumer-test-application' for 'application' (executable).
+     Warning Excluding main source file source/app.d from test.
+    Starting Performing "unittest" build using ldc2 for x86_64.
+  Up-to-date mir-core 1.7.4: target for configuration [library] is up to date.
+  Up-to-date mir-algorithm 3.22.4: target for configuration [default] is up to date.
+    Building raster-d ~develop: building configuration [library]
+    Building raster-m3-affine-consumer ~master: building configuration [raster-m3-affine-consumer-test-application]
+     Linking raster-m3-affine-consumer-test-application
+    Finished To force a rebuild of up-to-date targets, run again with --force
+     Running raster-m3-affine-consumer-test-application 
+3 modules passed unittests

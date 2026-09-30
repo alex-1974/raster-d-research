@@ -1,0 +1,4 @@
+source/raster/research/m3_affine_consumer/generated/
+.dub/
+raster-m3-affine-consumer*
+dub.selections.json

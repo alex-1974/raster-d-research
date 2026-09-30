@@ -1,0 +1,19 @@
+    Starting Performing "release" build using ldc2 for x86_64.
+  Up-to-date mir-core 1.7.4: target for configuration [library] is up to date.
+  Up-to-date mir-algorithm 3.22.4: target for configuration [default] is up to date.
+  Up-to-date raster-d ~develop: target for configuration [library] is up to date.
+    Building raster-m3-affine-bounds ~master: building configuration [application]
+     Linking raster-m3-affine-bounds
+    Finished To force a rebuild of up-to-date targets, run again with --force
+     Running raster-d-research/experiments/m3_affine_bounds/raster-m3-affine-bounds 
+m3_affine_bounds_sparse_counterexample PASS
+m3_affine_bounds_correctness PASS cases=100000 fast_rejects=68105 overlapping_bounds_but_disjoint=4160 exact_mismatches=0
+m3_affine_bounds_extreme PASS fixtures=12 checked_oracle_cases=8 conservative_unknown_cases=4 fast_rejects=6 exact_arithmetic_failures=0
+m3_affine_bounds_perf source=128x64 target=128x64 pitch=192 exact_ns=761300 fast_single_ns=0 fast_batch_ns=2169000 fast_batch_per_call_ns=21.690 exact_over_batch_per_call=35099.124 sink=14220773535099603370
+m3_affine_bounds_perf_raw source=128x64 target=128x64 exact=727600,748000,998200,845800,1003300,706800,761300 fast_single=100,0,100,0,0,0,0 fast_batch=2169000,2368500,2057500,2023200,2185600,2098800,2244500
+m3_affine_bounds_perf source=512x256 target=512x256 pitch=640 exact_ns=12480200 fast_single_ns=100 fast_batch_ns=2160700 fast_batch_per_call_ns=21.607 exact_over_batch_per_call=577599.852 sink=18415080281596342100
+m3_affine_bounds_perf_raw source=512x256 target=512x256 exact=12510600,17185300,12238300,11490700,12454400,13167100,12480200 fast_single=100,0,200,100,100,100,200 fast_batch=1984800,2132900,2229900,2127600,2160700,3641400,2673500
+m3_affine_bounds_perf source=2048x512 target=2048x512 pitch=2304 exact_ns=52550300 fast_single_ns=300 fast_batch_ns=2322200 fast_batch_per_call_ns=23.222 exact_over_batch_per_call=2262953.234 sink=15911659178061002990
+m3_affine_bounds_perf_raw source=2048x512 target=2048x512 exact=46902400,47830300,55216800,56851200,59694300,52550300,45533500 fast_single=300,100,400,200,400,200,400 fast_batch=2088400,2820100,2308500,2322200,2336500,2069600,2406200
+m3_affine_bounds_perf source=2050x514 target=2048x512 pitch=2304 exact_ns=54108400 fast_single_ns=400 fast_batch_ns=2011500 fast_batch_per_call_ns=20.115 exact_over_batch_per_call=2689952.772 sink=4935657975169907080
+m3_affine_bounds_perf_raw source=2050x514 target=2048x512 exact=53588000,54427300,56188400,59232700,48152000,50612800,54108400 fast_single=500,100,400,100,500,100,500 fast_batch=2160800,2450100,1993800,2043200,1934100,2011500,1883500

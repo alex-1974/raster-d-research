@@ -6,6 +6,7 @@ on:
       - research/m3-affine-bounds
     paths:
       - 'experiments/m3_affine_bounds/**'
+      - 'experiments/m3_affine_consumer/**'
       - 'docs/research/m3-affine-bounds.md'
       - '.github/workflows/m3-affine-bounds.yml'
   workflow_dispatch:
@@ -39,7 +40,7 @@ jobs:
         uses: actions/checkout@v7
         with:
           repository: alex-1974/raster-d
-          ref: develop
+          ref: 252bc9ab0c868820a9dc5b2432119d8ac0f15903
           path: raster-d
 
       - name: Expose sibling workspace layout
@@ -63,3 +64,35 @@ jobs:
             --compiler="$DC" \
             --build=release \
             --force
+
+      - name: Generate pinned production-shaped consumers
+        shell: bash
+        run: python3 experiments/m3_affine_consumer/generate.py
+
+      - name: Run inherited consumer semantic tests
+        shell: bash
+        run: |
+          set -o pipefail
+          mkdir -p artifacts
+          dub test --root=experiments/m3_affine_consumer \
+            --compiler="$DC" --force 2>&1 | tee artifacts/consumer-unittest.txt
+
+      - name: Run production-shaped consumer diagnostics
+        shell: bash
+        run: |
+          set -o pipefail
+          "$DC" --version > artifacts/environment.txt
+          dub --version >> artifacts/environment.txt
+          lscpu >> artifacts/environment.txt
+          dub run --root=experiments/m3_affine_consumer \
+            --compiler="$DC" --build=release --force \
+            2>&1 | tee artifacts/consumer-release.txt
+
+      - name: Retain consumer evidence
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: affine-consumer-${{ matrix.compiler }}
+          path: artifacts/
+          if-no-files-found: warn
+          retention-days: 14

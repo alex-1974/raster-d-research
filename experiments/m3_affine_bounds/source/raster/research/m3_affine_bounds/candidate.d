@@ -13,7 +13,7 @@ import raster.internal.physical_range :
     PhysicalByteRangeRelation,
     classifyByteAddressRanges;
 
-private
+package(raster)
 struct Rect
 {
     size_t width;
@@ -387,7 +387,7 @@ Bound checkedAffineBound(Rect rect, size_t sampleSize)
 }
 
 
-private
+package(raster)
 bool checkedFastRejectDisjoint(
     Rect a,
     Rect b,
@@ -1007,7 +1007,7 @@ private enum size_t fastBatchIterations = 100_000;
 private __gshared ulong relationSink;
 
 
-private
+package(raster)
 AffineByteOverlapRelation classifyWithCheckedFastReject(
     Rect a,
     Rect b,

@@ -1,0 +1,19 @@
+    Starting Performing "release" build using dmd for x86_64.
+  Up-to-date mir-core 1.7.4: target for configuration [library] is up to date.
+  Up-to-date mir-algorithm 3.22.4: target for configuration [default] is up to date.
+  Up-to-date raster-d ~develop: target for configuration [library] is up to date.
+    Building raster-m3-affine-bounds ~master: building configuration [application]
+     Linking raster-m3-affine-bounds
+    Finished To force a rebuild of up-to-date targets, run again with --force
+     Running raster-d-research/experiments/m3_affine_bounds/raster-m3-affine-bounds 
+m3_affine_bounds_sparse_counterexample PASS
+m3_affine_bounds_correctness PASS cases=100000 fast_rejects=68105 overlapping_bounds_but_disjoint=4160 exact_mismatches=0
+m3_affine_bounds_extreme PASS fixtures=12 checked_oracle_cases=8 conservative_unknown_cases=4 fast_rejects=6 exact_arithmetic_failures=0
+m3_affine_bounds_perf source=128x64 target=128x64 pitch=192 exact_ns=2401800 fast_single_ns=400 fast_batch_ns=10605300 fast_batch_per_call_ns=106.053 exact_over_batch_per_call=22647.167 sink=14220773535099603370
+m3_affine_bounds_perf_raw source=128x64 target=128x64 exact=2073000,1803800,2401800,3393400,3400500,2288100,2712700 fast_single=400,200,400,200,600,200,600 fast_batch=12639800,12389000,9526300,9404100,9246400,10605300,11230000
+m3_affine_bounds_perf source=512x256 target=512x256 pitch=640 exact_ns=35215500 fast_single_ns=700 fast_batch_ns=12776100 fast_batch_per_call_ns=127.761 exact_over_batch_per_call=275635.757 sink=18415080281596342100
+m3_affine_bounds_perf_raw source=512x256 target=512x256 exact=32235800,39945200,37876700,51607800,30839800,32077800,35215500 fast_single=700,200,900,200,1000,300,1300 fast_batch=10469200,9241900,12776100,13227600,9953500,14283500,14218900
+m3_affine_bounds_perf source=2048x512 target=2048x512 pitch=2304 exact_ns=154705700 fast_single_ns=1200 fast_batch_ns=10301700 fast_batch_per_call_ns=103.017 exact_over_batch_per_call=1501749.226 sink=15911659178061002990
+m3_affine_bounds_perf_raw source=2048x512 target=2048x512 exact=144437400,152909000,143110100,166671000,161537400,154705700,163651900 fast_single=1200,300,1300,200,1400,200,1300 fast_batch=12001900,10301700,10198100,10293600,18884000,10393800,9870000
+m3_affine_bounds_perf source=2050x514 target=2048x512 pitch=2304 exact_ns=164461800 fast_single_ns=1100 fast_batch_ns=15325700 fast_batch_per_call_ns=153.257 exact_over_batch_per_call=1073111.179 sink=4935657975169907080
+m3_affine_bounds_perf_raw source=2050x514 target=2048x512 exact=164461800,166373100,137470700,151309100,147801500,182473000,192417700 fast_single=1100,200,1400,200,1400,200,1500 fast_batch=17440400,17964000,14530100,15969100,15325700,14224000,14407600
