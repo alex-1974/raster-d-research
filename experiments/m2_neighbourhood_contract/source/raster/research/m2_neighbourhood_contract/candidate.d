@@ -942,6 +942,161 @@ bool runCandidateMatrix()
 
 
     /*
+     * Invalid source/destination planes and destination shape mismatch are
+     * explicit and leave destination unchanged.
+     */
+    {
+        ubyte[25] srcStorage;
+        ubyte[4] dstStorage = [7,7,7,7];
+
+        const PlaneDescriptor[1] srcDesc =
+        [
+            PlaneDescriptor(srcStorage.ptr,5,1)
+        ];
+
+        const PlaneDescriptor[1] dstDesc =
+        [
+            PlaneDescriptor(dstStorage.ptr,2,1)
+        ];
+
+        const ResourceEntry[1] dstRes =
+        [
+            ResourceEntry(
+                dstStorage.ptr,
+                dstStorage.sizeof,
+                null,
+                null,
+                ResourceAccess.readWrite
+            )
+        ];
+
+        scope auto src =
+            makeRasterViewAssumeValidated!ubyte(
+                srcDesc[],
+                Region2D(0,0,5,5)
+            );
+
+        scope auto dst =
+            makeWritable!ubyte(
+                dstRes[],
+                dstDesc[],
+                Region2D(0,0,2,2)
+            );
+
+        assert(
+            !tryCandidateNeighbourhood3x3!weighted3x3(
+                src,
+                1,
+                Region2D(1,1,2,2),
+                dst,
+                0,
+                error
+            )
+        );
+
+        assert(
+            error
+            == Neighbourhood3x3Error.invalidSourcePlane
+        );
+
+        assert(
+            !tryCandidateNeighbourhood3x3!weighted3x3(
+                src,
+                0,
+                Region2D(1,1,2,2),
+                dst,
+                1,
+                error
+            )
+        );
+
+        assert(
+            error
+            == Neighbourhood3x3Error.invalidDestinationPlane
+        );
+
+        assert(
+            !tryCandidateNeighbourhood3x3!weighted3x3(
+                src,
+                0,
+                Region2D(1,1,1,2),
+                dst,
+                0,
+                error
+            )
+        );
+
+        assert(
+            error
+            == Neighbourhood3x3Error.destinationShapeMismatch
+        );
+
+        assert(dstStorage == [7,7,7,7]);
+    }
+
+
+    /*
+     * A non-injective destination is rejected before the first write.
+     */
+    {
+        ubyte[25] srcStorage;
+        ubyte[1] dstStorage = [55];
+
+        const PlaneDescriptor[1] srcDesc =
+        [
+            PlaneDescriptor(srcStorage.ptr,5,1)
+        ];
+
+        const PlaneDescriptor[1] dstDesc =
+        [
+            PlaneDescriptor(dstStorage.ptr,0,0)
+        ];
+
+        const ResourceEntry[1] dstRes =
+        [
+            ResourceEntry(
+                dstStorage.ptr,
+                dstStorage.sizeof,
+                null,
+                null,
+                ResourceAccess.readWrite
+            )
+        ];
+
+        scope auto src =
+            makeRasterViewAssumeValidated!ubyte(
+                srcDesc[],
+                Region2D(0,0,5,5)
+            );
+
+        scope auto dst =
+            makeWritable!ubyte(
+                dstRes[],
+                dstDesc[],
+                Region2D(0,0,3,3)
+            );
+
+        assert(
+            !tryCandidateNeighbourhood3x3!weighted3x3(
+                src,
+                0,
+                Region2D(1,1,3,3),
+                dst,
+                0,
+                error
+            )
+        );
+
+        assert(
+            error
+            == Neighbourhood3x3Error.nonInjectiveDestination
+        );
+
+        assert(dstStorage[0] == 55);
+    }
+
+
+    /*
      * Matching empty output succeeds without context.
      */
     {
