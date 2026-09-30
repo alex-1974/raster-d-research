@@ -1154,3 +1154,109 @@ bool runCandidateMatrix()
 
     return true;
 }
+
+
+/*
+ * Compile-time callable qualification.
+ */
+@safe
+pure
+nothrow
+@nogc
+private
+ubyte validKernel(
+    ref const(ubyte)[9] n
+)
+{
+    return n[4];
+}
+
+
+private ubyte kernelState;
+
+
+@safe
+nothrow
+@nogc
+private
+ubyte impureKernel(
+    ref const(ubyte)[9] n
+)
+{
+    kernelState = n[4];
+    return n[4];
+}
+
+
+@safe
+pure
+private
+ubyte throwingKernel(
+    ref const(ubyte)[9] n
+)
+{
+    if (n[4] == 0)
+        throw new Exception("zero");
+
+    return n[4];
+}
+
+
+@safe
+pure
+nothrow
+private
+ubyte allocatingKernel(
+    ref const(ubyte)[9] n
+)
+{
+    auto value = new ubyte[1];
+    value[0] = n[4];
+    return value[0];
+}
+
+
+@system
+pure
+nothrow
+@nogc
+private
+ubyte systemKernel(
+    ref const(ubyte)[9] n
+)
+{
+    return n[4];
+}
+
+
+private
+void instantiateKernel(alias kernel)()
+{
+    ubyte[9] values;
+
+    const result =
+        invokeKernel!kernel(values);
+
+    assert(result == result);
+}
+
+
+static assert(
+    __traits(compiles, instantiateKernel!validKernel())
+);
+
+static assert(
+    !__traits(compiles, instantiateKernel!impureKernel())
+);
+
+static assert(
+    !__traits(compiles, instantiateKernel!throwingKernel())
+);
+
+static assert(
+    !__traits(compiles, instantiateKernel!allocatingKernel())
+);
+
+static assert(
+    !__traits(compiles, instantiateKernel!systemKernel())
+);
