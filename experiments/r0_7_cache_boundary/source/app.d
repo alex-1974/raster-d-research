@@ -3,6 +3,7 @@ module app;
 import raster : Region2D;
 import e7_2_retained_cache : runE72;
 import e7_3_geometry_reuse : runE73;
+import e7_4_failure_admission : runE74;
 
 
 private struct CacheKey
@@ -458,6 +459,7 @@ void main()
     assert(runPinnedBudgetFailureCase());
     assert(runE72());
     assert(runE73());
+    assert(runE74());
 
     import std.stdio : writeln;
 
@@ -471,5 +473,9 @@ void main()
 
     writeln(
         "E7.3 PASS: provider/cache/request independence and overlap reuse"
+    );
+
+    writeln(
+        "E7.4 PASS: empty work, failure isolation and separate residency admission"
     );
 }
