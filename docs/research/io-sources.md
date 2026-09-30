@@ -327,6 +327,36 @@ DEFER:
 - public source-error hierarchy;
 - public source metadata type.
 
+## 13. Prototype A result — caller-owned destination
+
+Status: PASS on both supported fast-floor compilers used locally for this research run.
+
+Verified:
+
+- DMD: PASS;
+- LDC: PASS;
+- contiguous single-plane ubyte destination;
+- padded-row single-plane ubyte destination;
+- non-zero and very large logical origins;
+- resident descriptor geometry rebased independently of logical origin;
+- materialization through public `WritableRasterView` sample writes;
+- verification through public read-only `RasterView` access;
+- no provider-tile, cache, scheduler or source-owned allocation requirement.
+
+Observed D engineering detail:
+
+`RasterLease.view()` requires a mutable non-scope lease receiver in this test
+context. The verification helper therefore accepts `ref RasterLease!ubyte`.
+This is a test/lifetime-callability constraint, not a source-contract semantic.
+
+Conclusion:
+
+Caller-owned destination materialization is viable with the current public
+`raster-d` ownership/view surface and should remain the primary R0.6 candidate.
+
+Prototype A alone is not sufficient for production promotion. R0.6 still
+requires a structurally different retained/adopted source path and ownership
+failure-boundary evidence.
 ## 13. Promotion gate
 
 R0.6 must not promote a production M1.3 source API until experiments show:
