@@ -120,6 +120,87 @@ nothrow
 }
 
 
+
+pragma(inline, false)
+private
+void executeCanonicalRowNoInline(alias kernel, T)(
+    scope const(T)* row0,
+    scope const(T)* row1,
+    scope const(T)* row2,
+    scope T* destinationRow,
+    size_t width
+)
+@trusted
+pure
+nothrow
+@nogc
+{
+    foreach (x; 0 .. width)
+    {
+        T[9] n =
+        [
+            row0[x], row0[x + 1], row0[x + 2],
+            row1[x], row1[x + 1], row1[x + 2],
+            row2[x], row2[x + 1], row2[x + 2]
+        ];
+
+        destinationRow[x] =
+            invokeKernel!kernel(n);
+    }
+}
+
+
+private
+bool executeCanonicalNoInline(alias kernel, T)(
+    scope const(T)* sourceBase,
+    ptrdiff_t sourceRowStride,
+    size_t outputX,
+    size_t outputY,
+    size_t width,
+    size_t height,
+    scope T* destinationBase,
+    ptrdiff_t destinationRowStride
+)
+@trusted
+pure
+nothrow
+@nogc
+{
+    assert(sourceBase !is null);
+    assert(destinationBase !is null);
+
+    const sourceStart =
+        sourceBase
+        + cast(ptrdiff_t) outputY * sourceRowStride
+        + cast(ptrdiff_t) outputX;
+
+    foreach (y; 0 .. height)
+    {
+        const centerRow =
+            sourceStart
+            + cast(ptrdiff_t) y * sourceRowStride;
+
+        const row0 = centerRow - sourceRowStride - 1;
+        const row1 = centerRow - 1;
+        const row2 = centerRow + sourceRowStride - 1;
+
+        auto destinationRow =
+            destinationBase
+            + cast(ptrdiff_t) y * destinationRowStride;
+
+        executeCanonicalRowNoInline!kernel(
+            row0,
+            row1,
+            row2,
+            destinationRow,
+            width
+        );
+    }
+
+    return true;
+}
+
+
 bool tryCanonicalCandidate(alias kernel, T)(
     scope RasterView!T source,
     size_t sourcePlaneIndex,
