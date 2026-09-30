@@ -1,7 +1,5 @@
 module app;
 
-import core.stdc.stdint : uint32_t;
-import std.bitmanip : bitfields;
 import std.math : fma;
 import std.stdio : writeln;
 
@@ -33,6 +31,20 @@ float affineExpression(
 }
 
 
+pragma(inline, false)
+@safe
+pure
+nothrow
+@nogc
+float roundedMultiply(
+    float x,
+    float gain
+)
+{
+    return x * gain;
+}
+
+
 @safe
 pure
 nothrow
@@ -44,11 +56,10 @@ float affineSeparate(
 )
 {
     /*
-     * This source shape expresses two operations, but this experiment does not
-     * assume that it is a portable anti-contraction guarantee.
+     * The no-inline call boundary forces the multiply result through the
+     * declared float return value before the later addition.
      */
-    float product = x * gain;
-    return product + bias;
+    return roundedMultiply(x, gain) + bias;
 }
 
 
@@ -122,7 +133,7 @@ void transformForwardShiftedOverlap(
      * same semantic contract as disjoint execution.
      */
     foreach (i; 0 .. storage.length - 1)
-        storage[i + 1] = plusOne(storage[i]);
+        storage[i + 1] = storage[i] + 10.0f;
 }
 
 
@@ -189,21 +200,17 @@ void main()
         /*
          * A mathematically independent point transform would have produced:
          *
-         *     [1, 2, 3, 4] -> destination [2, 3, 4]
+         *     [1, 2, 3, 4] -> destination [11, 12, 13]
          *
-         * but overlap changes later inputs:
+         * but forward overlap changes later inputs and instead produces:
          *
-         *     [1, 2, 3, 4]
-         *     [1, 2, 3, 4]
-         *     [1, 2, 3, 4]
+         *     [1, 11, 21, 31]
          *
-         * Every later destination becomes 2 after reading an overwritten
-         * source. This is intentionally not accepted point-transform
-         * semantics.
+         * This is intentionally not accepted point-transform semantics.
          */
         assert(
             storage
-            == [1.0f, 2.0f, 3.0f, 4.0f]
+            == [1.0f, 11.0f, 21.0f, 31.0f]
         );
     }
 
