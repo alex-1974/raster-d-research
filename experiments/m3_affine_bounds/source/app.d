@@ -147,119 +147,135 @@ bool directOverlap(Rect a, Rect b, size_t sampleSize)
 }
 
 private
+uint nextWord(ref uint state)
+@safe pure nothrow @nogc
+{
+    state = state * 1664525U + 1013904223U;
+    return state;
+}
+
+private
+ptrdiff_t generatedStride(ref uint state)
+@safe pure nothrow @nogc
+{
+    immutable ptrdiff_t[11] values =
+        [-8,-5,-3,-2,-1,0,1,2,3,5,8];
+
+    return values[nextWord(state) % values.length];
+}
+
+private
 int systematicCorrectness()
 {
-    size_t cases;
+    enum size_t caseCount = 100_000;
+
     size_t fastRejects;
     size_t overlappingBoundsButDisjoint;
     size_t exactMismatches;
 
-    const ptrdiff_t[] strides =
-        [-8,-5,-3,-2,-1,0,1,2,3,5,8];
+    immutable size_t[4] sampleSizes = [1,2,4,8];
+    immutable long[11] deltas =
+        [-31,-17,-9,-5,-1,0,1,3,7,15,33];
 
-    const size_t[] sampleSizes = [1,2,4,8];
+    uint state = 0x9e3779b9U;
 
-    foreach (sampleSize; sampleSizes)
-    foreach (aw; 0 .. 6)
-    foreach (ah; 0 .. 6)
-    foreach (bw; 0 .. 6)
-    foreach (bh; 0 .. 6)
-    foreach (ars; strides)
-    foreach (ass; strides)
-    foreach (brs; strides)
-    foreach (bss; strides)
+    foreach (caseIndex; 0 .. caseCount)
     {
-        /*
-         * Keep the systematic domain finite but vary relative base placement
-         * across exact equality, nearby/interleaved and clearly separate
-         * positions.
-         */
-        foreach (delta; [-31L,-17L,-9L,-5L,-1L,0L,1L,3L,7L,15L,33L])
+        const sampleSize =
+            sampleSizes[nextWord(state) % sampleSizes.length];
+
+        const aw = cast(size_t)(nextWord(state) % 6);
+        const ah = cast(size_t)(nextWord(state) % 6);
+        const bw = cast(size_t)(nextWord(state) % 6);
+        const bh = cast(size_t)(nextWord(state) % 6);
+
+        const ars = generatedStride(state);
+        const ass = generatedStride(state);
+        const brs = generatedStride(state);
+        const bss = generatedStride(state);
+
+        const delta =
+            deltas[nextWord(state) % deltas.length];
+
+        const long targetBaseLong = 4096L + delta;
+
+        const a = Rect(aw,ah,4096,ars,ass);
+        const b = Rect(
+            bw,bh,cast(size_t)targetBaseLong,brs,bss
+        );
+
+        const overlap =
+            directOverlap(a,b,sampleSize);
+
+        const rejected =
+            fastRejectDisjoint(a,b,sampleSize);
+
+        if (rejected)
         {
-            const long targetBaseLong = 4096L + delta;
-            if (targetBaseLong < 0)
-                continue;
+            ++fastRejects;
 
-            const a = Rect(aw,ah,4096,ars,ass);
-            const b = Rect(
-                bw,bh,cast(size_t)targetBaseLong,brs,bss
-            );
-
-            const overlap =
-                directOverlap(a,b,sampleSize);
-
-            const rejected =
-                fastRejectDisjoint(a,b,sampleSize);
-
-            ++cases;
-
-            if (rejected)
+            if (overlap)
             {
-                ++fastRejects;
-
-                if (overlap)
-                {
-                    writeln(
-                        "FALSE_DISJOINT ",
-                        a, " ", b,
-                        " sampleSize=", sampleSize
-                    );
-                    return 1;
-                }
-            }
-            else
-            {
-                const ab = smallDomainBound(a,sampleSize);
-                const bb = smallDomainBound(b,sampleSize);
-
-                if (
-                    !overlap
-                    && ab.valid
-                    && bb.valid
-                    && !boundsDisjoint(ab,bb)
-                )
-                    ++overlappingBoundsButDisjoint;
-            }
-
-            const exact =
-                classifySameTypeAffine2DRectanglesByteOverlap(
-                    a.width,a.height,
-                    a.base,a.rowStride,a.sampleStride,
-                    b.width,b.height,
-                    b.base,b.rowStride,b.sampleStride,
-                    sampleSize
-                );
-
-            if (
-                exact != AffineByteOverlapRelation.arithmeticFailure
-                && (
-                    (exact == AffineByteOverlapRelation.overlap)
-                    != overlap
-                )
-            )
-            {
-                ++exactMismatches;
                 writeln(
-                    "EXACT_MISMATCH ",
-                    a, " ", b,
-                    " sampleSize=", sampleSize,
-                    " exact=", exact,
-                    " direct=", overlap
+                    "FALSE_DISJOINT case=", caseIndex,
+                    " ", a, " ", b,
+                    " sampleSize=", sampleSize
                 );
                 return 1;
             }
         }
+        else
+        {
+            const ab = smallDomainBound(a,sampleSize);
+            const bb = smallDomainBound(b,sampleSize);
+
+            if (
+                !overlap
+                && ab.valid
+                && bb.valid
+                && !boundsDisjoint(ab,bb)
+            )
+                ++overlappingBoundsButDisjoint;
+        }
+
+        const exact =
+            classifySameTypeAffine2DRectanglesByteOverlap(
+                a.width,a.height,
+                a.base,a.rowStride,a.sampleStride,
+                b.width,b.height,
+                b.base,b.rowStride,b.sampleStride,
+                sampleSize
+            );
+
+        if (
+            exact != AffineByteOverlapRelation.arithmeticFailure
+            && (
+                (exact == AffineByteOverlapRelation.overlap)
+                != overlap
+            )
+        )
+        {
+            ++exactMismatches;
+            writeln(
+                "EXACT_MISMATCH case=", caseIndex,
+                " ", a, " ", b,
+                " sampleSize=", sampleSize,
+                " exact=", exact,
+                " direct=", overlap
+            );
+            return 1;
+        }
     }
 
     writeln(
-        "m3_affine_bounds_correctness PASS cases=", cases,
+        "m3_affine_bounds_correctness PASS cases=", caseCount,
         " fast_rejects=", fastRejects,
         " overlapping_bounds_but_disjoint=",
         overlappingBoundsButDisjoint,
         " exact_mismatches=", exactMismatches
     );
 
-    if (overlappingBoundsButDisjoint == 0)
+    if (fastRejects == 0 || overlappingBoundsButDisjoint == 0)
         return 1;
 
     return 0;
