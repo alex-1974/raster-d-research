@@ -369,7 +369,7 @@ long median(ref long[repetitions] samples)
 
 private
 void consume(scope const(float)[] values)
-@safe
+@trusted
 nothrow
 @nogc
 {
