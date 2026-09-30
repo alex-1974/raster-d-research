@@ -1,6 +1,7 @@
 module app;
 
 import raster : Region2D;
+import e8_2_key_ownership : runE82;
 
 
 private struct SourceIdentity
@@ -323,10 +324,15 @@ void main()
     assert(runProviderIndependence());
     assert(runHugeOrigin());
     assert(runGenerationInvalidation());
+    assert(runE82());
 
     import std.stdio : writeln;
 
     writeln(
         "E8.1 PASS: semantic identity prevents false hits without resident-layout coupling"
+    );
+
+    writeln(
+        "E8.2 PASS: caller-owned generic keys preserve semantics without raster-d source knowledge"
     );
 }
