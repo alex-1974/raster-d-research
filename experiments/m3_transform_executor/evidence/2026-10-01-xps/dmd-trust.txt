@@ -1,0 +1,29 @@
+PASS trust challenge: pointer requires pointer/slice construction boundary
+/tmp/tmp.h5ZEDaCWB3/pointer-True.d(16): Error: pointer arithmetic is not allowed in a `@safe` function
+        const row = source + cast(ptrdiff_t)y*sr;
+                    ^
+/tmp/tmp.h5ZEDaCWB3/pointer-True.d(17): Error: pointer arithmetic is not allowed in a `@safe` function
+        auto target = destination + cast(ptrdiff_t)y*dr;
+                      ^
+/tmp/tmp.h5ZEDaCWB3/pointer-True.d(23): Error: template instance `challenge.execute!(identity, float)` error instantiating
+void main() { float[4] a,b; execute!identity(a.ptr,2,2,2,b.ptr,2); }
+                                            ^
+PASS trust challenge: slice requires pointer/slice construction boundary
+/tmp/tmp.h5ZEDaCWB3/slice-True.d(13): Error: pointer arithmetic is not allowed in a `@safe` function
+{ return (base + cast(ptrdiff_t)y*stride)[0 .. width]; }
+          ^
+/tmp/tmp.h5ZEDaCWB3/slice-True.d(23): Error: template instance `challenge.readRow!float` error instantiating
+        scope const row = readRow(source,y,sr,width);
+                                 ^
+/tmp/tmp.h5ZEDaCWB3/slice-True.d(30):        instantiated from here: `execute!(identity, float)`
+void main() { float[4] a,b; execute!identity(a.ptr,2,2,2,b.ptr,2); }
+                                            ^
+/tmp/tmp.h5ZEDaCWB3/slice-True.d(16): Error: pointer arithmetic is not allowed in a `@safe` function
+{ return (base + cast(ptrdiff_t)y*stride)[0 .. width]; }
+          ^
+/tmp/tmp.h5ZEDaCWB3/slice-True.d(24): Error: template instance `challenge.writeRow!float` error instantiating
+        scope auto target = writeRow(destination,y,dr,width);
+                                    ^
+/tmp/tmp.h5ZEDaCWB3/slice-True.d(30):        instantiated from here: `execute!(identity, float)`
+void main() { float[4] a,b; execute!identity(a.ptr,2,2,2,b.ptr,2); }
+                                            ^

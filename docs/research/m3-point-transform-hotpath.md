@@ -106,5 +106,5 @@ PR #53 establishes production `b263477bdbbe0dc3e8c469ac3867eda345ba364c`.
 The new isolated comparison is recorded in `m3-transform-executor.md` and
 `experiments/m3_transform_executor/`; both sides use the same merged checked
 bounds wrapper. The historical harness above remains evidence and is not used
-to attribute bounds improvements to Canonical execution. Production promotion
-and final pointer/slice selection remain gated by stable reference measurements.
+to attribute bounds improvements to Canonical execution. The uploaded XPS reference evidence selects the generic pointer executor for
+production handoff; compiler-specific/parallel forms remain deferred.

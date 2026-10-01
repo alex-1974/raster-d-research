@@ -8,6 +8,7 @@ from pathlib import Path
 
 parser=argparse.ArgumentParser()
 parser.add_argument('directory',type=Path)
+parser.add_argument('--environment',choices=['container','xps'],default='container')
 args=parser.parse_args()
 records={}
 for compiler in ['dmd','ldc']:
@@ -38,7 +39,7 @@ for runs in records.values():
     for cases in runs:
         assert cases.keys()==reference.keys()
         assert all(cases[k][1]==reference[k][1] for k in reference),'cross-process/compiler hash mismatch'
-print('# Post-bounds transform executor — container evidence\n')
+print(f'# Post-bounds transform executor — {args.environment} evidence\n')
 print('Baseline: `b263477bdbbe0dc3e8c469ac3867eda345ba364c`.\n')
 print('All six independent processes pass 41 cases and special-float bit checks; all hashes match across processes and compilers. Each case has two warmups and nine timed calls per path, with cyclic order and full source/output/padding checks outside timing.\n')
 print('Large (2048x512) baseline/candidate median ratios across three processes, including contiguous and all four padded row-sign combinations:\n')
@@ -57,7 +58,10 @@ for typ in ['float','ubyte']:
                 spreads[form].append((max(medians)/min(medians)-1)*100)
         fmt=lambda v:f'{min(v):.3f}–{max(v):.3f}x'
         print(f'| {typ} | {compiler} | {fmt(ratios[0])} | {fmt(ratios[1])} | '+ ' / '.join(f'{max(s):.2f}%' for s in spreads)+' |')
-print('\nContainer/VM timing is diagnostic evidence, not XPS or AArch64 qualification. Small workloads and Universal fallback have no tight timing threshold. Pointer versus slice selection and production admission require a separate review of stable reference-machine evidence.\n')
+if args.environment=='container':
+    print('\nContainer/VM timing is diagnostic evidence, not XPS or AArch64 qualification. Small workloads and Universal fallback have no tight timing threshold. Pointer versus slice selection and production admission require a separate review of stable reference-machine evidence.\n')
+else:
+    print('\nXPS timing is reference-machine evidence, not a portable timing promise or AArch64 qualification. Small workloads and Universal fallback have no tight timing threshold. Preserve process spread when reviewing source-form selection.\n')
 print('## Per-case paired ratios\n')
 print('| Case | Compiler | Pointer range | Slice range |')
 print('| --- | --- | --- | --- |')

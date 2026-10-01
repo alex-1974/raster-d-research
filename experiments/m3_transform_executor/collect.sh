@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 root="$(cd "$(dirname "$0")" && pwd)"
-out="${1:?Usage: collect.sh OUTPUT_DIRECTORY [CPU]}"
+out="${1:?Usage: collect.sh OUTPUT_DIRECTORY [CPU] [container|xps]}"
 mkdir -p "$out"
 out="$(cd "$out" && pwd)"
 cpu="${2:-0}"
@@ -29,4 +29,4 @@ for run in 1 2 3; do
     taskset -c "$cpu" "$tmp_dir/ldc2" > "$out/ldc-run-$run.txt"
 done
 "$root/codegen.sh" > "$out/codegen.txt" 2>&1
-python3 "$root/summarize.py" "$out" > "$out/SUMMARY.md"
+python3 "$root/summarize.py" "$out" --environment "${3:-container}" > "$out/SUMMARY.md"

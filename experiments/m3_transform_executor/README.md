@@ -38,14 +38,14 @@ release-mode checks throw on a mismatch and do not rely on disabled assertions.
 With sibling `raster-d` at the pinned baseline and dmd/ldc2/dub on PATH:
 
 ```bash
-experiments/m3_transform_executor/collect.sh /tmp/transform-xps 0
+experiments/m3_transform_executor/collect.sh /tmp/transform-xps 0 xps
 ```
 
 This generates candidates, runs inherited tests and trust challenges, records
 verbose release compiler commands and binary hashes, pins measurements to the
 requested CPU, runs three independent processes per compiler and validates the
 raw medians and cross-process/compiler fingerprints. No frequency/thermal/VM
-isolation is implied by CPU affinity. `summarize.py DIRECTORY` reproduces the
+isolation is implied by CPU affinity. `summarize.py DIRECTORY --environment xps` reproduces the
 summary using only the Python standard library.
 
 `codegen.sh` inspects exact isolated executor helpers for one question: whether
@@ -55,4 +55,4 @@ establish a whole-consumer explanation or authorize compiler specialization.
 
 Decision and environment-specific findings are in
 `docs/research/m3-transform-executor.md`. The archived container evidence is a
-candidate-selection diagnostic; stable XPS qualification remains outstanding.
+candidate-selection diagnostic; the subsequent XPS reference record establishes generic pointer selection.

@@ -93,16 +93,62 @@ complete-consumer causal proof. No compiler-specific path is admitted from it.
 
 | Question | Decision |
 | --- | --- |
-| General Canonical executor | KEEP as a research candidate; correctness and VM end-to-end benefit established |
-| Slice versus pointer as production default | DEFER until stable reference measurements; slice narrows trust, pointer may have a DMD cost advantage |
+| General Canonical executor | KEEP for production handoff; correctness and XPS benefit established |
+| Slice versus pointer as production default | KEEP generic pointer; REJECT slice as the default due to consistent DMD cost, retain it as evidence |
 | Compiler-specific form | DEFER; no specialization justified yet |
 | Negative-row special handling | DEFER; signed generic paths are correct, no special implementation admitted |
 | Universal fallback | KEEP unchanged |
 | Parallel row-range entry | DEFER; outside this qualification |
-| Production promotion | DEFER pending stable XPS evidence and final source-form selection |
+| Production promotion | READY for a separate cleaned production PR with internal-surface and trust probes |
 
-Next qualification: run the preserved collector on XPS with both baseline
-compilers, inspect complete hashes and spread, then select the smallest generic
-executor or document a measured compiler trade-off. Only the cleaned accepted
-executor plus independent production contract probes should enter a separate
-PR to raster-d/develop. Issue #14 stays open until that decision is complete.
+Only the cleaned accepted executor plus independent production contract probes
+enter a separate PR to raster-d/develop. Issue #14 stays open until production
+handoff is complete. The following XPS record completes reference qualification.
+
+
+## XPS reference result — 2026-10-01
+
+Uploaded archive SHA256:
+`e0b5b0ec2333f69ef6e6ebe8bfd7f828db25104bd49ebbde0be6690afc9afb93`.
+Source is research `ed7cd00ff3d91c49f732f257d2c9d10dcd11f44c`, production
+`b263477bdbbe0dc3e8c469ac3867eda345ba364c`. Raw files are preserved byte-for-byte
+under `experiments/m3_transform_executor/evidence/2026-10-01-xps/`, including
+original SHA256SUMS. Every supplied checksum passes. The original summary used
+a hardcoded container label; QUALIFIED_SUMMARY.md recomputes identical medians
+and ratios with the corrected XPS environment label.
+
+Machine: XPS i7-9750H, CPU affinity 0; no added host frequency/thermal control.
+Compilers: DMD 2.111.0, LDC 1.41.0 / LLVM 19.1.7, DUB 1.40.0. Both inherited
+test suites and both trust challenges pass. Six processes pass all 41 cases,
+with all output/padding hashes identical across processes and compilers. Affine
+and identity special-float checks pass. Complete-consumer timing includes the
+already-integrated checked relation wrapper on all paths.
+
+Large 2048x512 outputs, three processes, contiguous and all four padded row-sign
+pairs:
+
+| Type | Compiler | Public/pointer ratio | Public/slice ratio |
+| --- | --- | --- | --- |
+| float | DMD | 17.433–24.001x | 9.233–10.360x |
+| float | LDC | 8.209–12.974x | 8.232–13.181x |
+| ubyte | DMD | 9.015–9.475x | 7.390–7.585x |
+| ubyte | LDC | 5.751–37.896x | 5.507–37.708x |
+
+DMD slice/pointer medians are 1.764–2.398 for float and 1.212–1.273 for ubyte:
+pointer wins every large paired case. LDC gives no stable material reason to
+maintain an additional slice specialization; paired differences sit within
+observed process variability. Both implementations use exactly the same
+sample-value expression and validate before writing.
+
+DMD float pointer process-median spread reaches 46.56%; LDC float pointer/slice
+reach 39.66%/36.19%. DMD ubyte pointer spread is 5.44%. These limits prevent
+precise portable speedup promises and a tight timing gate. Even the slowest
+large paired pointer result substantially improves the public baseline, and
+DMD pointer remains ahead of slice in every paired case. Source-form selection
+therefore rests on the robust direction and magnitude, not a small noisy delta.
+
+Decision: KEEP one portable generic pointer executor, with a narrowly audited
+trusted row/sample loop and unchanged safe transform invocation. REJECT slice
+as the default, while preserving it as a safety/performance comparison. DEFER
+compiler-specific tuning, negative-row specialization and parallel entry;
+AArch64 performance remains unqualified. Universal traversal remains unchanged.
