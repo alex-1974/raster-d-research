@@ -1,0 +1,10 @@
+             Generating test runner configuration 'raster-m3-fill-executor-test-application' for 'application' (executable).
+     Warning Excluding main source file source/app.d from test.
+    Starting Performing "unittest" build using ldc2 for x86_64.
+    Building mir-core 1.7.4: building configuration [library]
+    Building mir-algorithm 3.22.4: building configuration [default]
+    Building raster-d ~develop: building configuration [library]
+    Building raster-m3-fill-executor ~master: building configuration [raster-m3-fill-executor-test-application]
+     Linking raster-m3-fill-executor-test-application
+     Running raster-m3-fill-executor-test-application 
+2 modules passed unittests

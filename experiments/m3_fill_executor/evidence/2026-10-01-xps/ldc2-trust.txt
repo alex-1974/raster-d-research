@@ -1,0 +1,47 @@
+PASS trust challenge: pointer actual source requires trust
+/tmp/tmp.u4hShnkZgv/pointer-True.d(14): Error: pointer arithmetic is not allowed in a `@safe` function
+        auto row = base + cast(ptrdiff_t)y*stride;
+                   ^
+/tmp/tmp.u4hShnkZgv/pointer-True.d(19): Error: template instance `challenge.execute!float` error instantiating
+void main() { float[4] a; ubyte[4] b; Pod[4] c; execute(a.ptr,2,2,2,1.5f); execute(b.ptr,2,2,2,cast(ubyte)7); execute(c.ptr,2,2,2,Pod(7,11,13,17)); }
+                                                       ^
+/tmp/tmp.u4hShnkZgv/pointer-True.d(14): Error: pointer arithmetic is not allowed in a `@safe` function
+        auto row = base + cast(ptrdiff_t)y*stride;
+                   ^
+/tmp/tmp.u4hShnkZgv/pointer-True.d(19): Error: template instance `challenge.execute!ubyte` error instantiating
+void main() { float[4] a; ubyte[4] b; Pod[4] c; execute(a.ptr,2,2,2,1.5f); execute(b.ptr,2,2,2,cast(ubyte)7); execute(c.ptr,2,2,2,Pod(7,11,13,17)); }
+                                                                                  ^
+/tmp/tmp.u4hShnkZgv/pointer-True.d(14): Error: pointer arithmetic is not allowed in a `@safe` function
+        auto row = base + cast(ptrdiff_t)y*stride;
+                   ^
+/tmp/tmp.u4hShnkZgv/pointer-True.d(19): Error: template instance `challenge.execute!(Pod)` error instantiating
+void main() { float[4] a; ubyte[4] b; Pod[4] c; execute(a.ptr,2,2,2,1.5f); execute(b.ptr,2,2,2,cast(ubyte)7); execute(c.ptr,2,2,2,Pod(7,11,13,17)); }
+                                                                                                                     ^
+PASS trust challenge: slice actual source requires trust
+/tmp/tmp.u4hShnkZgv/slice-True.d(11): Error: pointer arithmetic is not allowed in a `@safe` function
+{ return (base + cast(ptrdiff_t)y*stride)[0 .. width]; }
+          ^
+/tmp/tmp.u4hShnkZgv/slice-True.d(17): Error: template instance `challenge.writeRow!float` error instantiating
+        scope auto row = writeRow(base,y,stride,width);
+                                 ^
+/tmp/tmp.u4hShnkZgv/slice-True.d(22):        instantiated from here: `execute!float`
+void main() { float[4] a; ubyte[4] b; Pod[4] c; execute(a.ptr,2,2,2,1.5f); execute(b.ptr,2,2,2,cast(ubyte)7); execute(c.ptr,2,2,2,Pod(7,11,13,17)); }
+                                                       ^
+/tmp/tmp.u4hShnkZgv/slice-True.d(11): Error: pointer arithmetic is not allowed in a `@safe` function
+{ return (base + cast(ptrdiff_t)y*stride)[0 .. width]; }
+          ^
+/tmp/tmp.u4hShnkZgv/slice-True.d(17): Error: template instance `challenge.writeRow!ubyte` error instantiating
+        scope auto row = writeRow(base,y,stride,width);
+                                 ^
+/tmp/tmp.u4hShnkZgv/slice-True.d(22):        instantiated from here: `execute!ubyte`
+void main() { float[4] a; ubyte[4] b; Pod[4] c; execute(a.ptr,2,2,2,1.5f); execute(b.ptr,2,2,2,cast(ubyte)7); execute(c.ptr,2,2,2,Pod(7,11,13,17)); }
+                                                                                  ^
+/tmp/tmp.u4hShnkZgv/slice-True.d(11): Error: pointer arithmetic is not allowed in a `@safe` function
+{ return (base + cast(ptrdiff_t)y*stride)[0 .. width]; }
+          ^
+/tmp/tmp.u4hShnkZgv/slice-True.d(17): Error: template instance `challenge.writeRow!(Pod)` error instantiating
+        scope auto row = writeRow(base,y,stride,width);
+                                 ^
+/tmp/tmp.u4hShnkZgv/slice-True.d(22):        instantiated from here: `execute!(Pod)`
+void main() { float[4] a; ubyte[4] b; Pod[4] c; execute(a.ptr,2,2,2,1.5f); execute(b.ptr,2,2,2,cast(ubyte)7); execute(c.ptr,2,2,2,Pod(7,11,13,17)); }
+                                                                                                                     ^
