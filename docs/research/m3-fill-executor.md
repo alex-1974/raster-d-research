@@ -97,13 +97,13 @@ complete-consumer causal proof. No compiler workaround is inferred.
 | Question | Decision |
 | --- | --- |
 | Generic Canonical fill optimization | KEEP as a qualified correctness candidate |
-| Pointer versus Slice | KEEP both for XPS comparison; Slice is the DMD VM leader |
+| Pointer versus Slice | KEEP Slice for production; retain Pointer as comparison evidence |
 | Universal/sample-strided fallback | KEEP unchanged |
 | Repeated/overlapping rows | KEEP exact legal fill behavior; no injectivity gate |
 | Compiler-specific specialization | DEFER |
 | Zero-stride algorithmic shortcut | DEFER; original Universal logical traversal retained |
 | SIMD, parallel execution | DEFER |
-| Production admission | DEFER until XPS reference qualification |
+| Production admission | READY for separate implementation review after XPS qualification |
 | AArch64 performance | Unqualified |
 
 `collect.sh OUTPUT_DIRECTORY CPU xps` reproduces all semantic, trust, six-process
@@ -112,3 +112,47 @@ raw counts, medians and cross-process/compiler fingerprints. Targeted CI pins
 production and runs the semantic/trust/complete-consumer diagnostic on both
 compilers without timing thresholds. A later production PR admits only the
 selected cleaned kernel with independent contract/visibility tests.
+
+## XPS qualification — 2026-10-01
+
+The uploaded archive and source hashes are recorded in
+`experiments/m3_fill_executor/evidence/2026-10-01-xps/PROVENANCE.md`. All uploaded
+checksums pass; the validating summarizer exactly reproduces SUMMARY.md.
+All six runs pass 70 cases and contract/special-float checks, with matching
+hashes. Both inherited suites and actual-source trust challenges pass.
+
+XPS i7-9750H, affinity CPU 0, no added frequency/thermal controls; DMD 2.111.0,
+LDC 1.41.0 / LLVM 19.1.7, DUB 1.40.0. Complete-consumer timings contain 11,340
+calls. Across all six large Canonical layouts, public/candidate medians span:
+
+| Type | Compiler | Pointer | Slice |
+| --- | --- | --- | --- |
+| float | DMD | 8.431–13.234x | 9.232–13.845x |
+| float | LDC | 2.281–16.557x | 2.247–16.350x |
+| ubyte | DMD | 19.132–24.234x | 61.527–282.100x |
+| ubyte | LDC | 8.628–144.913x | 11.892–151.867x |
+
+Slice beats Pointer in every paired large DMD ubyte case; Slice/Pointer ratios
+are 0.086–0.311 (3.22–11.65x faster). DMD float is mostly near parity, unlike
+the larger VM Slice advantage. LDC float and ubyte preferences vary by run and
+layout. Specifically LDC padded float Slice is 3.6–15.8% slower in all three
+runs; this bounded measured disadvantage is accepted in exchange for the large
+consistent DMD ubyte benefit and narrower safety boundary of one generic source
+form. Negative-row LDC float comparisons vary from 0.616–1.263; no specialization
+is justified by these noisy small paired differences.
+
+Large-case process spread reaches 355.03% for LDC ubyte Pointer, 157.86% for
+LDC ubyte Slice and 150.99% for DMD ubyte Slice. DMD float Pointer/Slice spread
+is 72.61%/61.67%, LDC float 96.17%/73.32%. These results support the robust
+end-to-end gain over the checked public baseline, not precise speedup promises
+or a claim that Slice wins every comparison. Repeated/overlapping rows remain
+logical repeated-write work, not independent-memory bandwidth.
+
+Select one portable generic Slice executor for matching sample stride one.
+Only validated row formation is trusted; assignment is safe. Retain Pointer
+as comparison evidence. Preserve Universal traversal and legal non-injective
+semantics, including repeated/overlapping Canonical rows. Compiler-specific,
+zero-stride algorithmic shortcuts, manual SIMD and parallel execution remain
+deferred. AArch64 performance is unqualified. The production handoff must add
+independent layout/padding/bitwise tests and external visibility/actual-source
+trust controls before merge.
