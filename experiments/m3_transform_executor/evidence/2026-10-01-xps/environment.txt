@@ -1,0 +1,103 @@
+Linux xps-15 6.17.0-22-generic #22-Ubuntu SMP PREEMPT_DYNAMIC Fri Mar 13 12:04:44 UTC 2026 x86_64 GNU/Linux
+Architektur:                             x86_64
+CPU Operationsmodus:                     32-bit, 64-bit
+Adressgrößen:                            39 bits physical, 48 bits virtual
+Byte-Reihenfolge:                        Little Endian
+CPU(s):                                  12
+Liste der Online-CPU(s):                 0-11
+Anbieterkennung:                         GenuineIntel
+Modellname:                              Intel(R) Core(TM) i7-9750H CPU @ 2.60GHz
+Prozessorfamilie:                        6
+Modell:                                  158
+Thread(s) pro Kern:                      2
+Kern(e) pro Sockel:                      6
+Sockel:                                  1
+Stepping:                                10
+Skalierung der CPU(s):                   85%
+Maximale Taktfrequenz der CPU:           4500,0000
+Minimale Taktfrequenz der CPU:           800,0000
+BogoMIPS:                                5199,98
+Markierungen:                            fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc cpuid aperfmperf pni pclmulqdq dtes64 monitor ds_cpl vmx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch cpuid_fault epb pti ssbd ibrs ibpb stibp tpr_shadow flexpriority ept vpid ept_ad fsgsbase tsc_adjust bmi1 avx2 smep bmi2 erms invpcid mpx rdseed adx smap clflushopt intel_pt xsaveopt xsavec xgetbv1 xsaves dtherm ida arat pln pts hwp hwp_notify hwp_act_window hwp_epp vnmi md_clear flush_l1d arch_capabilities
+Virtualisierung:                         VT-x
+L1d Cache:                               192 KiB (6 Instanzen)
+L1i Cache:                               192 KiB (6 Instanzen)
+L2 Cache:                                1,5 MiB (6 Instanzen)
+L3 Cache:                                12 MiB (1 Instanz)
+NUMA-Knoten:                             1
+NUMA-Knoten0 CPU(s):                     0-11
+Schwachstelle Gather data sampling:      Vulnerable
+Schwachstelle Ghostwrite:                Not affected
+Schwachstelle Indirect target selection: Not affected
+Schwachstelle Itlb multihit:             KVM: Mitigation: Split huge pages
+Schwachstelle L1tf:                      Mitigation; PTE Inversion; VMX conditional cache flushes, SMT vulnerable
+Schwachstelle Mds:                       Mitigation; Clear CPU buffers; SMT vulnerable
+Schwachstelle Meltdown:                  Mitigation; PTI
+Schwachstelle Mmio stale data:           Mitigation; Clear CPU buffers; SMT vulnerable
+Schwachstelle Old microcode:             Not affected
+Schwachstelle Reg file data sampling:    Not affected
+Schwachstelle Retbleed:                  Mitigation; IBRS
+Schwachstelle Spec rstack overflow:      Not affected
+Schwachstelle Spec store bypass:         Mitigation; Speculative Store Bypass disabled via prctl
+Schwachstelle Spectre v1:                Mitigation; usercopy/swapgs barriers and __user pointer sanitization
+Schwachstelle Spectre v2:                Mitigation; IBRS; IBPB conditional; STIBP conditional; RSB filling; PBRSB-eIBRS Not affected; BHI Not affected
+Schwachstelle Srbds:                     Mitigation; Microcode
+Schwachstelle Tsa:                       Not affected
+Schwachstelle Tsx async abort:           Not affected
+Schwachstelle Vmscape:                   Mitigation; IBPB before exit to userspace
+affinity CPU=0; VM/host frequency and thermal controls unchanged
+DUB version 1.40.0, built on Mar 31 2025
+DMD64 D Compiler v2.111.0
+Copyright (C) 1999-2025 by The D Language Foundation, All Rights Reserved written by Walter Bright
+LDC - the LLVM D compiler (1.41.0):
+  based on DMD v2.111.0 and LLVM 19.1.7
+  built with LDC - the LLVM D compiler (1.41.0)
+  Default target: x86_64-pc-linux-gnu
+  Host CPU: skylake
+  http://dlang.org - http://wiki.dlang.org/LDC
+
+
+  Registered Targets:
+    aarch64     - AArch64 (little endian)
+    aarch64_32  - AArch64 (little endian ILP32)
+    aarch64_be  - AArch64 (big endian)
+    amdgcn      - AMD GCN GPUs
+    arm         - ARM
+    arm64       - ARM64 (little endian)
+    arm64_32    - ARM64 (little endian ILP32)
+    armeb       - ARM (big endian)
+    avr         - Atmel AVR Microcontroller
+    bpf         - BPF (host endian)
+    bpfeb       - BPF (big endian)
+    bpfel       - BPF (little endian)
+    hexagon     - Hexagon
+    lanai       - Lanai
+    loongarch32 - 32-bit LoongArch
+    loongarch64 - 64-bit LoongArch
+    m68k        - Motorola 68000 family
+    mips        - MIPS (32-bit big endian)
+    mips64      - MIPS (64-bit big endian)
+    mips64el    - MIPS (64-bit little endian)
+    mipsel      - MIPS (32-bit little endian)
+    msp430      - MSP430 [experimental]
+    nvptx       - NVIDIA PTX 32-bit
+    nvptx64     - NVIDIA PTX 64-bit
+    ppc32       - PowerPC 32
+    ppc32le     - PowerPC 32 LE
+    ppc64       - PowerPC 64
+    ppc64le     - PowerPC 64 LE
+    r600        - AMD GPUs HD2XXX-HD6XXX
+    riscv32     - 32-bit RISC-V
+    riscv64     - 64-bit RISC-V
+    sparc       - Sparc
+    sparcel     - Sparc LE
+    sparcv9     - Sparc V9
+    systemz     - SystemZ
+    thumb       - Thumb
+    thumbeb     - Thumb (big endian)
+    ve          - VE
+    wasm32      - WebAssembly 32-bit
+    wasm64      - WebAssembly 64-bit
+    x86         - 32-bit X86: Pentium-Pro and above
+    x86-64      - 64-bit X86: EM64T and AMD64
+    xcore       - XCore
+    xtensa      - Xtensa 32

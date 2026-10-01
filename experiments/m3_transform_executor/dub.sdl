@@ -1,0 +1,6 @@
+name "raster-m3-transform-executor"
+description "Pinned post-bounds transform executor qualification"
+targetType "executable"
+dependency "raster-d" path="../../../raster-d"
+sourcePaths "source"
+dflags "-preview=dip1000"
