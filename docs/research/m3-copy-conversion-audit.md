@@ -135,7 +135,7 @@ separate candidate axes; no duration subtraction claims an exact causal share.
 | XPS baseline confirmation | Open; collector ready |
 | AArch64, explicit SIMD, threading | Unqualified / deferred |
 
-The next bounded research slice should compare full public candidates with
+The baseline motivates comparison of full public candidates with
 bounds-only, execution-only and combined changes, preserving original flat
 selection where appropriate. Checked conservative envelopes may prove
 **disjointness only**; overlapping/unrepresentable envelopes must retain the
@@ -146,3 +146,119 @@ source self-aliasing and destination injectivity. Actual-source trust challenges
 remain necessary. VM evidence establishes the question; stable XPS evidence
 must justify any production promotion. No compiler switch or manual SIMD is
 selected from these diagnostic ratios.
+
+## Full public candidate qualification
+
+Three independently generated forms extend the baseline without changing its
+raw evidence. Each form pins and copies both complete public/internal modules,
+retaining 147 public/dispatch unittest blocks across the three forms. The
+validated bounds module is separately pinned at SHA256
+`896da9b81f03fb0a5848043280c34597a3fcd5426cb8e3c0990045b760f07d0f`;
+it retains two inherited tests and adds two cross-type tests. One harness test
+brings the total to 152 unittest blocks across fourteen modules.
+
+| Full consumer | Relation change | Execution change |
+| --- | --- | --- |
+| Bounds | Same-type checked wrapper; checked one-/four-byte envelopes for conversion | None |
+| Execute | None | Unit-sample-stride safe row slices; approved flat conversion uses the same exact numeric loop |
+| Combined | Both checked bounds forms | Both row kernels |
+
+Checked envelopes prove **disjointness only**. Overlapping or unrepresentable
+envelopes return to the original exact classifier, including arithmeticFailure;
+all defensive operation-local fallbacks remain byte-for-byte unchanged. The
+original flat checked memcpy copy selection is preserved. Universal execution
+remains the original checked semantic traversal; it may still benefit from a
+bounds rejection. No repeated/zero-source work shortcut is introduced.
+
+The cross-type wrapper reuses the complete pinned checked envelope arithmetic
+with source/destination sample sizes one and four. A new 5,000-case independent
+byte-enumeration oracle checks overlap, disjointness, bounds-hit and decline;
+integer-limit fixtures compare with the original exact classifier. Together
+with the inherited 5,000-case same-type oracle this qualifies both sizes before
+any real pointer is accessed. CTFE and safe/pure/nothrow/nogc properties remain.
+
+Only read/write row pointer arithmetic and bounded slice formation need new
+trust. Callers have already validated retained geometry, unit sample strides,
+injective destination and exact global sample-byte disjointness. Source rows
+may repeat. Local slices do not escape; assignment and numeric conversion loops
+remain safe/pure/nothrow/nogc. Actual-source challenges extract all four row
+kernel instances and instantiate ubyte/float/POD copy and conversion under
+those attributes, then reject safe pointer/slice construction. The separately
+inspected C++ wrapper challenge remains. All argumented trust boundaries are
+invocation-local; none creates a persistent noalias capability.
+
+Every public form is tested for error order, invalid/empty, shape mismatch,
+non-injective destination, actual overlap/no-write and shared backing. In
+addition to sparse Universal sharing, three-type Canonical copy and exact
+conversion fixtures use overlapping envelopes with disjoint samples. They
+force bounds decline, exact approval and safe optimized row execution, with
+complete backing compared against independent storage/byte images.
+
+The five measured paths are Public, Bounds, Execute, Combined and the existing
+C++ execution reference. Fifteen cyclic rounds put each path in every position
+three times after two warmups. Source/output/guard checks and destination reset
+are outside timing. Six fixed-binary processes yield 43,200 timed calls across
+96 cases plus 32 extra semantic cases; all four public paths receive the
+contract controls. The summarizer validates odd medians, all counts and
+cross-process/compiler backing fingerprints. Public/candidate ratios now
+compare complete consumers; C++ ratios retain the baseline validation/ABI
+limits. Isolated code generation extracts actual row helper source with the
+recorded D release optimization flags; it is diagnostic, not a causal proof of
+the complete public binary.
+
+### Container results and decision
+
+[Complete candidate evidence](../../experiments/m3_copy_conversion_candidates/evidence/2026-10-01-container/SUMMARY.md)
+retains the six raw logs, exact reproducing summary, toolchain/build commands,
+actual-source trust diagnostics, C++ and isolated D assembly, and SHA256SUMS.
+Both compilers pass fourteen unittest modules and all five trust controls;
+all six release processes pass the full contract and backing checks.
+
+The following ranges cover three process medians per compiler; copy rows also
+aggregate all three sample types. They describe this VM, not a stable speedup
+promise or a complete D/C++ library comparison.
+
+| Large group (2048×512) | Compiler | Public/Bounds | Public/Execute | Public/Combined | Combined/C++ |
+| --- | --- | --- | --- | --- | --- |
+| Flat copy | DMD | 0.823–1.093x | 0.824–1.085x | 0.891–1.093x | 0.669–1.092x |
+| Flat copy | LDC | 0.976–1.224x | 0.941–1.139x | 0.935–1.194x | 0.786–1.130x |
+| Padded copy | DMD | 10.656–12.748x | 0.911–1.131x | 196.291–4122.947x | 0.971–1.331x |
+| Padded copy | LDC | 15.662–18.739x | 1.039–1.069x | 86.405–1089.356x | 0.986–1.369x |
+| Flat conversion | DMD | 0.978–1.030x | 7.250–16.513x | 7.373–15.469x | 8.141–9.563x |
+| Flat conversion | LDC | 0.947–0.992x | 19.654–41.015x | 17.934–36.129x | 1.100–2.251x |
+| Padded conversion | DMD | 38.948–53.086x | 1.017–1.047x | 537.524–583.384x | 8.381–9.154x |
+| Padded conversion | LDC | 64.878–67.502x | 1.025–1.036x | 743.795–1671.381x | 1.021–2.279x |
+| Negative-both conversion | DMD | 48.960–53.279x | 1.005–1.023x | 514.604–538.652x | 4.741–5.825x |
+| Negative-both conversion | LDC | 64.972–66.367x | 1.024–1.050x | 323.807–365.440x | 3.135–3.427x |
+
+The bounds-only result supports conservative rejection before the expensive
+exact relation scan. Execution alone retains that scan and consequently does
+little for non-flat cases. Combining both changes substantially reduces padded
+Copy cost and produces execution-reference ratios in the same broad range;
+flat Copy already takes the existing optimized route and has no established
+improvement. Universal sample strides preserve the original execution and
+receive only the applicable relation improvement.
+
+Exact conversion improves substantially, but the combined public consumer
+still trails the execution-only C++ reference: padded DMD is 8.381–9.154x,
+while LDC ranges from 1.021–2.279x; negative-both conversion retains a larger
+LDC gap of 3.135–3.427x. Isolated actual-source assembly shows scalar
+`cvtsi2ss` conversion in DMD, and packed `cvtdq2ps` plus scalar tails in LDC;
+the C++ object also has packed conversion. This supports a remaining codegen
+question, not attribution of the complete public timing difference.
+
+Across large cases the maximum three-process time spread is 126.32% public /
+170.37% combined for DMD, and 67.51% / 139.92% for LDC. Those outliers make
+stable reference-host confirmation essential; no confidence interval or timing
+threshold is inferred. Tiny zero medians remain explicitly below clock
+resolution. The final series ran alone; discarded preliminary logs are not
+included in the evidence.
+
+| Gate | Decision |
+| --- | --- |
+| Bounds-only and combined semantic / trust qualification | PASS on both compiler families |
+| Container six-process full consumer evidence | Complete, diagnostic; high VM spread retained |
+| Reference XPS qualification | Open; candidate collector ready |
+| Production selection | Deferred until reference evidence; no source promotion |
+| Remaining exact-conversion execution gap | Open; evaluate reference-host results and actual public codegen |
+| Explicit SIMD, compiler switch, AArch64, threading | Unqualified / deferred |

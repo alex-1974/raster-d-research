@@ -1,9 +1,10 @@
-name: M3 Copy Conversion Baseline
+name: M3 Copy Conversion Qualification
 on:
   push:
     branches: [research/m3-copy-conversion-audit]
     paths:
       - 'experiments/m3_copy_conversion/**'
+      - 'experiments/m3_copy_conversion_candidates/**'
       - 'docs/research/m3-copy-conversion-audit.md'
       - '.github/workflows/m3-copy-conversion.yml'
   workflow_dispatch:
@@ -49,6 +50,21 @@ jobs:
           dub --version >> artifacts/environment.txt
           lscpu >> artifacts/environment.txt
           dub run --root=experiments/m3_copy_conversion --compiler="$DC" --build=release --force --vverbose 2>&1 | tee artifacts/release.txt
+      - name: Generate full candidates and common C++ object
+        run: |
+          python3 experiments/m3_copy_conversion_candidates/generate.py
+          experiments/m3_copy_conversion_candidates/build_cpp.sh
+      - name: Full candidate semantic and trust checks
+        shell: bash
+        run: |
+          set -euo pipefail
+          dub test --root=experiments/m3_copy_conversion_candidates --compiler="$DC" --force 2>&1 | tee artifacts/candidate-tests.txt
+          experiments/m3_copy_conversion_candidates/trusted_challenge.sh "$DC" 2>&1 | tee artifacts/candidate-trust.txt
+      - name: Full candidate release consumer
+        shell: bash
+        run: |
+          set -euo pipefail
+          dub run --root=experiments/m3_copy_conversion_candidates --compiler="$DC" --build=release --force --vverbose 2>&1 | tee artifacts/candidate-release.txt
       - uses: actions/upload-artifact@v7
         if: always()
         with:

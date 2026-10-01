@@ -1,0 +1,269 @@
+PASS actual-source C++ wrapper requires trust
+/tmp/tmp.v2Oj2rpS9I/True.d(16): Error: `@safe` function `challenge.cppExecute!(ubyte, ubyte).cppExecute` cannot call `@system` function `challenge.cppCopy`
+    static if(is(S==D)) cppCopy(cast(const(ubyte)*)source,sr*cast(ptrdiff_t)S.sizeof,sx*cast(ptrdiff_t)S.sizeof,
+                               ^
+/tmp/tmp.v2Oj2rpS9I/True.d(3):        `challenge.cppCopy` is declared here
+extern(C) void cppCopy(scope const(ubyte)*,ptrdiff_t,ptrdiff_t,scope ubyte*,
+               ^
+/tmp/tmp.v2Oj2rpS9I/True.d(22): Error: template instance `challenge.cppExecute!(ubyte, ubyte)` error instantiating
+ cppExecute(a.ptr,2,1,b.ptr,2,1,2,2);
+           ^
+/tmp/tmp.v2Oj2rpS9I/True.d(16): Error: `@safe` function `challenge.cppExecute!(float, float).cppExecute` cannot call `@system` function `challenge.cppCopy`
+    static if(is(S==D)) cppCopy(cast(const(ubyte)*)source,sr*cast(ptrdiff_t)S.sizeof,sx*cast(ptrdiff_t)S.sizeof,
+                               ^
+/tmp/tmp.v2Oj2rpS9I/True.d(3):        `challenge.cppCopy` is declared here
+extern(C) void cppCopy(scope const(ubyte)*,ptrdiff_t,ptrdiff_t,scope ubyte*,
+               ^
+/tmp/tmp.v2Oj2rpS9I/True.d(23): Error: template instance `challenge.cppExecute!(float, float)` error instantiating
+ cppExecute(c.ptr,2,1,d.ptr,2,1,2,2);
+           ^
+/tmp/tmp.v2Oj2rpS9I/True.d(16): Error: `@safe` function `challenge.cppExecute!(Pod, Pod).cppExecute` cannot call `@system` function `challenge.cppCopy`
+    static if(is(S==D)) cppCopy(cast(const(ubyte)*)source,sr*cast(ptrdiff_t)S.sizeof,sx*cast(ptrdiff_t)S.sizeof,
+                               ^
+/tmp/tmp.v2Oj2rpS9I/True.d(3):        `challenge.cppCopy` is declared here
+extern(C) void cppCopy(scope const(ubyte)*,ptrdiff_t,ptrdiff_t,scope ubyte*,
+               ^
+/tmp/tmp.v2Oj2rpS9I/True.d(24): Error: template instance `challenge.cppExecute!(Pod, Pod)` error instantiating
+ cppExecute(e.ptr,2,1,f.ptr,2,1,2,2);
+           ^
+/tmp/tmp.v2Oj2rpS9I/True.d(18): Error: `@safe` function `challenge.cppExecute!(ubyte, float).cppExecute` cannot call `@system` function `challenge.cppConvert`
+    else cppConvert(source,sr,sx,target,dr,dx,w,h);
+                   ^
+/tmp/tmp.v2Oj2rpS9I/True.d(5):        `challenge.cppConvert` is declared here
+extern(C) void cppConvert(scope const(ubyte)*,ptrdiff_t,ptrdiff_t,scope float*,
+               ^
+/tmp/tmp.v2Oj2rpS9I/True.d(25): Error: template instance `challenge.cppExecute!(ubyte, float)` error instantiating
+ cppExecute(a.ptr,2,1,c.ptr,2,1,2,2); }
+           ^
+PASS actual-source safe row kernel requires scoped row trust: execute/copy
+/tmp/tmp.v2Oj2rpS9I/execute-copy-True.d(10): Error: pointer arithmetic is not allowed in a `@safe` function
+{ return (base+cast(ptrdiff_t)y*stride)[0..width]; }
+          ^
+/tmp/tmp.v2Oj2rpS9I/execute-copy-True.d(20): Error: template instance `row_challenge.readRow!ubyte` error instantiating
+        scope const row=readRow(source,sr,y,width);
+                               ^
+/tmp/tmp.v2Oj2rpS9I/execute-copy-True.d(33):        instantiated from here: `executeRows!(ubyte, ubyte)`
+ executeRows(a.ptr,2,b.ptr,2,2,2);
+            ^
+/tmp/tmp.v2Oj2rpS9I/execute-copy-True.d(13): Error: pointer arithmetic is not allowed in a `@safe` function
+{ return (base+cast(ptrdiff_t)y*stride)[0..width]; }
+          ^
+/tmp/tmp.v2Oj2rpS9I/execute-copy-True.d(21): Error: template instance `row_challenge.writeRow!ubyte` error instantiating
+        scope auto destination=writeRow(target,dr,y,width);
+                                       ^
+/tmp/tmp.v2Oj2rpS9I/execute-copy-True.d(33):        instantiated from here: `executeRows!(ubyte, ubyte)`
+ executeRows(a.ptr,2,b.ptr,2,2,2);
+            ^
+/tmp/tmp.v2Oj2rpS9I/execute-copy-True.d(10): Error: pointer arithmetic is not allowed in a `@safe` function
+{ return (base+cast(ptrdiff_t)y*stride)[0..width]; }
+          ^
+/tmp/tmp.v2Oj2rpS9I/execute-copy-True.d(20): Error: template instance `row_challenge.readRow!float` error instantiating
+        scope const row=readRow(source,sr,y,width);
+                               ^
+/tmp/tmp.v2Oj2rpS9I/execute-copy-True.d(34):        instantiated from here: `executeRows!(float, float)`
+ executeRows(c.ptr,2,d.ptr,2,2,2);
+            ^
+/tmp/tmp.v2Oj2rpS9I/execute-copy-True.d(13): Error: pointer arithmetic is not allowed in a `@safe` function
+{ return (base+cast(ptrdiff_t)y*stride)[0..width]; }
+          ^
+/tmp/tmp.v2Oj2rpS9I/execute-copy-True.d(21): Error: template instance `row_challenge.writeRow!float` error instantiating
+        scope auto destination=writeRow(target,dr,y,width);
+                                       ^
+/tmp/tmp.v2Oj2rpS9I/execute-copy-True.d(34):        instantiated from here: `executeRows!(float, float)`
+ executeRows(c.ptr,2,d.ptr,2,2,2);
+            ^
+/tmp/tmp.v2Oj2rpS9I/execute-copy-True.d(10): Error: pointer arithmetic is not allowed in a `@safe` function
+{ return (base+cast(ptrdiff_t)y*stride)[0..width]; }
+          ^
+/tmp/tmp.v2Oj2rpS9I/execute-copy-True.d(20): Error: template instance `row_challenge.readRow!(Pod)` error instantiating
+        scope const row=readRow(source,sr,y,width);
+                               ^
+/tmp/tmp.v2Oj2rpS9I/execute-copy-True.d(35):        instantiated from here: `executeRows!(Pod, Pod)`
+ executeRows(e.ptr,2,f.ptr,2,2,2);
+            ^
+/tmp/tmp.v2Oj2rpS9I/execute-copy-True.d(13): Error: pointer arithmetic is not allowed in a `@safe` function
+{ return (base+cast(ptrdiff_t)y*stride)[0..width]; }
+          ^
+/tmp/tmp.v2Oj2rpS9I/execute-copy-True.d(21): Error: template instance `row_challenge.writeRow!(Pod)` error instantiating
+        scope auto destination=writeRow(target,dr,y,width);
+                                       ^
+/tmp/tmp.v2Oj2rpS9I/execute-copy-True.d(35):        instantiated from here: `executeRows!(Pod, Pod)`
+ executeRows(e.ptr,2,f.ptr,2,2,2);
+            ^
+/tmp/tmp.v2Oj2rpS9I/execute-copy-True.d(36): Error: template instance `row_challenge.executeRows!(ubyte, float)` error instantiating
+ executeRows(a.ptr,2,c.ptr,2,2,2); }
+            ^
+PASS actual-source safe row kernel requires scoped row trust: execute/conversion
+/tmp/tmp.v2Oj2rpS9I/execute-conversion-True.d(10): Error: pointer arithmetic is not allowed in a `@safe` function
+{ return (base+cast(ptrdiff_t)y*stride)[0..width]; }
+          ^
+/tmp/tmp.v2Oj2rpS9I/execute-conversion-True.d(20): Error: template instance `row_challenge.readRow!ubyte` error instantiating
+        scope const row=readRow(source,sr,y,width);
+                               ^
+/tmp/tmp.v2Oj2rpS9I/execute-conversion-True.d(33):        instantiated from here: `executeRows!(ubyte, ubyte)`
+ executeRows(a.ptr,2,b.ptr,2,2,2);
+            ^
+/tmp/tmp.v2Oj2rpS9I/execute-conversion-True.d(13): Error: pointer arithmetic is not allowed in a `@safe` function
+{ return (base+cast(ptrdiff_t)y*stride)[0..width]; }
+          ^
+/tmp/tmp.v2Oj2rpS9I/execute-conversion-True.d(21): Error: template instance `row_challenge.writeRow!ubyte` error instantiating
+        scope auto destination=writeRow(target,dr,y,width);
+                                       ^
+/tmp/tmp.v2Oj2rpS9I/execute-conversion-True.d(33):        instantiated from here: `executeRows!(ubyte, ubyte)`
+ executeRows(a.ptr,2,b.ptr,2,2,2);
+            ^
+/tmp/tmp.v2Oj2rpS9I/execute-conversion-True.d(10): Error: pointer arithmetic is not allowed in a `@safe` function
+{ return (base+cast(ptrdiff_t)y*stride)[0..width]; }
+          ^
+/tmp/tmp.v2Oj2rpS9I/execute-conversion-True.d(20): Error: template instance `row_challenge.readRow!float` error instantiating
+        scope const row=readRow(source,sr,y,width);
+                               ^
+/tmp/tmp.v2Oj2rpS9I/execute-conversion-True.d(34):        instantiated from here: `executeRows!(float, float)`
+ executeRows(c.ptr,2,d.ptr,2,2,2);
+            ^
+/tmp/tmp.v2Oj2rpS9I/execute-conversion-True.d(13): Error: pointer arithmetic is not allowed in a `@safe` function
+{ return (base+cast(ptrdiff_t)y*stride)[0..width]; }
+          ^
+/tmp/tmp.v2Oj2rpS9I/execute-conversion-True.d(21): Error: template instance `row_challenge.writeRow!float` error instantiating
+        scope auto destination=writeRow(target,dr,y,width);
+                                       ^
+/tmp/tmp.v2Oj2rpS9I/execute-conversion-True.d(34):        instantiated from here: `executeRows!(float, float)`
+ executeRows(c.ptr,2,d.ptr,2,2,2);
+            ^
+/tmp/tmp.v2Oj2rpS9I/execute-conversion-True.d(10): Error: pointer arithmetic is not allowed in a `@safe` function
+{ return (base+cast(ptrdiff_t)y*stride)[0..width]; }
+          ^
+/tmp/tmp.v2Oj2rpS9I/execute-conversion-True.d(20): Error: template instance `row_challenge.readRow!(Pod)` error instantiating
+        scope const row=readRow(source,sr,y,width);
+                               ^
+/tmp/tmp.v2Oj2rpS9I/execute-conversion-True.d(35):        instantiated from here: `executeRows!(Pod, Pod)`
+ executeRows(e.ptr,2,f.ptr,2,2,2);
+            ^
+/tmp/tmp.v2Oj2rpS9I/execute-conversion-True.d(13): Error: pointer arithmetic is not allowed in a `@safe` function
+{ return (base+cast(ptrdiff_t)y*stride)[0..width]; }
+          ^
+/tmp/tmp.v2Oj2rpS9I/execute-conversion-True.d(21): Error: template instance `row_challenge.writeRow!(Pod)` error instantiating
+        scope auto destination=writeRow(target,dr,y,width);
+                                       ^
+/tmp/tmp.v2Oj2rpS9I/execute-conversion-True.d(35):        instantiated from here: `executeRows!(Pod, Pod)`
+ executeRows(e.ptr,2,f.ptr,2,2,2);
+            ^
+/tmp/tmp.v2Oj2rpS9I/execute-conversion-True.d(36): Error: template instance `row_challenge.executeRows!(ubyte, float)` error instantiating
+ executeRows(a.ptr,2,c.ptr,2,2,2); }
+            ^
+PASS actual-source safe row kernel requires scoped row trust: combined/copy
+/tmp/tmp.v2Oj2rpS9I/combined-copy-True.d(10): Error: pointer arithmetic is not allowed in a `@safe` function
+{ return (base+cast(ptrdiff_t)y*stride)[0..width]; }
+          ^
+/tmp/tmp.v2Oj2rpS9I/combined-copy-True.d(20): Error: template instance `row_challenge.readRow!ubyte` error instantiating
+        scope const row=readRow(source,sr,y,width);
+                               ^
+/tmp/tmp.v2Oj2rpS9I/combined-copy-True.d(33):        instantiated from here: `executeRows!(ubyte, ubyte)`
+ executeRows(a.ptr,2,b.ptr,2,2,2);
+            ^
+/tmp/tmp.v2Oj2rpS9I/combined-copy-True.d(13): Error: pointer arithmetic is not allowed in a `@safe` function
+{ return (base+cast(ptrdiff_t)y*stride)[0..width]; }
+          ^
+/tmp/tmp.v2Oj2rpS9I/combined-copy-True.d(21): Error: template instance `row_challenge.writeRow!ubyte` error instantiating
+        scope auto destination=writeRow(target,dr,y,width);
+                                       ^
+/tmp/tmp.v2Oj2rpS9I/combined-copy-True.d(33):        instantiated from here: `executeRows!(ubyte, ubyte)`
+ executeRows(a.ptr,2,b.ptr,2,2,2);
+            ^
+/tmp/tmp.v2Oj2rpS9I/combined-copy-True.d(10): Error: pointer arithmetic is not allowed in a `@safe` function
+{ return (base+cast(ptrdiff_t)y*stride)[0..width]; }
+          ^
+/tmp/tmp.v2Oj2rpS9I/combined-copy-True.d(20): Error: template instance `row_challenge.readRow!float` error instantiating
+        scope const row=readRow(source,sr,y,width);
+                               ^
+/tmp/tmp.v2Oj2rpS9I/combined-copy-True.d(34):        instantiated from here: `executeRows!(float, float)`
+ executeRows(c.ptr,2,d.ptr,2,2,2);
+            ^
+/tmp/tmp.v2Oj2rpS9I/combined-copy-True.d(13): Error: pointer arithmetic is not allowed in a `@safe` function
+{ return (base+cast(ptrdiff_t)y*stride)[0..width]; }
+          ^
+/tmp/tmp.v2Oj2rpS9I/combined-copy-True.d(21): Error: template instance `row_challenge.writeRow!float` error instantiating
+        scope auto destination=writeRow(target,dr,y,width);
+                                       ^
+/tmp/tmp.v2Oj2rpS9I/combined-copy-True.d(34):        instantiated from here: `executeRows!(float, float)`
+ executeRows(c.ptr,2,d.ptr,2,2,2);
+            ^
+/tmp/tmp.v2Oj2rpS9I/combined-copy-True.d(10): Error: pointer arithmetic is not allowed in a `@safe` function
+{ return (base+cast(ptrdiff_t)y*stride)[0..width]; }
+          ^
+/tmp/tmp.v2Oj2rpS9I/combined-copy-True.d(20): Error: template instance `row_challenge.readRow!(Pod)` error instantiating
+        scope const row=readRow(source,sr,y,width);
+                               ^
+/tmp/tmp.v2Oj2rpS9I/combined-copy-True.d(35):        instantiated from here: `executeRows!(Pod, Pod)`
+ executeRows(e.ptr,2,f.ptr,2,2,2);
+            ^
+/tmp/tmp.v2Oj2rpS9I/combined-copy-True.d(13): Error: pointer arithmetic is not allowed in a `@safe` function
+{ return (base+cast(ptrdiff_t)y*stride)[0..width]; }
+          ^
+/tmp/tmp.v2Oj2rpS9I/combined-copy-True.d(21): Error: template instance `row_challenge.writeRow!(Pod)` error instantiating
+        scope auto destination=writeRow(target,dr,y,width);
+                                       ^
+/tmp/tmp.v2Oj2rpS9I/combined-copy-True.d(35):        instantiated from here: `executeRows!(Pod, Pod)`
+ executeRows(e.ptr,2,f.ptr,2,2,2);
+            ^
+/tmp/tmp.v2Oj2rpS9I/combined-copy-True.d(36): Error: template instance `row_challenge.executeRows!(ubyte, float)` error instantiating
+ executeRows(a.ptr,2,c.ptr,2,2,2); }
+            ^
+PASS actual-source safe row kernel requires scoped row trust: combined/conversion
+/tmp/tmp.v2Oj2rpS9I/combined-conversion-True.d(10): Error: pointer arithmetic is not allowed in a `@safe` function
+{ return (base+cast(ptrdiff_t)y*stride)[0..width]; }
+          ^
+/tmp/tmp.v2Oj2rpS9I/combined-conversion-True.d(20): Error: template instance `row_challenge.readRow!ubyte` error instantiating
+        scope const row=readRow(source,sr,y,width);
+                               ^
+/tmp/tmp.v2Oj2rpS9I/combined-conversion-True.d(33):        instantiated from here: `executeRows!(ubyte, ubyte)`
+ executeRows(a.ptr,2,b.ptr,2,2,2);
+            ^
+/tmp/tmp.v2Oj2rpS9I/combined-conversion-True.d(13): Error: pointer arithmetic is not allowed in a `@safe` function
+{ return (base+cast(ptrdiff_t)y*stride)[0..width]; }
+          ^
+/tmp/tmp.v2Oj2rpS9I/combined-conversion-True.d(21): Error: template instance `row_challenge.writeRow!ubyte` error instantiating
+        scope auto destination=writeRow(target,dr,y,width);
+                                       ^
+/tmp/tmp.v2Oj2rpS9I/combined-conversion-True.d(33):        instantiated from here: `executeRows!(ubyte, ubyte)`
+ executeRows(a.ptr,2,b.ptr,2,2,2);
+            ^
+/tmp/tmp.v2Oj2rpS9I/combined-conversion-True.d(10): Error: pointer arithmetic is not allowed in a `@safe` function
+{ return (base+cast(ptrdiff_t)y*stride)[0..width]; }
+          ^
+/tmp/tmp.v2Oj2rpS9I/combined-conversion-True.d(20): Error: template instance `row_challenge.readRow!float` error instantiating
+        scope const row=readRow(source,sr,y,width);
+                               ^
+/tmp/tmp.v2Oj2rpS9I/combined-conversion-True.d(34):        instantiated from here: `executeRows!(float, float)`
+ executeRows(c.ptr,2,d.ptr,2,2,2);
+            ^
+/tmp/tmp.v2Oj2rpS9I/combined-conversion-True.d(13): Error: pointer arithmetic is not allowed in a `@safe` function
+{ return (base+cast(ptrdiff_t)y*stride)[0..width]; }
+          ^
+/tmp/tmp.v2Oj2rpS9I/combined-conversion-True.d(21): Error: template instance `row_challenge.writeRow!float` error instantiating
+        scope auto destination=writeRow(target,dr,y,width);
+                                       ^
+/tmp/tmp.v2Oj2rpS9I/combined-conversion-True.d(34):        instantiated from here: `executeRows!(float, float)`
+ executeRows(c.ptr,2,d.ptr,2,2,2);
+            ^
+/tmp/tmp.v2Oj2rpS9I/combined-conversion-True.d(10): Error: pointer arithmetic is not allowed in a `@safe` function
+{ return (base+cast(ptrdiff_t)y*stride)[0..width]; }
+          ^
+/tmp/tmp.v2Oj2rpS9I/combined-conversion-True.d(20): Error: template instance `row_challenge.readRow!(Pod)` error instantiating
+        scope const row=readRow(source,sr,y,width);
+                               ^
+/tmp/tmp.v2Oj2rpS9I/combined-conversion-True.d(35):        instantiated from here: `executeRows!(Pod, Pod)`
+ executeRows(e.ptr,2,f.ptr,2,2,2);
+            ^
+/tmp/tmp.v2Oj2rpS9I/combined-conversion-True.d(13): Error: pointer arithmetic is not allowed in a `@safe` function
+{ return (base+cast(ptrdiff_t)y*stride)[0..width]; }
+          ^
+/tmp/tmp.v2Oj2rpS9I/combined-conversion-True.d(21): Error: template instance `row_challenge.writeRow!(Pod)` error instantiating
+        scope auto destination=writeRow(target,dr,y,width);
+                                       ^
+/tmp/tmp.v2Oj2rpS9I/combined-conversion-True.d(35):        instantiated from here: `executeRows!(Pod, Pod)`
+ executeRows(e.ptr,2,f.ptr,2,2,2);
+            ^
+/tmp/tmp.v2Oj2rpS9I/combined-conversion-True.d(36): Error: template instance `row_challenge.executeRows!(ubyte, float)` error instantiating
+ executeRows(a.ptr,2,c.ptr,2,2,2); }
+            ^
