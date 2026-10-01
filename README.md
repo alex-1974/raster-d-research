@@ -43,5 +43,6 @@ non-injective layouts. The experiment and XPS collector are in
 
 [M3.4 strict reduction](docs/research/m3-strict-reduction.md) compares the
 existing scalar layout kernels with same-order Pointer/Slice and C++ execution
-references. VM evidence currently supports keeping Production unchanged; the
-XPS collector is in `experiments/m3_strict_reduction/`.
+references. VM and XPS evidence qualify the existing Production default; a
+layout-specific DMD Pointer opportunity is deferred for targeted confirmation.
+The collector and raw evidence are in `experiments/m3_strict_reduction/`.

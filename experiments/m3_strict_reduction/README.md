@@ -42,5 +42,6 @@ trust controls and isolated D/C++ disassembly are retained. The standard-library
 summarizer verifies counts, even-sample medians (integer nanoseconds), result bits
 and input fingerprints before reporting ratios/spread. Tiny zero durations are
 retained; zero-median ratios are omitted, and all large raw samples must be
-positive. It writes SHA256SUMS. Container timing is diagnostic, XPS is the next
-gate, and AArch64 performance remains unqualified.
+positive. It writes SHA256SUMS. Container timing is diagnostic. The completed XPS baseline audit keeps the
+existing default and defers a layout-specific DMD Pointer opportunity; see
+`../../docs/research/m3-strict-reduction.md`. AArch64 remains unqualified.

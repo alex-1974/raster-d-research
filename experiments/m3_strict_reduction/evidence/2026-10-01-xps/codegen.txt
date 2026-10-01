@@ -1,0 +1,505 @@
+DMD64 D Compiler v2.111.0
+Copyright (C) 1999-2025 by The D Language Foundation, All Rights Reserved written by Walter Bright
+=== dmd pointer exact strict kernel ===
+command: dmd -c -preview=dip1000 -O -release -inline pointer.d
+
+/tmp/tmp.kL38mQTGaK/pointer.o:     Dateiformat elf64-x86-64
+
+
+Disassembly of section .text._D5probe7executeFNbNiNeMPxflmmZd:
+
+0000000000000000 <_D5probe7executeFNbNiNeMPxflmmZd>:
+   0:	48 83 ec 18          	sub    $0x18,%rsp
+   4:	48 89 5c 24 08       	mov    %rbx,0x8(%rsp)
+   9:	48 89 7c 24 10       	mov    %rdi,0x10(%rsp)
+   e:	49 89 f0             	mov    %rsi,%r8
+  11:	49 89 d1             	mov    %rdx,%r9
+  14:	49 89 cb             	mov    %rcx,%r11
+  17:	48 8b 44 24 10       	mov    0x10(%rsp),%rax
+  1c:	66 0f 57 d2          	xorpd  %xmm2,%xmm2
+  20:	31 ff                	xor    %edi,%edi
+  22:	48 85 c0             	test   %rax,%rax
+  25:	74 3f                	je     66 <_D5probe7executeFNbNiNeMPxflmmZd+0x66>
+  27:	48 89 44 24 10       	mov    %rax,0x10(%rsp)
+  2c:	49 39 f8             	cmp    %rdi,%r8
+  2f:	0f 95 c3             	setne  %bl
+  32:	48 8b 44 24 10       	mov    0x10(%rsp),%rax
+  37:	48 8b cf             	mov    %rdi,%rcx
+  3a:	49 0f af c9          	imul   %r9,%rcx
+  3e:	49 8d 34 8b          	lea    (%r11,%rcx,4),%rsi
+  42:	31 d2                	xor    %edx,%edx
+  44:	40 84 db             	rex test %bl,%bl
+  47:	74 15                	je     5e <_D5probe7executeFNbNiNeMPxflmmZd+0x5e>
+  49:	f3 0f 10 04 96       	movss  (%rsi,%rdx,4),%xmm0
+  4e:	f3 0f 5a c8          	cvtss2sd %xmm0,%xmm1
+  52:	f2 0f 58 d1          	addsd  %xmm1,%xmm2
+  56:	48 ff c2             	inc    %rdx
+  59:	4c 39 c2             	cmp    %r8,%rdx
+  5c:	72 eb                	jb     49 <_D5probe7executeFNbNiNeMPxflmmZd+0x49>
+  5e:	48 ff c7             	inc    %rdi
+  61:	48 39 c7             	cmp    %rax,%rdi
+  64:	72 d1                	jb     37 <_D5probe7executeFNbNiNeMPxflmmZd+0x37>
+  66:	f2 0f 10 c2          	movsd  %xmm2,%xmm0
+  6a:	48 8b 5c 24 08       	mov    0x8(%rsp),%rbx
+  6f:	48 83 c4 18          	add    $0x18,%rsp
+  73:	c3                   	ret
+
+Disassembly of section .text.strictSum:
+
+0000000000000000 <strictSum>:
+   0:	55                   	push   %rbp
+   1:	48 8b ec             	mov    %rsp,%rbp
+   4:	48 83 ec 20          	sub    $0x20,%rsp
+   8:	48 89 7d e0          	mov    %rdi,-0x20(%rbp)
+   c:	48 89 75 e8          	mov    %rsi,-0x18(%rbp)
+  10:	48 89 55 f0          	mov    %rdx,-0x10(%rbp)
+  14:	48 89 4d f8          	mov    %rcx,-0x8(%rbp)
+  18:	48 8b 4d e0          	mov    -0x20(%rbp),%rcx
+  1c:	48 8b 55 e8          	mov    -0x18(%rbp),%rdx
+  20:	48 8b 75 f0          	mov    -0x10(%rbp),%rsi
+  24:	48 8b 7d f8          	mov    -0x8(%rbp),%rdi
+  28:	e8 00 00 00 00       	call   2d <strictSum+0x2d>
+			29: R_X86_64_PLT32	_D5probe7executeFNbNiNeMPxflmmZd-0x4
+  2d:	48 8b e5             	mov    %rbp,%rsp
+  30:	5d                   	pop    %rbp
+  31:	c3                   	ret
+	...
+
+Disassembly of section .text.d_dso_init:
+
+0000000000000000 <.text.d_dso_init>:
+   0:	55                   	push   %rbp
+   1:	48 8b ec             	mov    %rsp,%rbp
+   4:	48 8d 05 00 00 00 00 	lea    0x0(%rip),%rax        # b <.text.d_dso_init+0xb>
+			7: R_X86_64_PC32	__stop_minfo-0x4
+   b:	50                   	push   %rax
+   c:	48 8d 05 00 00 00 00 	lea    0x0(%rip),%rax        # 13 <.text.d_dso_init+0x13>
+			f: R_X86_64_PC32	__start_minfo-0x4
+  13:	50                   	push   %rax
+  14:	48 8d 05 00 00 00 00 	lea    0x0(%rip),%rax        # 1b <.text.d_dso_init+0x1b>
+			17: R_X86_64_PC32	.data.d_dso_rec-0x4
+  1b:	50                   	push   %rax
+  1c:	6a 01                	push   $0x1
+  1e:	48 8b fc             	mov    %rsp,%rdi
+  21:	e8 00 00 00 00       	call   26 <.text.d_dso_init+0x26>
+			22: R_X86_64_PLT32	_d_dso_registry-0x4
+  26:	c9                   	leave
+  27:	c3                   	ret
+=== dmd slice exact strict kernel ===
+command: dmd -c -preview=dip1000 -O -release -inline slice.d
+
+/tmp/tmp.kL38mQTGaK/slice.o:     Dateiformat elf64-x86-64
+
+
+Disassembly of section .text._D5probe7readRowFNbNiNeNkMPxfmlmZAxf:
+
+0000000000000000 <_D5probe7readRowFNbNiNeNkMPxfmlmZAxf>:
+   0:	50                   	push   %rax
+   1:	48 89 14 24          	mov    %rdx,(%rsp)
+   5:	48 8b c7             	mov    %rdi,%rax
+   8:	4c 8b 04 24          	mov    (%rsp),%r8
+   c:	4c 0f af c6          	imul   %rsi,%r8
+  10:	4a 8d 14 81          	lea    (%rcx,%r8,4),%rdx
+  14:	59                   	pop    %rcx
+  15:	c3                   	ret
+	...
+
+Disassembly of section .text._D5probe7executeFNbNiNfMPxflmmZd:
+
+0000000000000000 <_D5probe7executeFNbNiNfMPxflmmZd>:
+   0:	48 83 ec 18          	sub    $0x18,%rsp
+   4:	48 89 5c 24 08       	mov    %rbx,0x8(%rsp)
+   9:	48 89 7c 24 10       	mov    %rdi,0x10(%rsp)
+   e:	49 89 f0             	mov    %rsi,%r8
+  11:	49 89 d1             	mov    %rdx,%r9
+  14:	49 89 cb             	mov    %rcx,%r11
+  17:	48 8b 44 24 10       	mov    0x10(%rsp),%rax
+  1c:	66 0f 57 db          	xorpd  %xmm3,%xmm3
+  20:	31 ff                	xor    %edi,%edi
+  22:	48 85 c0             	test   %rax,%rax
+  25:	74 43                	je     6a <_D5probe7executeFNbNiNfMPxflmmZd+0x6a>
+  27:	48 89 44 24 10       	mov    %rax,0x10(%rsp)
+  2c:	49 39 f8             	cmp    %rdi,%r8
+  2f:	0f 95 c3             	setne  %bl
+  32:	48 8b 44 24 10       	mov    0x10(%rsp),%rax
+  37:	48 8b cf             	mov    %rdi,%rcx
+  3a:	49 0f af c9          	imul   %r9,%rcx
+  3e:	49 8d 34 8b          	lea    (%r11,%rcx,4),%rsi
+  42:	31 d2                	xor    %edx,%edx
+  44:	40 84 db             	rex test %bl,%bl
+  47:	74 19                	je     62 <_D5probe7executeFNbNiNfMPxflmmZd+0x62>
+  49:	f3 0f 10 14 96       	movss  (%rsi,%rdx,4),%xmm2
+  4e:	f3 0f 10 c2          	movss  %xmm2,%xmm0
+  52:	f3 0f 5a c8          	cvtss2sd %xmm0,%xmm1
+  56:	f2 0f 58 d9          	addsd  %xmm1,%xmm3
+  5a:	48 ff c2             	inc    %rdx
+  5d:	4c 39 c2             	cmp    %r8,%rdx
+  60:	72 e7                	jb     49 <_D5probe7executeFNbNiNfMPxflmmZd+0x49>
+  62:	48 ff c7             	inc    %rdi
+  65:	48 39 c7             	cmp    %rax,%rdi
+  68:	72 cd                	jb     37 <_D5probe7executeFNbNiNfMPxflmmZd+0x37>
+  6a:	f2 0f 10 c3          	movsd  %xmm3,%xmm0
+  6e:	48 8b 5c 24 08       	mov    0x8(%rsp),%rbx
+  73:	48 83 c4 18          	add    $0x18,%rsp
+  77:	c3                   	ret
+
+Disassembly of section .text.strictSum:
+
+0000000000000000 <strictSum>:
+   0:	55                   	push   %rbp
+   1:	48 8b ec             	mov    %rsp,%rbp
+   4:	48 83 ec 20          	sub    $0x20,%rsp
+   8:	48 89 7d e0          	mov    %rdi,-0x20(%rbp)
+   c:	48 89 75 e8          	mov    %rsi,-0x18(%rbp)
+  10:	48 89 55 f0          	mov    %rdx,-0x10(%rbp)
+  14:	48 89 4d f8          	mov    %rcx,-0x8(%rbp)
+  18:	48 8b 4d e0          	mov    -0x20(%rbp),%rcx
+  1c:	48 8b 55 e8          	mov    -0x18(%rbp),%rdx
+  20:	48 8b 75 f0          	mov    -0x10(%rbp),%rsi
+  24:	48 8b 7d f8          	mov    -0x8(%rbp),%rdi
+  28:	e8 00 00 00 00       	call   2d <strictSum+0x2d>
+			29: R_X86_64_PLT32	_D5probe7executeFNbNiNfMPxflmmZd-0x4
+  2d:	48 8b e5             	mov    %rbp,%rsp
+  30:	5d                   	pop    %rbp
+  31:	c3                   	ret
+	...
+
+Disassembly of section .text.d_dso_init:
+
+0000000000000000 <.text.d_dso_init>:
+   0:	55                   	push   %rbp
+   1:	48 8b ec             	mov    %rsp,%rbp
+   4:	48 8d 05 00 00 00 00 	lea    0x0(%rip),%rax        # b <.text.d_dso_init+0xb>
+			7: R_X86_64_PC32	__stop_minfo-0x4
+   b:	50                   	push   %rax
+   c:	48 8d 05 00 00 00 00 	lea    0x0(%rip),%rax        # 13 <.text.d_dso_init+0x13>
+			f: R_X86_64_PC32	__start_minfo-0x4
+  13:	50                   	push   %rax
+  14:	48 8d 05 00 00 00 00 	lea    0x0(%rip),%rax        # 1b <.text.d_dso_init+0x1b>
+			17: R_X86_64_PC32	.data.d_dso_rec-0x4
+  1b:	50                   	push   %rax
+  1c:	6a 01                	push   $0x1
+  1e:	48 8b fc             	mov    %rsp,%rdi
+  21:	e8 00 00 00 00       	call   26 <.text.d_dso_init+0x26>
+			22: R_X86_64_PLT32	_d_dso_registry-0x4
+  26:	c9                   	leave
+  27:	c3                   	ret
+LDC - the LLVM D compiler (1.41.0):
+  based on DMD v2.111.0 and LLVM 19.1.7
+  built with LDC - the LLVM D compiler (1.41.0)
+  Default target: x86_64-pc-linux-gnu
+  Host CPU: skylake
+  http://dlang.org - http://wiki.dlang.org/LDC
+
+
+  Registered Targets:
+    aarch64     - AArch64 (little endian)
+    aarch64_32  - AArch64 (little endian ILP32)
+    aarch64_be  - AArch64 (big endian)
+    amdgcn      - AMD GCN GPUs
+    arm         - ARM
+    arm64       - ARM64 (little endian)
+    arm64_32    - ARM64 (little endian ILP32)
+    armeb       - ARM (big endian)
+    avr         - Atmel AVR Microcontroller
+    bpf         - BPF (host endian)
+    bpfeb       - BPF (big endian)
+    bpfel       - BPF (little endian)
+    hexagon     - Hexagon
+    lanai       - Lanai
+    loongarch32 - 32-bit LoongArch
+    loongarch64 - 64-bit LoongArch
+    m68k        - Motorola 68000 family
+    mips        - MIPS (32-bit big endian)
+    mips64      - MIPS (64-bit big endian)
+    mips64el    - MIPS (64-bit little endian)
+    mipsel      - MIPS (32-bit little endian)
+    msp430      - MSP430 [experimental]
+    nvptx       - NVIDIA PTX 32-bit
+    nvptx64     - NVIDIA PTX 64-bit
+    ppc32       - PowerPC 32
+    ppc32le     - PowerPC 32 LE
+    ppc64       - PowerPC 64
+    ppc64le     - PowerPC 64 LE
+    r600        - AMD GPUs HD2XXX-HD6XXX
+    riscv32     - 32-bit RISC-V
+    riscv64     - 64-bit RISC-V
+    sparc       - Sparc
+    sparcel     - Sparc LE
+    sparcv9     - Sparc V9
+    systemz     - SystemZ
+    thumb       - Thumb
+    thumbeb     - Thumb (big endian)
+    ve          - VE
+    wasm32      - WebAssembly 32-bit
+    wasm64      - WebAssembly 64-bit
+    x86         - 32-bit X86: Pentium-Pro and above
+    x86-64      - 64-bit X86: EM64T and AMD64
+    xcore       - XCore
+    xtensa      - Xtensa 32
+=== ldc2 pointer exact strict kernel ===
+command: ldc2 -c -preview=dip1000 -O3 -release pointer.d
+
+/tmp/tmp.kL38mQTGaK/pointer.o:     Dateiformat elf64-x86-64
+
+
+Disassembly of section .text._D5probe7executeFNbNiNeMPxflmmZd:
+
+0000000000000000 <_D5probe7executeFNbNiNeMPxflmmZd>:
+   0:	48 85 c9             	test   %rcx,%rcx
+   3:	0f 94 c0             	sete   %al
+   6:	48 85 d2             	test   %rdx,%rdx
+   9:	41 0f 94 c0          	sete   %r8b
+   d:	41 08 c0             	or     %al,%r8b
+  10:	66 0f 57 c0          	xorpd  %xmm0,%xmm0
+  14:	0f 85 c2 00 00 00    	jne    dc <_D5probe7executeFNbNiNeMPxflmmZd+0xdc>
+  1a:	53                   	push   %rbx
+  1b:	48 8d 42 ff          	lea    -0x1(%rdx),%rax
+  1f:	41 89 d0             	mov    %edx,%r8d
+  22:	41 83 e0 03          	and    $0x3,%r8d
+  26:	48 83 e2 fc          	and    $0xfffffffffffffffc,%rdx
+  2a:	4c 8d 4f 0c          	lea    0xc(%rdi),%r9
+  2e:	48 c1 e6 02          	shl    $0x2,%rsi
+  32:	66 0f 57 c0          	xorpd  %xmm0,%xmm0
+  36:	45 31 d2             	xor    %r10d,%r10d
+  39:	eb 17                	jmp    52 <_D5probe7executeFNbNiNeMPxflmmZd+0x52>
+  3b:	0f 1f 44 00 00       	nopl   0x0(%rax,%rax,1)
+  40:	49 ff c2             	inc    %r10
+  43:	49 01 f1             	add    %rsi,%r9
+  46:	48 01 f7             	add    %rsi,%rdi
+  49:	49 39 ca             	cmp    %rcx,%r10
+  4c:	0f 84 89 00 00 00    	je     db <_D5probe7executeFNbNiNeMPxflmmZd+0xdb>
+  52:	45 31 db             	xor    %r11d,%r11d
+  55:	48 83 f8 03          	cmp    $0x3,%rax
+  59:	72 4c                	jb     a7 <_D5probe7executeFNbNiNeMPxflmmZd+0xa7>
+  5b:	0f 1f 44 00 00       	nopl   0x0(%rax,%rax,1)
+  60:	f3 43 0f 10 4c 99 f4 	movss  -0xc(%r9,%r11,4),%xmm1
+  67:	f3 43 0f 10 54 99 f8 	movss  -0x8(%r9,%r11,4),%xmm2
+  6e:	f3 0f 5a c9          	cvtss2sd %xmm1,%xmm1
+  72:	f2 0f 58 c8          	addsd  %xmm0,%xmm1
+  76:	0f 57 c0             	xorps  %xmm0,%xmm0
+  79:	f3 0f 5a c2          	cvtss2sd %xmm2,%xmm0
+  7d:	f2 0f 58 c1          	addsd  %xmm1,%xmm0
+  81:	f3 43 0f 10 4c 99 fc 	movss  -0x4(%r9,%r11,4),%xmm1
+  88:	f3 0f 5a c9          	cvtss2sd %xmm1,%xmm1
+  8c:	f2 0f 58 c8          	addsd  %xmm0,%xmm1
+  90:	f3 43 0f 10 04 99    	movss  (%r9,%r11,4),%xmm0
+  96:	f3 0f 5a c0          	cvtss2sd %xmm0,%xmm0
+  9a:	f2 0f 58 c1          	addsd  %xmm1,%xmm0
+  9e:	49 83 c3 04          	add    $0x4,%r11
+  a2:	4c 39 da             	cmp    %r11,%rdx
+  a5:	75 b9                	jne    60 <_D5probe7executeFNbNiNeMPxflmmZd+0x60>
+  a7:	4d 85 c0             	test   %r8,%r8
+  aa:	74 94                	je     40 <_D5probe7executeFNbNiNeMPxflmmZd+0x40>
+  ac:	4e 8d 1c 9f          	lea    (%rdi,%r11,4),%r11
+  b0:	31 db                	xor    %ebx,%ebx
+  b2:	66 66 66 66 66 2e 0f 	data16 data16 data16 data16 cs nopw 0x0(%rax,%rax,1)
+  b9:	1f 84 00 00 00 00 00 
+  c0:	f3 41 0f 10 0c 9b    	movss  (%r11,%rbx,4),%xmm1
+  c6:	f3 0f 5a c9          	cvtss2sd %xmm1,%xmm1
+  ca:	f2 0f 58 c1          	addsd  %xmm1,%xmm0
+  ce:	48 ff c3             	inc    %rbx
+  d1:	49 39 d8             	cmp    %rbx,%r8
+  d4:	75 ea                	jne    c0 <_D5probe7executeFNbNiNeMPxflmmZd+0xc0>
+  d6:	e9 65 ff ff ff       	jmp    40 <_D5probe7executeFNbNiNeMPxflmmZd+0x40>
+  db:	5b                   	pop    %rbx
+  dc:	c3                   	ret
+
+Disassembly of section .text.strictSum:
+
+0000000000000000 <strictSum>:
+   0:	48 85 c9             	test   %rcx,%rcx
+   3:	0f 94 c0             	sete   %al
+   6:	48 85 d2             	test   %rdx,%rdx
+   9:	41 0f 94 c0          	sete   %r8b
+   d:	41 08 c0             	or     %al,%r8b
+  10:	66 0f 57 c0          	xorpd  %xmm0,%xmm0
+  14:	0f 85 c2 00 00 00    	jne    dc <strictSum+0xdc>
+  1a:	53                   	push   %rbx
+  1b:	48 8d 42 ff          	lea    -0x1(%rdx),%rax
+  1f:	41 89 d0             	mov    %edx,%r8d
+  22:	41 83 e0 03          	and    $0x3,%r8d
+  26:	48 83 e2 fc          	and    $0xfffffffffffffffc,%rdx
+  2a:	4c 8d 4f 0c          	lea    0xc(%rdi),%r9
+  2e:	48 c1 e6 02          	shl    $0x2,%rsi
+  32:	66 0f 57 c0          	xorpd  %xmm0,%xmm0
+  36:	45 31 d2             	xor    %r10d,%r10d
+  39:	eb 17                	jmp    52 <strictSum+0x52>
+  3b:	0f 1f 44 00 00       	nopl   0x0(%rax,%rax,1)
+  40:	49 ff c2             	inc    %r10
+  43:	49 01 f1             	add    %rsi,%r9
+  46:	48 01 f7             	add    %rsi,%rdi
+  49:	49 39 ca             	cmp    %rcx,%r10
+  4c:	0f 84 89 00 00 00    	je     db <strictSum+0xdb>
+  52:	45 31 db             	xor    %r11d,%r11d
+  55:	48 83 f8 03          	cmp    $0x3,%rax
+  59:	72 4c                	jb     a7 <strictSum+0xa7>
+  5b:	0f 1f 44 00 00       	nopl   0x0(%rax,%rax,1)
+  60:	f3 43 0f 10 4c 99 f4 	movss  -0xc(%r9,%r11,4),%xmm1
+  67:	f3 43 0f 10 54 99 f8 	movss  -0x8(%r9,%r11,4),%xmm2
+  6e:	f3 0f 5a c9          	cvtss2sd %xmm1,%xmm1
+  72:	f2 0f 58 c8          	addsd  %xmm0,%xmm1
+  76:	0f 57 c0             	xorps  %xmm0,%xmm0
+  79:	f3 0f 5a c2          	cvtss2sd %xmm2,%xmm0
+  7d:	f2 0f 58 c1          	addsd  %xmm1,%xmm0
+  81:	f3 43 0f 10 4c 99 fc 	movss  -0x4(%r9,%r11,4),%xmm1
+  88:	f3 0f 5a c9          	cvtss2sd %xmm1,%xmm1
+  8c:	f2 0f 58 c8          	addsd  %xmm0,%xmm1
+  90:	f3 43 0f 10 04 99    	movss  (%r9,%r11,4),%xmm0
+  96:	f3 0f 5a c0          	cvtss2sd %xmm0,%xmm0
+  9a:	f2 0f 58 c1          	addsd  %xmm1,%xmm0
+  9e:	49 83 c3 04          	add    $0x4,%r11
+  a2:	4c 39 da             	cmp    %r11,%rdx
+  a5:	75 b9                	jne    60 <strictSum+0x60>
+  a7:	4d 85 c0             	test   %r8,%r8
+  aa:	74 94                	je     40 <strictSum+0x40>
+  ac:	4e 8d 1c 9f          	lea    (%rdi,%r11,4),%r11
+  b0:	31 db                	xor    %ebx,%ebx
+  b2:	66 66 66 66 66 2e 0f 	data16 data16 data16 data16 cs nopw 0x0(%rax,%rax,1)
+  b9:	1f 84 00 00 00 00 00 
+  c0:	f3 41 0f 10 0c 9b    	movss  (%r11,%rbx,4),%xmm1
+  c6:	f3 0f 5a c9          	cvtss2sd %xmm1,%xmm1
+  ca:	f2 0f 58 c1          	addsd  %xmm1,%xmm0
+  ce:	48 ff c3             	inc    %rbx
+  d1:	49 39 d8             	cmp    %rbx,%r8
+  d4:	75 ea                	jne    c0 <strictSum+0xc0>
+  d6:	e9 65 ff ff ff       	jmp    40 <strictSum+0x40>
+  db:	5b                   	pop    %rbx
+  dc:	c3                   	ret
+=== ldc2 slice exact strict kernel ===
+command: ldc2 -c -preview=dip1000 -O3 -release slice.d
+
+/tmp/tmp.kL38mQTGaK/slice.o:     Dateiformat elf64-x86-64
+
+
+Disassembly of section .text._D5probe7readRowFNbNiNeNkMPxfmlmZAxf:
+
+0000000000000000 <_D5probe7readRowFNbNiNeNkMPxfmlmZAxf>:
+   0:	48 89 c8             	mov    %rcx,%rax
+   3:	48 0f af f2          	imul   %rdx,%rsi
+   7:	48 8d 14 b7          	lea    (%rdi,%rsi,4),%rdx
+   b:	c3                   	ret
+
+Disassembly of section .text._D5probe7executeFNbNiNfMPxflmmZd:
+
+0000000000000000 <_D5probe7executeFNbNiNfMPxflmmZd>:
+   0:	48 85 c9             	test   %rcx,%rcx
+   3:	0f 94 c0             	sete   %al
+   6:	48 85 d2             	test   %rdx,%rdx
+   9:	41 0f 94 c0          	sete   %r8b
+   d:	41 08 c0             	or     %al,%r8b
+  10:	66 0f 57 c0          	xorpd  %xmm0,%xmm0
+  14:	0f 85 c2 00 00 00    	jne    dc <_D5probe7executeFNbNiNfMPxflmmZd+0xdc>
+  1a:	53                   	push   %rbx
+  1b:	48 8d 42 ff          	lea    -0x1(%rdx),%rax
+  1f:	41 89 d0             	mov    %edx,%r8d
+  22:	41 83 e0 03          	and    $0x3,%r8d
+  26:	48 83 e2 fc          	and    $0xfffffffffffffffc,%rdx
+  2a:	4c 8d 4f 0c          	lea    0xc(%rdi),%r9
+  2e:	48 c1 e6 02          	shl    $0x2,%rsi
+  32:	66 0f 57 c0          	xorpd  %xmm0,%xmm0
+  36:	45 31 d2             	xor    %r10d,%r10d
+  39:	eb 17                	jmp    52 <_D5probe7executeFNbNiNfMPxflmmZd+0x52>
+  3b:	0f 1f 44 00 00       	nopl   0x0(%rax,%rax,1)
+  40:	49 ff c2             	inc    %r10
+  43:	49 01 f1             	add    %rsi,%r9
+  46:	48 01 f7             	add    %rsi,%rdi
+  49:	49 39 ca             	cmp    %rcx,%r10
+  4c:	0f 84 89 00 00 00    	je     db <_D5probe7executeFNbNiNfMPxflmmZd+0xdb>
+  52:	45 31 db             	xor    %r11d,%r11d
+  55:	48 83 f8 03          	cmp    $0x3,%rax
+  59:	72 4c                	jb     a7 <_D5probe7executeFNbNiNfMPxflmmZd+0xa7>
+  5b:	0f 1f 44 00 00       	nopl   0x0(%rax,%rax,1)
+  60:	f3 43 0f 10 4c 99 f4 	movss  -0xc(%r9,%r11,4),%xmm1
+  67:	f3 43 0f 10 54 99 f8 	movss  -0x8(%r9,%r11,4),%xmm2
+  6e:	f3 0f 5a c9          	cvtss2sd %xmm1,%xmm1
+  72:	f2 0f 58 c8          	addsd  %xmm0,%xmm1
+  76:	0f 57 c0             	xorps  %xmm0,%xmm0
+  79:	f3 0f 5a c2          	cvtss2sd %xmm2,%xmm0
+  7d:	f2 0f 58 c1          	addsd  %xmm1,%xmm0
+  81:	f3 43 0f 10 4c 99 fc 	movss  -0x4(%r9,%r11,4),%xmm1
+  88:	f3 0f 5a c9          	cvtss2sd %xmm1,%xmm1
+  8c:	f2 0f 58 c8          	addsd  %xmm0,%xmm1
+  90:	f3 43 0f 10 04 99    	movss  (%r9,%r11,4),%xmm0
+  96:	f3 0f 5a c0          	cvtss2sd %xmm0,%xmm0
+  9a:	f2 0f 58 c1          	addsd  %xmm1,%xmm0
+  9e:	49 83 c3 04          	add    $0x4,%r11
+  a2:	4c 39 da             	cmp    %r11,%rdx
+  a5:	75 b9                	jne    60 <_D5probe7executeFNbNiNfMPxflmmZd+0x60>
+  a7:	4d 85 c0             	test   %r8,%r8
+  aa:	74 94                	je     40 <_D5probe7executeFNbNiNfMPxflmmZd+0x40>
+  ac:	4e 8d 1c 9f          	lea    (%rdi,%r11,4),%r11
+  b0:	31 db                	xor    %ebx,%ebx
+  b2:	66 66 66 66 66 2e 0f 	data16 data16 data16 data16 cs nopw 0x0(%rax,%rax,1)
+  b9:	1f 84 00 00 00 00 00 
+  c0:	f3 41 0f 10 0c 9b    	movss  (%r11,%rbx,4),%xmm1
+  c6:	f3 0f 5a c9          	cvtss2sd %xmm1,%xmm1
+  ca:	f2 0f 58 c1          	addsd  %xmm1,%xmm0
+  ce:	48 ff c3             	inc    %rbx
+  d1:	49 39 d8             	cmp    %rbx,%r8
+  d4:	75 ea                	jne    c0 <_D5probe7executeFNbNiNfMPxflmmZd+0xc0>
+  d6:	e9 65 ff ff ff       	jmp    40 <_D5probe7executeFNbNiNfMPxflmmZd+0x40>
+  db:	5b                   	pop    %rbx
+  dc:	c3                   	ret
+
+Disassembly of section .text.strictSum:
+
+0000000000000000 <strictSum>:
+   0:	48 85 c9             	test   %rcx,%rcx
+   3:	0f 94 c0             	sete   %al
+   6:	48 85 d2             	test   %rdx,%rdx
+   9:	41 0f 94 c0          	sete   %r8b
+   d:	41 08 c0             	or     %al,%r8b
+  10:	66 0f 57 c0          	xorpd  %xmm0,%xmm0
+  14:	0f 85 c2 00 00 00    	jne    dc <strictSum+0xdc>
+  1a:	53                   	push   %rbx
+  1b:	48 8d 42 ff          	lea    -0x1(%rdx),%rax
+  1f:	41 89 d0             	mov    %edx,%r8d
+  22:	41 83 e0 03          	and    $0x3,%r8d
+  26:	48 83 e2 fc          	and    $0xfffffffffffffffc,%rdx
+  2a:	4c 8d 4f 0c          	lea    0xc(%rdi),%r9
+  2e:	48 c1 e6 02          	shl    $0x2,%rsi
+  32:	66 0f 57 c0          	xorpd  %xmm0,%xmm0
+  36:	45 31 d2             	xor    %r10d,%r10d
+  39:	eb 17                	jmp    52 <strictSum+0x52>
+  3b:	0f 1f 44 00 00       	nopl   0x0(%rax,%rax,1)
+  40:	49 ff c2             	inc    %r10
+  43:	49 01 f1             	add    %rsi,%r9
+  46:	48 01 f7             	add    %rsi,%rdi
+  49:	49 39 ca             	cmp    %rcx,%r10
+  4c:	0f 84 89 00 00 00    	je     db <strictSum+0xdb>
+  52:	45 31 db             	xor    %r11d,%r11d
+  55:	48 83 f8 03          	cmp    $0x3,%rax
+  59:	72 4c                	jb     a7 <strictSum+0xa7>
+  5b:	0f 1f 44 00 00       	nopl   0x0(%rax,%rax,1)
+  60:	f3 43 0f 10 4c 99 f4 	movss  -0xc(%r9,%r11,4),%xmm1
+  67:	f3 43 0f 10 54 99 f8 	movss  -0x8(%r9,%r11,4),%xmm2
+  6e:	f3 0f 5a c9          	cvtss2sd %xmm1,%xmm1
+  72:	f2 0f 58 c8          	addsd  %xmm0,%xmm1
+  76:	0f 57 c0             	xorps  %xmm0,%xmm0
+  79:	f3 0f 5a c2          	cvtss2sd %xmm2,%xmm0
+  7d:	f2 0f 58 c1          	addsd  %xmm1,%xmm0
+  81:	f3 43 0f 10 4c 99 fc 	movss  -0x4(%r9,%r11,4),%xmm1
+  88:	f3 0f 5a c9          	cvtss2sd %xmm1,%xmm1
+  8c:	f2 0f 58 c8          	addsd  %xmm0,%xmm1
+  90:	f3 43 0f 10 04 99    	movss  (%r9,%r11,4),%xmm0
+  96:	f3 0f 5a c0          	cvtss2sd %xmm0,%xmm0
+  9a:	f2 0f 58 c1          	addsd  %xmm1,%xmm0
+  9e:	49 83 c3 04          	add    $0x4,%r11
+  a2:	4c 39 da             	cmp    %r11,%rdx
+  a5:	75 b9                	jne    60 <strictSum+0x60>
+  a7:	4d 85 c0             	test   %r8,%r8
+  aa:	74 94                	je     40 <strictSum+0x40>
+  ac:	4e 8d 1c 9f          	lea    (%rdi,%r11,4),%r11
+  b0:	31 db                	xor    %ebx,%ebx
+  b2:	66 66 66 66 66 2e 0f 	data16 data16 data16 data16 cs nopw 0x0(%rax,%rax,1)
+  b9:	1f 84 00 00 00 00 00 
+  c0:	f3 41 0f 10 0c 9b    	movss  (%r11,%rbx,4),%xmm1
+  c6:	f3 0f 5a c9          	cvtss2sd %xmm1,%xmm1
+  ca:	f2 0f 58 c1          	addsd  %xmm1,%xmm0
+  ce:	48 ff c3             	inc    %rbx
+  d1:	49 39 d8             	cmp    %rbx,%r8
+  d4:	75 ea                	jne    c0 <strictSum+0xc0>
+  d6:	e9 65 ff ff ff       	jmp    40 <strictSum+0x40>
+  db:	5b                   	pop    %rbx
+  dc:	c3                   	ret

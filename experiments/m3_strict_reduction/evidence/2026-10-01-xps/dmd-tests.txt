@@ -1,0 +1,10 @@
+             Generating test runner configuration 'raster-m3-strict-reduction-test-application' for 'application' (executable).
+     Warning Excluding main source file source/app.d from test.
+    Starting Performing "unittest" build using dmd for x86_64.
+    Building mir-core 1.7.4: building configuration [library]
+    Building mir-algorithm 3.22.4: building configuration [default]
+    Building raster-d ~master: building configuration [library]
+    Building raster-m3-strict-reduction ~master: building configuration [raster-m3-strict-reduction-test-application]
+     Linking raster-m3-strict-reduction-test-application
+     Running raster-m3-strict-reduction-test-application 
+4 modules passed unittests

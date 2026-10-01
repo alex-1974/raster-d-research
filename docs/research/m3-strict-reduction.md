@@ -96,22 +96,68 @@ spread reaches 38.21% for Pointer and 20.70% for Slice; LDC reaches
 Isolated actual-source D/C++ disassembly is retained to inspect the dependent
 scalar addition graph; it is not used as a substitute for timing.
 
-## Decision and next gate
+## XPS confirmation
+
+The uploaded 2026-10-01 archive is preserved byte-exact under
+`experiments/m3_strict_reduction/evidence/2026-10-01-xps/`, with archive SHA256
+and collector commit in its additional PROVENANCE.md. All 19 manifest checks
+pass; the original summary reproduces byte-for-byte. Both compilers pass four
+inherited unittest modules and the actual-source Pointer/Slice trust challenges.
+All six processes pass all 42 timed, 56 semantic and contract cases, with
+matching finite result bits and backing fingerprints.
+
+Dell XPS 15 / Intel i7-9750H, affinity CPU 0, unchanged frequency/thermal
+controls; DMD 2.111.0, LDC 1.41.0 / LLVM 19.1.7, DUB 1.40.0, G++ 15.2.0.
+The VM used LLVM 20.1.5 and G++ 13.3.0. Cross-host differences therefore mix
+hardware, backend and C++ compiler changes; they do not isolate a CPU effect.
+
+Large Canonical ratios (public time divided by candidate time; above 1 means
+the candidate is faster):
+
+| Compiler | Pointer | Slice | C++ reference |
+| --- | --- | --- | --- |
+| DMD | 0.992–1.151x | 0.879–1.050x | 1.010–1.170x |
+| LDC | 0.982–1.022x | 0.978–1.020x | 0.981–1.024x |
+
+LDC is near parity for all three references. DMD Pointer is near parity on
+contiguous data, but every paired large padded/negative/repeated-row process
+and both corpora favor it: public/Pointer 1.097–1.151x (about 8.8–13.1% less
+time). This is a real follow-up signal, not a blanket no-gain conclusion.
+DMD Slice loses on large contiguous data (0.879–0.913x, about 9.5–13.8% more
+time), and offers only small/mixed changes elsewhere.
+
+Across large Canonical cases, process spread maxima are 11.76%/12.64%/12.75%/
+10.61% for DMD public/Pointer/Slice/C++; LDC is 7.94%/7.17%/7.30%/7.18%.
+These are diagnostic spreads, not confidence intervals. The DMD advantage is
+layout-specific, overlaps the scale of process variability, and was not stable
+in the VM matrix. Promoting a general executor replacement is unjustified.
+A DMD-only Canonical pointer specialization merits a separate controlled
+confirmation before adding a compiler branch and trusted production kernel.
+The C++ gap on DMD has the documented classification/ABI asymmetry; the
+accepted trade-off is to keep the simpler existing executor for this audit,
+with the measured DMD opportunity retained explicitly rather than claiming
+universal C++ parity.
+
+## Decision and follow-up
 
 | Question | Decision |
 | --- | --- |
-| Existing Production strict executor | KEEP; no justified change from VM evidence |
-| Generic Pointer/Slice replacement | DEFER; no material stable gain established |
+| Existing Production strict executor | KEEP as the qualified default |
+| Generic Pointer replacement | DEFER; no stable cross-matrix gain |
+| Generic Slice replacement | REJECT for current promotion; DMD contiguous regression |
+| DMD Canonical Pointer specialization | DEFER to controlled targeted confirmation |
 | Fixed-lane/reassociated/vector sum as strict | REJECT; different numeric semantic |
 | Universal traversal | KEEP unchanged |
-| C++ execution reference | KEEP with explicit wrapper/ABI limits |
-| Compiler specialization, manual SIMD, threading | DEFER |
+| C++ execution reference | KEEP with explicit wrapper/ABI/compiler limits |
+| Manual SIMD and threading | DEFER |
 | Production PR | No implementation change proposed |
-| XPS qualification | Required before closing performance audit |
+| XPS qualification | PASS; baseline audit complete, evidence ready for integration |
 | AArch64 performance | Unqualified |
 
-`collect.sh OUTPUT_DIRECTORY CPU xps` repeats semantic/trust checks, the
-separately compiled strict C++ reference and six process measurements. Targeted
-CI pins production and checks correctness plus consumer diagnostics, without
-performance thresholds. XPS may confirm KEEP-existing; no optimization must be
-promoted merely because this milestone investigates performance.
+M3.4 establishes correctness and the current x86_64 strict-order performance
+baseline. Its completion does not claim that every compiler-specific
+optimization is exhausted. A later DMD specialization should isolate compiler
+and layout, repeat independent processes under recorded frequency/thermal
+conditions, retain contiguous/Universal controls, and pass the same semantic
+and trust gates. Reopen a measured performance task if that study justifies
+promotion. No optimization is required merely to close this audit.
