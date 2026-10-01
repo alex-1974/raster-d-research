@@ -1,0 +1,2 @@
+generated pointer inherited tests 9
+generated slice inherited tests 9

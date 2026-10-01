@@ -1,0 +1,63 @@
+
+/workspace/scratch/231248e26dd2/raster-d-research/experiments/m3_strict_reduction/cpp_reference.o:     file format elf64-x86-64
+
+
+Disassembly of section .text:
+
+0000000000000000 <cppStrict>:
+   0:	f3 0f 1e fa          	endbr64
+   4:	53                   	push   %rbx
+   5:	48 8b 5c 24 18       	mov    0x18(%rsp),%rbx
+   a:	31 c0                	xor    %eax,%eax
+   c:	48 c7 03 00 00 00 00 	movq   $0x0,(%rbx)
+  13:	4c 39 4c 24 10       	cmp    %r9,0x10(%rsp)
+  18:	73 5e                	jae    78 <cppStrict+0x78>
+  1a:	49 89 d2             	mov    %rdx,%r10
+  1d:	49 89 f3             	mov    %rsi,%r11
+  20:	48 89 ca             	mov    %rcx,%rdx
+  23:	48 85 c9             	test   %rcx,%rcx
+  26:	74 4b                	je     73 <cppStrict+0x73>
+  28:	4d 85 c0             	test   %r8,%r8
+  2b:	74 46                	je     73 <cppStrict+0x73>
+  2d:	31 f6                	xor    %esi,%esi
+  2f:	66 0f ef c0          	pxor   %xmm0,%xmm0
+  33:	49 83 fa 01          	cmp    $0x1,%r10
+  37:	75 41                	jne    7a <cppStrict+0x7a>
+  39:	0f 1f 80 00 00 00 00 	nopl   0x0(%rax)
+  40:	48 89 f0             	mov    %rsi,%rax
+  43:	49 0f af c3          	imul   %r11,%rax
+  47:	48 8d 0c 87          	lea    (%rdi,%rax,4),%rcx
+  4b:	31 c0                	xor    %eax,%eax
+  4d:	0f 1f 00             	nopl   (%rax)
+  50:	66 0f ef c9          	pxor   %xmm1,%xmm1
+  54:	f3 0f 5a 0c 81       	cvtss2sd (%rcx,%rax,4),%xmm1
+  59:	48 83 c0 01          	add    $0x1,%rax
+  5d:	f2 0f 58 c1          	addsd  %xmm1,%xmm0
+  61:	48 39 d0             	cmp    %rdx,%rax
+  64:	72 ea                	jb     50 <cppStrict+0x50>
+  66:	48 83 c6 01          	add    $0x1,%rsi
+  6a:	4c 39 c6             	cmp    %r8,%rsi
+  6d:	72 d1                	jb     40 <cppStrict+0x40>
+  6f:	f2 0f 11 03          	movsd  %xmm0,(%rbx)
+  73:	b8 01 00 00 00       	mov    $0x1,%eax
+  78:	5b                   	pop    %rbx
+  79:	c3                   	ret
+  7a:	45 31 c9             	xor    %r9d,%r9d
+  7d:	0f 1f 00             	nopl   (%rax)
+  80:	4c 89 ce             	mov    %r9,%rsi
+  83:	31 c0                	xor    %eax,%eax
+  85:	49 0f af f3          	imul   %r11,%rsi
+  89:	0f 1f 80 00 00 00 00 	nopl   0x0(%rax)
+  90:	48 89 c1             	mov    %rax,%rcx
+  93:	66 0f ef c9          	pxor   %xmm1,%xmm1
+  97:	48 83 c0 01          	add    $0x1,%rax
+  9b:	49 0f af ca          	imul   %r10,%rcx
+  9f:	48 01 f1             	add    %rsi,%rcx
+  a2:	f3 0f 5a 0c 8f       	cvtss2sd (%rdi,%rcx,4),%xmm1
+  a7:	f2 0f 58 c1          	addsd  %xmm1,%xmm0
+  ab:	48 39 d0             	cmp    %rdx,%rax
+  ae:	72 e0                	jb     90 <cppStrict+0x90>
+  b0:	49 83 c1 01          	add    $0x1,%r9
+  b4:	4d 39 c1             	cmp    %r8,%r9
+  b7:	72 c7                	jb     80 <cppStrict+0x80>
+  b9:	eb b4                	jmp    6f <cppStrict+0x6f>

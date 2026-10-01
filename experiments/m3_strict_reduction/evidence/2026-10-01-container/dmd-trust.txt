@@ -1,0 +1,8 @@
+PASS trust challenge: pointer actual source requires trust
+/tmp/tmp.aLuu2yD6Vx/pointer-True.d(13): Error: pointer arithmetic is not allowed in a `@safe` function
+        const row=base+cast(ptrdiff_t)y*stride;
+                  ^
+PASS trust challenge: slice actual source requires trust
+/tmp/tmp.aLuu2yD6Vx/slice-True.d(9): Error: pointer arithmetic is not allowed in a `@safe` function
+{ return (base+cast(ptrdiff_t)y*stride)[0 .. width]; }
+          ^

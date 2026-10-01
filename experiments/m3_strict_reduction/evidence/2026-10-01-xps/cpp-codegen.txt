@@ -1,0 +1,134 @@
+
+/tmp/raster-strict-xps.pcHnC8/raster-d-research/experiments/m3_strict_reduction/cpp_reference.o:     Dateiformat elf64-x86-64
+
+
+Disassembly of section .text:
+
+0000000000000000 <cppStrict>:
+   0:	f3 0f 1e fa          	endbr64
+   4:	41 54                	push   %r12
+   6:	55                   	push   %rbp
+   7:	53                   	push   %rbx
+   8:	48 8b 44 24 28       	mov    0x28(%rsp),%rax
+   d:	48 c7 00 00 00 00 00 	movq   $0x0,(%rax)
+  14:	31 c0                	xor    %eax,%eax
+  16:	4c 39 4c 24 20       	cmp    %r9,0x20(%rsp)
+  1b:	0f 83 43 01 00 00    	jae    164 <cppStrict+0x164>
+  21:	49 89 fa             	mov    %rdi,%r10
+  24:	49 89 f3             	mov    %rsi,%r11
+  27:	48 85 c9             	test   %rcx,%rcx
+  2a:	0f 84 2f 01 00 00    	je     15f <cppStrict+0x15f>
+  30:	4d 85 c0             	test   %r8,%r8
+  33:	0f 84 26 01 00 00    	je     15f <cppStrict+0x15f>
+  39:	48 83 fa 01          	cmp    $0x1,%rdx
+  3d:	0f 85 49 01 00 00    	jne    18c <cppStrict+0x18c>
+  43:	48 89 cb             	mov    %rcx,%rbx
+  46:	4c 8d 61 ff          	lea    -0x1(%rcx),%r12
+  4a:	66 0f ef c0          	pxor   %xmm0,%xmm0
+  4e:	45 31 c9             	xor    %r9d,%r9d
+  51:	48 c1 eb 02          	shr    $0x2,%rbx
+  55:	48 8d 2c b5 00 00 00 	lea    0x0(,%rsi,4),%rbp
+  5c:	00 
+  5d:	48 89 fe             	mov    %rdi,%rsi
+  60:	31 ff                	xor    %edi,%edi
+  62:	48 c1 e3 04          	shl    $0x4,%rbx
+  66:	66 2e 0f 1f 84 00 00 	cs nopw 0x0(%rax,%rax,1)
+  6d:	00 00 00 
+  70:	49 83 fc 02          	cmp    $0x2,%r12
+  74:	0f 86 0b 01 00 00    	jbe    185 <cppStrict+0x185>
+  7a:	48 8d 14 33          	lea    (%rbx,%rsi,1),%rdx
+  7e:	48 89 f0             	mov    %rsi,%rax
+  81:	0f 1f 84 00 00 00 00 	nopl   0x0(%rax,%rax,1)
+  88:	00 
+  89:	66 66 2e 0f 1f 84 00 	data16 cs nopw 0x0(%rax,%rax,1)
+  90:	00 00 00 00 
+  94:	66 66 2e 0f 1f 84 00 	data16 cs nopw 0x0(%rax,%rax,1)
+  9b:	00 00 00 00 
+  9f:	66 66 2e 0f 1f 84 00 	data16 cs nopw 0x0(%rax,%rax,1)
+  a6:	00 00 00 00 
+  aa:	66 66 2e 0f 1f 84 00 	data16 cs nopw 0x0(%rax,%rax,1)
+  b1:	00 00 00 00 
+  b5:	66 66 2e 0f 1f 84 00 	data16 cs nopw 0x0(%rax,%rax,1)
+  bc:	00 00 00 00 
+  c0:	0f 10 18             	movups (%rax),%xmm3
+  c3:	66 0f ef c9          	pxor   %xmm1,%xmm1
+  c7:	48 83 c0 10          	add    $0x10,%rax
+  cb:	0f 5a d3             	cvtps2pd %xmm3,%xmm2
+  ce:	f2 0f 58 c2          	addsd  %xmm2,%xmm0
+  d2:	66 0f 15 d2          	unpckhpd %xmm2,%xmm2
+  d6:	0f 12 cb             	movhlps %xmm3,%xmm1
+  d9:	0f 5a c9             	cvtps2pd %xmm1,%xmm1
+  dc:	f2 0f 58 c2          	addsd  %xmm2,%xmm0
+  e0:	f2 0f 58 c1          	addsd  %xmm1,%xmm0
+  e4:	66 0f 15 c9          	unpckhpd %xmm1,%xmm1
+  e8:	f2 0f 58 c1          	addsd  %xmm1,%xmm0
+  ec:	48 39 d0             	cmp    %rdx,%rax
+  ef:	75 cf                	jne    c0 <cppStrict+0xc0>
+  f1:	f6 c1 03             	test   $0x3,%cl
+  f4:	74 7a                	je     170 <cppStrict+0x170>
+  f6:	48 89 c8             	mov    %rcx,%rax
+  f9:	48 83 e0 fc          	and    $0xfffffffffffffffc,%rax
+  fd:	48 8d 14 07          	lea    (%rdi,%rax,1),%rdx
+ 101:	66 0f ef c9          	pxor   %xmm1,%xmm1
+ 105:	f3 41 0f 5a 0c 92    	cvtss2sd (%r10,%rdx,4),%xmm1
+ 10b:	48 8d 50 01          	lea    0x1(%rax),%rdx
+ 10f:	f2 0f 58 c1          	addsd  %xmm1,%xmm0
+ 113:	48 39 ca             	cmp    %rcx,%rdx
+ 116:	73 2b                	jae    143 <cppStrict+0x143>
+ 118:	48 01 fa             	add    %rdi,%rdx
+ 11b:	66 0f ef c9          	pxor   %xmm1,%xmm1
+ 11f:	48 83 c0 02          	add    $0x2,%rax
+ 123:	f3 41 0f 5a 0c 92    	cvtss2sd (%r10,%rdx,4),%xmm1
+ 129:	f2 0f 58 c1          	addsd  %xmm1,%xmm0
+ 12d:	48 39 c8             	cmp    %rcx,%rax
+ 130:	73 11                	jae    143 <cppStrict+0x143>
+ 132:	48 01 f8             	add    %rdi,%rax
+ 135:	66 0f ef c9          	pxor   %xmm1,%xmm1
+ 139:	f3 41 0f 5a 0c 82    	cvtss2sd (%r10,%rax,4),%xmm1
+ 13f:	f2 0f 58 c1          	addsd  %xmm1,%xmm0
+ 143:	49 83 c1 01          	add    $0x1,%r9
+ 147:	4c 01 df             	add    %r11,%rdi
+ 14a:	48 01 ee             	add    %rbp,%rsi
+ 14d:	4d 39 c1             	cmp    %r8,%r9
+ 150:	0f 82 1a ff ff ff    	jb     70 <cppStrict+0x70>
+ 156:	48 8b 44 24 28       	mov    0x28(%rsp),%rax
+ 15b:	f2 0f 11 00          	movsd  %xmm0,(%rax)
+ 15f:	b8 01 00 00 00       	mov    $0x1,%eax
+ 164:	5b                   	pop    %rbx
+ 165:	5d                   	pop    %rbp
+ 166:	41 5c                	pop    %r12
+ 168:	c3                   	ret
+ 169:	0f 1f 80 00 00 00 00 	nopl   0x0(%rax)
+ 170:	49 83 c1 01          	add    $0x1,%r9
+ 174:	4c 01 df             	add    %r11,%rdi
+ 177:	48 01 ee             	add    %rbp,%rsi
+ 17a:	4d 39 c1             	cmp    %r8,%r9
+ 17d:	0f 82 f7 fe ff ff    	jb     7a <cppStrict+0x7a>
+ 183:	eb d1                	jmp    156 <cppStrict+0x156>
+ 185:	31 c0                	xor    %eax,%eax
+ 187:	e9 71 ff ff ff       	jmp    fd <cppStrict+0xfd>
+ 18c:	48 8d 34 95 00 00 00 	lea    0x0(,%rdx,4),%rsi
+ 193:	00 
+ 194:	45 31 c9             	xor    %r9d,%r9d
+ 197:	66 0f ef c0          	pxor   %xmm0,%xmm0
+ 19b:	31 ff                	xor    %edi,%edi
+ 19d:	0f 1f 00             	nopl   (%rax)
+ 1a0:	4b 8d 14 8a          	lea    (%r10,%r9,4),%rdx
+ 1a4:	31 c0                	xor    %eax,%eax
+ 1a6:	0f 1f 40 00          	nopl   0x0(%rax)
+ 1aa:	66 66 2e 0f 1f 84 00 	data16 cs nopw 0x0(%rax,%rax,1)
+ 1b1:	00 00 00 00 
+ 1b5:	66 66 2e 0f 1f 84 00 	data16 cs nopw 0x0(%rax,%rax,1)
+ 1bc:	00 00 00 00 
+ 1c0:	66 0f ef c9          	pxor   %xmm1,%xmm1
+ 1c4:	48 83 c0 01          	add    $0x1,%rax
+ 1c8:	f3 0f 5a 0a          	cvtss2sd (%rdx),%xmm1
+ 1cc:	48 01 f2             	add    %rsi,%rdx
+ 1cf:	f2 0f 58 c1          	addsd  %xmm1,%xmm0
+ 1d3:	48 39 c8             	cmp    %rcx,%rax
+ 1d6:	72 e8                	jb     1c0 <cppStrict+0x1c0>
+ 1d8:	48 83 c7 01          	add    $0x1,%rdi
+ 1dc:	4d 01 d9             	add    %r11,%r9
+ 1df:	4c 39 c7             	cmp    %r8,%rdi
+ 1e2:	72 bc                	jb     1a0 <cppStrict+0x1a0>
+ 1e4:	e9 6d ff ff ff       	jmp    156 <cppStrict+0x156>

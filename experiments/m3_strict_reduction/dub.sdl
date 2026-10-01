@@ -1,0 +1,7 @@
+name "raster-m3-strict-reduction"
+description "Pinned strict row-major reduction qualification"
+targetType "executable"
+dependency "raster-d" path="../../../raster-d"
+sourcePaths "source"
+sourceFiles "cpp_reference.o"
+dflags "-preview=dip1000"

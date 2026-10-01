@@ -1,0 +1,168 @@
+Note: Failed to determine version of package raster-m3-strict-reduction at .. Assuming ~master.
+Collecting dependencies for raster-m3-strict-reduction
+'git --git-dir=/workspace/scratch/231248e26dd2/raster-d/.git describe --long --tags' failed with exit code 128: fatal: No names found, cannot describe anything.
+Determined package version using GIT: raster-d ~develop
+  Found dependency raster-d @../../../raster-d
+  Collecting dependencies for raster-d
+Lazily loading package mir-algorithm:3.22.4 from /root/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/
+    Found dependency mir-algorithm 3.22.4
+    Collecting dependencies for mir-algorithm
+Lazily loading package mir-core:1.7.4 from /root/.dub/packages/mir-core/1.7.4/mir-core/
+      Found dependency mir-core 1.7.4
+      Collecting dependencies for mir-core
+Lazily loading package silly:1.1.1 from /root/.dub/packages/silly/1.1.1/silly/
+      Found dependency silly 1.1.1
+      Collecting dependencies for silly
+Add config mir-core library
+Add config silly library
+Add config mir-algorithm default
+Including 2 default -> 3 library
+Including 2 default -> 4 library
+Add config mir-algorithm silly
+Including 2 silly -> 3 library
+Including 2 silly -> 4 library
+Add config mir-algorithm dip1008
+Including 2 dip1008 -> 3 library
+Including 2 dip1008 -> 4 library
+Add config mir-algorithm dips
+Including 2 dips -> 3 library
+Including 2 dips -> 4 library
+Add config mir-algorithm ci-bignum-test
+Including 2 ci-bignum-test -> 3 library
+Including 2 ci-bignum-test -> 4 library
+Add config mir-algorithm ci-core-test
+Including 2 ci-core-test -> 3 library
+Including 2 ci-core-test -> 4 library
+Add config mir-algorithm ci-ndslice-test
+Including 2 ci-ndslice-test -> 3 library
+Including 2 ci-ndslice-test -> 4 library
+Add config mir-algorithm ci-test
+Including 2 ci-test -> 3 library
+Including 2 ci-test -> 4 library
+Add config raster-d library
+Including 1 library -> 2 default
+Including 1 library -> 2 silly
+Including 1 library -> 2 dip1008
+Including 1 library -> 2 dips
+Including 1 library -> 2 ci-bignum-test
+Including 1 library -> 2 ci-core-test
+Including 1 library -> 2 ci-ndslice-test
+Including 1 library -> 2 ci-test
+Add config raster-m3-strict-reduction application
+Including 0 application -> 1 library
+NON-PRIMARY: 2 silly
+Eliminating config silly for 2
+NON-PRIMARY: 2 dip1008
+Eliminating config dip1008 for 2
+NON-PRIMARY: 2 dips
+Eliminating config dips for 2
+NON-PRIMARY: 2 ci-bignum-test
+Eliminating config ci-bignum-test for 2
+NON-PRIMARY: 2 ci-core-test
+Eliminating config ci-core-test for 2
+NON-PRIMARY: 2 ci-ndslice-test
+Eliminating config ci-ndslice-test for 2
+NON-PRIMARY: 2 ci-test
+Eliminating config ci-test for 2
+    2 default -> 3 library
+    2 default -> 4 library
+    1 library -> 2 default
+    0 application -> 1 library
+Using configuration 'library' for mir-core
+Using configuration 'library' for silly
+Using configuration 'default' for mir-algorithm
+Using configuration 'library' for raster-d
+Using configuration 'application' for raster-m3-strict-reduction
+Generating using build
+Creating build generator.
+Add config raster-m3-strict-reduction application
+Add config mir-core library
+Add config silly library
+Add config mir-algorithm default
+Including 2 default -> 3 library
+Including 2 default -> 4 library
+Add config mir-algorithm silly
+Including 2 silly -> 3 library
+Including 2 silly -> 4 library
+Add config mir-algorithm dip1008
+Including 2 dip1008 -> 3 library
+Including 2 dip1008 -> 4 library
+Add config mir-algorithm dips
+Including 2 dips -> 3 library
+Including 2 dips -> 4 library
+Add config mir-algorithm ci-bignum-test
+Including 2 ci-bignum-test -> 3 library
+Including 2 ci-bignum-test -> 4 library
+Add config mir-algorithm ci-core-test
+Including 2 ci-core-test -> 3 library
+Including 2 ci-core-test -> 4 library
+Add config mir-algorithm ci-ndslice-test
+Including 2 ci-ndslice-test -> 3 library
+Including 2 ci-ndslice-test -> 4 library
+Add config mir-algorithm ci-test
+Including 2 ci-test -> 3 library
+Including 2 ci-test -> 4 library
+Add config raster-d library
+Including 1 library -> 2 default
+Including 1 library -> 2 silly
+Including 1 library -> 2 dip1008
+Including 1 library -> 2 dips
+Including 1 library -> 2 ci-bignum-test
+Including 1 library -> 2 ci-core-test
+Including 1 library -> 2 ci-ndslice-test
+Including 1 library -> 2 ci-test
+Including 0 application -> 1 library
+NON-PRIMARY: 2 silly
+Eliminating config silly for 2
+NON-PRIMARY: 2 dip1008
+Eliminating config dip1008 for 2
+NON-PRIMARY: 2 dips
+Eliminating config dips for 2
+NON-PRIMARY: 2 ci-bignum-test
+Eliminating config ci-bignum-test for 2
+NON-PRIMARY: 2 ci-core-test
+Eliminating config ci-core-test for 2
+NON-PRIMARY: 2 ci-ndslice-test
+Eliminating config ci-ndslice-test for 2
+NON-PRIMARY: 2 ci-test
+Eliminating config ci-test for 2
+    2 default -> 3 library
+    2 default -> 4 library
+    1 library -> 2 default
+    0 application -> 1 library
+Using configuration 'application' for raster-m3-strict-reduction
+Using configuration 'library' for mir-core
+Using configuration 'library' for silly
+Using configuration 'default' for mir-algorithm
+Using configuration 'library' for raster-d
+Configuring target raster-m3-strict-reduction (executable /workspace/scratch/231248e26dd2/raster-d-research/experiments/m3_strict_reduction raster-m3-strict-reduction)
+deps: raster-m3-strict-reduction -> "raster-d"
+  Configuring target raster-d (staticLibrary /workspace/scratch/231248e26dd2/raster-d raster-d)
+deps: raster-d -> "mir-algorithm"
+    Configuring target mir-algorithm (staticLibrary /root/.dub/packages/mir-algorithm/3.22.4/mir-algorithm mir-algorithm)
+deps: mir-algorithm -> "mir-core"
+      Configuring target mir-core (staticLibrary /root/.dub/packages/mir-core/1.7.4/mir-core mir-core)
+deps: mir-core -> 
+Configure dependencies of raster-m3-strict-reduction, deps:"raster-d"
+  Configure dependencies of raster-d, deps:"mir-algorithm"
+    Configure dependencies of mir-algorithm, deps:"mir-core"
+      Configure dependencies of mir-core, deps:
+Configuring dependent raster-m3-strict-reduction, deps:"raster-d"
+  Configuring dependent raster-d, deps:"mir-algorithm"
+    Configuring dependent mir-algorithm, deps:"mir-core"
+      Configuring dependent mir-core, deps:
+    Starting Performing "release" build using ldc2 for x86_64.
+    Building mir-core 1.7.4: building configuration [library]
+ldc2 -release -enable-inlining -Hkeep-all-bodies -O3 -w -d-version=Have_mir_core -I/root/.dub/packages/mir-core/1.7.4/mir-core/source/ /root/.dub/packages/mir-core/1.7.4/mir-core/source/mir/algebraic.d /root/.dub/packages/mir-core/1.7.4/mir-core/source/mir/bitmanip.d /root/.dub/packages/mir-core/1.7.4/mir-core/source/mir/bitop.d /root/.dub/packages/mir-core/1.7.4/mir-core/source/mir/checkedint.d /root/.dub/packages/mir-core/1.7.4/mir-core/source/mir/complex/math.d /root/.dub/packages/mir-core/1.7.4/mir-core/source/mir/complex/package.d /root/.dub/packages/mir-core/1.7.4/mir-core/source/mir/conv.d /root/.dub/packages/mir-core/1.7.4/mir-core/source/mir/enums.d /root/.dub/packages/mir-core/1.7.4/mir-core/source/mir/exception.d /root/.dub/packages/mir-core/1.7.4/mir-core/source/mir/functional.d /root/.dub/packages/mir-core/1.7.4/mir-core/source/mir/internal/memory.d /root/.dub/packages/mir-core/1.7.4/mir-core/source/mir/internal/meta.d /root/.dub/packages/mir-core/1.7.4/mir-core/source/mir/internal/utility.d /root/.dub/packages/mir-core/1.7.4/mir-core/source/mir/math/common.d /root/.dub/packages/mir-core/1.7.4/mir-core/source/mir/math/constant.d /root/.dub/packages/mir-core/1.7.4/mir-core/source/mir/math/ieee.d /root/.dub/packages/mir-core/1.7.4/mir-core/source/mir/math/package.d /root/.dub/packages/mir-core/1.7.4/mir-core/source/mir/primitives.d /root/.dub/packages/mir-core/1.7.4/mir-core/source/mir/qualifier.d /root/.dub/packages/mir-core/1.7.4/mir-core/source/mir/reflection.d /root/.dub/packages/mir-core/1.7.4/mir-core/source/mir/string_table.d /root/.dub/packages/mir-core/1.7.4/mir-core/source/mir/utility.d -lib -oq -cleanup-obj -of/root/.dub/cache/mir-core/1.7.4/build/library-release-AQbZ6oaDdsf1tyLrQxOpbw/libmir-core.a -vcolumns
+Copying target from /root/.dub/cache/mir-core/1.7.4/build/library-release-AQbZ6oaDdsf1tyLrQxOpbw/libmir-core.a to /root/.dub/packages/mir-core/1.7.4/mir-core
+    Building mir-algorithm 3.22.4: building configuration [default]
+ldc2 -release -enable-inlining -Hkeep-all-bodies -O3 -w -d-version=Have_mir_algorithm -d-version=Have_mir_core -I/root/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/ -I/root/.dub/packages/mir-core/1.7.4/mir-core/source/ /root/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/algebraic_alias/ion.d /root/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/algebraic_alias/json.d /root/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/algebraic_alias/transform.d /root/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/algorithm/iteration.d /root/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/algorithm/setops.d /root/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/annotated.d /root/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/appender.d /root/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/array/allocation.d /root/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/base64.d /root/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/bignum/decimal.d /root/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/bignum/fixed.d /root/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/bignum/fp.d /root/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/bignum/integer.d /root/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/bignum/internal/dec2float.d /root/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/bignum/internal/dec2float_table.d /root/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/bignum/internal/kernel.d /root/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/bignum/internal/parse.d /root/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/bignum/internal/phobos_kernel.d /root/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/bignum/internal/ryu/generic_128.d /root/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/bignum/internal/ryu/table.d /root/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/bignum/low_level_view.d /root/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/combinatorics/package.d /root/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/container/binaryheap.d /root/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/cpp_export/numeric.d /root/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/date.d /root/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/ediff.d /root/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/format.d /root/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/format_impl.d /root/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/graph/package.d /root/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/graph/tarjan.d /root/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/internal/ldc_simd.d /root/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/interpolate/constant.d /root/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/interpolate/extrapolate.d /root/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/interpolate/generic.d /root/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/interpolate/linear.d /root/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/interpolate/mod.d /root/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/interpolate/package.d /root/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/interpolate/polynomial.d /root/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/interpolate/spline.d /root/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/interpolate/utility.d /root/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/lob.d /root/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/math/func/expdigamma.d /root/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/math/func/hermite.d /root/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/math/func/normal.d /root/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/math/numeric.d /root/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/math/stat.d /root/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/math/sum.d /root/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/ndslice/allocation.d /root/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/ndslice/chunks.d /root/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/ndslice/concatenation.d /root/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/ndslice/connect/cpython.d /root/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/ndslice/dynamic.d /root/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/ndslice/field.d /root/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/ndslice/filling.d /root/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/ndslice/fuse.d /root/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/ndslice/internal.d /root/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/ndslice/iterator.d /root/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/ndslice/mutation.d /root/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/ndslice/ndfield.d /root/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/ndslice/package.d /root/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/ndslice/slice.d /root/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/ndslice/sorting.d /root/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/ndslice/topology.d /root/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/ndslice/traits.d /root/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/numeric.d /root/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/parse.d /root/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/polynomial.d /root/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/range.d /root/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/rc/array.d /root/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/rc/context.d /root/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/rc/package.d /root/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/rc/ptr.d /root/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/rc/slim_ptr.d /root/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/serde.d /root/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/series.d /root/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/small_array.d /root/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/small_string.d /root/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/stdio.d /root/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/string.d /root/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/string_map.d /root/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/test.d /root/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/timestamp.d /root/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/type_info.d -lib -oq -cleanup-obj -of/root/.dub/cache/mir-algorithm/3.22.4/build/default-release-b_GP6ufajYjrRDzAruUNTQ/libmir-algorithm.a -vcolumns
+Copying target from /root/.dub/cache/mir-algorithm/3.22.4/build/default-release-b_GP6ufajYjrRDzAruUNTQ/libmir-algorithm.a to /root/.dub/packages/mir-algorithm/3.22.4/mir-algorithm
+    Building raster-d ~develop: building configuration [library]
+ldc2 -release -enable-inlining -Hkeep-all-bodies -O3 -w -d-version=Have_raster_d -d-version=Have_mir_algorithm -d-version=Have_mir_core -I../raster-d/source/ -I/root/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/ -I/root/.dub/packages/mir-core/1.7.4/mir-core/source/ ../raster-d/source/raster/backing.d ../raster-d/source/raster/byte_layout.d ../raster-d/source/raster/construction.d ../raster-d/source/raster/conversion.d ../raster-d/source/raster/copy.d ../raster-d/source/raster/descriptor.d ../raster-d/source/raster/fill.d ../raster-d/source/raster/import_owned.d ../raster-d/source/raster/import_single_resource.d ../raster-d/source/raster/internal/affine_relation.d ../raster-d/source/raster/internal/block_resolution.d ../raster-d/source/raster/internal/block_resolution_test.d ../raster-d/source/raster/internal/compiler_capabilities.d ../raster-d/source/raster/internal/conversion_dispatch.d ../raster-d/source/raster/internal/copy_dispatch.d ../raster-d/source/raster/internal/dependency.d ../raster-d/source/raster/internal/execution_layout.d ../raster-d/source/raster/internal/fill_dispatch.d ../raster-d/source/raster/internal/fixed_lane_kernels.d ../raster-d/source/raster/internal/materialization.d ../raster-d/source/raster/internal/materialization_plan.d ../raster-d/source/raster/internal/mir_adapter.d ../raster-d/source/raster/internal/mir_target_adapter.d ../raster-d/source/raster/internal/neighbourhood_dispatch.d ../raster-d/source/raster/internal/physical_range.d ../raster-d/source/raster/internal/reduction_dispatch.d ../raster-d/source/raster/internal/residency.d ../raster-d/source/raster/internal/retained_store.d ../raster-d/source/raster/internal/scalar_conversion.d ../raster-d/source/raster/internal/scalar_kernels.d ../raster-d/source/raster/internal/scalar_pointwise.d ../raster-d/source/raster/internal/streaming_equivalence_test.d ../raster-d/source/raster/internal/target.d ../raster-d/source/raster/internal/test_data.d ../raster-d/source/raster/internal/transform_dispatch.d ../raster-d/source/raster/internal/validated_affine_relation.d ../raster-d/source/raster/neighbourhood.d ../raster-d/source/raster/owned_resource.d ../raster-d/source/raster/package.d ../raster-d/source/raster/reduction.d ../raster-d/source/raster/region.d ../raster-d/source/raster/resource.d ../raster-d/source/raster/sample.d ../raster-d/source/raster/transform.d ../raster-d/source/raster/validation.d ../raster-d/source/raster/view.d ../raster-d/source/raster/writable_view.d -preview=dip1000 -lib -oq -cleanup-obj -of/root/.dub/cache/raster-d/~develop/build/library-release-sBSV4-cEncWyQ9-_Jts9uA/libraster-d.a -vcolumns
+Copying target from /root/.dub/cache/raster-d/~develop/build/library-release-sBSV4-cEncWyQ9-_Jts9uA/libraster-d.a to /workspace/scratch/231248e26dd2/raster-d
+    Building raster-m3-strict-reduction ~master: building configuration [application]
+ldc2 -release -enable-inlining -Hkeep-all-bodies -O3 -w -d-version=Have_raster_m3_strict_reduction -d-version=Have_raster_d -d-version=Have_mir_algorithm -d-version=Have_mir_core -Iexperiments/m3_strict_reduction/source/ -I../raster-d/source/ -I/root/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/ -I/root/.dub/packages/mir-core/1.7.4/mir-core/source/ experiments/m3_strict_reduction/source/app.d experiments/m3_strict_reduction/source/raster/research/m3_strict_reduction/generated/pointer.d experiments/m3_strict_reduction/source/raster/research/m3_strict_reduction/generated/pointer_dispatch.d experiments/m3_strict_reduction/source/raster/research/m3_strict_reduction/generated/slice.d experiments/m3_strict_reduction/source/raster/research/m3_strict_reduction/generated/slice_dispatch.d experiments/m3_strict_reduction/source/raster/research/m3_strict_reduction/harness.d -preview=dip1000 -c -of/root/.dub/cache/raster-m3-strict-reduction/~master/build/application-release-ULoyXZYxAvp0Y4W17224TQ/raster-m3-strict-reduction.o -vcolumns
+     Linking raster-m3-strict-reduction
+ldc2 -of/root/.dub/cache/raster-m3-strict-reduction/~master/build/application-release-ULoyXZYxAvp0Y4W17224TQ/raster-m3-strict-reduction /root/.dub/cache/raster-m3-strict-reduction/~master/build/application-release-ULoyXZYxAvp0Y4W17224TQ/raster-m3-strict-reduction.o experiments/m3_strict_reduction/cpp_reference.o /root/.dub/cache/raster-d/~develop/build/library-release-sBSV4-cEncWyQ9-_Jts9uA/libraster-d.a /root/.dub/cache/mir-algorithm/3.22.4/build/default-release-b_GP6ufajYjrRDzAruUNTQ/libmir-algorithm.a /root/.dub/cache/mir-core/1.7.4/build/library-release-AQbZ6oaDdsf1tyLrQxOpbw/libmir-core.a -L--no-as-needed
+Copying target from /root/.dub/cache/raster-m3-strict-reduction/~master/build/application-release-ULoyXZYxAvp0Y4W17224TQ/raster-m3-strict-reduction to /workspace/scratch/231248e26dd2/raster-d-research/experiments/m3_strict_reduction

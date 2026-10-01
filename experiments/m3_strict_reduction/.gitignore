@@ -1,0 +1,7 @@
+.dub/
+dub.selections.json
+raster-m3-strict-reduction
+raster-m3-strict-reduction-test-application
+cpp_reference.o
+source/raster/research/m3_strict_reduction/generated/
+__pycache__/
