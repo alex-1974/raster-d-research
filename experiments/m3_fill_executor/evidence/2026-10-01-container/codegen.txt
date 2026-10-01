@@ -1,0 +1,1088 @@
+DMD64 D Compiler v2.111.0
+Copyright (C) 1999-2025 by The D Language Foundation, All Rights Reserved written by Walter Bright
+=== dmd pointer isolated actual executor ===
+command: dmd -c -preview=dip1000 -O -release -inline pointer.d
+
+/tmp/tmp.QtZuRE9Cdt/pointer.o:     file format elf64-x86-64
+
+
+Disassembly of section .text.fillFloat:
+
+0000000000000000 <fillFloat>:
+   0:	48 83 ec 18          	sub    $0x18,%rsp
+   4:	48 89 5c 24 08       	mov    %rbx,0x8(%rsp)
+   9:	48 89 4c 24 10       	mov    %rcx,0x10(%rsp)
+   e:	49 89 f9             	mov    %rdi,%r9
+  11:	49 89 f3             	mov    %rsi,%r11
+  14:	49 89 d0             	mov    %rdx,%r8
+  17:	f3 0f 10 c8          	movss  %xmm0,%xmm1
+  1b:	48 8b 44 24 10       	mov    0x10(%rsp),%rax
+  20:	31 ff                	xor    %edi,%edi
+  22:	48 85 c0             	test   %rax,%rax
+  25:	74 37                	je     5e <fillFloat+0x5e>
+  27:	48 89 44 24 10       	mov    %rax,0x10(%rsp)
+  2c:	49 39 f8             	cmp    %rdi,%r8
+  2f:	0f 95 c3             	setne  %bl
+  32:	48 8b 44 24 10       	mov    0x10(%rsp),%rax
+  37:	48 8b cf             	mov    %rdi,%rcx
+  3a:	49 0f af cb          	imul   %r11,%rcx
+  3e:	49 8d 34 89          	lea    (%r9,%rcx,4),%rsi
+  42:	31 d2                	xor    %edx,%edx
+  44:	40 84 db             	rex test %bl,%bl
+  47:	74 0d                	je     56 <fillFloat+0x56>
+  49:	f3 0f 11 0c 96       	movss  %xmm1,(%rsi,%rdx,4)
+  4e:	48 ff c2             	inc    %rdx
+  51:	4c 39 c2             	cmp    %r8,%rdx
+  54:	72 f3                	jb     49 <fillFloat+0x49>
+  56:	48 ff c7             	inc    %rdi
+  59:	48 39 c7             	cmp    %rax,%rdi
+  5c:	72 d9                	jb     37 <fillFloat+0x37>
+  5e:	48 8b 5c 24 08       	mov    0x8(%rsp),%rbx
+  63:	48 83 c4 18          	add    $0x18,%rsp
+  67:	c3                   	ret
+
+Disassembly of section .text.fillByte:
+
+0000000000000000 <fillByte>:
+   0:	48 83 ec 18          	sub    $0x18,%rsp
+   4:	48 89 5c 24 08       	mov    %rbx,0x8(%rsp)
+   9:	48 89 4c 24 10       	mov    %rcx,0x10(%rsp)
+   e:	49 89 f3             	mov    %rsi,%r11
+  11:	49 89 d1             	mov    %rdx,%r9
+  14:	48 8b 44 24 10       	mov    0x10(%rsp),%rax
+  19:	31 c9                	xor    %ecx,%ecx
+  1b:	48 85 c0             	test   %rax,%rax
+  1e:	74 35                	je     55 <fillByte+0x55>
+  20:	48 89 44 24 10       	mov    %rax,0x10(%rsp)
+  25:	49 39 c9             	cmp    %rcx,%r9
+  28:	0f 95 c3             	setne  %bl
+  2b:	48 8b 44 24 10       	mov    0x10(%rsp),%rax
+  30:	48 8b d1             	mov    %rcx,%rdx
+  33:	49 0f af d3          	imul   %r11,%rdx
+  37:	48 03 d7             	add    %rdi,%rdx
+  3a:	31 f6                	xor    %esi,%esi
+  3c:	40 84 db             	rex test %bl,%bl
+  3f:	74 0c                	je     4d <fillByte+0x4d>
+  41:	44 88 04 16          	mov    %r8b,(%rsi,%rdx,1)
+  45:	48 ff c6             	inc    %rsi
+  48:	4c 39 ce             	cmp    %r9,%rsi
+  4b:	72 f4                	jb     41 <fillByte+0x41>
+  4d:	48 ff c1             	inc    %rcx
+  50:	48 39 c1             	cmp    %rax,%rcx
+  53:	72 db                	jb     30 <fillByte+0x30>
+  55:	48 8b 5c 24 08       	mov    0x8(%rsp),%rbx
+  5a:	48 83 c4 18          	add    $0x18,%rsp
+  5e:	c3                   	ret
+	...
+
+Disassembly of section .text._D5probe__T7executeTfZQlFNaNbNiNeMPflmmfZv:
+
+0000000000000000 <_D5probe__T7executeTfZQlFNaNbNiNeMPflmmfZv>:
+   0:	48 83 ec 18          	sub    $0x18,%rsp
+   4:	48 89 5c 24 08       	mov    %rbx,0x8(%rsp)
+   9:	48 89 7c 24 10       	mov    %rdi,0x10(%rsp)
+   e:	f3 0f 10 c8          	movss  %xmm0,%xmm1
+  12:	49 89 f0             	mov    %rsi,%r8
+  15:	49 89 d1             	mov    %rdx,%r9
+  18:	49 89 cb             	mov    %rcx,%r11
+  1b:	48 8b 44 24 10       	mov    0x10(%rsp),%rax
+  20:	31 ff                	xor    %edi,%edi
+  22:	48 85 c0             	test   %rax,%rax
+  25:	74 37                	je     5e <_D5probe__T7executeTfZQlFNaNbNiNeMPflmmfZv+0x5e>
+  27:	48 89 44 24 10       	mov    %rax,0x10(%rsp)
+  2c:	49 39 f8             	cmp    %rdi,%r8
+  2f:	0f 95 c3             	setne  %bl
+  32:	48 8b 44 24 10       	mov    0x10(%rsp),%rax
+  37:	48 8b cf             	mov    %rdi,%rcx
+  3a:	49 0f af c9          	imul   %r9,%rcx
+  3e:	49 8d 34 8b          	lea    (%r11,%rcx,4),%rsi
+  42:	31 d2                	xor    %edx,%edx
+  44:	40 84 db             	rex test %bl,%bl
+  47:	74 0d                	je     56 <_D5probe__T7executeTfZQlFNaNbNiNeMPflmmfZv+0x56>
+  49:	f3 0f 11 0c 96       	movss  %xmm1,(%rsi,%rdx,4)
+  4e:	48 ff c2             	inc    %rdx
+  51:	4c 39 c2             	cmp    %r8,%rdx
+  54:	72 f3                	jb     49 <_D5probe__T7executeTfZQlFNaNbNiNeMPflmmfZv+0x49>
+  56:	48 ff c7             	inc    %rdi
+  59:	48 39 c7             	cmp    %rax,%rdi
+  5c:	72 d9                	jb     37 <_D5probe__T7executeTfZQlFNaNbNiNeMPflmmfZv+0x37>
+  5e:	48 8b 5c 24 08       	mov    0x8(%rsp),%rbx
+  63:	48 83 c4 18          	add    $0x18,%rsp
+  67:	c3                   	ret
+
+Disassembly of section .text._D5probe__T7executeThZQlFNaNbNiNeMPhlmmhZv:
+
+0000000000000000 <_D5probe__T7executeThZQlFNaNbNiNeMPhlmmhZv>:
+   0:	48 83 ec 18          	sub    $0x18,%rsp
+   4:	48 89 5c 24 08       	mov    %rbx,0x8(%rsp)
+   9:	48 89 74 24 10       	mov    %rsi,0x10(%rsp)
+   e:	49 89 d1             	mov    %rdx,%r9
+  11:	49 89 cb             	mov    %rcx,%r11
+  14:	48 8b 44 24 10       	mov    0x10(%rsp),%rax
+  19:	31 c9                	xor    %ecx,%ecx
+  1b:	48 85 c0             	test   %rax,%rax
+  1e:	74 35                	je     55 <_D5probe__T7executeThZQlFNaNbNiNeMPhlmmhZv+0x55>
+  20:	48 89 44 24 10       	mov    %rax,0x10(%rsp)
+  25:	49 39 c9             	cmp    %rcx,%r9
+  28:	0f 95 c3             	setne  %bl
+  2b:	48 8b 44 24 10       	mov    0x10(%rsp),%rax
+  30:	48 8b d1             	mov    %rcx,%rdx
+  33:	49 0f af d3          	imul   %r11,%rdx
+  37:	49 03 d0             	add    %r8,%rdx
+  3a:	31 f6                	xor    %esi,%esi
+  3c:	40 84 db             	rex test %bl,%bl
+  3f:	74 0c                	je     4d <_D5probe__T7executeThZQlFNaNbNiNeMPhlmmhZv+0x4d>
+  41:	40 88 3c 16          	mov    %dil,(%rsi,%rdx,1)
+  45:	48 ff c6             	inc    %rsi
+  48:	4c 39 ce             	cmp    %r9,%rsi
+  4b:	72 f4                	jb     41 <_D5probe__T7executeThZQlFNaNbNiNeMPhlmmhZv+0x41>
+  4d:	48 ff c1             	inc    %rcx
+  50:	48 39 c1             	cmp    %rax,%rcx
+  53:	72 db                	jb     30 <_D5probe__T7executeThZQlFNaNbNiNeMPhlmmhZv+0x30>
+  55:	48 8b 5c 24 08       	mov    0x8(%rsp),%rbx
+  5a:	48 83 c4 18          	add    $0x18,%rsp
+  5e:	c3                   	ret
+	...
+
+Disassembly of section .text.d_dso_init:
+
+0000000000000000 <.text.d_dso_init>:
+   0:	55                   	push   %rbp
+   1:	48 8b ec             	mov    %rsp,%rbp
+   4:	48 8d 05 00 00 00 00 	lea    0x0(%rip),%rax        # b <.text.d_dso_init+0xb>
+			7: R_X86_64_PC32	__stop_minfo-0x4
+   b:	50                   	push   %rax
+   c:	48 8d 05 00 00 00 00 	lea    0x0(%rip),%rax        # 13 <.text.d_dso_init+0x13>
+			f: R_X86_64_PC32	__start_minfo-0x4
+  13:	50                   	push   %rax
+  14:	48 8d 05 00 00 00 00 	lea    0x0(%rip),%rax        # 1b <.text.d_dso_init+0x1b>
+			17: R_X86_64_PC32	.data.d_dso_rec-0x4
+  1b:	50                   	push   %rax
+  1c:	6a 01                	push   $0x1
+  1e:	48 8b fc             	mov    %rsp,%rdi
+  21:	e8 00 00 00 00       	call   26 <.text.d_dso_init+0x26>
+			22: R_X86_64_PLT32	_d_dso_registry-0x4
+  26:	c9                   	leave
+  27:	c3                   	ret
+=== dmd slice isolated actual executor ===
+command: dmd -c -preview=dip1000 -O -release -inline slice.d
+
+/tmp/tmp.QtZuRE9Cdt/slice.o:     file format elf64-x86-64
+
+
+Disassembly of section .text.fillFloat:
+
+0000000000000000 <fillFloat>:
+   0:	55                   	push   %rbp
+   1:	48 8b ec             	mov    %rsp,%rbp
+   4:	48 83 ec 40          	sub    $0x40,%rsp
+   8:	48 89 5d c8          	mov    %rbx,-0x38(%rbp)
+   c:	4c 89 65 d0          	mov    %r12,-0x30(%rbp)
+  10:	4c 89 6d d8          	mov    %r13,-0x28(%rbp)
+  14:	4c 89 75 e0          	mov    %r14,-0x20(%rbp)
+  18:	4c 89 7d e8          	mov    %r15,-0x18(%rbp)
+  1c:	48 89 55 f0          	mov    %rdx,-0x10(%rbp)
+  20:	f3 0f 11 45 f8       	movss  %xmm0,-0x8(%rbp)
+  25:	49 89 fd             	mov    %rdi,%r13
+  28:	49 89 f6             	mov    %rsi,%r14
+  2b:	49 89 cf             	mov    %rcx,%r15
+  2e:	31 db                	xor    %ebx,%ebx
+  30:	4d 85 ff             	test   %r15,%r15
+  33:	74 25                	je     5a <fillFloat+0x5a>
+  35:	48 8b c3             	mov    %rbx,%rax
+  38:	49 0f af c6          	imul   %r14,%rax
+  3c:	4d 8d 64 85 00       	lea    0x0(%r13,%rax,4),%r12
+  41:	48 8b 75 f0          	mov    -0x10(%rbp),%rsi
+  45:	f3 0f 10 45 f8       	movss  -0x8(%rbp),%xmm0
+  4a:	49 8b fc             	mov    %r12,%rdi
+  4d:	e8 00 00 00 00       	call   52 <fillFloat+0x52>
+			4e: R_X86_64_PLT32	_memsetFloat-0x4
+  52:	48 ff c3             	inc    %rbx
+  55:	4c 39 fb             	cmp    %r15,%rbx
+  58:	72 db                	jb     35 <fillFloat+0x35>
+  5a:	48 8b 5d c8          	mov    -0x38(%rbp),%rbx
+  5e:	4c 8b 65 d0          	mov    -0x30(%rbp),%r12
+  62:	4c 8b 6d d8          	mov    -0x28(%rbp),%r13
+  66:	4c 8b 75 e0          	mov    -0x20(%rbp),%r14
+  6a:	4c 8b 7d e8          	mov    -0x18(%rbp),%r15
+  6e:	48 8b e5             	mov    %rbp,%rsp
+  71:	5d                   	pop    %rbp
+  72:	c3                   	ret
+	...
+
+Disassembly of section .text.fillByte:
+
+0000000000000000 <fillByte>:
+   0:	53                   	push   %rbx
+   1:	41 54                	push   %r12
+   3:	41 55                	push   %r13
+   5:	49 89 f9             	mov    %rdi,%r9
+   8:	49 89 f3             	mov    %rsi,%r11
+   b:	49 89 d4             	mov    %rdx,%r12
+   e:	48 89 cb             	mov    %rcx,%rbx
+  11:	4d 89 c5             	mov    %r8,%r13
+  14:	31 f6                	xor    %esi,%esi
+  16:	48 85 db             	test   %rbx,%rbx
+  19:	74 45                	je     60 <fillByte+0x60>
+  1b:	4c 8b c6             	mov    %rsi,%r8
+  1e:	4d 0f af c3          	imul   %r11,%r8
+  22:	4d 03 c1             	add    %r9,%r8
+  25:	49 8b cc             	mov    %r12,%rcx
+  28:	41 8a c5             	mov    %r13b,%al
+  2b:	0f b6 c0             	movzbl %al,%eax
+  2e:	48 ba 01 01 01 01 01 	movabs $0x101010101010101,%rdx
+  35:	01 01 01 
+  38:	48 0f af c2          	imul   %rdx,%rax
+  3c:	49 8b f8             	mov    %r8,%rdi
+  3f:	41 89 ca             	mov    %ecx,%r10d
+  42:	48 c1 e9 03          	shr    $0x3,%rcx
+  46:	f3 48 ab             	rep stos %rax,%es:(%rdi)
+  49:	11 c9                	adc    %ecx,%ecx
+  4b:	f3 ab                	rep stos %eax,%es:(%rdi)
+  4d:	44 89 d1             	mov    %r10d,%ecx
+  50:	81 e1 03 00 00 00    	and    $0x3,%ecx
+  56:	f3 aa                	rep stos %al,%es:(%rdi)
+  58:	48 ff c6             	inc    %rsi
+  5b:	48 39 de             	cmp    %rbx,%rsi
+  5e:	72 bb                	jb     1b <fillByte+0x1b>
+  60:	41 5d                	pop    %r13
+  62:	41 5c                	pop    %r12
+  64:	5b                   	pop    %rbx
+  65:	c3                   	ret
+	...
+
+Disassembly of section .text._D5probe__T7executeTfZQlFNaNbNiNfMPflmmfZv:
+
+0000000000000000 <_D5probe__T7executeTfZQlFNaNbNiNfMPflmmfZv>:
+   0:	55                   	push   %rbp
+   1:	48 8b ec             	mov    %rsp,%rbp
+   4:	48 83 ec 40          	sub    $0x40,%rsp
+   8:	48 89 5d c8          	mov    %rbx,-0x38(%rbp)
+   c:	4c 89 65 d0          	mov    %r12,-0x30(%rbp)
+  10:	4c 89 6d d8          	mov    %r13,-0x28(%rbp)
+  14:	4c 89 75 e0          	mov    %r14,-0x20(%rbp)
+  18:	4c 89 7d e8          	mov    %r15,-0x18(%rbp)
+  1c:	f3 0f 11 45 f0       	movss  %xmm0,-0x10(%rbp)
+  21:	48 89 75 f8          	mov    %rsi,-0x8(%rbp)
+  25:	49 89 ff             	mov    %rdi,%r15
+  28:	49 89 d5             	mov    %rdx,%r13
+  2b:	49 89 ce             	mov    %rcx,%r14
+  2e:	31 db                	xor    %ebx,%ebx
+  30:	4d 85 ff             	test   %r15,%r15
+  33:	74 24                	je     59 <_D5probe__T7executeTfZQlFNaNbNiNfMPflmmfZv+0x59>
+  35:	48 8b c3             	mov    %rbx,%rax
+  38:	49 0f af c5          	imul   %r13,%rax
+  3c:	4d 8d 24 86          	lea    (%r14,%rax,4),%r12
+  40:	48 8b 75 f8          	mov    -0x8(%rbp),%rsi
+  44:	f3 0f 10 45 f0       	movss  -0x10(%rbp),%xmm0
+  49:	49 8b fc             	mov    %r12,%rdi
+  4c:	e8 00 00 00 00       	call   51 <_D5probe__T7executeTfZQlFNaNbNiNfMPflmmfZv+0x51>
+			4d: R_X86_64_PLT32	_memsetFloat-0x4
+  51:	48 ff c3             	inc    %rbx
+  54:	4c 39 fb             	cmp    %r15,%rbx
+  57:	72 dc                	jb     35 <_D5probe__T7executeTfZQlFNaNbNiNfMPflmmfZv+0x35>
+  59:	48 8b 5d c8          	mov    -0x38(%rbp),%rbx
+  5d:	4c 8b 65 d0          	mov    -0x30(%rbp),%r12
+  61:	4c 8b 6d d8          	mov    -0x28(%rbp),%r13
+  65:	4c 8b 75 e0          	mov    -0x20(%rbp),%r14
+  69:	4c 8b 7d e8          	mov    -0x18(%rbp),%r15
+  6d:	48 8b e5             	mov    %rbp,%rsp
+  70:	5d                   	pop    %rbp
+  71:	c3                   	ret
+	...
+
+Disassembly of section .text._D5probe__T8writeRowTfZQmFNaNbNiNeNkMPfmlmZAf:
+
+0000000000000000 <_D5probe__T8writeRowTfZQmFNaNbNiNeNkMPfmlmZAf>:
+   0:	50                   	push   %rax
+   1:	48 89 14 24          	mov    %rdx,(%rsp)
+   5:	48 8b c7             	mov    %rdi,%rax
+   8:	4c 8b 04 24          	mov    (%rsp),%r8
+   c:	4c 0f af c6          	imul   %rsi,%r8
+  10:	4a 8d 14 81          	lea    (%rcx,%r8,4),%rdx
+  14:	59                   	pop    %rcx
+  15:	c3                   	ret
+	...
+
+Disassembly of section .text._D5probe__T7executeThZQlFNaNbNiNfMPhlmmhZv:
+
+0000000000000000 <_D5probe__T7executeThZQlFNaNbNiNfMPhlmmhZv>:
+   0:	53                   	push   %rbx
+   1:	41 54                	push   %r12
+   3:	41 55                	push   %r13
+   5:	49 89 fc             	mov    %rdi,%r12
+   8:	48 89 f3             	mov    %rsi,%rbx
+   b:	49 89 d5             	mov    %rdx,%r13
+   e:	49 89 c9             	mov    %rcx,%r9
+  11:	4d 89 c3             	mov    %r8,%r11
+  14:	31 f6                	xor    %esi,%esi
+  16:	48 85 db             	test   %rbx,%rbx
+  19:	74 45                	je     60 <_D5probe__T7executeThZQlFNaNbNiNfMPhlmmhZv+0x60>
+  1b:	4c 8b c6             	mov    %rsi,%r8
+  1e:	4d 0f af c1          	imul   %r9,%r8
+  22:	4d 03 c3             	add    %r11,%r8
+  25:	49 8b cd             	mov    %r13,%rcx
+  28:	41 8a c4             	mov    %r12b,%al
+  2b:	0f b6 c0             	movzbl %al,%eax
+  2e:	48 ba 01 01 01 01 01 	movabs $0x101010101010101,%rdx
+  35:	01 01 01 
+  38:	48 0f af c2          	imul   %rdx,%rax
+  3c:	49 8b f8             	mov    %r8,%rdi
+  3f:	41 89 ca             	mov    %ecx,%r10d
+  42:	48 c1 e9 03          	shr    $0x3,%rcx
+  46:	f3 48 ab             	rep stos %rax,%es:(%rdi)
+  49:	11 c9                	adc    %ecx,%ecx
+  4b:	f3 ab                	rep stos %eax,%es:(%rdi)
+  4d:	44 89 d1             	mov    %r10d,%ecx
+  50:	81 e1 03 00 00 00    	and    $0x3,%ecx
+  56:	f3 aa                	rep stos %al,%es:(%rdi)
+  58:	48 ff c6             	inc    %rsi
+  5b:	48 39 de             	cmp    %rbx,%rsi
+  5e:	72 bb                	jb     1b <_D5probe__T7executeThZQlFNaNbNiNfMPhlmmhZv+0x1b>
+  60:	41 5d                	pop    %r13
+  62:	41 5c                	pop    %r12
+  64:	5b                   	pop    %rbx
+  65:	c3                   	ret
+	...
+
+Disassembly of section .text._D5probe__T8writeRowThZQmFNaNbNiNeNkMPhmlmZAh:
+
+0000000000000000 <_D5probe__T8writeRowThZQmFNaNbNiNeNkMPhmlmZAh>:
+   0:	50                   	push   %rax
+   1:	48 89 14 24          	mov    %rdx,(%rsp)
+   5:	48 8b c7             	mov    %rdi,%rax
+   8:	48 8b 14 24          	mov    (%rsp),%rdx
+   c:	48 0f af d6          	imul   %rsi,%rdx
+  10:	48 03 d1             	add    %rcx,%rdx
+  13:	59                   	pop    %rcx
+  14:	c3                   	ret
+  15:	00 00                	add    %al,(%rax)
+	...
+
+Disassembly of section .text.d_dso_init:
+
+0000000000000000 <.text.d_dso_init>:
+   0:	55                   	push   %rbp
+   1:	48 8b ec             	mov    %rsp,%rbp
+   4:	48 8d 05 00 00 00 00 	lea    0x0(%rip),%rax        # b <.text.d_dso_init+0xb>
+			7: R_X86_64_PC32	__stop_minfo-0x4
+   b:	50                   	push   %rax
+   c:	48 8d 05 00 00 00 00 	lea    0x0(%rip),%rax        # 13 <.text.d_dso_init+0x13>
+			f: R_X86_64_PC32	__start_minfo-0x4
+  13:	50                   	push   %rax
+  14:	48 8d 05 00 00 00 00 	lea    0x0(%rip),%rax        # 1b <.text.d_dso_init+0x1b>
+			17: R_X86_64_PC32	.data.d_dso_rec-0x4
+  1b:	50                   	push   %rax
+  1c:	6a 01                	push   $0x1
+  1e:	48 8b fc             	mov    %rsp,%rdi
+  21:	e8 00 00 00 00       	call   26 <.text.d_dso_init+0x26>
+			22: R_X86_64_PLT32	_d_dso_registry-0x4
+  26:	c9                   	leave
+  27:	c3                   	ret
+LDC - the LLVM D compiler (1.41.0):
+  based on DMD v2.111.0 and LLVM 20.1.5
+  built with LDC - the LLVM D compiler (1.41.0)
+  Default target: x86_64-unknown-linux-gnu
+  Host CPU: znver4
+  http://dlang.org - http://wiki.dlang.org/LDC
+
+
+  Registered Targets:
+    aarch64     - AArch64 (little endian)
+    aarch64_32  - AArch64 (little endian ILP32)
+    aarch64_be  - AArch64 (big endian)
+    amdgcn      - AMD GCN GPUs
+    arm         - ARM
+    arm64       - ARM64 (little endian)
+    arm64_32    - ARM64 (little endian ILP32)
+    armeb       - ARM (big endian)
+    avr         - Atmel AVR Microcontroller
+    bpf         - BPF (host endian)
+    bpfeb       - BPF (big endian)
+    bpfel       - BPF (little endian)
+    hexagon     - Hexagon
+    lanai       - Lanai
+    loongarch32 - 32-bit LoongArch
+    loongarch64 - 64-bit LoongArch
+    mips        - MIPS (32-bit big endian)
+    mips64      - MIPS (64-bit big endian)
+    mips64el    - MIPS (64-bit little endian)
+    mipsel      - MIPS (32-bit little endian)
+    msp430      - MSP430 [experimental]
+    nvptx       - NVIDIA PTX 32-bit
+    nvptx64     - NVIDIA PTX 64-bit
+    ppc32       - PowerPC 32
+    ppc32le     - PowerPC 32 LE
+    ppc64       - PowerPC 64
+    ppc64le     - PowerPC 64 LE
+    r600        - AMD GPUs HD2XXX-HD6XXX
+    riscv32     - 32-bit RISC-V
+    riscv64     - 64-bit RISC-V
+    sparc       - Sparc
+    sparcel     - Sparc LE
+    sparcv9     - Sparc V9
+    spirv       - SPIR-V Logical
+    spirv32     - SPIR-V 32-bit
+    spirv64     - SPIR-V 64-bit
+    systemz     - SystemZ
+    thumb       - Thumb
+    thumbeb     - Thumb (big endian)
+    ve          - VE
+    wasm32      - WebAssembly 32-bit
+    wasm64      - WebAssembly 64-bit
+    x86         - 32-bit X86: Pentium-Pro and above
+    x86-64      - 64-bit X86: EM64T and AMD64
+    xcore       - XCore
+    xtensa      - Xtensa 32
+=== ldc2 pointer isolated actual executor ===
+command: ldc2 -c -preview=dip1000 -O3 -release pointer.d
+
+/tmp/tmp.QtZuRE9Cdt/pointer.o:     file format elf64-x86-64
+
+
+Disassembly of section .text.fillFloat:
+
+0000000000000000 <fillFloat>:
+   0:	48 85 c9             	test   %rcx,%rcx
+   3:	0f 94 c0             	sete   %al
+   6:	48 85 d2             	test   %rdx,%rdx
+   9:	41 0f 94 c0          	sete   %r8b
+   d:	41 08 c0             	or     %al,%r8b
+  10:	74 01                	je     13 <fillFloat+0x13>
+  12:	c3                   	ret
+  13:	48 89 d0             	mov    %rdx,%rax
+  16:	48 83 e0 f8          	and    $0xfffffffffffffff8,%rax
+  1a:	0f 28 c8             	movaps %xmm0,%xmm1
+  1d:	0f c6 c8 00          	shufps $0x0,%xmm0,%xmm1
+  21:	4c 8d 47 10          	lea    0x10(%rdi),%r8
+  25:	48 c1 e6 02          	shl    $0x2,%rsi
+  29:	45 31 c9             	xor    %r9d,%r9d
+  2c:	eb 10                	jmp    3e <fillFloat+0x3e>
+  2e:	66 90                	xchg   %ax,%ax
+  30:	49 ff c1             	inc    %r9
+  33:	49 01 f0             	add    %rsi,%r8
+  36:	48 01 f7             	add    %rsi,%rdi
+  39:	49 39 c9             	cmp    %rcx,%r9
+  3c:	74 d4                	je     12 <fillFloat+0x12>
+  3e:	45 31 d2             	xor    %r10d,%r10d
+  41:	48 83 fa 08          	cmp    $0x8,%rdx
+  45:	72 29                	jb     70 <fillFloat+0x70>
+  47:	66 0f 1f 84 00 00 00 	nopw   0x0(%rax,%rax,1)
+  4e:	00 00 
+  50:	43 0f 11 4c 90 f0    	movups %xmm1,-0x10(%r8,%r10,4)
+  56:	43 0f 11 0c 90       	movups %xmm1,(%r8,%r10,4)
+  5b:	49 83 c2 08          	add    $0x8,%r10
+  5f:	4c 39 d0             	cmp    %r10,%rax
+  62:	75 ec                	jne    50 <fillFloat+0x50>
+  64:	49 89 c2             	mov    %rax,%r10
+  67:	48 39 c2             	cmp    %rax,%rdx
+  6a:	74 c4                	je     30 <fillFloat+0x30>
+  6c:	0f 1f 40 00          	nopl   0x0(%rax)
+  70:	f3 42 0f 11 04 97    	movss  %xmm0,(%rdi,%r10,4)
+  76:	49 ff c2             	inc    %r10
+  79:	4c 39 d2             	cmp    %r10,%rdx
+  7c:	75 f2                	jne    70 <fillFloat+0x70>
+  7e:	eb b0                	jmp    30 <fillFloat+0x30>
+
+Disassembly of section .text._D5probe__T7executeTfZQlFNaNbNiNeMPflmmfZv:
+
+0000000000000000 <_D5probe__T7executeTfZQlFNaNbNiNeMPflmmfZv>:
+   0:	48 85 c9             	test   %rcx,%rcx
+   3:	0f 94 c0             	sete   %al
+   6:	48 85 d2             	test   %rdx,%rdx
+   9:	41 0f 94 c0          	sete   %r8b
+   d:	41 08 c0             	or     %al,%r8b
+  10:	74 01                	je     13 <_D5probe__T7executeTfZQlFNaNbNiNeMPflmmfZv+0x13>
+  12:	c3                   	ret
+  13:	48 89 d0             	mov    %rdx,%rax
+  16:	48 83 e0 f8          	and    $0xfffffffffffffff8,%rax
+  1a:	0f 28 c8             	movaps %xmm0,%xmm1
+  1d:	0f c6 c8 00          	shufps $0x0,%xmm0,%xmm1
+  21:	4c 8d 47 10          	lea    0x10(%rdi),%r8
+  25:	48 c1 e6 02          	shl    $0x2,%rsi
+  29:	45 31 c9             	xor    %r9d,%r9d
+  2c:	eb 10                	jmp    3e <_D5probe__T7executeTfZQlFNaNbNiNeMPflmmfZv+0x3e>
+  2e:	66 90                	xchg   %ax,%ax
+  30:	49 ff c1             	inc    %r9
+  33:	49 01 f0             	add    %rsi,%r8
+  36:	48 01 f7             	add    %rsi,%rdi
+  39:	49 39 c9             	cmp    %rcx,%r9
+  3c:	74 d4                	je     12 <_D5probe__T7executeTfZQlFNaNbNiNeMPflmmfZv+0x12>
+  3e:	45 31 d2             	xor    %r10d,%r10d
+  41:	48 83 fa 08          	cmp    $0x8,%rdx
+  45:	72 29                	jb     70 <_D5probe__T7executeTfZQlFNaNbNiNeMPflmmfZv+0x70>
+  47:	66 0f 1f 84 00 00 00 	nopw   0x0(%rax,%rax,1)
+  4e:	00 00 
+  50:	43 0f 11 4c 90 f0    	movups %xmm1,-0x10(%r8,%r10,4)
+  56:	43 0f 11 0c 90       	movups %xmm1,(%r8,%r10,4)
+  5b:	49 83 c2 08          	add    $0x8,%r10
+  5f:	4c 39 d0             	cmp    %r10,%rax
+  62:	75 ec                	jne    50 <_D5probe__T7executeTfZQlFNaNbNiNeMPflmmfZv+0x50>
+  64:	49 89 c2             	mov    %rax,%r10
+  67:	48 39 c2             	cmp    %rax,%rdx
+  6a:	74 c4                	je     30 <_D5probe__T7executeTfZQlFNaNbNiNeMPflmmfZv+0x30>
+  6c:	0f 1f 40 00          	nopl   0x0(%rax)
+  70:	f3 42 0f 11 04 97    	movss  %xmm0,(%rdi,%r10,4)
+  76:	49 ff c2             	inc    %r10
+  79:	4c 39 d2             	cmp    %r10,%rdx
+  7c:	75 f2                	jne    70 <_D5probe__T7executeTfZQlFNaNbNiNeMPflmmfZv+0x70>
+  7e:	eb b0                	jmp    30 <_D5probe__T7executeTfZQlFNaNbNiNeMPflmmfZv+0x30>
+
+Disassembly of section .text.fillByte:
+
+0000000000000000 <fillByte>:
+   0:	55                   	push   %rbp
+   1:	41 57                	push   %r15
+   3:	41 56                	push   %r14
+   5:	41 55                	push   %r13
+   7:	41 54                	push   %r12
+   9:	53                   	push   %rbx
+   a:	48 83 ec 28          	sub    $0x28,%rsp
+   e:	48 89 4c 24 08       	mov    %rcx,0x8(%rsp)
+  13:	48 85 c9             	test   %rcx,%rcx
+  16:	0f 94 c0             	sete   %al
+  19:	48 85 d2             	test   %rdx,%rdx
+  1c:	0f 94 c1             	sete   %cl
+  1f:	08 c1                	or     %al,%cl
+  21:	0f 85 1e 01 00 00    	jne    145 <fillByte+0x145>
+  27:	48 89 d3             	mov    %rdx,%rbx
+  2a:	48 8b 4c 24 08       	mov    0x8(%rsp),%rcx
+  2f:	48 8d 41 ff          	lea    -0x1(%rcx),%rax
+  33:	83 e1 07             	and    $0x7,%ecx
+  36:	48 89 4c 24 10       	mov    %rcx,0x10(%rsp)
+  3b:	41 0f b6 e8          	movzbl %r8b,%ebp
+  3f:	48 83 f8 07          	cmp    $0x7,%rax
+  43:	48 89 7c 24 18       	mov    %rdi,0x18(%rsp)
+  48:	73 0b                	jae    55 <fillByte+0x55>
+  4a:	45 31 f6             	xor    %r14d,%r14d
+  4d:	49 89 f7             	mov    %rsi,%r15
+  50:	e9 bd 00 00 00       	jmp    112 <fillByte+0x112>
+  55:	48 83 64 24 08 f8    	andq   $0xfffffffffffffff8,0x8(%rsp)
+  5b:	48 8d 04 f5 00 00 00 	lea    0x0(,%rsi,8),%rax
+  62:	00 
+  63:	48 89 44 24 20       	mov    %rax,0x20(%rsp)
+  68:	45 31 f6             	xor    %r14d,%r14d
+  6b:	49 89 f7             	mov    %rsi,%r15
+  6e:	49 89 fd             	mov    %rdi,%r13
+  71:	66 66 66 66 66 66 2e 	data16 data16 data16 data16 data16 cs nopw 0x0(%rax,%rax,1)
+  78:	0f 1f 84 00 00 00 00 
+  7f:	00 
+  80:	4c 89 ef             	mov    %r13,%rdi
+  83:	89 ee                	mov    %ebp,%esi
+  85:	48 89 da             	mov    %rbx,%rdx
+  88:	e8 00 00 00 00       	call   8d <fillByte+0x8d>
+			89: R_X86_64_PLT32	memset-0x4
+  8d:	4f 8d 24 2f          	lea    (%r15,%r13,1),%r12
+  91:	4c 89 e7             	mov    %r12,%rdi
+  94:	89 ee                	mov    %ebp,%esi
+  96:	48 89 da             	mov    %rbx,%rdx
+  99:	e8 00 00 00 00       	call   9e <fillByte+0x9e>
+			9a: R_X86_64_PLT32	memset-0x4
+  9e:	4d 01 fc             	add    %r15,%r12
+  a1:	4c 89 e7             	mov    %r12,%rdi
+  a4:	89 ee                	mov    %ebp,%esi
+  a6:	48 89 da             	mov    %rbx,%rdx
+  a9:	e8 00 00 00 00       	call   ae <fillByte+0xae>
+			aa: R_X86_64_PLT32	memset-0x4
+  ae:	4d 01 fc             	add    %r15,%r12
+  b1:	4c 89 e7             	mov    %r12,%rdi
+  b4:	89 ee                	mov    %ebp,%esi
+  b6:	48 89 da             	mov    %rbx,%rdx
+  b9:	e8 00 00 00 00       	call   be <fillByte+0xbe>
+			ba: R_X86_64_PLT32	memset-0x4
+  be:	4d 01 fc             	add    %r15,%r12
+  c1:	4c 89 e7             	mov    %r12,%rdi
+  c4:	89 ee                	mov    %ebp,%esi
+  c6:	48 89 da             	mov    %rbx,%rdx
+  c9:	e8 00 00 00 00       	call   ce <fillByte+0xce>
+			ca: R_X86_64_PLT32	memset-0x4
+  ce:	4d 01 fc             	add    %r15,%r12
+  d1:	4c 89 e7             	mov    %r12,%rdi
+  d4:	89 ee                	mov    %ebp,%esi
+  d6:	48 89 da             	mov    %rbx,%rdx
+  d9:	e8 00 00 00 00       	call   de <fillByte+0xde>
+			da: R_X86_64_PLT32	memset-0x4
+  de:	4d 01 fc             	add    %r15,%r12
+  e1:	4c 89 e7             	mov    %r12,%rdi
+  e4:	89 ee                	mov    %ebp,%esi
+  e6:	48 89 da             	mov    %rbx,%rdx
+  e9:	e8 00 00 00 00       	call   ee <fillByte+0xee>
+			ea: R_X86_64_PLT32	memset-0x4
+  ee:	4d 01 fc             	add    %r15,%r12
+  f1:	4c 89 e7             	mov    %r12,%rdi
+  f4:	89 ee                	mov    %ebp,%esi
+  f6:	48 89 da             	mov    %rbx,%rdx
+  f9:	e8 00 00 00 00       	call   fe <fillByte+0xfe>
+			fa: R_X86_64_PLT32	memset-0x4
+  fe:	49 83 c6 08          	add    $0x8,%r14
+ 102:	4c 03 6c 24 20       	add    0x20(%rsp),%r13
+ 107:	4c 39 74 24 08       	cmp    %r14,0x8(%rsp)
+ 10c:	0f 85 6e ff ff ff    	jne    80 <fillByte+0x80>
+ 112:	4c 8b 6c 24 10       	mov    0x10(%rsp),%r13
+ 117:	4d 85 ed             	test   %r13,%r13
+ 11a:	4c 8b 64 24 18       	mov    0x18(%rsp),%r12
+ 11f:	74 24                	je     145 <fillByte+0x145>
+ 121:	4d 0f af f7          	imul   %r15,%r14
+ 125:	4d 01 f4             	add    %r14,%r12
+ 128:	0f 1f 84 00 00 00 00 	nopl   0x0(%rax,%rax,1)
+ 12f:	00 
+ 130:	4c 89 e7             	mov    %r12,%rdi
+ 133:	89 ee                	mov    %ebp,%esi
+ 135:	48 89 da             	mov    %rbx,%rdx
+ 138:	e8 00 00 00 00       	call   13d <fillByte+0x13d>
+			139: R_X86_64_PLT32	memset-0x4
+ 13d:	4d 01 fc             	add    %r15,%r12
+ 140:	49 ff cd             	dec    %r13
+ 143:	75 eb                	jne    130 <fillByte+0x130>
+ 145:	48 83 c4 28          	add    $0x28,%rsp
+ 149:	5b                   	pop    %rbx
+ 14a:	41 5c                	pop    %r12
+ 14c:	41 5d                	pop    %r13
+ 14e:	41 5e                	pop    %r14
+ 150:	41 5f                	pop    %r15
+ 152:	5d                   	pop    %rbp
+ 153:	c3                   	ret
+
+Disassembly of section .text._D5probe__T7executeThZQlFNaNbNiNeMPhlmmhZv:
+
+0000000000000000 <_D5probe__T7executeThZQlFNaNbNiNeMPhlmmhZv>:
+   0:	55                   	push   %rbp
+   1:	41 57                	push   %r15
+   3:	41 56                	push   %r14
+   5:	41 55                	push   %r13
+   7:	41 54                	push   %r12
+   9:	53                   	push   %rbx
+   a:	48 83 ec 28          	sub    $0x28,%rsp
+   e:	48 89 4c 24 08       	mov    %rcx,0x8(%rsp)
+  13:	48 85 c9             	test   %rcx,%rcx
+  16:	0f 94 c0             	sete   %al
+  19:	48 85 d2             	test   %rdx,%rdx
+  1c:	0f 94 c1             	sete   %cl
+  1f:	08 c1                	or     %al,%cl
+  21:	0f 85 1e 01 00 00    	jne    145 <_D5probe__T7executeThZQlFNaNbNiNeMPhlmmhZv+0x145>
+  27:	48 89 d3             	mov    %rdx,%rbx
+  2a:	48 8b 4c 24 08       	mov    0x8(%rsp),%rcx
+  2f:	48 8d 41 ff          	lea    -0x1(%rcx),%rax
+  33:	83 e1 07             	and    $0x7,%ecx
+  36:	48 89 4c 24 10       	mov    %rcx,0x10(%rsp)
+  3b:	41 0f b6 e8          	movzbl %r8b,%ebp
+  3f:	48 83 f8 07          	cmp    $0x7,%rax
+  43:	48 89 7c 24 18       	mov    %rdi,0x18(%rsp)
+  48:	73 0b                	jae    55 <_D5probe__T7executeThZQlFNaNbNiNeMPhlmmhZv+0x55>
+  4a:	45 31 f6             	xor    %r14d,%r14d
+  4d:	49 89 f7             	mov    %rsi,%r15
+  50:	e9 bd 00 00 00       	jmp    112 <_D5probe__T7executeThZQlFNaNbNiNeMPhlmmhZv+0x112>
+  55:	48 83 64 24 08 f8    	andq   $0xfffffffffffffff8,0x8(%rsp)
+  5b:	48 8d 04 f5 00 00 00 	lea    0x0(,%rsi,8),%rax
+  62:	00 
+  63:	48 89 44 24 20       	mov    %rax,0x20(%rsp)
+  68:	45 31 f6             	xor    %r14d,%r14d
+  6b:	49 89 f7             	mov    %rsi,%r15
+  6e:	49 89 fd             	mov    %rdi,%r13
+  71:	66 66 66 66 66 66 2e 	data16 data16 data16 data16 data16 cs nopw 0x0(%rax,%rax,1)
+  78:	0f 1f 84 00 00 00 00 
+  7f:	00 
+  80:	4c 89 ef             	mov    %r13,%rdi
+  83:	89 ee                	mov    %ebp,%esi
+  85:	48 89 da             	mov    %rbx,%rdx
+  88:	e8 00 00 00 00       	call   8d <_D5probe__T7executeThZQlFNaNbNiNeMPhlmmhZv+0x8d>
+			89: R_X86_64_PLT32	memset-0x4
+  8d:	4f 8d 24 2f          	lea    (%r15,%r13,1),%r12
+  91:	4c 89 e7             	mov    %r12,%rdi
+  94:	89 ee                	mov    %ebp,%esi
+  96:	48 89 da             	mov    %rbx,%rdx
+  99:	e8 00 00 00 00       	call   9e <_D5probe__T7executeThZQlFNaNbNiNeMPhlmmhZv+0x9e>
+			9a: R_X86_64_PLT32	memset-0x4
+  9e:	4d 01 fc             	add    %r15,%r12
+  a1:	4c 89 e7             	mov    %r12,%rdi
+  a4:	89 ee                	mov    %ebp,%esi
+  a6:	48 89 da             	mov    %rbx,%rdx
+  a9:	e8 00 00 00 00       	call   ae <_D5probe__T7executeThZQlFNaNbNiNeMPhlmmhZv+0xae>
+			aa: R_X86_64_PLT32	memset-0x4
+  ae:	4d 01 fc             	add    %r15,%r12
+  b1:	4c 89 e7             	mov    %r12,%rdi
+  b4:	89 ee                	mov    %ebp,%esi
+  b6:	48 89 da             	mov    %rbx,%rdx
+  b9:	e8 00 00 00 00       	call   be <_D5probe__T7executeThZQlFNaNbNiNeMPhlmmhZv+0xbe>
+			ba: R_X86_64_PLT32	memset-0x4
+  be:	4d 01 fc             	add    %r15,%r12
+  c1:	4c 89 e7             	mov    %r12,%rdi
+  c4:	89 ee                	mov    %ebp,%esi
+  c6:	48 89 da             	mov    %rbx,%rdx
+  c9:	e8 00 00 00 00       	call   ce <_D5probe__T7executeThZQlFNaNbNiNeMPhlmmhZv+0xce>
+			ca: R_X86_64_PLT32	memset-0x4
+  ce:	4d 01 fc             	add    %r15,%r12
+  d1:	4c 89 e7             	mov    %r12,%rdi
+  d4:	89 ee                	mov    %ebp,%esi
+  d6:	48 89 da             	mov    %rbx,%rdx
+  d9:	e8 00 00 00 00       	call   de <_D5probe__T7executeThZQlFNaNbNiNeMPhlmmhZv+0xde>
+			da: R_X86_64_PLT32	memset-0x4
+  de:	4d 01 fc             	add    %r15,%r12
+  e1:	4c 89 e7             	mov    %r12,%rdi
+  e4:	89 ee                	mov    %ebp,%esi
+  e6:	48 89 da             	mov    %rbx,%rdx
+  e9:	e8 00 00 00 00       	call   ee <_D5probe__T7executeThZQlFNaNbNiNeMPhlmmhZv+0xee>
+			ea: R_X86_64_PLT32	memset-0x4
+  ee:	4d 01 fc             	add    %r15,%r12
+  f1:	4c 89 e7             	mov    %r12,%rdi
+  f4:	89 ee                	mov    %ebp,%esi
+  f6:	48 89 da             	mov    %rbx,%rdx
+  f9:	e8 00 00 00 00       	call   fe <_D5probe__T7executeThZQlFNaNbNiNeMPhlmmhZv+0xfe>
+			fa: R_X86_64_PLT32	memset-0x4
+  fe:	49 83 c6 08          	add    $0x8,%r14
+ 102:	4c 03 6c 24 20       	add    0x20(%rsp),%r13
+ 107:	4c 39 74 24 08       	cmp    %r14,0x8(%rsp)
+ 10c:	0f 85 6e ff ff ff    	jne    80 <_D5probe__T7executeThZQlFNaNbNiNeMPhlmmhZv+0x80>
+ 112:	4c 8b 6c 24 10       	mov    0x10(%rsp),%r13
+ 117:	4d 85 ed             	test   %r13,%r13
+ 11a:	4c 8b 64 24 18       	mov    0x18(%rsp),%r12
+ 11f:	74 24                	je     145 <_D5probe__T7executeThZQlFNaNbNiNeMPhlmmhZv+0x145>
+ 121:	4d 0f af f7          	imul   %r15,%r14
+ 125:	4d 01 f4             	add    %r14,%r12
+ 128:	0f 1f 84 00 00 00 00 	nopl   0x0(%rax,%rax,1)
+ 12f:	00 
+ 130:	4c 89 e7             	mov    %r12,%rdi
+ 133:	89 ee                	mov    %ebp,%esi
+ 135:	48 89 da             	mov    %rbx,%rdx
+ 138:	e8 00 00 00 00       	call   13d <_D5probe__T7executeThZQlFNaNbNiNeMPhlmmhZv+0x13d>
+			139: R_X86_64_PLT32	memset-0x4
+ 13d:	4d 01 fc             	add    %r15,%r12
+ 140:	49 ff cd             	dec    %r13
+ 143:	75 eb                	jne    130 <_D5probe__T7executeThZQlFNaNbNiNeMPhlmmhZv+0x130>
+ 145:	48 83 c4 28          	add    $0x28,%rsp
+ 149:	5b                   	pop    %rbx
+ 14a:	41 5c                	pop    %r12
+ 14c:	41 5d                	pop    %r13
+ 14e:	41 5e                	pop    %r14
+ 150:	41 5f                	pop    %r15
+ 152:	5d                   	pop    %rbp
+ 153:	c3                   	ret
+=== ldc2 slice isolated actual executor ===
+command: ldc2 -c -preview=dip1000 -O3 -release slice.d
+
+/tmp/tmp.QtZuRE9Cdt/slice.o:     file format elf64-x86-64
+
+
+Disassembly of section .text.fillFloat:
+
+0000000000000000 <fillFloat>:
+   0:	48 85 c9             	test   %rcx,%rcx
+   3:	0f 94 c0             	sete   %al
+   6:	48 85 d2             	test   %rdx,%rdx
+   9:	41 0f 94 c0          	sete   %r8b
+   d:	41 08 c0             	or     %al,%r8b
+  10:	74 01                	je     13 <fillFloat+0x13>
+  12:	c3                   	ret
+  13:	48 89 d0             	mov    %rdx,%rax
+  16:	48 83 e0 f8          	and    $0xfffffffffffffff8,%rax
+  1a:	0f 28 c8             	movaps %xmm0,%xmm1
+  1d:	0f c6 c8 00          	shufps $0x0,%xmm0,%xmm1
+  21:	4c 8d 47 10          	lea    0x10(%rdi),%r8
+  25:	48 c1 e6 02          	shl    $0x2,%rsi
+  29:	45 31 c9             	xor    %r9d,%r9d
+  2c:	eb 10                	jmp    3e <fillFloat+0x3e>
+  2e:	66 90                	xchg   %ax,%ax
+  30:	49 ff c1             	inc    %r9
+  33:	49 01 f0             	add    %rsi,%r8
+  36:	48 01 f7             	add    %rsi,%rdi
+  39:	49 39 c9             	cmp    %rcx,%r9
+  3c:	74 d4                	je     12 <fillFloat+0x12>
+  3e:	45 31 d2             	xor    %r10d,%r10d
+  41:	48 83 fa 08          	cmp    $0x8,%rdx
+  45:	72 29                	jb     70 <fillFloat+0x70>
+  47:	66 0f 1f 84 00 00 00 	nopw   0x0(%rax,%rax,1)
+  4e:	00 00 
+  50:	43 0f 11 4c 90 f0    	movups %xmm1,-0x10(%r8,%r10,4)
+  56:	43 0f 11 0c 90       	movups %xmm1,(%r8,%r10,4)
+  5b:	49 83 c2 08          	add    $0x8,%r10
+  5f:	4c 39 d0             	cmp    %r10,%rax
+  62:	75 ec                	jne    50 <fillFloat+0x50>
+  64:	49 89 c2             	mov    %rax,%r10
+  67:	48 39 c2             	cmp    %rax,%rdx
+  6a:	74 c4                	je     30 <fillFloat+0x30>
+  6c:	0f 1f 40 00          	nopl   0x0(%rax)
+  70:	f3 42 0f 11 04 97    	movss  %xmm0,(%rdi,%r10,4)
+  76:	49 ff c2             	inc    %r10
+  79:	4c 39 d2             	cmp    %r10,%rdx
+  7c:	75 f2                	jne    70 <fillFloat+0x70>
+  7e:	eb b0                	jmp    30 <fillFloat+0x30>
+
+Disassembly of section .text._D5probe__T7executeTfZQlFNaNbNiNfMPflmmfZv:
+
+0000000000000000 <_D5probe__T7executeTfZQlFNaNbNiNfMPflmmfZv>:
+   0:	48 85 c9             	test   %rcx,%rcx
+   3:	0f 94 c0             	sete   %al
+   6:	48 85 d2             	test   %rdx,%rdx
+   9:	41 0f 94 c0          	sete   %r8b
+   d:	41 08 c0             	or     %al,%r8b
+  10:	74 01                	je     13 <_D5probe__T7executeTfZQlFNaNbNiNfMPflmmfZv+0x13>
+  12:	c3                   	ret
+  13:	48 89 d0             	mov    %rdx,%rax
+  16:	48 83 e0 f8          	and    $0xfffffffffffffff8,%rax
+  1a:	0f 28 c8             	movaps %xmm0,%xmm1
+  1d:	0f c6 c8 00          	shufps $0x0,%xmm0,%xmm1
+  21:	4c 8d 47 10          	lea    0x10(%rdi),%r8
+  25:	48 c1 e6 02          	shl    $0x2,%rsi
+  29:	45 31 c9             	xor    %r9d,%r9d
+  2c:	eb 10                	jmp    3e <_D5probe__T7executeTfZQlFNaNbNiNfMPflmmfZv+0x3e>
+  2e:	66 90                	xchg   %ax,%ax
+  30:	49 ff c1             	inc    %r9
+  33:	49 01 f0             	add    %rsi,%r8
+  36:	48 01 f7             	add    %rsi,%rdi
+  39:	49 39 c9             	cmp    %rcx,%r9
+  3c:	74 d4                	je     12 <_D5probe__T7executeTfZQlFNaNbNiNfMPflmmfZv+0x12>
+  3e:	45 31 d2             	xor    %r10d,%r10d
+  41:	48 83 fa 08          	cmp    $0x8,%rdx
+  45:	72 29                	jb     70 <_D5probe__T7executeTfZQlFNaNbNiNfMPflmmfZv+0x70>
+  47:	66 0f 1f 84 00 00 00 	nopw   0x0(%rax,%rax,1)
+  4e:	00 00 
+  50:	43 0f 11 4c 90 f0    	movups %xmm1,-0x10(%r8,%r10,4)
+  56:	43 0f 11 0c 90       	movups %xmm1,(%r8,%r10,4)
+  5b:	49 83 c2 08          	add    $0x8,%r10
+  5f:	4c 39 d0             	cmp    %r10,%rax
+  62:	75 ec                	jne    50 <_D5probe__T7executeTfZQlFNaNbNiNfMPflmmfZv+0x50>
+  64:	49 89 c2             	mov    %rax,%r10
+  67:	48 39 c2             	cmp    %rax,%rdx
+  6a:	74 c4                	je     30 <_D5probe__T7executeTfZQlFNaNbNiNfMPflmmfZv+0x30>
+  6c:	0f 1f 40 00          	nopl   0x0(%rax)
+  70:	f3 42 0f 11 04 97    	movss  %xmm0,(%rdi,%r10,4)
+  76:	49 ff c2             	inc    %r10
+  79:	4c 39 d2             	cmp    %r10,%rdx
+  7c:	75 f2                	jne    70 <_D5probe__T7executeTfZQlFNaNbNiNfMPflmmfZv+0x70>
+  7e:	eb b0                	jmp    30 <_D5probe__T7executeTfZQlFNaNbNiNfMPflmmfZv+0x30>
+
+Disassembly of section .text.fillByte:
+
+0000000000000000 <fillByte>:
+   0:	55                   	push   %rbp
+   1:	41 57                	push   %r15
+   3:	41 56                	push   %r14
+   5:	41 55                	push   %r13
+   7:	41 54                	push   %r12
+   9:	53                   	push   %rbx
+   a:	48 83 ec 28          	sub    $0x28,%rsp
+   e:	48 89 4c 24 08       	mov    %rcx,0x8(%rsp)
+  13:	48 85 c9             	test   %rcx,%rcx
+  16:	0f 84 19 01 00 00    	je     135 <fillByte+0x135>
+  1c:	48 89 d3             	mov    %rdx,%rbx
+  1f:	48 8b 4c 24 08       	mov    0x8(%rsp),%rcx
+  24:	89 c8                	mov    %ecx,%eax
+  26:	83 e0 07             	and    $0x7,%eax
+  29:	48 89 44 24 10       	mov    %rax,0x10(%rsp)
+  2e:	41 0f b6 e8          	movzbl %r8b,%ebp
+  32:	48 83 f9 08          	cmp    $0x8,%rcx
+  36:	48 89 7c 24 18       	mov    %rdi,0x18(%rsp)
+  3b:	73 0b                	jae    48 <fillByte+0x48>
+  3d:	45 31 f6             	xor    %r14d,%r14d
+  40:	49 89 f7             	mov    %rsi,%r15
+  43:	e9 ba 00 00 00       	jmp    102 <fillByte+0x102>
+  48:	48 83 64 24 08 f8    	andq   $0xfffffffffffffff8,0x8(%rsp)
+  4e:	48 8d 04 f5 00 00 00 	lea    0x0(,%rsi,8),%rax
+  55:	00 
+  56:	48 89 44 24 20       	mov    %rax,0x20(%rsp)
+  5b:	45 31 f6             	xor    %r14d,%r14d
+  5e:	49 89 f7             	mov    %rsi,%r15
+  61:	49 89 fd             	mov    %rdi,%r13
+  64:	66 66 66 2e 0f 1f 84 	data16 data16 cs nopw 0x0(%rax,%rax,1)
+  6b:	00 00 00 00 00 
+  70:	4c 89 ef             	mov    %r13,%rdi
+  73:	89 ee                	mov    %ebp,%esi
+  75:	48 89 da             	mov    %rbx,%rdx
+  78:	e8 00 00 00 00       	call   7d <fillByte+0x7d>
+			79: R_X86_64_PLT32	memset-0x4
+  7d:	4f 8d 24 2f          	lea    (%r15,%r13,1),%r12
+  81:	4c 89 e7             	mov    %r12,%rdi
+  84:	89 ee                	mov    %ebp,%esi
+  86:	48 89 da             	mov    %rbx,%rdx
+  89:	e8 00 00 00 00       	call   8e <fillByte+0x8e>
+			8a: R_X86_64_PLT32	memset-0x4
+  8e:	4d 01 fc             	add    %r15,%r12
+  91:	4c 89 e7             	mov    %r12,%rdi
+  94:	89 ee                	mov    %ebp,%esi
+  96:	48 89 da             	mov    %rbx,%rdx
+  99:	e8 00 00 00 00       	call   9e <fillByte+0x9e>
+			9a: R_X86_64_PLT32	memset-0x4
+  9e:	4d 01 fc             	add    %r15,%r12
+  a1:	4c 89 e7             	mov    %r12,%rdi
+  a4:	89 ee                	mov    %ebp,%esi
+  a6:	48 89 da             	mov    %rbx,%rdx
+  a9:	e8 00 00 00 00       	call   ae <fillByte+0xae>
+			aa: R_X86_64_PLT32	memset-0x4
+  ae:	4d 01 fc             	add    %r15,%r12
+  b1:	4c 89 e7             	mov    %r12,%rdi
+  b4:	89 ee                	mov    %ebp,%esi
+  b6:	48 89 da             	mov    %rbx,%rdx
+  b9:	e8 00 00 00 00       	call   be <fillByte+0xbe>
+			ba: R_X86_64_PLT32	memset-0x4
+  be:	4d 01 fc             	add    %r15,%r12
+  c1:	4c 89 e7             	mov    %r12,%rdi
+  c4:	89 ee                	mov    %ebp,%esi
+  c6:	48 89 da             	mov    %rbx,%rdx
+  c9:	e8 00 00 00 00       	call   ce <fillByte+0xce>
+			ca: R_X86_64_PLT32	memset-0x4
+  ce:	4d 01 fc             	add    %r15,%r12
+  d1:	4c 89 e7             	mov    %r12,%rdi
+  d4:	89 ee                	mov    %ebp,%esi
+  d6:	48 89 da             	mov    %rbx,%rdx
+  d9:	e8 00 00 00 00       	call   de <fillByte+0xde>
+			da: R_X86_64_PLT32	memset-0x4
+  de:	4d 01 fc             	add    %r15,%r12
+  e1:	4c 89 e7             	mov    %r12,%rdi
+  e4:	89 ee                	mov    %ebp,%esi
+  e6:	48 89 da             	mov    %rbx,%rdx
+  e9:	e8 00 00 00 00       	call   ee <fillByte+0xee>
+			ea: R_X86_64_PLT32	memset-0x4
+  ee:	49 83 c6 08          	add    $0x8,%r14
+  f2:	4c 03 6c 24 20       	add    0x20(%rsp),%r13
+  f7:	4c 39 74 24 08       	cmp    %r14,0x8(%rsp)
+  fc:	0f 85 6e ff ff ff    	jne    70 <fillByte+0x70>
+ 102:	4c 8b 6c 24 10       	mov    0x10(%rsp),%r13
+ 107:	4d 85 ed             	test   %r13,%r13
+ 10a:	4c 8b 64 24 18       	mov    0x18(%rsp),%r12
+ 10f:	74 24                	je     135 <fillByte+0x135>
+ 111:	4d 0f af f7          	imul   %r15,%r14
+ 115:	4d 01 f4             	add    %r14,%r12
+ 118:	0f 1f 84 00 00 00 00 	nopl   0x0(%rax,%rax,1)
+ 11f:	00 
+ 120:	4c 89 e7             	mov    %r12,%rdi
+ 123:	89 ee                	mov    %ebp,%esi
+ 125:	48 89 da             	mov    %rbx,%rdx
+ 128:	e8 00 00 00 00       	call   12d <fillByte+0x12d>
+			129: R_X86_64_PLT32	memset-0x4
+ 12d:	4d 01 fc             	add    %r15,%r12
+ 130:	49 ff cd             	dec    %r13
+ 133:	75 eb                	jne    120 <fillByte+0x120>
+ 135:	48 83 c4 28          	add    $0x28,%rsp
+ 139:	5b                   	pop    %rbx
+ 13a:	41 5c                	pop    %r12
+ 13c:	41 5d                	pop    %r13
+ 13e:	41 5e                	pop    %r14
+ 140:	41 5f                	pop    %r15
+ 142:	5d                   	pop    %rbp
+ 143:	c3                   	ret
+
+Disassembly of section .text._D5probe__T7executeThZQlFNaNbNiNfMPhlmmhZv:
+
+0000000000000000 <_D5probe__T7executeThZQlFNaNbNiNfMPhlmmhZv>:
+   0:	55                   	push   %rbp
+   1:	41 57                	push   %r15
+   3:	41 56                	push   %r14
+   5:	41 55                	push   %r13
+   7:	41 54                	push   %r12
+   9:	53                   	push   %rbx
+   a:	48 83 ec 28          	sub    $0x28,%rsp
+   e:	48 89 4c 24 08       	mov    %rcx,0x8(%rsp)
+  13:	48 85 c9             	test   %rcx,%rcx
+  16:	0f 84 19 01 00 00    	je     135 <_D5probe__T7executeThZQlFNaNbNiNfMPhlmmhZv+0x135>
+  1c:	48 89 d3             	mov    %rdx,%rbx
+  1f:	48 8b 4c 24 08       	mov    0x8(%rsp),%rcx
+  24:	89 c8                	mov    %ecx,%eax
+  26:	83 e0 07             	and    $0x7,%eax
+  29:	48 89 44 24 10       	mov    %rax,0x10(%rsp)
+  2e:	41 0f b6 e8          	movzbl %r8b,%ebp
+  32:	48 83 f9 08          	cmp    $0x8,%rcx
+  36:	48 89 7c 24 18       	mov    %rdi,0x18(%rsp)
+  3b:	73 0b                	jae    48 <_D5probe__T7executeThZQlFNaNbNiNfMPhlmmhZv+0x48>
+  3d:	45 31 f6             	xor    %r14d,%r14d
+  40:	49 89 f7             	mov    %rsi,%r15
+  43:	e9 ba 00 00 00       	jmp    102 <_D5probe__T7executeThZQlFNaNbNiNfMPhlmmhZv+0x102>
+  48:	48 83 64 24 08 f8    	andq   $0xfffffffffffffff8,0x8(%rsp)
+  4e:	48 8d 04 f5 00 00 00 	lea    0x0(,%rsi,8),%rax
+  55:	00 
+  56:	48 89 44 24 20       	mov    %rax,0x20(%rsp)
+  5b:	45 31 f6             	xor    %r14d,%r14d
+  5e:	49 89 f7             	mov    %rsi,%r15
+  61:	49 89 fd             	mov    %rdi,%r13
+  64:	66 66 66 2e 0f 1f 84 	data16 data16 cs nopw 0x0(%rax,%rax,1)
+  6b:	00 00 00 00 00 
+  70:	4c 89 ef             	mov    %r13,%rdi
+  73:	89 ee                	mov    %ebp,%esi
+  75:	48 89 da             	mov    %rbx,%rdx
+  78:	e8 00 00 00 00       	call   7d <_D5probe__T7executeThZQlFNaNbNiNfMPhlmmhZv+0x7d>
+			79: R_X86_64_PLT32	memset-0x4
+  7d:	4f 8d 24 2f          	lea    (%r15,%r13,1),%r12
+  81:	4c 89 e7             	mov    %r12,%rdi
+  84:	89 ee                	mov    %ebp,%esi
+  86:	48 89 da             	mov    %rbx,%rdx
+  89:	e8 00 00 00 00       	call   8e <_D5probe__T7executeThZQlFNaNbNiNfMPhlmmhZv+0x8e>
+			8a: R_X86_64_PLT32	memset-0x4
+  8e:	4d 01 fc             	add    %r15,%r12
+  91:	4c 89 e7             	mov    %r12,%rdi
+  94:	89 ee                	mov    %ebp,%esi
+  96:	48 89 da             	mov    %rbx,%rdx
+  99:	e8 00 00 00 00       	call   9e <_D5probe__T7executeThZQlFNaNbNiNfMPhlmmhZv+0x9e>
+			9a: R_X86_64_PLT32	memset-0x4
+  9e:	4d 01 fc             	add    %r15,%r12
+  a1:	4c 89 e7             	mov    %r12,%rdi
+  a4:	89 ee                	mov    %ebp,%esi
+  a6:	48 89 da             	mov    %rbx,%rdx
+  a9:	e8 00 00 00 00       	call   ae <_D5probe__T7executeThZQlFNaNbNiNfMPhlmmhZv+0xae>
+			aa: R_X86_64_PLT32	memset-0x4
+  ae:	4d 01 fc             	add    %r15,%r12
+  b1:	4c 89 e7             	mov    %r12,%rdi
+  b4:	89 ee                	mov    %ebp,%esi
+  b6:	48 89 da             	mov    %rbx,%rdx
+  b9:	e8 00 00 00 00       	call   be <_D5probe__T7executeThZQlFNaNbNiNfMPhlmmhZv+0xbe>
+			ba: R_X86_64_PLT32	memset-0x4
+  be:	4d 01 fc             	add    %r15,%r12
+  c1:	4c 89 e7             	mov    %r12,%rdi
+  c4:	89 ee                	mov    %ebp,%esi
+  c6:	48 89 da             	mov    %rbx,%rdx
+  c9:	e8 00 00 00 00       	call   ce <_D5probe__T7executeThZQlFNaNbNiNfMPhlmmhZv+0xce>
+			ca: R_X86_64_PLT32	memset-0x4
+  ce:	4d 01 fc             	add    %r15,%r12
+  d1:	4c 89 e7             	mov    %r12,%rdi
+  d4:	89 ee                	mov    %ebp,%esi
+  d6:	48 89 da             	mov    %rbx,%rdx
+  d9:	e8 00 00 00 00       	call   de <_D5probe__T7executeThZQlFNaNbNiNfMPhlmmhZv+0xde>
+			da: R_X86_64_PLT32	memset-0x4
+  de:	4d 01 fc             	add    %r15,%r12
+  e1:	4c 89 e7             	mov    %r12,%rdi
+  e4:	89 ee                	mov    %ebp,%esi
+  e6:	48 89 da             	mov    %rbx,%rdx
+  e9:	e8 00 00 00 00       	call   ee <_D5probe__T7executeThZQlFNaNbNiNfMPhlmmhZv+0xee>
+			ea: R_X86_64_PLT32	memset-0x4
+  ee:	49 83 c6 08          	add    $0x8,%r14
+  f2:	4c 03 6c 24 20       	add    0x20(%rsp),%r13
+  f7:	4c 39 74 24 08       	cmp    %r14,0x8(%rsp)
+  fc:	0f 85 6e ff ff ff    	jne    70 <_D5probe__T7executeThZQlFNaNbNiNfMPhlmmhZv+0x70>
+ 102:	4c 8b 6c 24 10       	mov    0x10(%rsp),%r13
+ 107:	4d 85 ed             	test   %r13,%r13
+ 10a:	4c 8b 64 24 18       	mov    0x18(%rsp),%r12
+ 10f:	74 24                	je     135 <_D5probe__T7executeThZQlFNaNbNiNfMPhlmmhZv+0x135>
+ 111:	4d 0f af f7          	imul   %r15,%r14
+ 115:	4d 01 f4             	add    %r14,%r12
+ 118:	0f 1f 84 00 00 00 00 	nopl   0x0(%rax,%rax,1)
+ 11f:	00 
+ 120:	4c 89 e7             	mov    %r12,%rdi
+ 123:	89 ee                	mov    %ebp,%esi
+ 125:	48 89 da             	mov    %rbx,%rdx
+ 128:	e8 00 00 00 00       	call   12d <_D5probe__T7executeThZQlFNaNbNiNfMPhlmmhZv+0x12d>
+			129: R_X86_64_PLT32	memset-0x4
+ 12d:	4d 01 fc             	add    %r15,%r12
+ 130:	49 ff cd             	dec    %r13
+ 133:	75 eb                	jne    120 <_D5probe__T7executeThZQlFNaNbNiNfMPhlmmhZv+0x120>
+ 135:	48 83 c4 28          	add    $0x28,%rsp
+ 139:	5b                   	pop    %rbx
+ 13a:	41 5c                	pop    %r12
+ 13c:	41 5d                	pop    %r13
+ 13e:	41 5e                	pop    %r14
+ 140:	41 5f                	pop    %r15
+ 142:	5d                   	pop    %rbp
+ 143:	c3                   	ret
+
+Disassembly of section .text._D5probe__T8writeRowTfZQmFNaNbNiNeNkMPfmlmZAf:
+
+0000000000000000 <_D5probe__T8writeRowTfZQmFNaNbNiNeNkMPfmlmZAf>:
+   0:	48 89 c8             	mov    %rcx,%rax
+   3:	48 0f af f2          	imul   %rdx,%rsi
+   7:	48 8d 14 b7          	lea    (%rdi,%rsi,4),%rdx
+   b:	c3                   	ret
+
+Disassembly of section .text._D5probe__T8writeRowThZQmFNaNbNiNeNkMPhmlmZAh:
+
+0000000000000000 <_D5probe__T8writeRowThZQmFNaNbNiNeNkMPhmlmZAh>:
+   0:	48 89 c8             	mov    %rcx,%rax
+   3:	48 0f af d6          	imul   %rsi,%rdx
+   7:	48 01 fa             	add    %rdi,%rdx
+   a:	c3                   	ret

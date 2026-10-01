@@ -33,3 +33,10 @@ No Git history rewrite is required for the split. Historical `raster-d`
 commits remain available in the production repository.
 
 See `PROVENANCE.md` for the pinned source and verification record.
+
+## Active CPU qualification
+
+[M3.3 generic fill execution](docs/research/m3-fill-executor.md) compares the
+complete public consumer with pointer and safe row-slice candidates, including
+non-injective layouts. The experiment and XPS collector are in
+`experiments/m3_fill_executor/`.

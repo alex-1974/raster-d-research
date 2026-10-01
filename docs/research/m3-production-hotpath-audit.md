@@ -627,3 +627,12 @@ until separate benchmark/code-generation evidence justifies extending or
 replacing the specialization.
 
 M3.1 research is complete.
+
+## Continuation after M3.2 — 2026-10-01
+
+M3.1 neighbourhood and M3.2a/b relation/point-transform production handoffs are
+complete. The historical deferred decisions above describe their original
+audit dates. M3.3 now compares complete public fill against generic Canonical
+pointer and row-slice execution, including legal non-injective destinations.
+See `m3-fill-executor.md` and Research Issue #17. Production admission remains
+deferred until XPS qualification; the VM comparison favors Slice under DMD.
