@@ -1,0 +1,60 @@
+name: M3 Strict Reduction Research
+on:
+  push:
+    branches: [research/m3-strict-reduction]
+    paths:
+      - 'experiments/m3_strict_reduction/**'
+      - 'docs/research/m3-strict-reduction.md'
+      - '.github/workflows/m3-strict-reduction.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  qualify:
+    strategy:
+      fail-fast: false
+      matrix:
+        compiler: [dmd-2.111.0, ldc-1.41.0]
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/checkout@v7
+        with:
+          repository: alex-1974/raster-d
+          ref: 1671fb2e51a7b1e7311f78f575d9457e9f279fd4
+          path: raster-d
+      - name: Expose sibling layout
+        run: ln -s "$GITHUB_WORKSPACE/raster-d" "$GITHUB_WORKSPACE/../raster-d"
+      - uses: dlang-community/setup-dlang@v2
+        with:
+          compiler: ${{ matrix.compiler }}
+          dub: 1.40.0
+          dc_format: shortname
+      - name: Generate pinned candidates
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts
+          python3 experiments/m3_strict_reduction/generate.py
+          experiments/m3_strict_reduction/build_cpp.sh 2>&1 | tee artifacts/cpp-build.txt
+      - name: Semantic tests and trust challenges
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts
+          dub test --root=experiments/m3_strict_reduction --compiler="$DC" --force 2>&1 | tee artifacts/tests.txt
+          experiments/m3_strict_reduction/trusted_challenge.sh "$DC" 2>&1 | tee artifacts/trust.txt
+      - name: Complete consumer diagnostic
+        shell: bash
+        run: |
+          set -euo pipefail
+          "$DC" --version > artifacts/environment.txt
+          dub --version >> artifacts/environment.txt
+          lscpu >> artifacts/environment.txt
+          dub run --root=experiments/m3_strict_reduction --compiler="$DC" --build=release --force --vverbose 2>&1 | tee artifacts/release.txt
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: strict-reduction-${{ matrix.compiler }}
+          path: artifacts/
+          retention-days: 14
