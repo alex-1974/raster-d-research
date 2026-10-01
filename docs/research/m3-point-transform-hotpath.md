@@ -99,3 +99,12 @@ Promote a general Canonical executor only if:
 
 Compiler-specific source forms are a second-stage question only if the general
 Canonical result leaves a material compiler-specific gap.
+
+## Continuation after the bounds-prefilter production handoff
+
+PR #53 establishes production `b263477bdbbe0dc3e8c469ac3867eda345ba364c`.
+The new isolated comparison is recorded in `m3-transform-executor.md` and
+`experiments/m3_transform_executor/`; both sides use the same merged checked
+bounds wrapper. The historical harness above remains evidence and is not used
+to attribute bounds improvements to Canonical execution. Production promotion
+and final pointer/slice selection remain gated by stable reference measurements.

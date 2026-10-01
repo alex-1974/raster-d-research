@@ -1,0 +1,55 @@
+name: M3 Transform Executor Research
+on:
+  push:
+    branches: [research/m3-transform-executor]
+    paths:
+      - 'experiments/m3_transform_executor/**'
+      - 'docs/research/m3-transform-executor.md'
+      - '.github/workflows/m3-transform-executor.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  qualify:
+    strategy:
+      fail-fast: false
+      matrix:
+        compiler: [dmd-2.111.0, ldc-1.41.0]
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/checkout@v7
+        with:
+          repository: alex-1974/raster-d
+          ref: b263477bdbbe0dc3e8c469ac3867eda345ba364c
+          path: raster-d
+      - name: Expose sibling layout
+        run: ln -s "$GITHUB_WORKSPACE/raster-d" "$GITHUB_WORKSPACE/../raster-d"
+      - uses: dlang-community/setup-dlang@v2
+        with:
+          compiler: ${{ matrix.compiler }}
+          dub: 1.40.0
+          dc_format: shortname
+      - name: Generate pinned candidates
+        run: python3 experiments/m3_transform_executor/generate.py
+      - name: Semantic tests and trust challenges
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts
+          dub test --root=experiments/m3_transform_executor --compiler="$DC" --force 2>&1 | tee artifacts/tests.txt
+          experiments/m3_transform_executor/trusted_challenge.sh "$DC" 2>&1 | tee artifacts/trust.txt
+      - name: Complete consumer diagnostic
+        shell: bash
+        run: |
+          set -euo pipefail
+          "$DC" --version > artifacts/environment.txt
+          dub --version >> artifacts/environment.txt
+          lscpu >> artifacts/environment.txt
+          dub run --root=experiments/m3_transform_executor --compiler="$DC" --build=release --force --vverbose 2>&1 | tee artifacts/release.txt
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: transform-executor-${{ matrix.compiler }}
+          path: artifacts/
+          retention-days: 14
