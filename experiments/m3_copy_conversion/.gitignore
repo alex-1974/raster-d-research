@@ -1,0 +1,6 @@
+.dub/
+dub.selections.json
+raster-m3-copy-conversion*
+cpp_reference.o
+source/raster/research/m3_copy_conversion/generated/
+__pycache__/

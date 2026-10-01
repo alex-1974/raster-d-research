@@ -1,0 +1,2 @@
+generated copy inherited tests 16
+generated conversion inherited tests 15
