@@ -96,6 +96,8 @@ operations keep the original generic executor body unchanged. LDC and forced
 portable compile the original route. No additional trusted code is introduced.
 Copy, fallback, errors, backing rules and public signatures remain unchanged.
 
+Exact qualified producer commit: `0e32179e32e3670ba28a89c24b2f44e7ced3d21c`.
+
 The complete VM cohort is retained in
 [evidence/2026-10-03-container](../../experiments/m3_conversion_selection/evidence/2026-10-03-container).
 It uses the same compiler/toolchain/affinity conditions described above, four

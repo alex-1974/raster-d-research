@@ -103,6 +103,16 @@ cmp /tmp/selection-replay.csv /tmp/conversion-selection/summary.csv
 `--compiler dmd|ldc2|both`, `--processes 1..6`; output must be new. Individual
 `audit.py` modes accept `--profile prior|sweep --block short|long`. The long sweep
 scope remains focused and explicit. Python optimized execution is rejected.
-The pinned XPS launcher is added after the qualified source commit exists.
+
+The XPS launcher uses exact qualified Research source `0e32179e32e3670ba28a89c24b2f44e7ced3d21c` and the unchanged
+Production pin. It creates detached sibling worktrees, runs all four modes with
+both compilers/six processes, verifies recursive hashes and byte-exact replay,
+and prints the archive to return.
+
+```bash
+bash experiments/m3_conversion_selection/run_xps.sh "$HOME/Programmiersprachen/dlang/d-geospatial-workspace/libs"
+```
+
+Append `--prepare-only` to check pinned worktree preparation without measuring.
 
 [Findings and decision gates](../../docs/research/m3-conversion-selection.md).
