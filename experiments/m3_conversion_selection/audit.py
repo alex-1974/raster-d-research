@@ -43,10 +43,18 @@ def generate(directory, sources, profile, block):
                                     f'module raster.variant_{form}_dispatch;', 1)
         old = 'foreach (x, value; row)\n                destination[x] = cast(float)value;'
         assert internal.count(old) == 1
-        replacement='convertApprovedRow(row, destination);'
         if form=='selected64':
-            replacement='static if(vectorEnabled) { if(row.length>=64) { convertVectorRow(row, destination); } else { '+old+' } } else { '+old+' }'
-        internal = internal.replace(old, replacement, 1)
+            old_call='        executeApprovedRows(\n            source.executionRegionBase(sourcePlaneIndex), sourceRowStride,\n            target.executionRegionBase(targetPlaneIndex), targetRowStride,\n            source.width, source.height);'
+            assert internal.count(old_call)==1
+            replacement='        static if(vectorEnabled) { if(source.width>=64) {\n'+old_call.replace('executeApprovedRows','executeVectorApprovedRows',1)+'\n            return;\n        } }\n'+old_call
+            internal=internal.replace(old_call,replacement,1)
+            flat_call='                    executeApprovedRows(\n                        sourceBase, sourceRowStrideElements,\n                        destinationBase, destinationRowStrideElements,\n                        source.width, source.height);'
+            assert internal.count(flat_call)==1
+            flat_replacement='                    static if(vectorEnabled) { if(source.width>=64) {\n'+flat_call.replace('executeApprovedRows','executeVectorApprovedRows',1)+'\n                        return ExactUbyteToFloatRasterError.none;\n                    } }\n'+flat_call
+            internal=internal.replace(flat_call,flat_replacement,1)
+            internal+='\n'+'private void executeVectorApprovedRows(\n    scope const(ubyte)* source, ptrdiff_t sourceRowStride,\n    scope float* target, ptrdiff_t targetRowStride,\n    size_t width, size_t height) @safe pure nothrow @nogc\n{\n    foreach(y;0..height) {\n        scope const row=readApprovedRow(source,sourceRowStride,y,width);\n        scope auto destination=writeApprovedRow(target,targetRowStride,y,width);\n        convertVectorRow(row,destination);\n    }\n}\n'
+        else:
+            internal=internal.replace(old,'convertApprovedRow(row, destination);',1)
         internal += '\n' + (ROOT / f'{form}.d').read_text()
         (directory / 'raster' / f'variant_{form}_dispatch.d').write_text(internal)
         candidate = public.replace('module raster.conversion;',
@@ -125,7 +133,7 @@ def excerpts(assembly, form):
         if 'conversionPublic' in header or (
                 module in header and any(name in header for name in [
                     'tryConvertUbyteToFloat', 'convertApprovedUbyteToFloatAffine2D',
-                    'executeApprovedRows', 'convertApprovedRow', 'convertVectorRow', 'readVectorBlock', 'writeVectorBlock'])) or (
+                    'executeApprovedRows', 'executeVectorApprovedRows', 'convertApprovedRow', 'convertVectorRow', 'readVectorBlock', 'writeVectorBlock'])) or (
                 form == 'original' and '6raster10conversion' in header):
             selected.append(block)
     result = '\n'.join(selected)
@@ -215,6 +223,8 @@ def main():
     executeApprovedRows(g.ptr,2,h.ptr,2,2,2);
     executeApprovedRows(a.ptr,2,c.ptr,2,2,2);
 }'''
+                if form=='selected64':
+                    control+='@safe pure nothrow @nogc void vectorAttributes(){ubyte[4] a;float[4] b;executeVectorApprovedRows(a.ptr,2,b.ptr,2,2,2);}'
                 for safe in [False, True]:
                     probe = directory / 'control.d'
                     probe.write_text(prefix + (helpers.replace('@trusted', '@safe') if safe else helpers) + control)

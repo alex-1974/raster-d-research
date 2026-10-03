@@ -18,6 +18,8 @@ source oracles and declared iteration budgets are retained.
 
 ## Rejected wrapper selection
 
+Exact producer commit: `448e42657d75d1ba6c0461542aa5f46f5a5bdacd`.
+
 The initial `selected64` candidate routes DMD rows through an extra safe wrapper,
 calling the unchanged exact SIMD-store kernel only for widths >=64 and retaining
 the exact original foreach conversion below it. LDC/forced-portable dispatch
@@ -58,6 +60,8 @@ candidate in all four modes before judging the next step. The earlier PR29 XPS
 
 ## Rejected row-local gate
 
+Exact producer commit: `a39247ce39238317075248b9f010391a32fe9ed5`.
+
 A second complete six-process/four-mode audit moved the gate into the original
 row executor, without calling the wrapper below width 64. It preserves the
 original scalar expression at that point, but changes the generic executor's
@@ -81,6 +85,61 @@ physical-disjointness checks. All original validation/fallback branches and
 existing row-borrow trust remain; no new trust is introduced. Qualify the
 actual candidate before promotion, including every boundary/shared test and
 both consumer/block-length combinations.
+
+## Operation-level candidate
+
+The third candidate selects once per operation at both existing approved flat
+and affine conversion call sites, after their original validation and physical
+non-overlap proof. On DMD x86-64, width >=64 calls a separate safe row executor
+using the existing scoped row borrows and exact SIMD-store primitive. Small
+operations keep the original generic executor body unchanged. LDC and forced
+portable compile the original route. No additional trusted code is introduced.
+Copy, fallback, errors, backing rules and public signatures remain unchanged.
+
+The complete VM cohort is retained in
+[evidence/2026-10-03-container](../../experiments/m3_conversion_selection/evidence/2026-10-03-container).
+It uses the same compiler/toolchain/affinity conditions described above, four
+independently compiled mode binaries per compiler and six processes each:
+48 processes, 231,984 timed blocks and 308,242,584 calls. All semantics,
+attributes/trust, bitwise/rounding, guard-page, public boundary and shared-backing
+controls pass in every mode. Input hashes are fixed across modes; all 438
+workload fingerprints agree. Original/retained manifests and byte-exact summary
+replay verify.
+
+| DMD contiguous original/selected | Prior short | Prior long | Expanded short | Expanded long |
+| --- | ---: | ---: | ---: | ---: |
+| 31x17 | 1.001 | 1.007 | 1.003 | 1.017 |
+| 2048x512 | 4.476 | 4.455 | 4.381 | 4.520 |
+
+In expanded short, 31x17 process ratios are 0.997–1.012. Prior long varies
+0.885–1.118 despite its near-one median. All 200 wide unit-stride expanded-short
+workloads favor selection in every process: median ratios 1.256–4.452, minimum
+individual process ratio 1.163. The focused long sweep likewise favors all forty wide unit-stride workloads
+in every process (median ratios 1.266–4.520, minimum process ratio 1.190).
+This includes contiguous, padded, negative
+source, negative both and repeated source; Universal stride two keeps the
+existing fallback. The small expanded-short DMD median ratios span 0.968–1.305;
+individual minima reach 0.791. These data remove the earlier systematic large
+small-row penalties on this VM, but do not establish zero regression everywhere.
+Do not interpret modest near-one differences as a qualified optimization.
+
+LDC keeps the original route and remains near one on the large contiguous
+anchors; no new LDC algorithmic gain is claimed. C++ still omits public validation.
+For expanded-short 2048x512 contiguous the selected DMD/C++ median is 2.270,
+LDC/C++ 1.077; at 31x17 these ratios are 7.871 and 2.224. At 2048x512 negative-source/negative-both, selected DMD/C++ medians are
+2.073 / 1.909 and LDC/C++ 4.397 / 4.146 on this VM. Signed-layout and
+small-call residuals remain open; these ratios cannot establish full-public
+parity or isolate validation cost. Maximum spread across forms/workloads ranges 60.913–92.332% for DMD
+and 57.499–136.721% for LDC across modes. Substantial process spread and unmonitored
+thermal/frequency conditions limit VM claims.
+
+Decision: retain this operation-level policy as an experimental candidate and
+qualify its exact pinned producer on the XPS before Production promotion.
+The 64 threshold is conservative experimental policy, not a universal optimum.
+Both rejected implementations and the earlier PR29 XPS regression remain visible.
+This task does not merge Research or modify Production PR61. The pinned launcher
+runs all four modes on the XPS; return its complete archive for independent
+hash/source/replay/fingerprint qualification before selecting the next change.
 
 ## Evidence verification
 

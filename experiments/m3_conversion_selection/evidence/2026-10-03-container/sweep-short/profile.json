@@ -1,0 +1,15 @@
+{
+  "profile": "sweep",
+  "block": "short",
+  "forms": [
+    "original",
+    "selected64",
+    "vector16store",
+    "cpp-approved-execution"
+  ],
+  "compilers": [
+    "dmd",
+    "ldc2"
+  ],
+  "samples_per_block": 262144
+}

@@ -7,22 +7,26 @@ hashes. No Production change or merge is assumed.
 
 ## Actual selection and trust
 
-`selected64.d` copies the qualified bounded SIMD-store kernel, renames its safe
-row routine to `convertVectorRow`, and adds a safe selection wrapper. On DMD
-x86-64, rows at least 64 bytes wide call the exact SIMD routine; shorter rows
-use the exact original `foreach (x, value; row)` float conversion expression.
-The selected dispatcher compiles the exact original expression directly on
-LDC/forced-portable branches. The unconditional vector form is copied byte-exact
-from PR31. Copy and all public validation/overlap fallback/injectivity/error/
-no-write/empty/Universal contracts stay intact.
+The public selected form chooses once per approved operation on DMD x86-64.
+Both flat and affine conversion call sites select a separate safe vector-row
+executor when width >=64, after their existing bounds and physical-disjointness
+checks. That executor borrows rows through the existing approved row helpers
+and calls `convertVectorRow`. The original generic scalar/copy row executor
+body stays unchanged for small widths and LDC/forced-portable branches.
+All public validation, overlap fallback, injectivity, errors, no-write, empty
+and Universal contracts remain unchanged.
 
-The wrapper adds no trust. The existing scoped sixteen-byte load and four-float
-store proof is unchanged. Width >=64 chooses the route; the vector loop still
-requires sixteen remaining samples independently, with safe scalar tails.
-Below-gate expressions remain exact, but an extra wrapper/branch and compiled
-consumer differences may change code generation and timing. Preserving the
-expression is not a promise of identical timing or binary code. Both consumers
-must measure the actual candidate before promotion.
+`selected64.d` contains the exact qualified bounded SIMD-store kernel renamed
+`convertVectorRow`, plus `convertApprovedRow` for isolated row controls. That
+wrapper exercises the threshold independently; the full public selected path
+uses the operation-level gate described above. The unconditional store form
+and C++ reference are copied byte-exact from PR31.
+
+The gate and executor add no trust. Existing scoped sixteen-byte load and
+four-float store proofs remain unchanged. Width >=64 chooses the route; the
+vector loop independently requires sixteen remaining samples, with safe scalar
+tails. Unchanged expressions and helper bodies do not promise identical binary
+layout or timing. Both consumers must measure the actual candidate.
 
 ## Two consumers and two block lengths
 
