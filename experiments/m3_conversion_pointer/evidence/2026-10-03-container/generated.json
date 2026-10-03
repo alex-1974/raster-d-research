@@ -1,0 +1,11 @@
+{
+  "fixtures.d": "072dc8abd47e075bf57dd0ea27ba82a157c1a65978673926f2dfb9c84681828f",
+  "public_original.d": "aee237e7e29eb26a81d995508c49d647bd840bda458bed1af7704f84198c8209",
+  "public_pointer.d": "1d2b64c94cbb57f7fec275a07f8f0755a75de0e0d803a582c65f4ea215262589",
+  "public_pointer32.d": "ce9df50a6d0eb98ad4a04c2ea326ea02333b879ef8142cb232356e7fb5e3db82",
+  "raster/variant_pointer.d": "c2d780e92fee15e80684e0b73b4ee2d14fffe11fa16809018ede83f7699486ac",
+  "raster/variant_pointer32.d": "cd7732a7ebec7624108c555e6b973f884567aad340a92581a291f61cdfe355d6",
+  "raster/variant_pointer32_dispatch.d": "e3bca33d4d8a14017c7785bc092fc263b1c27ce399082119c5d1b29ad61360f5",
+  "raster/variant_pointer_dispatch.d": "dd684cdacc65417534df7df6fe8125629b2b57e84fe98f0ef18ba45195023fa3",
+  "timing.d": "7fb8f3a5d788456bc691dbe65b7ff107221c92290d9a00ead2f10dd01770ceb9"
+}
