@@ -1,0 +1,6 @@
+/tmp/raster-public-pointer-2nt_3gou/narrow.d(11): Error: using `row.ptr` (instead of `&row[0])` is not allowed in a `@safe` function
+    auto input = row.ptr;
+                 ^
+/tmp/raster-public-pointer-2nt_3gou/narrow.d(12): Error: using `destination.ptr` (instead of `&destination[0])` is not allowed in a `@safe` function
+    auto output = destination.ptr;
+                  ^
