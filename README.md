@@ -40,3 +40,8 @@ See `PROVENANCE.md` for the pinned source and verification record.
 complete public consumer with pointer and safe row-slice candidates, including
 non-injective layouts. The experiment and XPS collector are in
 `experiments/m3_fill_executor/`.
+
+[M3.10 conservative vector selection](docs/research/m3-conversion-selection.md)
+qualifies an actual private width gate in both consumer shapes and block
+lengths. Measured small-row regressions are retained; no Production promotion
+is inferred from preserving a scalar expression.

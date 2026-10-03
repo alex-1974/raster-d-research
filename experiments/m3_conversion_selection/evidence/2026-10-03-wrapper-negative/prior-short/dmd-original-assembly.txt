@@ -1,0 +1,552 @@
+Disassembly of section .text.conversionPublic:
+
+0000000000000000 <conversionPublic>:
+   0:	55                   	push   %rbp
+   1:	48 8b ec             	mov    %rsp,%rbp
+   4:	48 83 ec 20          	sub    $0x20,%rsp
+   8:	48 89 5d e8          	mov    %rbx,-0x18(%rbp)
+   c:	48 89 7d f0          	mov    %rdi,-0x10(%rbp)
+  10:	48 89 75 f8          	mov    %rsi,-0x8(%rbp)
+  14:	48 8b 75 f8          	mov    -0x8(%rbp),%rsi
+  18:	c6 06 00             	movb   $0x0,(%rsi)
+  1b:	48 89 75 f8          	mov    %rsi,-0x8(%rbp)
+  1f:	48 8d 5d 38          	lea    0x38(%rbp),%rbx
+  23:	b9 06 00 00 00       	mov    $0x6,%ecx
+  28:	ff 33                	push   (%rbx)
+  2a:	48 83 eb 08          	sub    $0x8,%rbx
+  2e:	ff c9                	dec    %ecx
+  30:	75 f6                	jne    28 <conversionPublic+0x28>
+  32:	48 8b 55 f0          	mov    -0x10(%rbp),%rdx
+  36:	48 89 ce             	mov    %rcx,%rsi
+  39:	48 8b 7d f8          	mov    -0x8(%rbp),%rdi
+  3d:	e8 00 00 00 00       	call   42 <conversionPublic+0x42>
+			3e: R_X86_64_PLT32	_D6raster10conversion27tryConvertUbyteToFloatPlaneFNbNiNfMSQCf4view__T10RasterViewThZQpmMKSQDl13writable_view__T18WritableRasterViewTfZQxmJEQFiQFe27UbyteToFloatConversionErrorZb-0x4
+  42:	48 83 c4 30          	add    $0x30,%rsp
+  46:	48 8b 5d e8          	mov    -0x18(%rbp),%rbx
+  4a:	48 8b e5             	mov    %rbp,%rsp
+  4d:	5d                   	pop    %rbp
+  4e:	c3                   	ret
+	...
+
+
+Disassembly of section .text._D6raster10conversion27tryConvertUbyteToFloatPlaneFNbNiNfMSQCf4view__T10RasterViewThZQpmMKSQDl13writable_view__T18WritableRasterViewTfZQxmJEQFiQFe27UbyteToFloatConversionErrorZb:
+
+0000000000000000 <_D6raster10conversion27tryConvertUbyteToFloatPlaneFNbNiNfMSQCf4view__T10RasterViewThZQpmMKSQDl13writable_view__T18WritableRasterViewTfZQxmJEQFiQFe27UbyteToFloatConversionErrorZb>:
+   0:	55                   	push   %rbp
+   1:	48 8b ec             	mov    %rsp,%rbp
+   4:	48 83 ec 30          	sub    $0x30,%rsp
+   8:	48 89 5d d8          	mov    %rbx,-0x28(%rbp)
+   c:	4c 89 65 e0          	mov    %r12,-0x20(%rbp)
+  10:	48 89 75 e8          	mov    %rsi,-0x18(%rbp)
+  14:	48 89 55 f0          	mov    %rdx,-0x10(%rbp)
+  18:	48 89 4d f8          	mov    %rcx,-0x8(%rbp)
+  1c:	49 89 fc             	mov    %rdi,%r12
+  1f:	31 c0                	xor    %eax,%eax
+  21:	41 88 04 24          	mov    %al,(%r12)
+  25:	41 88 04 24          	mov    %al,(%r12)
+  29:	48 8d 5d 38          	lea    0x38(%rbp),%rbx
+  2d:	b9 06 00 00 00       	mov    $0x6,%ecx
+  32:	ff 33                	push   (%rbx)
+  34:	48 83 eb 08          	sub    $0x8,%rbx
+  38:	ff c9                	dec    %ecx
+  3a:	75 f6                	jne    32 <_D6raster10conversion27tryConvertUbyteToFloatPlaneFNbNiNfMSQCf4view__T10RasterViewThZQpmMKSQDl13writable_view__T18WritableRasterViewTfZQxmJEQFiQFe27UbyteToFloatConversionErrorZb+0x32>
+  3c:	48 8b 55 f8          	mov    -0x8(%rbp),%rdx
+  40:	48 8b 75 f0          	mov    -0x10(%rbp),%rsi
+  44:	48 8b 7d e8          	mov    -0x18(%rbp),%rdi
+  48:	e8 00 00 00 00       	call   4d <_D6raster10conversion27tryConvertUbyteToFloatPlaneFNbNiNfMSQCf4view__T10RasterViewThZQpmMKSQDl13writable_view__T18WritableRasterViewTfZQxmJEQFiQFe27UbyteToFloatConversionErrorZb+0x4d>
+			49: R_X86_64_PLT32	_D6raster8internal19conversion_dispatch30convertUbyteToFloatRasterPlaneFNbNiNfMSQDa4view__T10RasterViewThZQpmMKSQEg13writable_view__T18WritableRasterViewTfZQxmZEQGdQFzQFt28ExactUbyteToFloatRasterError-0x4
+  4d:	48 83 c4 30          	add    $0x30,%rsp
+  51:	89 c3                	mov    %eax,%ebx
+  53:	81 e3 ff 00 00 00    	and    $0xff,%ebx
+  59:	83 fb 05             	cmp    $0x5,%ebx
+  5c:	77 55                	ja     b3 <_D6raster10conversion27tryConvertUbyteToFloatPlaneFNbNiNfMSQCf4view__T10RasterViewThZQpmMKSQDl13writable_view__T18WritableRasterViewTfZQxmJEQFiQFe27UbyteToFloatConversionErrorZb+0xb3>
+  5e:	8b db                	mov    %ebx,%ebx
+  60:	48 8d 05 00 00 00 00 	lea    0x0(%rip),%rax        # 67 <_D6raster10conversion27tryConvertUbyteToFloatPlaneFNbNiNfMSQCf4view__T10RasterViewThZQpmMKSQDl13writable_view__T18WritableRasterViewTfZQxmJEQFiQFe27UbyteToFloatConversionErrorZb+0x67>
+			63: R_X86_64_PC32	.rodata._D6raster10conversion27tryConvertUbyteToFloatPlaneFNbNiNfMSQCf4view__T10RasterViewThZQpmMKSQDl13writable_view__T18WritableRasterViewTfZQxmJEQFiQFe27UbyteToFloatConversionErrorZb-0x4
+  67:	48 63 0c 98          	movslq (%rax,%rbx,4),%rcx
+  6b:	48 8d 04 01          	lea    (%rcx,%rax,1),%rax
+  6f:	ff e0                	jmp    *%rax
+  71:	b8 01 00 00 00       	mov    $0x1,%eax
+  76:	48 8b 5d d8          	mov    -0x28(%rbp),%rbx
+  7a:	4c 8b 65 e0          	mov    -0x20(%rbp),%r12
+  7e:	48 8b e5             	mov    %rbp,%rsp
+  81:	5d                   	pop    %rbp
+  82:	c3                   	ret
+  83:	41 c6 04 24 01       	movb   $0x1,(%r12)
+  88:	eb 1a                	jmp    a4 <_D6raster10conversion27tryConvertUbyteToFloatPlaneFNbNiNfMSQCf4view__T10RasterViewThZQpmMKSQDl13writable_view__T18WritableRasterViewTfZQxmJEQFiQFe27UbyteToFloatConversionErrorZb+0xa4>
+  8a:	41 c6 04 24 02       	movb   $0x2,(%r12)
+  8f:	eb 13                	jmp    a4 <_D6raster10conversion27tryConvertUbyteToFloatPlaneFNbNiNfMSQCf4view__T10RasterViewThZQpmMKSQDl13writable_view__T18WritableRasterViewTfZQxmJEQFiQFe27UbyteToFloatConversionErrorZb+0xa4>
+  91:	41 c6 04 24 03       	movb   $0x3,(%r12)
+  96:	eb 0c                	jmp    a4 <_D6raster10conversion27tryConvertUbyteToFloatPlaneFNbNiNfMSQCf4view__T10RasterViewThZQpmMKSQDl13writable_view__T18WritableRasterViewTfZQxmJEQFiQFe27UbyteToFloatConversionErrorZb+0xa4>
+  98:	41 c6 04 24 04       	movb   $0x4,(%r12)
+  9d:	eb 05                	jmp    a4 <_D6raster10conversion27tryConvertUbyteToFloatPlaneFNbNiNfMSQCf4view__T10RasterViewThZQpmMKSQDl13writable_view__T18WritableRasterViewTfZQxmJEQFiQFe27UbyteToFloatConversionErrorZb+0xa4>
+  9f:	41 c6 04 24 05       	movb   $0x5,(%r12)
+  a4:	31 c0                	xor    %eax,%eax
+  a6:	48 8b 5d d8          	mov    -0x28(%rbp),%rbx
+  aa:	4c 8b 65 e0          	mov    -0x20(%rbp),%r12
+  ae:	48 8b e5             	mov    %rbp,%rsp
+  b1:	5d                   	pop    %rbp
+  b2:	c3                   	ret
+  b3:	0f 0b                	ud2
+  b5:	48 8b 5d d8          	mov    -0x28(%rbp),%rbx
+  b9:	4c 8b 65 e0          	mov    -0x20(%rbp),%r12
+  bd:	48 8b e5             	mov    %rbp,%rsp
+  c0:	5d                   	pop    %rbp
+  c1:	c3                   	ret
+	...
+
+
+Disassembly of section .text._D6raster8internal19conversion_dispatch35convertApprovedUbyteToFloatAffine2DFNbNiNfMSQDf4view__T10RasterViewThZQpmMKSQEl13writable_view__T18WritableRasterViewTfZQxmZv:
+
+0000000000000000 <_D6raster8internal19conversion_dispatch35convertApprovedUbyteToFloatAffine2DFNbNiNfMSQDf4view__T10RasterViewThZQpmMKSQEl13writable_view__T18WritableRasterViewTfZQxmZv>:
+   0:	55                   	push   %rbp
+   1:	48 8b ec             	mov    %rsp,%rbp
+   4:	48 83 ec 60          	sub    $0x60,%rsp
+   8:	48 89 5d a0          	mov    %rbx,-0x60(%rbp)
+   c:	4c 89 65 a8          	mov    %r12,-0x58(%rbp)
+  10:	4c 89 6d b0          	mov    %r13,-0x50(%rbp)
+  14:	4c 89 75 b8          	mov    %r14,-0x48(%rbp)
+  18:	4c 89 7d c0          	mov    %r15,-0x40(%rbp)
+  1c:	48 89 55 f8          	mov    %rdx,-0x8(%rbp)
+  20:	49 89 fe             	mov    %rdi,%r14
+  23:	49 89 f7             	mov    %rsi,%r15
+  26:	31 c0                	xor    %eax,%eax
+  28:	48 89 45 c8          	mov    %rax,-0x38(%rbp)
+  2c:	48 89 45 d0          	mov    %rax,-0x30(%rbp)
+  30:	48 89 45 d8          	mov    %rax,-0x28(%rbp)
+  34:	48 89 45 e0          	mov    %rax,-0x20(%rbp)
+  38:	48 8b 4d f8          	mov    -0x8(%rbp),%rcx
+  3c:	48 8d 55 c8          	lea    -0x38(%rbp),%rdx
+  40:	48 8d 75 d0          	lea    -0x30(%rbp),%rsi
+  44:	48 8d 7d 10          	lea    0x10(%rbp),%rdi
+  48:	e8 00 00 00 00       	call   4d <_D6raster8internal19conversion_dispatch35convertApprovedUbyteToFloatAffine2DFNbNiNfMSQDf4view__T10RasterViewThZQpmMKSQEl13writable_view__T18WritableRasterViewTfZQxmZv+0x4d>
+			49: R_X86_64_PLT32	_D6raster4view__T10RasterViewThZQp24tryExecutionPlaneStridesMxFNaNbNiNfmJlJlZb-0x4
+  4d:	49 8b ce             	mov    %r14,%rcx
+  50:	48 8d 55 d8          	lea    -0x28(%rbp),%rdx
+  54:	48 8d 75 e0          	lea    -0x20(%rbp),%rsi
+  58:	49 8b ff             	mov    %r15,%rdi
+  5b:	e8 00 00 00 00       	call   60 <_D6raster8internal19conversion_dispatch35convertApprovedUbyteToFloatAffine2DFNbNiNfMSQDf4view__T10RasterViewThZQpmMKSQEl13writable_view__T18WritableRasterViewTfZQxmZv+0x60>
+			5c: R_X86_64_PLT32	_D6raster13writable_view__T18WritableRasterViewTfZQx24tryExecutionPlaneStridesMxFNaNbNiNfmJlJlZb-0x4
+  60:	b8 01 00 00 00       	mov    $0x1,%eax
+  65:	48 39 45 d0          	cmp    %rax,-0x30(%rbp)
+  69:	0f 85 a1 00 00 00    	jne    110 <_D6raster8internal19conversion_dispatch35convertApprovedUbyteToFloatAffine2DFNbNiNfMSQDf4view__T10RasterViewThZQpmMKSQEl13writable_view__T18WritableRasterViewTfZQxmZv+0x110>
+  6f:	48 39 45 e0          	cmp    %rax,-0x20(%rbp)
+  73:	0f 85 97 00 00 00    	jne    110 <_D6raster8internal19conversion_dispatch35convertApprovedUbyteToFloatAffine2DFNbNiNfMSQDf4view__T10RasterViewThZQpmMKSQEl13writable_view__T18WritableRasterViewTfZQxmZv+0x110>
+  79:	48 8b 75 f8          	mov    -0x8(%rbp),%rsi
+  7d:	48 8d 7d 10          	lea    0x10(%rbp),%rdi
+  81:	e8 00 00 00 00       	call   86 <_D6raster8internal19conversion_dispatch35convertApprovedUbyteToFloatAffine2DFNbNiNfMSQDf4view__T10RasterViewThZQpmMKSQEl13writable_view__T18WritableRasterViewTfZQxmZv+0x86>
+			82: R_X86_64_PLT32	_D6raster4view__T10RasterViewThZQp19executionRegionBaseMxFNaNbNiNjNlNemZPxh-0x4
+  86:	48 89 c3             	mov    %rax,%rbx
+  89:	4c 8b 65 c8          	mov    -0x38(%rbp),%r12
+  8d:	49 8b f6             	mov    %r14,%rsi
+  90:	49 8b ff             	mov    %r15,%rdi
+  93:	e8 00 00 00 00       	call   98 <_D6raster8internal19conversion_dispatch35convertApprovedUbyteToFloatAffine2DFNbNiNfMSQDf4view__T10RasterViewThZQpmMKSQEl13writable_view__T18WritableRasterViewTfZQxmZv+0x98>
+			94: R_X86_64_PLT32	_D6raster13writable_view__T18WritableRasterViewTfZQx19executionRegionBaseMFNaNbNiNjNlNemZPf-0x4
+  98:	49 89 c5             	mov    %rax,%r13
+  9b:	45 31 db             	xor    %r11d,%r11d
+  9e:	4c 8b 75 38          	mov    0x38(%rbp),%r14
+  a2:	4c 39 5d 38          	cmp    %r11,0x38(%rbp)
+  a6:	0f 84 c8 00 00 00    	je     174 <_D6raster8internal19conversion_dispatch35convertApprovedUbyteToFloatAffine2DFNbNiNfMSQDf4view__T10RasterViewThZQpmMKSQEl13writable_view__T18WritableRasterViewTfZQxmZv+0x174>
+  ac:	48 8b 45 d8          	mov    -0x28(%rbp),%rax
+  b0:	4c 8b 4d 30          	mov    0x30(%rbp),%r9
+  b4:	48 8b 7d 30          	mov    0x30(%rbp),%rdi
+  b8:	4c 39 5d 30          	cmp    %r11,0x30(%rbp)
+  bc:	41 0f 95 c7          	setne  %r15b
+  c0:	49 8b d3             	mov    %r11,%rdx
+  c3:	49 0f af d4          	imul   %r12,%rdx
+  c7:	48 03 d3             	add    %rbx,%rdx
+  ca:	49 8b cb             	mov    %r11,%rcx
+  cd:	48 0f af c8          	imul   %rax,%rcx
+  d1:	49 8d 74 8d 00       	lea    0x0(%r13,%rcx,4),%rsi
+  d6:	45 31 c0             	xor    %r8d,%r8d
+  d9:	45 84 ff             	test   %r15b,%r15b
+  dc:	74 28                	je     106 <_D6raster8internal19conversion_dispatch35convertApprovedUbyteToFloatAffine2DFNbNiNfMSQDf4view__T10RasterViewThZQpmMKSQEl13writable_view__T18WritableRasterViewTfZQxmZv+0x106>
+  de:	41 0f b6 0c 10       	movzbl (%r8,%rdx,1),%ecx
+  e3:	4d 39 c8             	cmp    %r9,%r8
+  e6:	0f 83 a1 00 00 00    	jae    18d <_D6raster8internal19conversion_dispatch35convertApprovedUbyteToFloatAffine2DFNbNiNfMSQDf4view__T10RasterViewThZQpmMKSQEl13writable_view__T18WritableRasterViewTfZQxmZv+0x18d>
+  ec:	44 0f b6 d1          	movzbl %cl,%r10d
+  f0:	45 8b d2             	mov    %r10d,%r10d
+  f3:	f3 49 0f 2a c2       	cvtsi2ss %r10,%xmm0
+  f8:	f3 42 0f 11 04 86    	movss  %xmm0,(%rsi,%r8,4)
+  fe:	49 ff c0             	inc    %r8
+ 101:	49 39 f8             	cmp    %rdi,%r8
+ 104:	72 d8                	jb     de <_D6raster8internal19conversion_dispatch35convertApprovedUbyteToFloatAffine2DFNbNiNfMSQDf4view__T10RasterViewThZQpmMKSQEl13writable_view__T18WritableRasterViewTfZQxmZv+0xde>
+ 106:	49 ff c3             	inc    %r11
+ 109:	4d 39 f3             	cmp    %r14,%r11
+ 10c:	72 b2                	jb     c0 <_D6raster8internal19conversion_dispatch35convertApprovedUbyteToFloatAffine2DFNbNiNfMSQDf4view__T10RasterViewThZQpmMKSQEl13writable_view__T18WritableRasterViewTfZQxmZv+0xc0>
+ 10e:	eb 64                	jmp    174 <_D6raster8internal19conversion_dispatch35convertApprovedUbyteToFloatAffine2DFNbNiNfMSQDf4view__T10RasterViewThZQpmMKSQEl13writable_view__T18WritableRasterViewTfZQxmZv+0x174>
+ 110:	45 31 e4             	xor    %r12d,%r12d
+ 113:	48 8b 4d 38          	mov    0x38(%rbp),%rcx
+ 117:	48 89 4d e8          	mov    %rcx,-0x18(%rbp)
+ 11b:	48 85 c9             	test   %rcx,%rcx
+ 11e:	74 54                	je     174 <_D6raster8internal19conversion_dispatch35convertApprovedUbyteToFloatAffine2DFNbNiNfMSQDf4view__T10RasterViewThZQpmMKSQEl13writable_view__T18WritableRasterViewTfZQxmZv+0x174>
+ 120:	31 db                	xor    %ebx,%ebx
+ 122:	4c 8b 6d 30          	mov    0x30(%rbp),%r13
+ 126:	48 39 5d 30          	cmp    %rbx,0x30(%rbp)
+ 12a:	74 3f                	je     16b <_D6raster8internal19conversion_dispatch35convertApprovedUbyteToFloatAffine2DFNbNiNfMSQDf4view__T10RasterViewThZQpmMKSQEl13writable_view__T18WritableRasterViewTfZQxmZv+0x16b>
+ 12c:	c6 45 f0 00          	movb   $0x0,-0x10(%rbp)
+ 130:	4c 8b 45 f8          	mov    -0x8(%rbp),%r8
+ 134:	48 8b cb             	mov    %rbx,%rcx
+ 137:	49 8b d4             	mov    %r12,%rdx
+ 13a:	48 8d 75 f0          	lea    -0x10(%rbp),%rsi
+ 13e:	48 8d 7d 10          	lea    0x10(%rbp),%rdi
+ 142:	e8 00 00 00 00       	call   147 <_D6raster8internal19conversion_dispatch35convertApprovedUbyteToFloatAffine2DFNbNiNfMSQDf4view__T10RasterViewThZQpmMKSQEl13writable_view__T18WritableRasterViewTfZQxmZv+0x147>
+			143: R_X86_64_PLT32	_D6raster4view__T10RasterViewThZQp9trySampleMxFNaNbNiNemmmJhZb-0x4
+ 147:	49 8b ce             	mov    %r14,%rcx
+ 14a:	48 8b d3             	mov    %rbx,%rdx
+ 14d:	49 8b f4             	mov    %r12,%rsi
+ 150:	0f b6 45 f0          	movzbl -0x10(%rbp),%eax
+ 154:	8b c0                	mov    %eax,%eax
+ 156:	f3 48 0f 2a c0       	cvtsi2ss %rax,%xmm0
+ 15b:	49 8b ff             	mov    %r15,%rdi
+ 15e:	e8 00 00 00 00       	call   163 <_D6raster8internal19conversion_dispatch35convertApprovedUbyteToFloatAffine2DFNbNiNfMSQDf4view__T10RasterViewThZQpmMKSQEl13writable_view__T18WritableRasterViewTfZQxmZv+0x163>
+			15f: R_X86_64_PLT32	_D6raster13writable_view__T18WritableRasterViewTfZQx12trySetSampleMFNaNbNiNemmmfZb-0x4
+ 163:	48 ff c3             	inc    %rbx
+ 166:	4c 39 eb             	cmp    %r13,%rbx
+ 169:	72 c1                	jb     12c <_D6raster8internal19conversion_dispatch35convertApprovedUbyteToFloatAffine2DFNbNiNfMSQDf4view__T10RasterViewThZQpmMKSQEl13writable_view__T18WritableRasterViewTfZQxmZv+0x12c>
+ 16b:	49 ff c4             	inc    %r12
+ 16e:	4c 3b 65 e8          	cmp    -0x18(%rbp),%r12
+ 172:	72 ac                	jb     120 <_D6raster8internal19conversion_dispatch35convertApprovedUbyteToFloatAffine2DFNbNiNfMSQDf4view__T10RasterViewThZQpmMKSQEl13writable_view__T18WritableRasterViewTfZQxmZv+0x120>
+ 174:	48 8b 5d a0          	mov    -0x60(%rbp),%rbx
+ 178:	4c 8b 65 a8          	mov    -0x58(%rbp),%r12
+ 17c:	4c 8b 6d b0          	mov    -0x50(%rbp),%r13
+ 180:	4c 8b 75 b8          	mov    -0x48(%rbp),%r14
+ 184:	4c 8b 7d c0          	mov    -0x40(%rbp),%r15
+ 188:	48 8b e5             	mov    %rbp,%rsp
+ 18b:	5d                   	pop    %rbp
+ 18c:	c3                   	ret
+ 18d:	49 8b c9             	mov    %r9,%rcx
+ 190:	49 8b d0             	mov    %r8,%rdx
+ 193:	be 59 08 00 00       	mov    $0x859,%esi
+ 198:	48 8d 3d 00 00 00 00 	lea    0x0(%rip),%rdi        # 19f <_D6raster8internal19conversion_dispatch35convertApprovedUbyteToFloatAffine2DFNbNiNfMSQDf4view__T10RasterViewThZQpmMKSQEl13writable_view__T18WritableRasterViewTfZQxmZv+0x19f>
+			19b: R_X86_64_PC32	.rodata.str1.1-0x4
+ 19f:	e8 00 00 00 00       	call   1a4 <_D6raster8internal19conversion_dispatch35convertApprovedUbyteToFloatAffine2DFNbNiNfMSQDf4view__T10RasterViewThZQpmMKSQEl13writable_view__T18WritableRasterViewTfZQxmZv+0x1a4>
+			1a0: R_X86_64_PLT32	_d_arraybounds_indexp-0x4
+ 1a4:	48 8b 5d a0          	mov    -0x60(%rbp),%rbx
+ 1a8:	4c 8b 65 a8          	mov    -0x58(%rbp),%r12
+ 1ac:	4c 8b 6d b0          	mov    -0x50(%rbp),%r13
+ 1b0:	4c 8b 75 b8          	mov    -0x48(%rbp),%r14
+ 1b4:	4c 8b 7d c0          	mov    -0x40(%rbp),%r15
+ 1b8:	48 8b e5             	mov    %rbp,%rsp
+ 1bb:	5d                   	pop    %rbp
+ 1bc:	c3                   	ret
+ 1bd:	00 00                	add    %al,(%rax)
+	...
+
+
+Disassembly of section .text._D6raster8internal19conversion_dispatch30tryConvertUbyteToFloatAffine2DFNbNiNfMSQDa4view__T10RasterViewThZQpmMKSQEg13writable_view__T18WritableRasterViewTfZQxmZSQGdQFzQFt28UbyteToFloatConversionResult:
+
+0000000000000000 <_D6raster8internal19conversion_dispatch30tryConvertUbyteToFloatAffine2DFNbNiNfMSQDa4view__T10RasterViewThZQpmMKSQEg13writable_view__T18WritableRasterViewTfZQxmZSQGdQFzQFt28UbyteToFloatConversionResult>:
+   0:	55                   	push   %rbp
+   1:	48 8b ec             	mov    %rsp,%rbp
+   4:	48 83 ec 60          	sub    $0x60,%rsp
+   8:	48 89 5d b0          	mov    %rbx,-0x50(%rbp)
+   c:	48 89 7d e8          	mov    %rdi,-0x18(%rbp)
+  10:	48 89 75 f0          	mov    %rsi,-0x10(%rbp)
+  14:	48 89 55 f8          	mov    %rdx,-0x8(%rbp)
+  18:	48 8b 5d f0          	mov    -0x10(%rbp),%rbx
+  1c:	31 c0                	xor    %eax,%eax
+  1e:	48 89 45 b8          	mov    %rax,-0x48(%rbp)
+  22:	48 89 45 c0          	mov    %rax,-0x40(%rbp)
+  26:	48 8b 4d f8          	mov    -0x8(%rbp),%rcx
+  2a:	48 8d 55 b8          	lea    -0x48(%rbp),%rdx
+  2e:	48 8d 75 c0          	lea    -0x40(%rbp),%rsi
+  32:	48 8d 7d 10          	lea    0x10(%rbp),%rdi
+  36:	e8 00 00 00 00       	call   3b <_D6raster8internal19conversion_dispatch30tryConvertUbyteToFloatAffine2DFNbNiNfMSQDa4view__T10RasterViewThZQpmMKSQEg13writable_view__T18WritableRasterViewTfZQxmZSQGdQFzQFt28UbyteToFloatConversionResult+0x3b>
+			37: R_X86_64_PLT32	_D6raster4view__T10RasterViewThZQp24tryExecutionPlaneStridesMxFNaNbNiNfmJlJlZb-0x4
+  3b:	34 01                	xor    $0x1,%al
+  3d:	74 0e                	je     4d <_D6raster8internal19conversion_dispatch30tryConvertUbyteToFloatAffine2DFNbNiNfMSQDa4view__T10RasterViewThZQpmMKSQEg13writable_view__T18WritableRasterViewTfZQxmZSQGdQFzQFt28UbyteToFloatConversionResult+0x4d>
+  3f:	b8 01 00 00 00       	mov    $0x1,%eax
+  44:	48 8b 5d b0          	mov    -0x50(%rbp),%rbx
+  48:	48 8b e5             	mov    %rbp,%rsp
+  4b:	5d                   	pop    %rbp
+  4c:	c3                   	ret
+  4d:	48 c7 45 c8 00 00 00 	movq   $0x0,-0x38(%rbp)
+  54:	00 
+  55:	48 c7 45 d0 00 00 00 	movq   $0x0,-0x30(%rbp)
+  5c:	00 
+  5d:	48 8b 4d e8          	mov    -0x18(%rbp),%rcx
+  61:	48 8d 55 c8          	lea    -0x38(%rbp),%rdx
+  65:	48 8d 75 d0          	lea    -0x30(%rbp),%rsi
+  69:	48 8b fb             	mov    %rbx,%rdi
+  6c:	e8 00 00 00 00       	call   71 <_D6raster8internal19conversion_dispatch30tryConvertUbyteToFloatAffine2DFNbNiNfMSQDa4view__T10RasterViewThZQpmMKSQEg13writable_view__T18WritableRasterViewTfZQxmZSQGdQFzQFt28UbyteToFloatConversionResult+0x71>
+			6d: R_X86_64_PLT32	_D6raster13writable_view__T18WritableRasterViewTfZQx24tryExecutionPlaneStridesMxFNaNbNiNfmJlJlZb-0x4
+  71:	34 01                	xor    $0x1,%al
+  73:	74 0e                	je     83 <_D6raster8internal19conversion_dispatch30tryConvertUbyteToFloatAffine2DFNbNiNfMSQDa4view__T10RasterViewThZQpmMKSQEg13writable_view__T18WritableRasterViewTfZQxmZSQGdQFzQFt28UbyteToFloatConversionResult+0x83>
+  75:	b8 06 00 00 00       	mov    $0x6,%eax
+  7a:	48 8b 5d b0          	mov    -0x50(%rbp),%rbx
+  7e:	48 8b e5             	mov    %rbp,%rsp
+  81:	5d                   	pop    %rbp
+  82:	c3                   	ret
+  83:	48 8b 43 20          	mov    0x20(%rbx),%rax
+  87:	48 3b 45 30          	cmp    0x30(%rbp),%rax
+  8b:	75 0a                	jne    97 <_D6raster8internal19conversion_dispatch30tryConvertUbyteToFloatAffine2DFNbNiNfMSQDa4view__T10RasterViewThZQpmMKSQEg13writable_view__T18WritableRasterViewTfZQxmZSQGdQFzQFt28UbyteToFloatConversionResult+0x97>
+  8d:	48 8b 4b 28          	mov    0x28(%rbx),%rcx
+  91:	48 3b 4d 38          	cmp    0x38(%rbp),%rcx
+  95:	74 0e                	je     a5 <_D6raster8internal19conversion_dispatch30tryConvertUbyteToFloatAffine2DFNbNiNfMSQDa4view__T10RasterViewThZQpmMKSQEg13writable_view__T18WritableRasterViewTfZQxmZSQGdQFzQFt28UbyteToFloatConversionResult+0xa5>
+  97:	b8 02 00 00 00       	mov    $0x2,%eax
+  9c:	48 8b 5d b0          	mov    -0x50(%rbp),%rbx
+  a0:	48 8b e5             	mov    %rbp,%rsp
+  a3:	5d                   	pop    %rbp
+  a4:	c3                   	ret
+  a5:	48 83 7d 30 00       	cmpq   $0x0,0x30(%rbp)
+  aa:	0f 84 dc 00 00 00    	je     18c <_D6raster8internal19conversion_dispatch30tryConvertUbyteToFloatAffine2DFNbNiNfMSQDa4view__T10RasterViewThZQpmMKSQEg13writable_view__T18WritableRasterViewTfZQxmZSQGdQFzQFt28UbyteToFloatConversionResult+0x18c>
+  b0:	48 83 7d 38 00       	cmpq   $0x0,0x38(%rbp)
+  b5:	0f 84 d1 00 00 00    	je     18c <_D6raster8internal19conversion_dispatch30tryConvertUbyteToFloatAffine2DFNbNiNfMSQDa4view__T10RasterViewThZQpmMKSQEg13writable_view__T18WritableRasterViewTfZQxmZSQGdQFzQFt28UbyteToFloatConversionResult+0x18c>
+  bb:	48 89 c1             	mov    %rax,%rcx
+  be:	48 8b 53 28          	mov    0x28(%rbx),%rdx
+  c2:	48 8b 75 c8          	mov    -0x38(%rbp),%rsi
+  c6:	48 8b 7d d0          	mov    -0x30(%rbp),%rdi
+  ca:	e8 00 00 00 00       	call   cf <_D6raster8internal19conversion_dispatch30tryConvertUbyteToFloatAffine2DFNbNiNfMSQDa4view__T10RasterViewThZQpmMKSQEg13writable_view__T18WritableRasterViewTfZQxmZSQGdQFzQFt28UbyteToFloatConversionResult+0xcf>
+			cb: R_X86_64_PLT32	_D6raster8internal15affine_relation26affine2DMappingIsInjectiveFNaNbNiNfmmllZb-0x4
+  cf:	34 01                	xor    $0x1,%al
+  d1:	74 0e                	je     e1 <_D6raster8internal19conversion_dispatch30tryConvertUbyteToFloatAffine2DFNbNiNfMSQDa4view__T10RasterViewThZQpmMKSQEg13writable_view__T18WritableRasterViewTfZQxmZSQGdQFzQFt28UbyteToFloatConversionResult+0xe1>
+  d3:	b8 07 00 00 00       	mov    $0x7,%eax
+  d8:	48 8b 5d b0          	mov    -0x50(%rbp),%rbx
+  dc:	48 8b e5             	mov    %rbp,%rsp
+  df:	5d                   	pop    %rbp
+  e0:	c3                   	ret
+  e1:	48 8b 75 f8          	mov    -0x8(%rbp),%rsi
+  e5:	48 8d 7d 10          	lea    0x10(%rbp),%rdi
+  e9:	e8 00 00 00 00       	call   ee <_D6raster8internal19conversion_dispatch30tryConvertUbyteToFloatAffine2DFNbNiNfMSQDa4view__T10RasterViewThZQpmMKSQEg13writable_view__T18WritableRasterViewTfZQxmZSQGdQFzQFt28UbyteToFloatConversionResult+0xee>
+			ea: R_X86_64_PLT32	_D6raster4view__T10RasterViewThZQp19executionRegionBaseMxFNaNbNiNjNlNemZPxh-0x4
+  ee:	48 89 45 d8          	mov    %rax,-0x28(%rbp)
+  f2:	48 8b 75 e8          	mov    -0x18(%rbp),%rsi
+  f6:	48 8b fb             	mov    %rbx,%rdi
+  f9:	e8 00 00 00 00       	call   fe <_D6raster8internal19conversion_dispatch30tryConvertUbyteToFloatAffine2DFNbNiNfMSQDa4view__T10RasterViewThZQpmMKSQEg13writable_view__T18WritableRasterViewTfZQxmZSQGdQFzQFt28UbyteToFloatConversionResult+0xfe>
+			fa: R_X86_64_PLT32	_D6raster13writable_view__T18WritableRasterViewTfZQx19executionRegionBaseMFNaNbNiNjNlNemZPf-0x4
+  fe:	48 89 45 e0          	mov    %rax,-0x20(%rbp)
+ 102:	48 8b 45 30          	mov    0x30(%rbp),%rax
+ 106:	48 89 45 a8          	mov    %rax,-0x58(%rbp)
+ 10a:	48 8b 4d 38          	mov    0x38(%rbp),%rcx
+ 10e:	48 89 4d a0          	mov    %rcx,-0x60(%rbp)
+ 112:	4c 8b 4d d8          	mov    -0x28(%rbp),%r9
+ 116:	4c 8b 45 b8          	mov    -0x48(%rbp),%r8
+ 11a:	48 8b 4d c0          	mov    -0x40(%rbp),%rcx
+ 11e:	48 8b 55 e0          	mov    -0x20(%rbp),%rdx
+ 122:	48 8b 75 c8          	mov    -0x38(%rbp),%rsi
+ 126:	48 8b 7d d0          	mov    -0x30(%rbp),%rdi
+ 12a:	e8 00 00 00 00       	call   12f <_D6raster8internal19conversion_dispatch30tryConvertUbyteToFloatAffine2DFNbNiNfMSQDa4view__T10RasterViewThZQpmMKSQEg13writable_view__T18WritableRasterViewTfZQxmZSQGdQFzQFt28UbyteToFloatConversionResult+0x12f>
+			12b: R_X86_64_PLT32	_D6raster8internal25validated_affine_relation48classifyValidatedUbyteToFloatAffine2DByteOverlapFNaNbNiNfmmmllmllZEQEiQEe15affine_relation25AffineByteOverlapRelation-0x4
+ 12f:	25 ff 00 00 00       	and    $0xff,%eax
+ 134:	85 c0                	test   %eax,%eax
+ 136:	74 28                	je     160 <_D6raster8internal19conversion_dispatch30tryConvertUbyteToFloatAffine2DFNbNiNfMSQDa4view__T10RasterViewThZQpmMKSQEg13writable_view__T18WritableRasterViewTfZQxmZSQGdQFzQFt28UbyteToFloatConversionResult+0x160>
+ 138:	83 f8 01             	cmp    $0x1,%eax
+ 13b:	74 07                	je     144 <_D6raster8internal19conversion_dispatch30tryConvertUbyteToFloatAffine2DFNbNiNfMSQDa4view__T10RasterViewThZQpmMKSQEg13writable_view__T18WritableRasterViewTfZQxmZSQGdQFzQFt28UbyteToFloatConversionResult+0x144>
+ 13d:	83 f8 02             	cmp    $0x2,%eax
+ 140:	74 10                	je     152 <_D6raster8internal19conversion_dispatch30tryConvertUbyteToFloatAffine2DFNbNiNfMSQDa4view__T10RasterViewThZQpmMKSQEg13writable_view__T18WritableRasterViewTfZQxmZSQGdQFzQFt28UbyteToFloatConversionResult+0x152>
+ 142:	eb 53                	jmp    197 <_D6raster8internal19conversion_dispatch30tryConvertUbyteToFloatAffine2DFNbNiNfMSQDa4view__T10RasterViewThZQpmMKSQEg13writable_view__T18WritableRasterViewTfZQxmZSQGdQFzQFt28UbyteToFloatConversionResult+0x197>
+ 144:	b8 04 00 00 00       	mov    $0x4,%eax
+ 149:	48 8b 5d b0          	mov    -0x50(%rbp),%rbx
+ 14d:	48 8b e5             	mov    %rbp,%rsp
+ 150:	5d                   	pop    %rbp
+ 151:	c3                   	ret
+ 152:	b8 05 00 00 00       	mov    $0x5,%eax
+ 157:	48 8b 5d b0          	mov    -0x50(%rbp),%rbx
+ 15b:	48 8b e5             	mov    %rbp,%rsp
+ 15e:	5d                   	pop    %rbp
+ 15f:	c3                   	ret
+ 160:	48 89 5d f0          	mov    %rbx,-0x10(%rbp)
+ 164:	48 8d 5d 38          	lea    0x38(%rbp),%rbx
+ 168:	b9 06 00 00 00       	mov    $0x6,%ecx
+ 16d:	ff 33                	push   (%rbx)
+ 16f:	48 83 eb 08          	sub    $0x8,%rbx
+ 173:	ff c9                	dec    %ecx
+ 175:	75 f6                	jne    16d <_D6raster8internal19conversion_dispatch30tryConvertUbyteToFloatAffine2DFNbNiNfMSQDa4view__T10RasterViewThZQpmMKSQEg13writable_view__T18WritableRasterViewTfZQxmZSQGdQFzQFt28UbyteToFloatConversionResult+0x16d>
+ 177:	48 8b 55 f8          	mov    -0x8(%rbp),%rdx
+ 17b:	48 8b 75 f0          	mov    -0x10(%rbp),%rsi
+ 17f:	48 8b 7d e8          	mov    -0x18(%rbp),%rdi
+ 183:	e8 00 00 00 00       	call   188 <_D6raster8internal19conversion_dispatch30tryConvertUbyteToFloatAffine2DFNbNiNfMSQDa4view__T10RasterViewThZQpmMKSQEg13writable_view__T18WritableRasterViewTfZQxmZSQGdQFzQFt28UbyteToFloatConversionResult+0x188>
+			184: R_X86_64_PLT32	_D6raster8internal19conversion_dispatch35convertApprovedUbyteToFloatAffine2DFNbNiNfMSQDf4view__T10RasterViewThZQpmMKSQEl13writable_view__T18WritableRasterViewTfZQxmZv-0x4
+ 188:	48 83 c4 30          	add    $0x30,%rsp
+ 18c:	31 c0                	xor    %eax,%eax
+ 18e:	48 8b 5d b0          	mov    -0x50(%rbp),%rbx
+ 192:	48 8b e5             	mov    %rbp,%rsp
+ 195:	5d                   	pop    %rbp
+ 196:	c3                   	ret
+ 197:	0f 0b                	ud2
+ 199:	48 8b 5d b0          	mov    -0x50(%rbp),%rbx
+ 19d:	48 8b e5             	mov    %rbp,%rsp
+ 1a0:	5d                   	pop    %rbp
+ 1a1:	c3                   	ret
+	...
+
+
+Disassembly of section .text._D6raster8internal19conversion_dispatch34tryConvertUbyteToFloatContiguous1DFNbNiNfMSQDe4view__T10RasterViewThZQpmMSQEjQEf6target__T17RasterTargetPlaneTfZQwZSQFzQFvQFp28UbyteToFloatConversionResult:
+
+0000000000000000 <_D6raster8internal19conversion_dispatch34tryConvertUbyteToFloatContiguous1DFNbNiNfMSQDe4view__T10RasterViewThZQpmMSQEjQEf6target__T17RasterTargetPlaneTfZQwZSQFzQFvQFp28UbyteToFloatConversionResult>:
+   0:	55                   	push   %rbp
+   1:	48 8b ec             	mov    %rsp,%rbp
+   4:	48 83 ec 40          	sub    $0x40,%rsp
+   8:	48 89 7d f8          	mov    %rdi,-0x8(%rbp)
+   c:	31 c0                	xor    %eax,%eax
+   e:	48 89 45 d0          	mov    %rax,-0x30(%rbp)
+  12:	48 89 45 d8          	mov    %rax,-0x28(%rbp)
+  16:	48 8b 55 f8          	mov    -0x8(%rbp),%rdx
+  1a:	48 8d 75 d0          	lea    -0x30(%rbp),%rsi
+  1e:	48 8d 7d 38          	lea    0x38(%rbp),%rdi
+  22:	e8 00 00 00 00       	call   27 <_D6raster8internal19conversion_dispatch34tryConvertUbyteToFloatContiguous1DFNbNiNfMSQDe4view__T10RasterViewThZQpmMSQEjQEf6target__T17RasterTargetPlaneTfZQwZSQFzQFvQFp28UbyteToFloatConversionResult+0x27>
+			23: R_X86_64_PLT32	_D6raster4view__T10RasterViewThZQp23tryPlaneExecutionTraitsMxFNaNbNiNfmJSQCt8internal16execution_layout20PlaneExecutionTraitsZb-0x4
+  27:	34 01                	xor    $0x1,%al
+  29:	74 0a                	je     35 <_D6raster8internal19conversion_dispatch34tryConvertUbyteToFloatContiguous1DFNbNiNfMSQDe4view__T10RasterViewThZQpmMSQEjQEf6target__T17RasterTargetPlaneTfZQwZSQFzQFvQFp28UbyteToFloatConversionResult+0x35>
+  2b:	b8 01 00 00 00       	mov    $0x1,%eax
+  30:	48 8b e5             	mov    %rbp,%rsp
+  33:	5d                   	pop    %rbp
+  34:	c3                   	ret
+  35:	48 8b 4d 20          	mov    0x20(%rbp),%rcx
+  39:	48 39 4d 58          	cmp    %rcx,0x58(%rbp)
+  3d:	75 0a                	jne    49 <_D6raster8internal19conversion_dispatch34tryConvertUbyteToFloatContiguous1DFNbNiNfMSQDe4view__T10RasterViewThZQpmMSQEjQEf6target__T17RasterTargetPlaneTfZQwZSQFzQFvQFp28UbyteToFloatConversionResult+0x49>
+  3f:	48 8b 45 60          	mov    0x60(%rbp),%rax
+  43:	48 3b 45 28          	cmp    0x28(%rbp),%rax
+  47:	74 0a                	je     53 <_D6raster8internal19conversion_dispatch34tryConvertUbyteToFloatContiguous1DFNbNiNfMSQDe4view__T10RasterViewThZQpmMSQEjQEf6target__T17RasterTargetPlaneTfZQwZSQFzQFvQFp28UbyteToFloatConversionResult+0x53>
+  49:	b8 02 00 00 00       	mov    $0x2,%eax
+  4e:	48 8b e5             	mov    %rbp,%rsp
+  51:	5d                   	pop    %rbp
+  52:	c3                   	ret
+  53:	48 83 7d 58 00       	cmpq   $0x0,0x58(%rbp)
+  58:	0f 84 c2 00 00 00    	je     120 <_D6raster8internal19conversion_dispatch34tryConvertUbyteToFloatContiguous1DFNbNiNfMSQDe4view__T10RasterViewThZQpmMSQEjQEf6target__T17RasterTargetPlaneTfZQwZSQFzQFvQFp28UbyteToFloatConversionResult+0x120>
+  5e:	48 83 7d 60 00       	cmpq   $0x0,0x60(%rbp)
+  63:	0f 84 b7 00 00 00    	je     120 <_D6raster8internal19conversion_dispatch34tryConvertUbyteToFloatContiguous1DFNbNiNfMSQDe4view__T10RasterViewThZQpmMSQEjQEf6target__T17RasterTargetPlaneTfZQwZSQFzQFvQFp28UbyteToFloatConversionResult+0x120>
+  69:	8a 55 d1             	mov    -0x2f(%rbp),%dl
+  6c:	80 f2 01             	xor    $0x1,%dl
+  6f:	74 0a                	je     7b <_D6raster8internal19conversion_dispatch34tryConvertUbyteToFloatContiguous1DFNbNiNfMSQDe4view__T10RasterViewThZQpmMSQEjQEf6target__T17RasterTargetPlaneTfZQwZSQFzQFvQFp28UbyteToFloatConversionResult+0x7b>
+  71:	b8 03 00 00 00       	mov    $0x3,%eax
+  76:	48 8b e5             	mov    %rbp,%rsp
+  79:	5d                   	pop    %rbp
+  7a:	c3                   	ret
+  7b:	48 8b 75 f8          	mov    -0x8(%rbp),%rsi
+  7f:	48 8d 7d 38          	lea    0x38(%rbp),%rdi
+  83:	e8 00 00 00 00       	call   88 <_D6raster8internal19conversion_dispatch34tryConvertUbyteToFloatContiguous1DFNbNiNfMSQDe4view__T10RasterViewThZQpmMSQEjQEf6target__T17RasterTargetPlaneTfZQwZSQFzQFvQFp28UbyteToFloatConversionResult+0x88>
+			84: R_X86_64_PLT32	_D6raster4view__T10RasterViewThZQp19executionRegionBaseMxFNaNbNiNjNlNemZPxh-0x4
+  88:	48 89 45 e0          	mov    %rax,-0x20(%rbp)
+  8c:	48 83 7d 20 00       	cmpq   $0x0,0x20(%rbp)
+  91:	74 07                	je     9a <_D6raster8internal19conversion_dispatch34tryConvertUbyteToFloatContiguous1DFNbNiNfMSQDe4view__T10RasterViewThZQpmMSQEjQEf6target__T17RasterTargetPlaneTfZQwZSQFzQFvQFp28UbyteToFloatConversionResult+0x9a>
+  93:	48 83 7d 28 00       	cmpq   $0x0,0x28(%rbp)
+  98:	75 04                	jne    9e <_D6raster8internal19conversion_dispatch34tryConvertUbyteToFloatContiguous1DFNbNiNfMSQDe4view__T10RasterViewThZQpmMSQEjQEf6target__T17RasterTargetPlaneTfZQwZSQFzQFvQFp28UbyteToFloatConversionResult+0x9e>
+  9a:	31 c9                	xor    %ecx,%ecx
+  9c:	eb 22                	jmp    c0 <_D6raster8internal19conversion_dispatch34tryConvertUbyteToFloatContiguous1DFNbNiNfMSQDe4view__T10RasterViewThZQpmMSQEjQEf6target__T17RasterTargetPlaneTfZQwZSQFzQFvQFp28UbyteToFloatConversionResult+0xc0>
+  9e:	48 83 7d 10 00       	cmpq   $0x0,0x10(%rbp)
+  a3:	75 17                	jne    bc <_D6raster8internal19conversion_dispatch34tryConvertUbyteToFloatContiguous1DFNbNiNfMSQDe4view__T10RasterViewThZQpmMSQEjQEf6target__T17RasterTargetPlaneTfZQwZSQFzQFvQFp28UbyteToFloatConversionResult+0xbc>
+  a5:	48 8b 4d 10          	mov    0x10(%rbp),%rcx
+  a9:	31 d2                	xor    %edx,%edx
+  ab:	be 7d 00 00 00       	mov    $0x7d,%esi
+  b0:	48 8d 3d 00 00 00 00 	lea    0x0(%rip),%rdi        # b7 <_D6raster8internal19conversion_dispatch34tryConvertUbyteToFloatContiguous1DFNbNiNfMSQDe4view__T10RasterViewThZQpmMSQEjQEf6target__T17RasterTargetPlaneTfZQwZSQFzQFvQFp28UbyteToFloatConversionResult+0xb7>
+			b3: R_X86_64_PC32	.rodata.str1.1+0x52
+  b7:	e8 00 00 00 00       	call   bc <_D6raster8internal19conversion_dispatch34tryConvertUbyteToFloatContiguous1DFNbNiNfMSQDe4view__T10RasterViewThZQpmMSQEjQEf6target__T17RasterTargetPlaneTfZQwZSQFzQFvQFp28UbyteToFloatConversionResult+0xbc>
+			b8: R_X86_64_PLT32	_d_arraybounds_indexp-0x4
+  bc:	48 8b 4d 18          	mov    0x18(%rbp),%rcx
+  c0:	48 89 4d e8          	mov    %rcx,-0x18(%rbp)
+  c4:	48 8b 55 e0          	mov    -0x20(%rbp),%rdx
+  c8:	48 89 ce             	mov    %rcx,%rsi
+  cb:	48 8b 7d d8          	mov    -0x28(%rbp),%rdi
+  cf:	e8 00 00 00 00       	call   d4 <_D6raster8internal19conversion_dispatch34tryConvertUbyteToFloatContiguous1DFNbNiNfMSQDe4view__T10RasterViewThZQpmMSQEjQEf6target__T17RasterTargetPlaneTfZQwZSQFzQFvQFp28UbyteToFloatConversionResult+0xd4>
+			d0: R_X86_64_PLT32	_D6raster8internal19conversion_dispatch32classifyConversionPhysicalRangesFNbNiNeMPxhMPfmZEQDkQDg14physical_range25PhysicalByteRangeRelation-0x4
+  d4:	25 ff 00 00 00       	and    $0xff,%eax
+  d9:	85 c0                	test   %eax,%eax
+  db:	74 0c                	je     e9 <_D6raster8internal19conversion_dispatch34tryConvertUbyteToFloatContiguous1DFNbNiNfMSQDe4view__T10RasterViewThZQpmMSQEjQEf6target__T17RasterTargetPlaneTfZQwZSQFzQFvQFp28UbyteToFloatConversionResult+0xe9>
+  dd:	83 f8 01             	cmp    $0x1,%eax
+  e0:	74 1b                	je     fd <_D6raster8internal19conversion_dispatch34tryConvertUbyteToFloatContiguous1DFNbNiNfMSQDe4view__T10RasterViewThZQpmMSQEjQEf6target__T17RasterTargetPlaneTfZQwZSQFzQFvQFp28UbyteToFloatConversionResult+0xfd>
+  e2:	83 f8 02             	cmp    $0x2,%eax
+  e5:	74 0c                	je     f3 <_D6raster8internal19conversion_dispatch34tryConvertUbyteToFloatContiguous1DFNbNiNfMSQDe4view__T10RasterViewThZQpmMSQEjQEf6target__T17RasterTargetPlaneTfZQwZSQFzQFvQFp28UbyteToFloatConversionResult+0xf3>
+  e7:	eb 3e                	jmp    127 <_D6raster8internal19conversion_dispatch34tryConvertUbyteToFloatContiguous1DFNbNiNfMSQDe4view__T10RasterViewThZQpmMSQEjQEf6target__T17RasterTargetPlaneTfZQwZSQFzQFvQFp28UbyteToFloatConversionResult+0x127>
+  e9:	b8 04 00 00 00       	mov    $0x4,%eax
+  ee:	48 8b e5             	mov    %rbp,%rsp
+  f1:	5d                   	pop    %rbp
+  f2:	c3                   	ret
+  f3:	b8 05 00 00 00       	mov    $0x5,%eax
+  f8:	48 8b e5             	mov    %rbp,%rsp
+  fb:	5d                   	pop    %rbp
+  fc:	c3                   	ret
+  fd:	48 8b 45 d8          	mov    -0x28(%rbp),%rax
+ 101:	48 8b 4d e0          	mov    -0x20(%rbp),%rcx
+ 105:	48 89 c2             	mov    %rax,%rdx
+ 108:	48 89 55 c8          	mov    %rdx,-0x38(%rbp)
+ 10c:	48 8b 7d d8          	mov    -0x28(%rbp),%rdi
+ 110:	48 8b 55 e8          	mov    -0x18(%rbp),%rdx
+ 114:	48 89 d6             	mov    %rdx,%rsi
+ 117:	48 8b 55 c8          	mov    -0x38(%rbp),%rdx
+ 11b:	e8 00 00 00 00       	call   120 <_D6raster8internal19conversion_dispatch34tryConvertUbyteToFloatContiguous1DFNbNiNfMSQDe4view__T10RasterViewThZQpmMSQEjQEf6target__T17RasterTargetPlaneTfZQwZSQFzQFvQFp28UbyteToFloatConversionResult+0x120>
+			11c: R_X86_64_PLT32	_D6raster8internal17scalar_conversion30scalarConvertUbyteToFloatSliceFNaNbNiNfMAxhMAfZb-0x4
+ 120:	31 c0                	xor    %eax,%eax
+ 122:	48 8b e5             	mov    %rbp,%rsp
+ 125:	5d                   	pop    %rbp
+ 126:	c3                   	ret
+ 127:	0f 0b                	ud2
+ 129:	48 8b e5             	mov    %rbp,%rsp
+ 12c:	5d                   	pop    %rbp
+ 12d:	c3                   	ret
+	...
+
+
+Disassembly of section .text._D6raster8internal19conversion_dispatch__T19executeApprovedRowsThTfZQBaFNaNbNiNfMPxhlMPflmmZv:
+
+0000000000000000 <_D6raster8internal19conversion_dispatch__T19executeApprovedRowsThTfZQBaFNaNbNiNfMPxhlMPflmmZv>:
+   0:	55                   	push   %rbp
+   1:	48 8b ec             	mov    %rsp,%rbp
+   4:	48 83 ec 30          	sub    $0x30,%rsp
+   8:	48 89 5d d0          	mov    %rbx,-0x30(%rbp)
+   c:	4c 89 65 d8          	mov    %r12,-0x28(%rbp)
+  10:	4c 89 6d e0          	mov    %r13,-0x20(%rbp)
+  14:	4c 89 75 e8          	mov    %r14,-0x18(%rbp)
+  18:	4c 89 7d f0          	mov    %r15,-0x10(%rbp)
+  1c:	4c 89 45 f8          	mov    %r8,-0x8(%rbp)
+  20:	49 89 fc             	mov    %rdi,%r12
+  23:	49 89 f3             	mov    %rsi,%r11
+  26:	49 89 d6             	mov    %rdx,%r14
+  29:	49 89 cf             	mov    %rcx,%r15
+  2c:	4c 89 cb             	mov    %r9,%rbx
+  2f:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
+  33:	31 ff                	xor    %edi,%edi
+  35:	4d 85 e4             	test   %r12,%r12
+  38:	74 58                	je     92 <_D6raster8internal19conversion_dispatch__T19executeApprovedRowsThTfZQBaFNaNbNiNfMPxhlMPflmmZv+0x92>
+  3a:	48 89 45 f8          	mov    %rax,-0x8(%rbp)
+  3e:	49 39 fb             	cmp    %rdi,%r11
+  41:	41 0f 95 c5          	setne  %r13b
+  45:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
+  49:	48 8b d7             	mov    %rdi,%rdx
+  4c:	48 0f af d0          	imul   %rax,%rdx
+  50:	48 03 d3             	add    %rbx,%rdx
+  53:	48 8b cf             	mov    %rdi,%rcx
+  56:	49 0f af ce          	imul   %r14,%rcx
+  5a:	49 8d 34 8f          	lea    (%r15,%rcx,4),%rsi
+  5e:	45 31 c0             	xor    %r8d,%r8d
+  61:	45 84 ed             	test   %r13b,%r13b
+  64:	74 24                	je     8a <_D6raster8internal19conversion_dispatch__T19executeApprovedRowsThTfZQBaFNaNbNiNfMPxhlMPflmmZv+0x8a>
+  66:	41 0f b6 0c 10       	movzbl (%r8,%rdx,1),%ecx
+  6b:	4d 39 d8             	cmp    %r11,%r8
+  6e:	73 3b                	jae    ab <_D6raster8internal19conversion_dispatch__T19executeApprovedRowsThTfZQBaFNaNbNiNfMPxhlMPflmmZv+0xab>
+  70:	44 0f b6 c9          	movzbl %cl,%r9d
+  74:	45 8b c9             	mov    %r9d,%r9d
+  77:	f3 49 0f 2a c1       	cvtsi2ss %r9,%xmm0
+  7c:	f3 42 0f 11 04 86    	movss  %xmm0,(%rsi,%r8,4)
+  82:	49 ff c0             	inc    %r8
+  85:	4d 39 d8             	cmp    %r11,%r8
+  88:	72 dc                	jb     66 <_D6raster8internal19conversion_dispatch__T19executeApprovedRowsThTfZQBaFNaNbNiNfMPxhlMPflmmZv+0x66>
+  8a:	48 ff c7             	inc    %rdi
+  8d:	4c 39 e7             	cmp    %r12,%rdi
+  90:	72 b7                	jb     49 <_D6raster8internal19conversion_dispatch__T19executeApprovedRowsThTfZQBaFNaNbNiNfMPxhlMPflmmZv+0x49>
+  92:	48 8b 5d d0          	mov    -0x30(%rbp),%rbx
+  96:	4c 8b 65 d8          	mov    -0x28(%rbp),%r12
+  9a:	4c 8b 6d e0          	mov    -0x20(%rbp),%r13
+  9e:	4c 8b 75 e8          	mov    -0x18(%rbp),%r14
+  a2:	4c 8b 7d f0          	mov    -0x10(%rbp),%r15
+  a6:	48 8b e5             	mov    %rbp,%rsp
+  a9:	5d                   	pop    %rbp
+  aa:	c3                   	ret
+  ab:	49 8b cb             	mov    %r11,%rcx
+  ae:	49 8b d0             	mov    %r8,%rdx
+  b1:	be 59 08 00 00       	mov    $0x859,%esi
+  b6:	48 8d 3d 00 00 00 00 	lea    0x0(%rip),%rdi        # bd <_D6raster8internal19conversion_dispatch__T19executeApprovedRowsThTfZQBaFNaNbNiNfMPxhlMPflmmZv+0xbd>
+			b9: R_X86_64_PC32	.rodata.str1.1-0x4
+  bd:	e8 00 00 00 00       	call   c2 <_D6raster8internal19conversion_dispatch__T19executeApprovedRowsThTfZQBaFNaNbNiNfMPxhlMPflmmZv+0xc2>
+			be: R_X86_64_PLT32	_d_arraybounds_indexp-0x4
+  c2:	48 8b 5d d0          	mov    -0x30(%rbp),%rbx
+  c6:	4c 8b 65 d8          	mov    -0x28(%rbp),%r12
+  ca:	4c 8b 6d e0          	mov    -0x20(%rbp),%r13
+  ce:	4c 8b 75 e8          	mov    -0x18(%rbp),%r14
+  d2:	4c 8b 7d f0          	mov    -0x10(%rbp),%r15
+  d6:	48 8b e5             	mov    %rbp,%rsp
+  d9:	5d                   	pop    %rbp
+  da:	c3                   	ret
+	...
+
