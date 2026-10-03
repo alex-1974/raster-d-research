@@ -1,0 +1,1283 @@
+{
+	"rootPackage": "raster-d",
+	"configuration": "library",
+	"buildType": "debug",
+	"compiler": "ldc",
+	"architecture": [
+		"x86_64"
+	],
+	"platform": [
+		"linux",
+		"posix"
+	],
+	"packages": [
+		{
+			"path": "/tmp/raster-vector-xps-run-rORpT2/raster-d/",
+			"name": "raster-d",
+			"version": "~master",
+			"description": "High-performance raster engine for large and streamed raster data",
+			"homepage": "",
+			"authors": [
+				"Alexander Bernardi"
+			],
+			"copyright": "Copyright © 2026, Alexander Bernardi",
+			"license": "MIT",
+			"dependencies": [
+				"mir-algorithm"
+			],
+			"active": true,
+			"configuration": "library",
+			"targetType": "library",
+			"targetPath": "",
+			"targetName": "raster-d",
+			"targetFileName": "libraster-d.a",
+			"workingDirectory": "",
+			"mainSourceFile": "",
+			"dflags": [
+				"-preview=dip1000"
+			],
+			"lflags": [],
+			"libs": [],
+			"injectSourceFiles": [],
+			"copyFiles": [],
+			"extraDependencyFiles": [],
+			"versions": [],
+			"debugVersions": [],
+			"importPaths": [
+				"source/"
+			],
+			"cImportPaths": [],
+			"stringImportPaths": [],
+			"preGenerateCommands": [],
+			"postGenerateCommands": [],
+			"preBuildCommands": [],
+			"postBuildCommands": [],
+			"preRunCommands": [],
+			"postRunCommands": [],
+			"environments": {},
+			"buildEnvironments": {},
+			"runEnvironments": {},
+			"preGenerateEnvironments": {},
+			"postGenerateEnvironments": {},
+			"preBuildEnvironments": {},
+			"postBuildEnvironments": {},
+			"preRunEnvironments": {},
+			"postRunEnvironments": {},
+			"buildRequirements": [],
+			"options": [],
+			"files": [
+				{
+					"role": "source",
+					"path": "source/raster/backing.d"
+				},
+				{
+					"role": "source",
+					"path": "source/raster/byte_layout.d"
+				},
+				{
+					"role": "source",
+					"path": "source/raster/construction.d"
+				},
+				{
+					"role": "source",
+					"path": "source/raster/conversion.d"
+				},
+				{
+					"role": "source",
+					"path": "source/raster/copy.d"
+				},
+				{
+					"role": "source",
+					"path": "source/raster/descriptor.d"
+				},
+				{
+					"role": "source",
+					"path": "source/raster/fill.d"
+				},
+				{
+					"role": "source",
+					"path": "source/raster/import_owned.d"
+				},
+				{
+					"role": "source",
+					"path": "source/raster/import_single_resource.d"
+				},
+				{
+					"role": "source",
+					"path": "source/raster/internal/affine_relation.d"
+				},
+				{
+					"role": "source",
+					"path": "source/raster/internal/block_resolution.d"
+				},
+				{
+					"role": "source",
+					"path": "source/raster/internal/block_resolution_test.d"
+				},
+				{
+					"role": "source",
+					"path": "source/raster/internal/compiler_capabilities.d"
+				},
+				{
+					"role": "source",
+					"path": "source/raster/internal/conversion_dispatch.d"
+				},
+				{
+					"role": "source",
+					"path": "source/raster/internal/copy_dispatch.d"
+				},
+				{
+					"role": "source",
+					"path": "source/raster/internal/dependency.d"
+				},
+				{
+					"role": "source",
+					"path": "source/raster/internal/execution_layout.d"
+				},
+				{
+					"role": "source",
+					"path": "source/raster/internal/fill_dispatch.d"
+				},
+				{
+					"role": "source",
+					"path": "source/raster/internal/fixed_lane_kernels.d"
+				},
+				{
+					"role": "source",
+					"path": "source/raster/internal/materialization.d"
+				},
+				{
+					"role": "source",
+					"path": "source/raster/internal/materialization_plan.d"
+				},
+				{
+					"role": "source",
+					"path": "source/raster/internal/mir_adapter.d"
+				},
+				{
+					"role": "source",
+					"path": "source/raster/internal/mir_target_adapter.d"
+				},
+				{
+					"role": "source",
+					"path": "source/raster/internal/neighbourhood_dispatch.d"
+				},
+				{
+					"role": "source",
+					"path": "source/raster/internal/physical_range.d"
+				},
+				{
+					"role": "source",
+					"path": "source/raster/internal/reduction_dispatch.d"
+				},
+				{
+					"role": "source",
+					"path": "source/raster/internal/residency.d"
+				},
+				{
+					"role": "source",
+					"path": "source/raster/internal/retained_store.d"
+				},
+				{
+					"role": "source",
+					"path": "source/raster/internal/scalar_conversion.d"
+				},
+				{
+					"role": "source",
+					"path": "source/raster/internal/scalar_kernels.d"
+				},
+				{
+					"role": "source",
+					"path": "source/raster/internal/scalar_pointwise.d"
+				},
+				{
+					"role": "source",
+					"path": "source/raster/internal/streaming_equivalence_test.d"
+				},
+				{
+					"role": "source",
+					"path": "source/raster/internal/target.d"
+				},
+				{
+					"role": "source",
+					"path": "source/raster/internal/test_data.d"
+				},
+				{
+					"role": "source",
+					"path": "source/raster/internal/transform_dispatch.d"
+				},
+				{
+					"role": "source",
+					"path": "source/raster/internal/validated_affine_relation.d"
+				},
+				{
+					"role": "source",
+					"path": "source/raster/neighbourhood.d"
+				},
+				{
+					"role": "source",
+					"path": "source/raster/owned_resource.d"
+				},
+				{
+					"role": "source",
+					"path": "source/raster/package.d"
+				},
+				{
+					"role": "source",
+					"path": "source/raster/reduction.d"
+				},
+				{
+					"role": "source",
+					"path": "source/raster/region.d"
+				},
+				{
+					"role": "source",
+					"path": "source/raster/resource.d"
+				},
+				{
+					"role": "source",
+					"path": "source/raster/sample.d"
+				},
+				{
+					"role": "source",
+					"path": "source/raster/transform.d"
+				},
+				{
+					"role": "source",
+					"path": "source/raster/validation.d"
+				},
+				{
+					"role": "source",
+					"path": "source/raster/view.d"
+				},
+				{
+					"role": "source",
+					"path": "source/raster/writable_view.d"
+				}
+			]
+		},
+		{
+			"path": "/home/alexander/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/",
+			"name": "mir-algorithm",
+			"version": "3.22.4",
+			"description": "Dlang Core Library",
+			"homepage": "",
+			"authors": [
+				"Ilia Ki",
+				"John Michael Hall",
+				"Shigeki Karita",
+				"Sebastian Wilzbach",
+				"And others",
+				"mir.date and a bit of other code is based on Phobos"
+			],
+			"copyright": "2020 Ilia Ki, Kaleidic Associates Advisory Limited, Symmetry Investments",
+			"license": "Apache-2.0",
+			"dependencies": [
+				"mir-core"
+			],
+			"active": true,
+			"configuration": "default",
+			"targetType": "library",
+			"targetPath": "",
+			"targetName": "mir-algorithm",
+			"targetFileName": "libmir-algorithm.a",
+			"workingDirectory": "",
+			"mainSourceFile": "",
+			"dflags": [],
+			"lflags": [],
+			"libs": [],
+			"injectSourceFiles": [],
+			"copyFiles": [],
+			"extraDependencyFiles": [],
+			"versions": [],
+			"debugVersions": [],
+			"importPaths": [
+				"source/"
+			],
+			"cImportPaths": [],
+			"stringImportPaths": [],
+			"preGenerateCommands": [],
+			"postGenerateCommands": [],
+			"preBuildCommands": [],
+			"postBuildCommands": [],
+			"preRunCommands": [],
+			"postRunCommands": [],
+			"environments": {},
+			"buildEnvironments": {},
+			"runEnvironments": {},
+			"preGenerateEnvironments": {},
+			"postGenerateEnvironments": {},
+			"preBuildEnvironments": {},
+			"postBuildEnvironments": {},
+			"preRunEnvironments": {},
+			"postRunEnvironments": {},
+			"buildRequirements": [],
+			"options": [],
+			"files": [
+				{
+					"role": "source",
+					"path": "source/mir/algebraic_alias/ion.d"
+				},
+				{
+					"role": "source",
+					"path": "source/mir/algebraic_alias/json.d"
+				},
+				{
+					"role": "source",
+					"path": "source/mir/algebraic_alias/transform.d"
+				},
+				{
+					"role": "source",
+					"path": "source/mir/algorithm/iteration.d"
+				},
+				{
+					"role": "source",
+					"path": "source/mir/algorithm/setops.d"
+				},
+				{
+					"role": "source",
+					"path": "source/mir/annotated.d"
+				},
+				{
+					"role": "source",
+					"path": "source/mir/appender.d"
+				},
+				{
+					"role": "source",
+					"path": "source/mir/array/allocation.d"
+				},
+				{
+					"role": "source",
+					"path": "source/mir/base64.d"
+				},
+				{
+					"role": "source",
+					"path": "source/mir/bignum/decimal.d"
+				},
+				{
+					"role": "source",
+					"path": "source/mir/bignum/fixed.d"
+				},
+				{
+					"role": "source",
+					"path": "source/mir/bignum/fp.d"
+				},
+				{
+					"role": "source",
+					"path": "source/mir/bignum/integer.d"
+				},
+				{
+					"role": "source",
+					"path": "source/mir/bignum/internal/dec2float.d"
+				},
+				{
+					"role": "source",
+					"path": "source/mir/bignum/internal/dec2float_table.d"
+				},
+				{
+					"role": "source",
+					"path": "source/mir/bignum/internal/kernel.d"
+				},
+				{
+					"role": "source",
+					"path": "source/mir/bignum/internal/parse.d"
+				},
+				{
+					"role": "source",
+					"path": "source/mir/bignum/internal/phobos_kernel.d"
+				},
+				{
+					"role": "source",
+					"path": "source/mir/bignum/internal/ryu/generic_128.d"
+				},
+				{
+					"role": "source",
+					"path": "source/mir/bignum/internal/ryu/table.d"
+				},
+				{
+					"role": "source",
+					"path": "source/mir/bignum/low_level_view.d"
+				},
+				{
+					"role": "source",
+					"path": "source/mir/combinatorics/package.d"
+				},
+				{
+					"role": "source",
+					"path": "source/mir/container/binaryheap.d"
+				},
+				{
+					"role": "source",
+					"path": "source/mir/cpp_export/numeric.d"
+				},
+				{
+					"role": "source",
+					"path": "source/mir/date.d"
+				},
+				{
+					"role": "source",
+					"path": "source/mir/ediff.d"
+				},
+				{
+					"role": "source",
+					"path": "source/mir/format.d"
+				},
+				{
+					"role": "source",
+					"path": "source/mir/format_impl.d"
+				},
+				{
+					"role": "source",
+					"path": "source/mir/graph/package.d"
+				},
+				{
+					"role": "source",
+					"path": "source/mir/graph/tarjan.d"
+				},
+				{
+					"role": "source",
+					"path": "source/mir/internal/ldc_simd.d"
+				},
+				{
+					"role": "source",
+					"path": "source/mir/interpolate/constant.d"
+				},
+				{
+					"role": "source",
+					"path": "source/mir/interpolate/extrapolate.d"
+				},
+				{
+					"role": "source",
+					"path": "source/mir/interpolate/generic.d"
+				},
+				{
+					"role": "source",
+					"path": "source/mir/interpolate/linear.d"
+				},
+				{
+					"role": "source",
+					"path": "source/mir/interpolate/mod.d"
+				},
+				{
+					"role": "source",
+					"path": "source/mir/interpolate/package.d"
+				},
+				{
+					"role": "source",
+					"path": "source/mir/interpolate/polynomial.d"
+				},
+				{
+					"role": "source",
+					"path": "source/mir/interpolate/spline.d"
+				},
+				{
+					"role": "source",
+					"path": "source/mir/interpolate/utility.d"
+				},
+				{
+					"role": "source",
+					"path": "source/mir/lob.d"
+				},
+				{
+					"role": "source",
+					"path": "source/mir/math/func/expdigamma.d"
+				},
+				{
+					"role": "source",
+					"path": "source/mir/math/func/hermite.d"
+				},
+				{
+					"role": "source",
+					"path": "source/mir/math/func/normal.d"
+				},
+				{
+					"role": "source",
+					"path": "source/mir/math/numeric.d"
+				},
+				{
+					"role": "source",
+					"path": "source/mir/math/stat.d"
+				},
+				{
+					"role": "source",
+					"path": "source/mir/math/sum.d"
+				},
+				{
+					"role": "source",
+					"path": "source/mir/ndslice/allocation.d"
+				},
+				{
+					"role": "source",
+					"path": "source/mir/ndslice/chunks.d"
+				},
+				{
+					"role": "source",
+					"path": "source/mir/ndslice/concatenation.d"
+				},
+				{
+					"role": "source",
+					"path": "source/mir/ndslice/connect/cpython.d"
+				},
+				{
+					"role": "source",
+					"path": "source/mir/ndslice/dynamic.d"
+				},
+				{
+					"role": "source",
+					"path": "source/mir/ndslice/field.d"
+				},
+				{
+					"role": "source",
+					"path": "source/mir/ndslice/filling.d"
+				},
+				{
+					"role": "source",
+					"path": "source/mir/ndslice/fuse.d"
+				},
+				{
+					"role": "source",
+					"path": "source/mir/ndslice/internal.d"
+				},
+				{
+					"role": "source",
+					"path": "source/mir/ndslice/iterator.d"
+				},
+				{
+					"role": "source",
+					"path": "source/mir/ndslice/mutation.d"
+				},
+				{
+					"role": "source",
+					"path": "source/mir/ndslice/ndfield.d"
+				},
+				{
+					"role": "source",
+					"path": "source/mir/ndslice/package.d"
+				},
+				{
+					"role": "source",
+					"path": "source/mir/ndslice/slice.d"
+				},
+				{
+					"role": "source",
+					"path": "source/mir/ndslice/sorting.d"
+				},
+				{
+					"role": "source",
+					"path": "source/mir/ndslice/topology.d"
+				},
+				{
+					"role": "source",
+					"path": "source/mir/ndslice/traits.d"
+				},
+				{
+					"role": "source",
+					"path": "source/mir/numeric.d"
+				},
+				{
+					"role": "source",
+					"path": "source/mir/parse.d"
+				},
+				{
+					"role": "source",
+					"path": "source/mir/polynomial.d"
+				},
+				{
+					"role": "source",
+					"path": "source/mir/range.d"
+				},
+				{
+					"role": "source",
+					"path": "source/mir/rc/array.d"
+				},
+				{
+					"role": "source",
+					"path": "source/mir/rc/context.d"
+				},
+				{
+					"role": "source",
+					"path": "source/mir/rc/package.d"
+				},
+				{
+					"role": "source",
+					"path": "source/mir/rc/ptr.d"
+				},
+				{
+					"role": "source",
+					"path": "source/mir/rc/slim_ptr.d"
+				},
+				{
+					"role": "source",
+					"path": "source/mir/serde.d"
+				},
+				{
+					"role": "source",
+					"path": "source/mir/series.d"
+				},
+				{
+					"role": "source",
+					"path": "source/mir/small_array.d"
+				},
+				{
+					"role": "source",
+					"path": "source/mir/small_string.d"
+				},
+				{
+					"role": "source",
+					"path": "source/mir/stdio.d"
+				},
+				{
+					"role": "source",
+					"path": "source/mir/string.d"
+				},
+				{
+					"role": "source",
+					"path": "source/mir/string_map.d"
+				},
+				{
+					"role": "source",
+					"path": "source/mir/test.d"
+				},
+				{
+					"role": "source",
+					"path": "source/mir/timestamp.d"
+				},
+				{
+					"role": "source",
+					"path": "source/mir/type_info.d"
+				}
+			]
+		},
+		{
+			"path": "/home/alexander/.dub/packages/mir-core/1.7.4/mir-core/",
+			"name": "mir-core",
+			"version": "1.7.4",
+			"description": "Base software building blocks: Algebraic types (aka sumtype/tagged union/variant), universal reflection API, basic math, and more",
+			"homepage": "",
+			"authors": [
+				"Ilia Ki",
+				"Phobos authors (see information per file)"
+			],
+			"copyright": "Ilia Ki, Kaleidic Associates Advisory Limited, Symmetry Investments",
+			"license": "Apache-2.0",
+			"dependencies": [],
+			"active": true,
+			"configuration": "library",
+			"targetType": "library",
+			"targetPath": "",
+			"targetName": "mir-core",
+			"targetFileName": "libmir-core.a",
+			"workingDirectory": "",
+			"mainSourceFile": "",
+			"dflags": [],
+			"lflags": [],
+			"libs": [],
+			"injectSourceFiles": [],
+			"copyFiles": [],
+			"extraDependencyFiles": [],
+			"versions": [],
+			"debugVersions": [],
+			"importPaths": [
+				"source/"
+			],
+			"cImportPaths": [],
+			"stringImportPaths": [],
+			"preGenerateCommands": [],
+			"postGenerateCommands": [],
+			"preBuildCommands": [],
+			"postBuildCommands": [],
+			"preRunCommands": [],
+			"postRunCommands": [],
+			"environments": {},
+			"buildEnvironments": {},
+			"runEnvironments": {},
+			"preGenerateEnvironments": {},
+			"postGenerateEnvironments": {},
+			"preBuildEnvironments": {},
+			"postBuildEnvironments": {},
+			"preRunEnvironments": {},
+			"postRunEnvironments": {},
+			"buildRequirements": [],
+			"options": [],
+			"files": [
+				{
+					"role": "source",
+					"path": "source/mir/algebraic.d"
+				},
+				{
+					"role": "source",
+					"path": "source/mir/bitmanip.d"
+				},
+				{
+					"role": "source",
+					"path": "source/mir/bitop.d"
+				},
+				{
+					"role": "source",
+					"path": "source/mir/checkedint.d"
+				},
+				{
+					"role": "source",
+					"path": "source/mir/complex/math.d"
+				},
+				{
+					"role": "source",
+					"path": "source/mir/complex/package.d"
+				},
+				{
+					"role": "source",
+					"path": "source/mir/conv.d"
+				},
+				{
+					"role": "source",
+					"path": "source/mir/enums.d"
+				},
+				{
+					"role": "source",
+					"path": "source/mir/exception.d"
+				},
+				{
+					"role": "source",
+					"path": "source/mir/functional.d"
+				},
+				{
+					"role": "source",
+					"path": "source/mir/internal/memory.d"
+				},
+				{
+					"role": "source",
+					"path": "source/mir/internal/meta.d"
+				},
+				{
+					"role": "source",
+					"path": "source/mir/internal/utility.d"
+				},
+				{
+					"role": "source",
+					"path": "source/mir/math/common.d"
+				},
+				{
+					"role": "source",
+					"path": "source/mir/math/constant.d"
+				},
+				{
+					"role": "source",
+					"path": "source/mir/math/ieee.d"
+				},
+				{
+					"role": "source",
+					"path": "source/mir/math/package.d"
+				},
+				{
+					"role": "source",
+					"path": "source/mir/primitives.d"
+				},
+				{
+					"role": "source",
+					"path": "source/mir/qualifier.d"
+				},
+				{
+					"role": "source",
+					"path": "source/mir/reflection.d"
+				},
+				{
+					"role": "source",
+					"path": "source/mir/string_table.d"
+				},
+				{
+					"role": "source",
+					"path": "source/mir/utility.d"
+				}
+			]
+		},
+		{
+			"path": "/home/alexander/.dub/packages/silly/1.1.1/silly/",
+			"name": "silly",
+			"version": "1.1.1",
+			"description": "Better test runner for D",
+			"homepage": "",
+			"authors": [
+				"Anton Fediushin"
+			],
+			"copyright": "Copyright © 2018-2019, Anton Fediushin",
+			"license": "ISC",
+			"dependencies": [],
+			"active": false,
+			"configuration": "library",
+			"targetType": "sourceLibrary",
+			"targetPath": "",
+			"targetName": "silly",
+			"targetFileName": "",
+			"workingDirectory": "",
+			"mainSourceFile": "",
+			"dflags": [],
+			"lflags": [],
+			"libs": [],
+			"injectSourceFiles": [],
+			"copyFiles": [],
+			"extraDependencyFiles": [],
+			"versions": [],
+			"debugVersions": [],
+			"importPaths": [
+				"."
+			],
+			"cImportPaths": [],
+			"stringImportPaths": [],
+			"preGenerateCommands": [],
+			"postGenerateCommands": [],
+			"preBuildCommands": [],
+			"postBuildCommands": [],
+			"preRunCommands": [],
+			"postRunCommands": [],
+			"environments": {},
+			"buildEnvironments": {},
+			"runEnvironments": {},
+			"preGenerateEnvironments": {},
+			"postGenerateEnvironments": {},
+			"preBuildEnvironments": {},
+			"postBuildEnvironments": {},
+			"preRunEnvironments": {},
+			"postRunEnvironments": {},
+			"buildRequirements": [],
+			"options": [],
+			"files": [
+				{
+					"role": "import_",
+					"path": "example/source/example/attributes.d"
+				},
+				{
+					"role": "import_",
+					"path": "example/source/example/chatty.d"
+				},
+				{
+					"role": "import_",
+					"path": "example/source/example/delay.d"
+				},
+				{
+					"role": "import_",
+					"path": "example/source/example/named.d"
+				},
+				{
+					"role": "import_",
+					"path": "example/source/example/nameless.d"
+				},
+				{
+					"role": "source",
+					"path": "silly.d"
+				},
+				{
+					"role": "import_",
+					"path": "test/common.d"
+				},
+				{
+					"role": "import_",
+					"path": "test/error/error.d"
+				},
+				{
+					"role": "import_",
+					"path": "test/help/help.d"
+				},
+				{
+					"role": "import_",
+					"path": "test/include_exclude/include_exclude.d"
+				},
+				{
+					"role": "import_",
+					"path": "test/issue_10/issue_10.d"
+				},
+				{
+					"role": "import_",
+					"path": "test/issue_2/issue_2.d"
+				},
+				{
+					"role": "import_",
+					"path": "test/issue_23/issue_23.d"
+				},
+				{
+					"role": "import_",
+					"path": "test/issue_29/issue_29.d"
+				},
+				{
+					"role": "import_",
+					"path": "test/issue_30/issue_30.d"
+				},
+				{
+					"role": "import_",
+					"path": "test/issue_38/issue_38.d"
+				},
+				{
+					"role": "import_",
+					"path": "test/issue_5/issue_5.d"
+				},
+				{
+					"role": "import_",
+					"path": "test/names/source/names/modulewithnamewhichistoolongandnobodysgoingtousenameslikethisanyway.d"
+				},
+				{
+					"role": "import_",
+					"path": "test/names/source/names/one/two/three/four/five/six/seven/eight/nine/ten/m.d"
+				},
+				{
+					"role": "import_",
+					"path": "test/verbose/verbose.d"
+				}
+			]
+		}
+	],
+	"targets": [
+		{
+			"rootPackage": "raster-d",
+			"packages": [
+				"raster-d"
+			],
+			"rootConfiguration": "library",
+			"buildSettings": {
+				"targetType": 6,
+				"targetPath": "/tmp/raster-vector-xps-run-rORpT2/raster-d",
+				"targetName": "raster-d",
+				"workingDirectory": "",
+				"mainSourceFile": "",
+				"dflags": [
+					"-preview=dip1000"
+				],
+				"lflags": [],
+				"libs": [],
+				"linkerFiles": [
+					"/home/alexander/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/libmir-algorithm.a",
+					"/home/alexander/.dub/packages/mir-core/1.7.4/mir-core/libmir-core.a"
+				],
+				"sourceFiles": [
+					"/tmp/raster-vector-xps-run-rORpT2/raster-d/source/raster/backing.d",
+					"/tmp/raster-vector-xps-run-rORpT2/raster-d/source/raster/byte_layout.d",
+					"/tmp/raster-vector-xps-run-rORpT2/raster-d/source/raster/construction.d",
+					"/tmp/raster-vector-xps-run-rORpT2/raster-d/source/raster/conversion.d",
+					"/tmp/raster-vector-xps-run-rORpT2/raster-d/source/raster/copy.d",
+					"/tmp/raster-vector-xps-run-rORpT2/raster-d/source/raster/descriptor.d",
+					"/tmp/raster-vector-xps-run-rORpT2/raster-d/source/raster/fill.d",
+					"/tmp/raster-vector-xps-run-rORpT2/raster-d/source/raster/import_owned.d",
+					"/tmp/raster-vector-xps-run-rORpT2/raster-d/source/raster/import_single_resource.d",
+					"/tmp/raster-vector-xps-run-rORpT2/raster-d/source/raster/internal/affine_relation.d",
+					"/tmp/raster-vector-xps-run-rORpT2/raster-d/source/raster/internal/block_resolution.d",
+					"/tmp/raster-vector-xps-run-rORpT2/raster-d/source/raster/internal/block_resolution_test.d",
+					"/tmp/raster-vector-xps-run-rORpT2/raster-d/source/raster/internal/compiler_capabilities.d",
+					"/tmp/raster-vector-xps-run-rORpT2/raster-d/source/raster/internal/conversion_dispatch.d",
+					"/tmp/raster-vector-xps-run-rORpT2/raster-d/source/raster/internal/copy_dispatch.d",
+					"/tmp/raster-vector-xps-run-rORpT2/raster-d/source/raster/internal/dependency.d",
+					"/tmp/raster-vector-xps-run-rORpT2/raster-d/source/raster/internal/execution_layout.d",
+					"/tmp/raster-vector-xps-run-rORpT2/raster-d/source/raster/internal/fill_dispatch.d",
+					"/tmp/raster-vector-xps-run-rORpT2/raster-d/source/raster/internal/fixed_lane_kernels.d",
+					"/tmp/raster-vector-xps-run-rORpT2/raster-d/source/raster/internal/materialization.d",
+					"/tmp/raster-vector-xps-run-rORpT2/raster-d/source/raster/internal/materialization_plan.d",
+					"/tmp/raster-vector-xps-run-rORpT2/raster-d/source/raster/internal/mir_adapter.d",
+					"/tmp/raster-vector-xps-run-rORpT2/raster-d/source/raster/internal/mir_target_adapter.d",
+					"/tmp/raster-vector-xps-run-rORpT2/raster-d/source/raster/internal/neighbourhood_dispatch.d",
+					"/tmp/raster-vector-xps-run-rORpT2/raster-d/source/raster/internal/physical_range.d",
+					"/tmp/raster-vector-xps-run-rORpT2/raster-d/source/raster/internal/reduction_dispatch.d",
+					"/tmp/raster-vector-xps-run-rORpT2/raster-d/source/raster/internal/residency.d",
+					"/tmp/raster-vector-xps-run-rORpT2/raster-d/source/raster/internal/retained_store.d",
+					"/tmp/raster-vector-xps-run-rORpT2/raster-d/source/raster/internal/scalar_conversion.d",
+					"/tmp/raster-vector-xps-run-rORpT2/raster-d/source/raster/internal/scalar_kernels.d",
+					"/tmp/raster-vector-xps-run-rORpT2/raster-d/source/raster/internal/scalar_pointwise.d",
+					"/tmp/raster-vector-xps-run-rORpT2/raster-d/source/raster/internal/streaming_equivalence_test.d",
+					"/tmp/raster-vector-xps-run-rORpT2/raster-d/source/raster/internal/target.d",
+					"/tmp/raster-vector-xps-run-rORpT2/raster-d/source/raster/internal/test_data.d",
+					"/tmp/raster-vector-xps-run-rORpT2/raster-d/source/raster/internal/transform_dispatch.d",
+					"/tmp/raster-vector-xps-run-rORpT2/raster-d/source/raster/internal/validated_affine_relation.d",
+					"/tmp/raster-vector-xps-run-rORpT2/raster-d/source/raster/neighbourhood.d",
+					"/tmp/raster-vector-xps-run-rORpT2/raster-d/source/raster/owned_resource.d",
+					"/tmp/raster-vector-xps-run-rORpT2/raster-d/source/raster/package.d",
+					"/tmp/raster-vector-xps-run-rORpT2/raster-d/source/raster/reduction.d",
+					"/tmp/raster-vector-xps-run-rORpT2/raster-d/source/raster/region.d",
+					"/tmp/raster-vector-xps-run-rORpT2/raster-d/source/raster/resource.d",
+					"/tmp/raster-vector-xps-run-rORpT2/raster-d/source/raster/sample.d",
+					"/tmp/raster-vector-xps-run-rORpT2/raster-d/source/raster/transform.d",
+					"/tmp/raster-vector-xps-run-rORpT2/raster-d/source/raster/validation.d",
+					"/tmp/raster-vector-xps-run-rORpT2/raster-d/source/raster/view.d",
+					"/tmp/raster-vector-xps-run-rORpT2/raster-d/source/raster/writable_view.d"
+				],
+				"injectSourceFiles": [],
+				"copyFiles": [],
+				"extraDependencyFiles": [],
+				"versions": [
+					"Have_raster_d",
+					"Have_mir_algorithm",
+					"Have_mir_core"
+				],
+				"debugVersions": [],
+				"versionFilters": [],
+				"debugVersionFilters": [],
+				"importPaths": [
+					"/tmp/raster-vector-xps-run-rORpT2/raster-d/source/",
+					"/home/alexander/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/",
+					"/home/alexander/.dub/packages/mir-core/1.7.4/mir-core/source/"
+				],
+				"cImportPaths": [],
+				"stringImportPaths": [],
+				"importFiles": [],
+				"stringImportFiles": [],
+				"preGenerateCommands": [],
+				"postGenerateCommands": [],
+				"preBuildCommands": [],
+				"postBuildCommands": [],
+				"preRunCommands": [],
+				"postRunCommands": [],
+				"environments": {},
+				"buildEnvironments": {},
+				"runEnvironments": {},
+				"preGenerateEnvironments": {},
+				"postGenerateEnvironments": {},
+				"preBuildEnvironments": {},
+				"postBuildEnvironments": {},
+				"preRunEnvironments": {},
+				"postRunEnvironments": {},
+				"requirements": [],
+				"options": [
+					"debugMode",
+					"debugInfo",
+					"warningsAsErrors"
+				]
+			},
+			"cacheArtifactPath": "/home/alexander/.dub/cache/raster-d/~master/build/library-debug-O8Oo2cXDeNN4HdZEDLyyLg/libraster-d.a",
+			"dependencies": [
+				"mir-algorithm"
+			],
+			"linkDependencies": [
+				"mir-algorithm",
+				"mir-core"
+			]
+		},
+		{
+			"rootPackage": "mir-algorithm",
+			"packages": [
+				"mir-algorithm"
+			],
+			"rootConfiguration": "default",
+			"buildSettings": {
+				"targetType": 6,
+				"targetPath": "/home/alexander/.dub/packages/mir-algorithm/3.22.4/mir-algorithm",
+				"targetName": "mir-algorithm",
+				"workingDirectory": "",
+				"mainSourceFile": "",
+				"dflags": [],
+				"lflags": [],
+				"libs": [],
+				"linkerFiles": [
+					"/home/alexander/.dub/packages/mir-core/1.7.4/mir-core/libmir-core.a"
+				],
+				"sourceFiles": [
+					"/home/alexander/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/algebraic_alias/ion.d",
+					"/home/alexander/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/algebraic_alias/json.d",
+					"/home/alexander/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/algebraic_alias/transform.d",
+					"/home/alexander/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/algorithm/iteration.d",
+					"/home/alexander/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/algorithm/setops.d",
+					"/home/alexander/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/annotated.d",
+					"/home/alexander/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/appender.d",
+					"/home/alexander/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/array/allocation.d",
+					"/home/alexander/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/base64.d",
+					"/home/alexander/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/bignum/decimal.d",
+					"/home/alexander/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/bignum/fixed.d",
+					"/home/alexander/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/bignum/fp.d",
+					"/home/alexander/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/bignum/integer.d",
+					"/home/alexander/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/bignum/internal/dec2float.d",
+					"/home/alexander/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/bignum/internal/dec2float_table.d",
+					"/home/alexander/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/bignum/internal/kernel.d",
+					"/home/alexander/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/bignum/internal/parse.d",
+					"/home/alexander/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/bignum/internal/phobos_kernel.d",
+					"/home/alexander/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/bignum/internal/ryu/generic_128.d",
+					"/home/alexander/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/bignum/internal/ryu/table.d",
+					"/home/alexander/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/bignum/low_level_view.d",
+					"/home/alexander/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/combinatorics/package.d",
+					"/home/alexander/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/container/binaryheap.d",
+					"/home/alexander/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/cpp_export/numeric.d",
+					"/home/alexander/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/date.d",
+					"/home/alexander/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/ediff.d",
+					"/home/alexander/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/format.d",
+					"/home/alexander/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/format_impl.d",
+					"/home/alexander/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/graph/package.d",
+					"/home/alexander/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/graph/tarjan.d",
+					"/home/alexander/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/internal/ldc_simd.d",
+					"/home/alexander/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/interpolate/constant.d",
+					"/home/alexander/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/interpolate/extrapolate.d",
+					"/home/alexander/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/interpolate/generic.d",
+					"/home/alexander/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/interpolate/linear.d",
+					"/home/alexander/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/interpolate/mod.d",
+					"/home/alexander/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/interpolate/package.d",
+					"/home/alexander/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/interpolate/polynomial.d",
+					"/home/alexander/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/interpolate/spline.d",
+					"/home/alexander/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/interpolate/utility.d",
+					"/home/alexander/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/lob.d",
+					"/home/alexander/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/math/func/expdigamma.d",
+					"/home/alexander/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/math/func/hermite.d",
+					"/home/alexander/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/math/func/normal.d",
+					"/home/alexander/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/math/numeric.d",
+					"/home/alexander/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/math/stat.d",
+					"/home/alexander/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/math/sum.d",
+					"/home/alexander/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/ndslice/allocation.d",
+					"/home/alexander/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/ndslice/chunks.d",
+					"/home/alexander/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/ndslice/concatenation.d",
+					"/home/alexander/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/ndslice/connect/cpython.d",
+					"/home/alexander/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/ndslice/dynamic.d",
+					"/home/alexander/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/ndslice/field.d",
+					"/home/alexander/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/ndslice/filling.d",
+					"/home/alexander/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/ndslice/fuse.d",
+					"/home/alexander/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/ndslice/internal.d",
+					"/home/alexander/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/ndslice/iterator.d",
+					"/home/alexander/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/ndslice/mutation.d",
+					"/home/alexander/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/ndslice/ndfield.d",
+					"/home/alexander/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/ndslice/package.d",
+					"/home/alexander/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/ndslice/slice.d",
+					"/home/alexander/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/ndslice/sorting.d",
+					"/home/alexander/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/ndslice/topology.d",
+					"/home/alexander/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/ndslice/traits.d",
+					"/home/alexander/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/numeric.d",
+					"/home/alexander/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/parse.d",
+					"/home/alexander/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/polynomial.d",
+					"/home/alexander/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/range.d",
+					"/home/alexander/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/rc/array.d",
+					"/home/alexander/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/rc/context.d",
+					"/home/alexander/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/rc/package.d",
+					"/home/alexander/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/rc/ptr.d",
+					"/home/alexander/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/rc/slim_ptr.d",
+					"/home/alexander/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/serde.d",
+					"/home/alexander/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/series.d",
+					"/home/alexander/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/small_array.d",
+					"/home/alexander/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/small_string.d",
+					"/home/alexander/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/stdio.d",
+					"/home/alexander/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/string.d",
+					"/home/alexander/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/string_map.d",
+					"/home/alexander/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/test.d",
+					"/home/alexander/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/timestamp.d",
+					"/home/alexander/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/mir/type_info.d"
+				],
+				"injectSourceFiles": [],
+				"copyFiles": [],
+				"extraDependencyFiles": [],
+				"versions": [
+					"Have_mir_algorithm",
+					"Have_mir_core"
+				],
+				"debugVersions": [],
+				"versionFilters": [],
+				"debugVersionFilters": [],
+				"importPaths": [
+					"/home/alexander/.dub/packages/mir-algorithm/3.22.4/mir-algorithm/source/",
+					"/home/alexander/.dub/packages/mir-core/1.7.4/mir-core/source/"
+				],
+				"cImportPaths": [],
+				"stringImportPaths": [],
+				"importFiles": [],
+				"stringImportFiles": [],
+				"preGenerateCommands": [],
+				"postGenerateCommands": [],
+				"preBuildCommands": [],
+				"postBuildCommands": [],
+				"preRunCommands": [],
+				"postRunCommands": [],
+				"environments": {},
+				"buildEnvironments": {},
+				"runEnvironments": {},
+				"preGenerateEnvironments": {},
+				"postGenerateEnvironments": {},
+				"preBuildEnvironments": {},
+				"postBuildEnvironments": {},
+				"preRunEnvironments": {},
+				"postRunEnvironments": {},
+				"requirements": [],
+				"options": [
+					"debugMode",
+					"debugInfo",
+					"warningsAsErrors"
+				]
+			},
+			"cacheArtifactPath": "/home/alexander/.dub/cache/mir-algorithm/3.22.4/build/default-debug-Otcem17Iqnr_-N826elfUg/libmir-algorithm.a",
+			"dependencies": [
+				"mir-core"
+			],
+			"linkDependencies": [
+				"mir-core"
+			]
+		},
+		{
+			"rootPackage": "mir-core",
+			"packages": [
+				"mir-core"
+			],
+			"rootConfiguration": "library",
+			"buildSettings": {
+				"targetType": 6,
+				"targetPath": "/home/alexander/.dub/packages/mir-core/1.7.4/mir-core",
+				"targetName": "mir-core",
+				"workingDirectory": "",
+				"mainSourceFile": "",
+				"dflags": [],
+				"lflags": [],
+				"libs": [],
+				"linkerFiles": [],
+				"sourceFiles": [
+					"/home/alexander/.dub/packages/mir-core/1.7.4/mir-core/source/mir/algebraic.d",
+					"/home/alexander/.dub/packages/mir-core/1.7.4/mir-core/source/mir/bitmanip.d",
+					"/home/alexander/.dub/packages/mir-core/1.7.4/mir-core/source/mir/bitop.d",
+					"/home/alexander/.dub/packages/mir-core/1.7.4/mir-core/source/mir/checkedint.d",
+					"/home/alexander/.dub/packages/mir-core/1.7.4/mir-core/source/mir/complex/math.d",
+					"/home/alexander/.dub/packages/mir-core/1.7.4/mir-core/source/mir/complex/package.d",
+					"/home/alexander/.dub/packages/mir-core/1.7.4/mir-core/source/mir/conv.d",
+					"/home/alexander/.dub/packages/mir-core/1.7.4/mir-core/source/mir/enums.d",
+					"/home/alexander/.dub/packages/mir-core/1.7.4/mir-core/source/mir/exception.d",
+					"/home/alexander/.dub/packages/mir-core/1.7.4/mir-core/source/mir/functional.d",
+					"/home/alexander/.dub/packages/mir-core/1.7.4/mir-core/source/mir/internal/memory.d",
+					"/home/alexander/.dub/packages/mir-core/1.7.4/mir-core/source/mir/internal/meta.d",
+					"/home/alexander/.dub/packages/mir-core/1.7.4/mir-core/source/mir/internal/utility.d",
+					"/home/alexander/.dub/packages/mir-core/1.7.4/mir-core/source/mir/math/common.d",
+					"/home/alexander/.dub/packages/mir-core/1.7.4/mir-core/source/mir/math/constant.d",
+					"/home/alexander/.dub/packages/mir-core/1.7.4/mir-core/source/mir/math/ieee.d",
+					"/home/alexander/.dub/packages/mir-core/1.7.4/mir-core/source/mir/math/package.d",
+					"/home/alexander/.dub/packages/mir-core/1.7.4/mir-core/source/mir/primitives.d",
+					"/home/alexander/.dub/packages/mir-core/1.7.4/mir-core/source/mir/qualifier.d",
+					"/home/alexander/.dub/packages/mir-core/1.7.4/mir-core/source/mir/reflection.d",
+					"/home/alexander/.dub/packages/mir-core/1.7.4/mir-core/source/mir/string_table.d",
+					"/home/alexander/.dub/packages/mir-core/1.7.4/mir-core/source/mir/utility.d"
+				],
+				"injectSourceFiles": [],
+				"copyFiles": [],
+				"extraDependencyFiles": [],
+				"versions": [
+					"Have_mir_core"
+				],
+				"debugVersions": [],
+				"versionFilters": [],
+				"debugVersionFilters": [],
+				"importPaths": [
+					"/home/alexander/.dub/packages/mir-core/1.7.4/mir-core/source/"
+				],
+				"cImportPaths": [],
+				"stringImportPaths": [],
+				"importFiles": [],
+				"stringImportFiles": [],
+				"preGenerateCommands": [],
+				"postGenerateCommands": [],
+				"preBuildCommands": [],
+				"postBuildCommands": [],
+				"preRunCommands": [],
+				"postRunCommands": [],
+				"environments": {},
+				"buildEnvironments": {},
+				"runEnvironments": {},
+				"preGenerateEnvironments": {},
+				"postGenerateEnvironments": {},
+				"preBuildEnvironments": {},
+				"postBuildEnvironments": {},
+				"preRunEnvironments": {},
+				"postRunEnvironments": {},
+				"requirements": [],
+				"options": [
+					"debugMode",
+					"debugInfo",
+					"warningsAsErrors"
+				]
+			},
+			"cacheArtifactPath": "/home/alexander/.dub/cache/mir-core/1.7.4/build/library-debug-jy3aqT1dDSqDOLQT7WRFsw/libmir-core.a",
+			"dependencies": [],
+			"linkDependencies": []
+		}
+	]
+}
