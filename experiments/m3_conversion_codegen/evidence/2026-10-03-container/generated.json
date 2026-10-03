@@ -1,0 +1,10 @@
+{
+  "fixtures.d": "6e3b7e665430d41133ae1cc36ba7f1805d8b436e564b5a5f520c8e239af95dcf",
+  "public_array.d": "cadc8729371e4019a1b83d5cd39f86beebe4dae012b2b691390e6b562f406d59",
+  "public_original.d": "aee237e7e29eb26a81d995508c49d647bd840bda458bed1af7704f84198c8209",
+  "public_signed.d": "e60578492930cf9d7d947c87c46e1a8e434c709ce703cafe38ab2def731d5d17",
+  "raster/variant_array.d": "70e799ad186a681040b43680509a2ec5acc3eb52aae064f54aaf0edbf27d9b15",
+  "raster/variant_array_dispatch.d": "734b6058a36067f857767d2711310b3b674f4d3a8dee81952cfa88a58b329e97",
+  "raster/variant_signed.d": "5f1563b0bf42c0683b794c2325a3be2767eaf098a5b7309329ec7d04d7fad5c0",
+  "raster/variant_signed_dispatch.d": "eb33a55de368a6cc994dae3befaf2138166b2eb754b0a3fc9fc06b341102ea4a"
+}
