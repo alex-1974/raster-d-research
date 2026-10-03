@@ -262,3 +262,92 @@ included in the evidence.
 | Production selection | Deferred until reference evidence; no source promotion |
 | Remaining exact-conversion execution gap | Open; evaluate reference-host results and actual public codegen |
 | Explicit SIMD, compiler switch, AArch64, threading | Unqualified / deferred |
+
+## Reference XPS qualification — 2026-10-03
+
+[Original XPS raw evidence and reproduced summary](../../experiments/m3_copy_conversion_candidates/evidence/2026-10-03-xps/SUMMARY.md)
+qualifies research head `85e1614417b628068fca071a9fa4a28ace6302e1`
+against the unchanged production pin. The uploaded archive SHA256 is
+`7c1636331163f30e1479f9d99bbcb230a6520b2396184f21a2fdb73f26d73ae4`.
+All 19 checksums verify, the summary reproduces byte-for-byte, and all 96
+source/result fingerprints match the container evidence. Both compilers pass
+fourteen unittest modules and five actual-source trust controls. All six
+release processes pass 96 timed cases, 32 additional semantic cases, all four
+public-path contract controls and independent backing/guard checks.
+
+The reference host is Intel i7-9750H / x86_64, CPU affinity 0, Linux
+6.17.0-22-generic; frequency/thermal controls are unchanged. DMD 2.111.0,
+LDC 1.41.0 (frontend 2.111.0 / LLVM 19.1.7), DUB 1.40.0 and G++ 15.2.0
+are recorded with full build commands. The container used LLVM 20.1.5 and
+G++ 13.3.0, so differences are not isolated hardware effects. Each D binary
+links the same strict C++ object on its host.
+
+Ranges below span three process medians; Copy groups aggregate all three
+sample types. Public/candidate ratios compare complete consumers. Combined/C++
+retains the execution-only reference limitations; it is not a language ratio.
+
+| Large group (2048×512) | Compiler | Public/Bounds | Public/Execute | Public/Combined | Combined/C++ |
+| --- | --- | --- | --- | --- | --- |
+| Flat copy | DMD | 0.852–1.311x | 0.533–1.479x | 0.651–1.123x | 0.756–1.508x |
+| Flat copy | LDC | 0.870–1.324x | 0.947–1.531x | 0.994–1.406x | 0.746–1.003x |
+| Padded copy | DMD | 9.900–10.740x | 1.086–1.117x | 128.592–2892.533x | 0.878–1.161x |
+| Padded copy | LDC | 14.488–21.845x | 1.044–1.068x | 46.604–934.892x | 0.998–1.643x |
+| Flat conversion | DMD | 0.999–1.089x | 5.726–6.151x | 4.374–4.776x | 2.055–6.721x |
+| Flat conversion | LDC | 0.945–1.012x | 18.150–22.327x | 20.210–23.135x | 0.938–0.998x |
+| Padded conversion | DMD | 50.593–51.684x | 1.021–1.023x | 975.357–980.202x | 3.953–4.065x |
+| Padded conversion | LDC | 62.394–65.162x | 1.010–1.049x | 891.907–1214.341x | 1.007–1.209x |
+| Negative-both conversion | DMD | 51.355–51.856x | 1.006–1.034x | 920.221–929.541x | 2.918–3.516x |
+| Negative-both conversion | LDC | 60.606–61.587x | 0.985–1.029x | 463.266–475.638x | 1.542–1.848x |
+
+### Findings and selection
+
+The independent forms confirm that both relation rejection and row execution
+matter. On padded Copy, bounds alone improves the complete consumer by
+9.900–10.740x under DMD and 14.488–21.845x under LDC; execution alone leaves
+the expensive exact scan and is only 1.044–1.117x across the two compilers.
+Combined is 128.592–2892.533x / 46.604–934.892x respectively. The exact
+multipliers vary by sample type and process, but every measured large
+non-flat case benefits from Combined. Universal sample strides still execute
+the original checked traversal and receive only the conservative relation
+benefit. Flat Copy preserves its original checked whole-plane memcpy route;
+no small improvement or regression is established from these noisy results.
+
+For conversion, padded Combined is 975.357–980.202x faster than the complete
+DMD baseline and 891.907–1214.341x under LDC. DMD padded Public and Combined
+process-time spread is 3.36% / 3.36%, supporting the large directional result.
+Flat conversion also benefits (4.374–4.776x DMD, 20.210–23.135x LDC).
+LDC flat conversion is in the C++ execution-reference range (0.938–0.998x),
+and padded is 1.007–1.209x. DMD remains 3.953–4.065x slower for padded,
+2.055–6.721x for flat; negative-both still trails for both compilers
+(DMD 2.918–3.516x, LDC 1.542–1.848x). These remaining execution gaps stay
+open; successful optimization does not establish family-wide C++ parity.
+
+Actual isolated row assembly again has scalar cvtsi2ss conversion in DMD and
+packed cvtdq2ps plus scalar tails in LDC. C++ also has packed conversion.
+That is a concrete follow-up lead. It does not causally decompose the complete
+public timings, and this evidence does not select explicit SIMD or a compiler
+version switch. DMD flat Execute is faster than Combined in these runs despite
+an unchanged flat relation route; inspect actual public codegen and measure
+controlled candidates before attributing that difference to validation work.
+
+The XPS run is not uniformly low-noise: maximum large-case Public / Combined
+three-process spread is 99.55% / 244.36% DMD and 42.09% / 93.35% LDC,
+mostly short Copy cases. LDC padded conversion Combined also has 45.06%
+spread. Report full ranges; do not infer narrow speedup promises, confidence
+intervals or precise near-parity differences. Frequency/thermal controls were
+not locked by the collector. Tiny zero medians retain their clock-resolution
+qualification. No additional host run was fabricated during archive review.
+
+| Gate / next action | Decision |
+| --- | --- |
+| Complete consumer semantics, independent backing, shared fallback and trust on XPS | PASS for both compiler families |
+| Reference-host direction of non-flat bounds + row improvement | Confirmed; precise Copy timing and small differences remain noisy |
+| Same-/cross-type conservative bounds and Canonical row Copy | Selected for a clean, scoped Production implementation PR with original flat route retained |
+| Exact conversion bounds + row loop | Qualified as a substantial intermediate improvement; remaining execution gaps must stay tracked through production validation |
+| Production source integration | Not performed by this evidence commit; repeat required production checks on the clean implementation |
+| Remaining conversion work | Actual full-public codegen and controlled row/pointer candidate study, especially DMD and signed LDC rows |
+| Flat Copy microdifferences | No conclusion; preserve existing route and avoid claiming a small speedup |
+| Explicit SIMD, compiler switch, AArch64 and threading | Unqualified / deferred |
+
+Research Issue #22 remains open for clean Production promotion and the remaining
+conversion execution work. No production API or numerical contract changes.

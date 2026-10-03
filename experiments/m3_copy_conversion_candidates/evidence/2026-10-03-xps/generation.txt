@@ -1,0 +1,7 @@
+generated bounds total tests 4
+generated bounds copy inherited public/internal tests 25
+generated bounds conversion inherited public/internal tests 24
+generated execute copy inherited public/internal tests 25
+generated execute conversion inherited public/internal tests 24
+generated combined copy inherited public/internal tests 25
+generated combined conversion inherited public/internal tests 24

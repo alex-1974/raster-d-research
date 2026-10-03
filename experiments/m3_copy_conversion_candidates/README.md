@@ -87,3 +87,11 @@ experiments/m3_copy_conversion_candidates/collect.sh /tmp/copy-candidates-xps 0 
 (cd /tmp/copy-candidates-xps && sha256sum -c SHA256SUMS)
 tar -C /tmp -czf /tmp/copy-candidates-xps.tar.gz copy-candidates-xps
 ```
+
+## Qualified reference evidence
+
+[2026-10-03 XPS evidence](evidence/2026-10-03-xps/SUMMARY.md) passes all 19
+checksums, both compiler test/trust suites and six full-consumer processes.
+[The audit](../../docs/research/m3-copy-conversion-audit.md#reference-xps-qualification--2026-10-03)
+records the scoped selection, remaining conversion gap and high short-Copy
+process spread. No production source change is made by evidence qualification.
