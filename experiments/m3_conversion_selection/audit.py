@@ -45,7 +45,7 @@ def generate(directory, sources, profile, block):
         assert internal.count(old) == 1
         replacement='convertApprovedRow(row, destination);'
         if form=='selected64':
-            replacement='static if(vectorEnabled) { convertApprovedRow(row, destination); } else { '+old+' }'
+            replacement='static if(vectorEnabled) { if(row.length>=64) { convertVectorRow(row, destination); } else { '+old+' } } else { '+old+' }'
         internal = internal.replace(old, replacement, 1)
         internal += '\n' + (ROOT / f'{form}.d').read_text()
         (directory / 'raster' / f'variant_{form}_dispatch.d').write_text(internal)

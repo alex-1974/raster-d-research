@@ -56,6 +56,32 @@ call site rather than through an extra helper. Qualify the actual direct-dispatc
 candidate in all four modes before judging the next step. The earlier PR29 XPS
 31x17 regression remains relevant and is not erased by VM results.
 
+## Rejected row-local gate
+
+A second complete six-process/four-mode audit moved the gate into the original
+row executor, without calling the wrapper below width 64. It preserves the
+original scalar expression at that point, but changes the generic executor's
+body and still fails the prior small-row goal. In the prior short consumer,
+DMD 31x17 contiguous original/selected median is 0.805 (0.785–0.809); prior
+long is 0.929 (0.853–0.986). Every process takes longer than original on that
+case. Large 2048x512 contiguous medians remain 4.366 / 4.402 respectively.
+
+[evidence/2026-10-03-row-gate-negative](../../experiments/m3_conversion_selection/evidence/2026-10-03-row-gate-negative)
+preserves all four full audits and their exact producer/source/generated hashes.
+All semantic/trust/bitwise/guard/boundary suites pass; all original/retained
+hashes and replay verify. This is measured negative evidence for the policy's
+performance goal, not a semantic defect or attribution to a single compiler
+mechanism. Compiler/code-placement/inlining effects remain possible.
+
+Next candidate: select once per approved public operation, before calling a
+separate safe vector-row executor. Keep the original generic scalar/copy row
+executor body completely unchanged for the below-gate and portable cases.
+Both flat and affine approved call sites must be covered, after their existing
+physical-disjointness checks. All original validation/fallback branches and
+existing row-borrow trust remain; no new trust is introduced. Qualify the
+actual candidate before promotion, including every boundary/shared test and
+both consumer/block-length combinations.
+
 ## Evidence verification
 
 Each mode retains the original manifest as `RAW-SHA256SUMS`, and the root
