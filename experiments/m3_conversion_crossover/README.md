@@ -109,3 +109,13 @@ close heavy background workloads for the actual reference run. No branch merge
 is assumed.
 
 [Findings and remaining gates](../../docs/research/m3-conversion-crossover.md).
+
+## Qualified reference XPS evidence
+
+The uploaded sweep is retained in `evidence/2026-10-03-xps`. All 115 original
+extended / 110 audit hashes verify, with byte-exact summary and 438 matching
+workload fingerprints. Large DMD stores win, but sub-block widths regress and
+31x17 differs from PR29's prior XPS result. The next experimental policy is
+original execution below row width 64, with SIMD stores at/above it; the actual
+selection code still requires both-consumer qualification. Production remains
+unchanged. See the findings for scoped C++ gaps, spread and complete limits.

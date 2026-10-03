@@ -112,18 +112,92 @@ missing/corrupted files. Python assertions must remain enabled; runner/replay
 explicitly reject optimized Python. CI independently repeats both compiler
 semantic/trust suites with one process and no timing threshold.
 
+## Reference XPS qualification — 2026-10-03
+
+The uploaded `raster-crossover-xps-run-9J1pun.tar.gz` has SHA256
+`cd3bc1a37a9fba046053af434ec208a84deeb4d8065205d9c3a9bf486941472d`.
+All 115 extended-manifest entries and all 110 original audit entries verify.
+Summary regeneration is byte-exact. Pins, generated sources, matrix and
+experiment input hashes match the container byte-for-byte, and all 438 workload
+fingerprints agree across machines/forms/compilers/processes. Every original
+file is retained byte-exactly directly or with lossless deterministic gzip,
+including both uploaded manifests. The retained manifest has 116 entries;
+`RAW-SHA256SUMS` preserves the uploaded extended manifest, and
+`audit-SHA256SUMS` preserves the original collector manifest. The same verification
+and replay commands above apply to `evidence/2026-10-03-xps`.
+
+Reference host: Intel Core i7-9750H, CPU 0, Linux 6.17.0-22/glibc 2.43;
+DMD 2.111.0, LDC 1.41.0/frontend 2.111.0/LLVM 19.1.7, GCC 15.2.0,
+DUB 1.40.0, Python 3.14.4, GNU objdump 2.46. Resolved Mir algorithm 3.22.4,
+Mir core 1.7.4 and silly 1.1.1 match the prior run. GCC/LLVM backend/CPU differ
+from the VM and are explicitly recorded. Frequency/thermal conditions remain
+unmonitored. Both complete compiler semantic/trust suites and the independently
+challenged C++ bridge pass; all isolated 10,240-case/four-rounding-mode plus
+forty-guard-page suites pass. Twelve complete processes retain the same
+189,216 blocks and 215,804,736 calls with full backing/source oracles.
+
+| XPS shape/layout | DMD original/store (process range) | DMD store / C++ | LDC original/store | LDC store / C++ |
+| --- | ---: | ---: | ---: | ---: |
+| 1x128 contiguous | 0.670 (0.663–0.676) | 34.872 | 0.995 | 20.039 |
+| 15x17 contiguous | 0.835 (0.749–0.858) | 13.575 | 1.006 | 3.403 |
+| 16x17 contiguous | 1.809 (1.683–1.847) | 7.027 | 1.067 | 2.370 |
+| 31x17 contiguous | 1.510 (1.440–1.535) | 7.117 | 0.951 | 2.569 |
+| 2048x512 contiguous | 3.244 (3.069–3.555) | 1.929 | 1.002 | 0.985 |
+| 2048x512 padded | 2.446 (2.393–2.575) | 1.722 | 1.002 | 0.981 |
+| 2048x512 negative source | 2.392 (1.813–2.517) | 1.877 | 0.996 | 2.398 |
+| 2048x512 negative both | 2.384 (2.107–2.483) | 1.820 | 0.998 | 2.344 |
+| 2048x512 repeated source | 2.492 (2.355–2.588) | 2.267 | 1.000 | 0.995 |
+| 2048x512 Universal | 0.998 (0.977–1.031) | 20.169 | 0.993 | 4.281 |
+
+Large DMD unit-stride stores win in every paired process, with medians
+2.384–3.244x. Safe result copies remain slower (large ratios 0.458–0.603).
+DMD original/store medians for unit-stride widths below sixteen are all below
+one, ranging 0.456–0.993 across heights/layouts. The full-block boundary is a
+useful selection hypothesis, not sufficient evidence for immediate promotion.
+
+**31x17 contiguous now wins 1.510x on the XPS; PR29's qualified XPS evidence
+loses at 0.904x on that shape.** Public candidate sources and fixture pins are
+unchanged, but the expanded compiled harness, four-path order, timing block
+length and execution conditions differ. These results do not identify the
+cause. The earlier regression remains valid evidence for that captured consumer;
+this sweep cannot erase it or establish that a width-16 gate fixes it.
+
+A conservative next candidate can test **row width at least 64** while retaining
+the original loop below that width. This is grounded in the sweep: all 200
+unit-stride workloads with widths >=64 favor stores in every process on both
+XPS and VM (lowest process ratios 1.144 and 1.118 respectively). Widths >=16
+have an adverse 47x17 negative-source process (ratio 0.513; median 1.301).
+Width 64 is an experimental candidate policy, not a measured selected-operation
+result or a universal optimal threshold. The actual branch and preserved
+original loop must be measured and qualified in both the prior PR29 consumer
+and the wider PR31 consumer, including short and long timing blocks. No
+Production source is changed by selecting this next research hypothesis.
+
+Process spread is still substantial: store-form maxima 173.545% DMD
+(7x128 contiguous) and 217.608% LDC (511x17 repeated source). Do not promote
+small timing differences or precise factors outside the captured workloads.
+LDC's implementation remains the original expression; material small-workload
+form differences in the expanded harness warrant compiler/consumer inspection,
+not a new SIMD algorithm claim. Large positive-row LDC is near this C++ executor
+(medians 0.981–0.995), while signed LDC still takes 2.344–2.398x (negative-both
+process range 2.169–3.155; negative-source 2.368–2.604). DMD stores still take
+1.722–2.267x C++ time. All reference scope limits above remain: no equivalent
+full-public C++ parity, historical-ratio division or isolated validation-cost
+estimate is claimed.
+
 ## Decision and next gates
 
-Retain this study as measured Research evidence. Do not promote unconditional
-vector selection or invent a cutoff from shared-container observations.
-Run the complete pinned collector on the reference XPS, qualify all hashes,
-summary, fingerprints and process ranges, then select a conservative private
-compiler/architecture/size policy and measure that actual full public candidate
-against both original and unconditional vector execution. Preserve the original
-path where it wins, all public contracts, exactness and independent trust gates.
-Investigate the remaining signed-LDC and scoped DMD execution gaps with fresh
-comparisons; no historical ratio division or C++ parity claim is permitted.
-Issues #30/#28/#22 and Production promotion remain open.
+Retain the complete container and XPS evidence. Do not promote unconditional
+vector selection. Next, implement and measure a private DMD x86-64 row-width
+>=64 selection candidate, preserving the exact original loop below the gate
+and all portable/LDC behavior. Qualify that actual full public candidate in
+both PR29 and PR31 consumers, with short/long timing blocks, before deciding
+whether its policy is justified. Preserve all contracts, exactness and narrow
+trust gates. Keep the previous small-flat regression explicitly covered.
+Investigate signed-LDC and scoped DMD residual C++ gaps with fresh comparisons;
+no historical ratio division or end-to-end parity claim is permitted.
+Issues #30/#28/#22 remain open for actual selection and remaining promotion.
+Production PR61 is unchanged; no merge is performed.
 
 ## Pinned reference XPS launcher
 
@@ -132,4 +206,5 @@ and unchanged Production PR61 in new detached sibling worktrees. It records
 complete D/GCC/toolchain/dependency provenance, preserves the original manifest,
 verifies the summary and extended manifest, and prints the upload archive.
 Bash syntax and a local prepare-only smoke passed; this is not an XPS runtime
-measurement. The actual reference sweep remains the next gate.
+measurement. The uploaded reference sweep is now qualified above. Actual conservative
+selection qualification remains the next gate.
