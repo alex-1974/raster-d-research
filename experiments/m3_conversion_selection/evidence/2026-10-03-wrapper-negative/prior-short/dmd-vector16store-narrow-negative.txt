@@ -1,0 +1,6 @@
+/tmp/raster-public-selection-kuee5wcu/narrow.d(18): Error: using `block.ptr` (instead of `&block[0])` is not allowed in a `@safe` function
+        return loadUnaligned(cast(const(ubyte16)*)block.ptr);
+                                                  ^
+/tmp/raster-public-selection-kuee5wcu/narrow.d(28): Error: using `block.ptr` (instead of `&block[0])` is not allowed in a `@safe` function
+        storeUnaligned(cast(float4*)block.ptr,result);
+                                    ^

@@ -1,0 +1,6 @@
+/tmp/raster-public-selection-n6us57pi/cpp-control.d(15): Error: using `src.ptr` (instead of `&src[0])` is not allowed in a `@safe` function
+    cppApprovedConversion(src.ptr+so,dst.ptr+targetOffset,sr,sx,dr,dx,width,height);
+                          ^
+/tmp/raster-public-selection-n6us57pi/cpp-control.d(15): Error: using `dst.ptr` (instead of `&dst[0])` is not allowed in a `@safe` function
+    cppApprovedConversion(src.ptr+so,dst.ptr+targetOffset,sr,sx,dr,dx,width,height);
+                                     ^

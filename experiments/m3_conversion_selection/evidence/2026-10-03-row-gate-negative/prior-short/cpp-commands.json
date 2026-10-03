@@ -1,0 +1,12 @@
+[
+  "g++",
+  "-std=c++17",
+  "-O3",
+  "-fno-fast-math",
+  "-march=x86-64",
+  "-mtune=generic",
+  "-c",
+  "/workspace/scratch/231248e26dd2/raster-d-research/experiments/m3_conversion_selection/reference.cpp",
+  "-o",
+  "/tmp/raster-public-selection-tqurx2kp/reference.o"
+]
