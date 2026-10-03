@@ -1,0 +1,1270 @@
+Isolated actual-source row kernels: dmd
+DMD64 D Compiler v2.111.0
+Copyright (C) 1999-2025 by The D Language Foundation, All Rights Reserved written by Walter Bright
++ dmd -release -inline -O -preview=dip1000 -c -of=/tmp/tmp.xRVvg3e68c/dmd.o /tmp/tmp.xRVvg3e68c/rows.d
++ set +x
+
+/tmp/tmp.xRVvg3e68c/dmd.o:     Dateiformat elf64-x86-64
+
+
+Disassembly of section .text.copyUbyte:
+
+0000000000000000 <copyUbyte>:
+   0:	55                   	push   %rbp
+   1:	48 8b ec             	mov    %rsp,%rbp
+   4:	50                   	push   %rax
+   5:	53                   	push   %rbx
+   6:	41 54                	push   %r12
+   8:	41 55                	push   %r13
+   a:	41 56                	push   %r14
+   c:	41 57                	push   %r15
+   e:	48 89 fb             	mov    %rdi,%rbx
+  11:	49 89 f4             	mov    %rsi,%r12
+  14:	49 89 d6             	mov    %rdx,%r14
+  17:	49 89 cf             	mov    %rcx,%r15
+  1a:	4d 89 cd             	mov    %r9,%r13
+  1d:	31 d2                	xor    %edx,%edx
+  1f:	4d 85 ed             	test   %r13,%r13
+  22:	74 43                	je     67 <copyUbyte+0x67>
+  24:	4c 8b ca             	mov    %rdx,%r9
+  27:	4d 0f af cc          	imul   %r12,%r9
+  2b:	4c 03 cb             	add    %rbx,%r9
+  2e:	4c 8b da             	mov    %rdx,%r11
+  31:	4d 0f af df          	imul   %r15,%r11
+  35:	4d 03 de             	add    %r14,%r11
+  38:	4d 3b c0             	cmp    %r8,%r8
+  3b:	75 38                	jne    75 <copyUbyte+0x75>
+  3d:	4b 8d 04 03          	lea    (%r11,%r8,1),%rax
+  41:	49 39 c1             	cmp    %rax,%r9
+  44:	73 09                	jae    4f <copyUbyte+0x4f>
+  46:	4b 8d 0c 01          	lea    (%r9,%r8,1),%rcx
+  4a:	49 39 cb             	cmp    %rcx,%r11
+  4d:	72 26                	jb     75 <copyUbyte+0x75>
+  4f:	49 8b f1             	mov    %r9,%rsi
+  52:	49 8b c8             	mov    %r8,%rcx
+  55:	49 8b fb             	mov    %r11,%rdi
+  58:	48 85 c9             	test   %rcx,%rcx
+  5b:	74 02                	je     5f <copyUbyte+0x5f>
+  5d:	f3 a4                	rep movsb (%rsi),(%rdi)
+  5f:	48 ff c2             	inc    %rdx
+  62:	4c 39 ea             	cmp    %r13,%rdx
+  65:	72 bd                	jb     24 <copyUbyte+0x24>
+  67:	41 5f                	pop    %r15
+  69:	41 5e                	pop    %r14
+  6b:	41 5d                	pop    %r13
+  6d:	41 5c                	pop    %r12
+  6f:	5b                   	pop    %rbx
+  70:	48 8b e5             	mov    %rbp,%rsp
+  73:	5d                   	pop    %rbp
+  74:	c3                   	ret
+  75:	be 16 00 00 00       	mov    $0x16,%esi
+  7a:	48 8d 3d 00 00 00 00 	lea    0x0(%rip),%rdi        # 81 <copyUbyte+0x81>
+			7d: R_X86_64_PC32	.rodata.str1.1-0x4
+  81:	e8 00 00 00 00       	call   86 <copyUbyte+0x86>
+			82: R_X86_64_PLT32	_d_arrayboundsp-0x4
+  86:	41 5f                	pop    %r15
+  88:	41 5e                	pop    %r14
+  8a:	41 5d                	pop    %r13
+  8c:	41 5c                	pop    %r12
+  8e:	5b                   	pop    %rbx
+  8f:	48 8b e5             	mov    %rbp,%rsp
+  92:	5d                   	pop    %rbp
+  93:	c3                   	ret
+
+Disassembly of section .text.copyFloat:
+
+0000000000000000 <copyFloat>:
+   0:	55                   	push   %rbp
+   1:	48 8b ec             	mov    %rsp,%rbp
+   4:	50                   	push   %rax
+   5:	53                   	push   %rbx
+   6:	41 54                	push   %r12
+   8:	41 55                	push   %r13
+   a:	41 56                	push   %r14
+   c:	41 57                	push   %r15
+   e:	48 89 fb             	mov    %rdi,%rbx
+  11:	49 89 f4             	mov    %rsi,%r12
+  14:	49 89 d6             	mov    %rdx,%r14
+  17:	49 89 cf             	mov    %rcx,%r15
+  1a:	4d 89 c3             	mov    %r8,%r11
+  1d:	4d 89 cd             	mov    %r9,%r13
+  20:	31 d2                	xor    %edx,%edx
+  22:	4d 85 ed             	test   %r13,%r13
+  25:	74 51                	je     78 <copyFloat+0x78>
+  27:	48 8b c2             	mov    %rdx,%rax
+  2a:	49 0f af c4          	imul   %r12,%rax
+  2e:	4c 8d 04 83          	lea    (%rbx,%rax,4),%r8
+  32:	48 8b ca             	mov    %rdx,%rcx
+  35:	49 0f af cf          	imul   %r15,%rcx
+  39:	4d 8d 0c 8e          	lea    (%r14,%rcx,4),%r9
+  3d:	4d 3b db             	cmp    %r11,%r11
+  40:	75 44                	jne    86 <copyFloat+0x86>
+  42:	49 8b f3             	mov    %r11,%rsi
+  45:	48 c1 e6 02          	shl    $0x2,%rsi
+  49:	4a 8d 3c 0e          	lea    (%rsi,%r9,1),%rdi
+  4d:	49 39 f8             	cmp    %rdi,%r8
+  50:	73 09                	jae    5b <copyFloat+0x5b>
+  52:	4e 8d 14 06          	lea    (%rsi,%r8,1),%r10
+  56:	4d 39 d1             	cmp    %r10,%r9
+  59:	72 2b                	jb     86 <copyFloat+0x86>
+  5b:	49 8b f0             	mov    %r8,%rsi
+  5e:	4a 8d 0c 9d 00 00 00 	lea    0x0(,%r11,4),%rcx
+  65:	00 
+  66:	49 8b f9             	mov    %r9,%rdi
+  69:	48 85 c9             	test   %rcx,%rcx
+  6c:	74 02                	je     70 <copyFloat+0x70>
+  6e:	f3 a4                	rep movsb (%rsi),(%rdi)
+  70:	48 ff c2             	inc    %rdx
+  73:	4c 39 ea             	cmp    %r13,%rdx
+  76:	72 af                	jb     27 <copyFloat+0x27>
+  78:	41 5f                	pop    %r15
+  7a:	41 5e                	pop    %r14
+  7c:	41 5d                	pop    %r13
+  7e:	41 5c                	pop    %r12
+  80:	5b                   	pop    %rbx
+  81:	48 8b e5             	mov    %rbp,%rsp
+  84:	5d                   	pop    %rbp
+  85:	c3                   	ret
+  86:	be 16 00 00 00       	mov    $0x16,%esi
+  8b:	48 8d 3d 00 00 00 00 	lea    0x0(%rip),%rdi        # 92 <copyFloat+0x92>
+			8e: R_X86_64_PC32	.rodata.str1.1-0x4
+  92:	e8 00 00 00 00       	call   97 <copyFloat+0x97>
+			93: R_X86_64_PLT32	_d_arrayboundsp-0x4
+  97:	41 5f                	pop    %r15
+  99:	41 5e                	pop    %r14
+  9b:	41 5d                	pop    %r13
+  9d:	41 5c                	pop    %r12
+  9f:	5b                   	pop    %rbx
+  a0:	48 8b e5             	mov    %rbp,%rsp
+  a3:	5d                   	pop    %rbp
+  a4:	c3                   	ret
+  a5:	00 00                	add    %al,(%rax)
+	...
+
+Disassembly of section .text.copyPod:
+
+0000000000000000 <copyPod>:
+   0:	55                   	push   %rbp
+   1:	48 8b ec             	mov    %rsp,%rbp
+   4:	50                   	push   %rax
+   5:	53                   	push   %rbx
+   6:	41 54                	push   %r12
+   8:	41 55                	push   %r13
+   a:	41 56                	push   %r14
+   c:	41 57                	push   %r15
+   e:	48 89 fb             	mov    %rdi,%rbx
+  11:	49 89 f4             	mov    %rsi,%r12
+  14:	49 89 d6             	mov    %rdx,%r14
+  17:	49 89 cf             	mov    %rcx,%r15
+  1a:	4d 89 c3             	mov    %r8,%r11
+  1d:	4d 89 cd             	mov    %r9,%r13
+  20:	31 d2                	xor    %edx,%edx
+  22:	4d 85 ed             	test   %r13,%r13
+  25:	74 51                	je     78 <copyPod+0x78>
+  27:	48 8b c2             	mov    %rdx,%rax
+  2a:	49 0f af c4          	imul   %r12,%rax
+  2e:	4c 8d 04 c3          	lea    (%rbx,%rax,8),%r8
+  32:	48 8b ca             	mov    %rdx,%rcx
+  35:	49 0f af cf          	imul   %r15,%rcx
+  39:	4d 8d 0c ce          	lea    (%r14,%rcx,8),%r9
+  3d:	4d 3b db             	cmp    %r11,%r11
+  40:	75 44                	jne    86 <copyPod+0x86>
+  42:	49 8b f3             	mov    %r11,%rsi
+  45:	48 c1 e6 03          	shl    $0x3,%rsi
+  49:	4a 8d 3c 0e          	lea    (%rsi,%r9,1),%rdi
+  4d:	49 39 f8             	cmp    %rdi,%r8
+  50:	73 09                	jae    5b <copyPod+0x5b>
+  52:	4e 8d 14 06          	lea    (%rsi,%r8,1),%r10
+  56:	4d 39 d1             	cmp    %r10,%r9
+  59:	72 2b                	jb     86 <copyPod+0x86>
+  5b:	49 8b f0             	mov    %r8,%rsi
+  5e:	4a 8d 0c dd 00 00 00 	lea    0x0(,%r11,8),%rcx
+  65:	00 
+  66:	49 8b f9             	mov    %r9,%rdi
+  69:	48 85 c9             	test   %rcx,%rcx
+  6c:	74 02                	je     70 <copyPod+0x70>
+  6e:	f3 a4                	rep movsb (%rsi),(%rdi)
+  70:	48 ff c2             	inc    %rdx
+  73:	4c 39 ea             	cmp    %r13,%rdx
+  76:	72 af                	jb     27 <copyPod+0x27>
+  78:	41 5f                	pop    %r15
+  7a:	41 5e                	pop    %r14
+  7c:	41 5d                	pop    %r13
+  7e:	41 5c                	pop    %r12
+  80:	5b                   	pop    %rbx
+  81:	48 8b e5             	mov    %rbp,%rsp
+  84:	5d                   	pop    %rbp
+  85:	c3                   	ret
+  86:	be 16 00 00 00       	mov    $0x16,%esi
+  8b:	48 8d 3d 00 00 00 00 	lea    0x0(%rip),%rdi        # 92 <copyPod+0x92>
+			8e: R_X86_64_PC32	.rodata.str1.1-0x4
+  92:	e8 00 00 00 00       	call   97 <copyPod+0x97>
+			93: R_X86_64_PLT32	_d_arrayboundsp-0x4
+  97:	41 5f                	pop    %r15
+  99:	41 5e                	pop    %r14
+  9b:	41 5d                	pop    %r13
+  9d:	41 5c                	pop    %r12
+  9f:	5b                   	pop    %rbx
+  a0:	48 8b e5             	mov    %rbp,%rsp
+  a3:	5d                   	pop    %rbp
+  a4:	c3                   	ret
+  a5:	00 00                	add    %al,(%rax)
+	...
+
+Disassembly of section .text.convertExact:
+
+0000000000000000 <convertExact>:
+   0:	55                   	push   %rbp
+   1:	48 8b ec             	mov    %rsp,%rbp
+   4:	48 83 ec 30          	sub    $0x30,%rsp
+   8:	48 89 5d d0          	mov    %rbx,-0x30(%rbp)
+   c:	4c 89 65 d8          	mov    %r12,-0x28(%rbp)
+  10:	4c 89 6d e0          	mov    %r13,-0x20(%rbp)
+  14:	4c 89 75 e8          	mov    %r14,-0x18(%rbp)
+  18:	4c 89 7d f0          	mov    %r15,-0x10(%rbp)
+  1c:	48 89 7d f8          	mov    %rdi,-0x8(%rbp)
+  20:	48 89 f3             	mov    %rsi,%rbx
+  23:	49 89 d6             	mov    %rdx,%r14
+  26:	49 89 cf             	mov    %rcx,%r15
+  29:	4d 89 c3             	mov    %r8,%r11
+  2c:	4d 89 cc             	mov    %r9,%r12
+  2f:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
+  33:	31 ff                	xor    %edi,%edi
+  35:	4d 85 e4             	test   %r12,%r12
+  38:	74 58                	je     92 <convertExact+0x92>
+  3a:	48 89 45 f8          	mov    %rax,-0x8(%rbp)
+  3e:	49 39 fb             	cmp    %rdi,%r11
+  41:	41 0f 95 c5          	setne  %r13b
+  45:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
+  49:	48 8b d7             	mov    %rdi,%rdx
+  4c:	48 0f af d3          	imul   %rbx,%rdx
+  50:	48 03 d0             	add    %rax,%rdx
+  53:	48 8b cf             	mov    %rdi,%rcx
+  56:	49 0f af cf          	imul   %r15,%rcx
+  5a:	49 8d 34 8e          	lea    (%r14,%rcx,4),%rsi
+  5e:	45 31 c0             	xor    %r8d,%r8d
+  61:	45 84 ed             	test   %r13b,%r13b
+  64:	74 24                	je     8a <convertExact+0x8a>
+  66:	41 0f b6 0c 10       	movzbl (%r8,%rdx,1),%ecx
+  6b:	4d 39 d8             	cmp    %r11,%r8
+  6e:	73 3b                	jae    ab <convertExact+0xab>
+  70:	44 0f b6 c9          	movzbl %cl,%r9d
+  74:	45 8b c9             	mov    %r9d,%r9d
+  77:	f3 49 0f 2a c1       	cvtsi2ss %r9,%xmm0
+  7c:	f3 42 0f 11 04 86    	movss  %xmm0,(%rsi,%r8,4)
+  82:	49 ff c0             	inc    %r8
+  85:	4d 39 d8             	cmp    %r11,%r8
+  88:	72 dc                	jb     66 <convertExact+0x66>
+  8a:	48 ff c7             	inc    %rdi
+  8d:	4c 39 e7             	cmp    %r12,%rdi
+  90:	72 b7                	jb     49 <convertExact+0x49>
+  92:	48 8b 5d d0          	mov    -0x30(%rbp),%rbx
+  96:	4c 8b 65 d8          	mov    -0x28(%rbp),%r12
+  9a:	4c 8b 6d e0          	mov    -0x20(%rbp),%r13
+  9e:	4c 8b 75 e8          	mov    -0x18(%rbp),%r14
+  a2:	4c 8b 7d f0          	mov    -0x10(%rbp),%r15
+  a6:	48 8b e5             	mov    %rbp,%rsp
+  a9:	5d                   	pop    %rbp
+  aa:	c3                   	ret
+  ab:	49 8b cb             	mov    %r11,%rcx
+  ae:	49 8b d0             	mov    %r8,%rdx
+  b1:	be 1a 00 00 00       	mov    $0x1a,%esi
+  b6:	48 8d 3d 00 00 00 00 	lea    0x0(%rip),%rdi        # bd <convertExact+0xbd>
+			b9: R_X86_64_PC32	.rodata.str1.1-0x4
+  bd:	e8 00 00 00 00       	call   c2 <convertExact+0xc2>
+			be: R_X86_64_PLT32	_d_arraybounds_indexp-0x4
+  c2:	48 8b 5d d0          	mov    -0x30(%rbp),%rbx
+  c6:	4c 8b 65 d8          	mov    -0x28(%rbp),%r12
+  ca:	4c 8b 6d e0          	mov    -0x20(%rbp),%r13
+  ce:	4c 8b 75 e8          	mov    -0x18(%rbp),%r14
+  d2:	4c 8b 7d f0          	mov    -0x10(%rbp),%r15
+  d6:	48 8b e5             	mov    %rbp,%rsp
+  d9:	5d                   	pop    %rbp
+  da:	c3                   	ret
+	...
+
+Disassembly of section .text._D11row_codegen__T11executeRowsThThZQsFNaNbNiNfMPxhlMPhlmmZv:
+
+0000000000000000 <_D11row_codegen__T11executeRowsThThZQsFNaNbNiNfMPxhlMPhlmmZv>:
+   0:	55                   	push   %rbp
+   1:	48 8b ec             	mov    %rsp,%rbp
+   4:	50                   	push   %rax
+   5:	53                   	push   %rbx
+   6:	41 54                	push   %r12
+   8:	41 55                	push   %r13
+   a:	41 56                	push   %r14
+   c:	41 57                	push   %r15
+   e:	49 89 fd             	mov    %rdi,%r13
+  11:	49 89 f3             	mov    %rsi,%r11
+  14:	49 89 d6             	mov    %rdx,%r14
+  17:	49 89 cf             	mov    %rcx,%r15
+  1a:	4c 89 c3             	mov    %r8,%rbx
+  1d:	4d 89 cc             	mov    %r9,%r12
+  20:	31 d2                	xor    %edx,%edx
+  22:	4d 85 ed             	test   %r13,%r13
+  25:	74 43                	je     6a <_D11row_codegen__T11executeRowsThThZQsFNaNbNiNfMPxhlMPhlmmZv+0x6a>
+  27:	4c 8b c2             	mov    %rdx,%r8
+  2a:	4c 0f af c3          	imul   %rbx,%r8
+  2e:	4d 03 c4             	add    %r12,%r8
+  31:	4c 8b ca             	mov    %rdx,%r9
+  34:	4d 0f af ce          	imul   %r14,%r9
+  38:	4d 03 cf             	add    %r15,%r9
+  3b:	4d 3b db             	cmp    %r11,%r11
+  3e:	75 38                	jne    78 <_D11row_codegen__T11executeRowsThThZQsFNaNbNiNfMPxhlMPhlmmZv+0x78>
+  40:	4b 8d 04 19          	lea    (%r9,%r11,1),%rax
+  44:	49 39 c0             	cmp    %rax,%r8
+  47:	73 09                	jae    52 <_D11row_codegen__T11executeRowsThThZQsFNaNbNiNfMPxhlMPhlmmZv+0x52>
+  49:	4b 8d 0c 18          	lea    (%r8,%r11,1),%rcx
+  4d:	49 39 c9             	cmp    %rcx,%r9
+  50:	72 26                	jb     78 <_D11row_codegen__T11executeRowsThThZQsFNaNbNiNfMPxhlMPhlmmZv+0x78>
+  52:	49 8b f0             	mov    %r8,%rsi
+  55:	49 8b cb             	mov    %r11,%rcx
+  58:	49 8b f9             	mov    %r9,%rdi
+  5b:	48 85 c9             	test   %rcx,%rcx
+  5e:	74 02                	je     62 <_D11row_codegen__T11executeRowsThThZQsFNaNbNiNfMPxhlMPhlmmZv+0x62>
+  60:	f3 a4                	rep movsb (%rsi),(%rdi)
+  62:	48 ff c2             	inc    %rdx
+  65:	4c 39 ea             	cmp    %r13,%rdx
+  68:	72 bd                	jb     27 <_D11row_codegen__T11executeRowsThThZQsFNaNbNiNfMPxhlMPhlmmZv+0x27>
+  6a:	41 5f                	pop    %r15
+  6c:	41 5e                	pop    %r14
+  6e:	41 5d                	pop    %r13
+  70:	41 5c                	pop    %r12
+  72:	5b                   	pop    %rbx
+  73:	48 8b e5             	mov    %rbp,%rsp
+  76:	5d                   	pop    %rbp
+  77:	c3                   	ret
+  78:	be 16 00 00 00       	mov    $0x16,%esi
+  7d:	48 8d 3d 00 00 00 00 	lea    0x0(%rip),%rdi        # 84 <_D11row_codegen__T11executeRowsThThZQsFNaNbNiNfMPxhlMPhlmmZv+0x84>
+			80: R_X86_64_PC32	.rodata.str1.1-0x4
+  84:	e8 00 00 00 00       	call   89 <_D11row_codegen__T11executeRowsThThZQsFNaNbNiNfMPxhlMPhlmmZv+0x89>
+			85: R_X86_64_PLT32	_d_arrayboundsp-0x4
+  89:	41 5f                	pop    %r15
+  8b:	41 5e                	pop    %r14
+  8d:	41 5d                	pop    %r13
+  8f:	41 5c                	pop    %r12
+  91:	5b                   	pop    %rbx
+  92:	48 8b e5             	mov    %rbp,%rsp
+  95:	5d                   	pop    %rbp
+  96:	c3                   	ret
+	...
+
+Disassembly of section .text._D11row_codegen__T7readRowThZQlFNaNbNiNeNkMPxhlmmZAxh:
+
+0000000000000000 <_D11row_codegen__T7readRowThZQlFNaNbNiNeNkMPxhlmmZAxh>:
+   0:	50                   	push   %rax
+   1:	48 89 14 24          	mov    %rdx,(%rsp)
+   5:	48 8b c7             	mov    %rdi,%rax
+   8:	48 8b d6             	mov    %rsi,%rdx
+   b:	48 0f af 14 24       	imul   (%rsp),%rdx
+  10:	48 03 d1             	add    %rcx,%rdx
+  13:	59                   	pop    %rcx
+  14:	c3                   	ret
+  15:	00 00                	add    %al,(%rax)
+	...
+
+Disassembly of section .text._D11row_codegen__T8writeRowThZQmFNaNbNiNeNkMPhlmmZAh:
+
+0000000000000000 <_D11row_codegen__T8writeRowThZQmFNaNbNiNeNkMPhlmmZAh>:
+   0:	50                   	push   %rax
+   1:	48 89 14 24          	mov    %rdx,(%rsp)
+   5:	48 8b c7             	mov    %rdi,%rax
+   8:	48 8b d6             	mov    %rsi,%rdx
+   b:	48 0f af 14 24       	imul   (%rsp),%rdx
+  10:	48 03 d1             	add    %rcx,%rdx
+  13:	59                   	pop    %rcx
+  14:	c3                   	ret
+  15:	00 00                	add    %al,(%rax)
+	...
+
+Disassembly of section .text._D11row_codegen__T11executeRowsTfTfZQsFNaNbNiNfMPxflMPflmmZv:
+
+0000000000000000 <_D11row_codegen__T11executeRowsTfTfZQsFNaNbNiNfMPxflMPflmmZv>:
+   0:	55                   	push   %rbp
+   1:	48 8b ec             	mov    %rsp,%rbp
+   4:	50                   	push   %rax
+   5:	53                   	push   %rbx
+   6:	41 54                	push   %r12
+   8:	41 55                	push   %r13
+   a:	41 56                	push   %r14
+   c:	41 57                	push   %r15
+   e:	49 89 fd             	mov    %rdi,%r13
+  11:	49 89 f3             	mov    %rsi,%r11
+  14:	49 89 d6             	mov    %rdx,%r14
+  17:	49 89 cf             	mov    %rcx,%r15
+  1a:	4c 89 c3             	mov    %r8,%rbx
+  1d:	4d 89 cc             	mov    %r9,%r12
+  20:	31 d2                	xor    %edx,%edx
+  22:	4d 85 ed             	test   %r13,%r13
+  25:	74 51                	je     78 <_D11row_codegen__T11executeRowsTfTfZQsFNaNbNiNfMPxflMPflmmZv+0x78>
+  27:	48 8b c2             	mov    %rdx,%rax
+  2a:	48 0f af c3          	imul   %rbx,%rax
+  2e:	4d 8d 04 84          	lea    (%r12,%rax,4),%r8
+  32:	48 8b ca             	mov    %rdx,%rcx
+  35:	49 0f af ce          	imul   %r14,%rcx
+  39:	4d 8d 0c 8f          	lea    (%r15,%rcx,4),%r9
+  3d:	4d 3b db             	cmp    %r11,%r11
+  40:	75 44                	jne    86 <_D11row_codegen__T11executeRowsTfTfZQsFNaNbNiNfMPxflMPflmmZv+0x86>
+  42:	49 8b f3             	mov    %r11,%rsi
+  45:	48 c1 e6 02          	shl    $0x2,%rsi
+  49:	4a 8d 3c 0e          	lea    (%rsi,%r9,1),%rdi
+  4d:	49 39 f8             	cmp    %rdi,%r8
+  50:	73 09                	jae    5b <_D11row_codegen__T11executeRowsTfTfZQsFNaNbNiNfMPxflMPflmmZv+0x5b>
+  52:	4e 8d 14 06          	lea    (%rsi,%r8,1),%r10
+  56:	4d 39 d1             	cmp    %r10,%r9
+  59:	72 2b                	jb     86 <_D11row_codegen__T11executeRowsTfTfZQsFNaNbNiNfMPxflMPflmmZv+0x86>
+  5b:	49 8b f0             	mov    %r8,%rsi
+  5e:	4a 8d 0c 9d 00 00 00 	lea    0x0(,%r11,4),%rcx
+  65:	00 
+  66:	49 8b f9             	mov    %r9,%rdi
+  69:	48 85 c9             	test   %rcx,%rcx
+  6c:	74 02                	je     70 <_D11row_codegen__T11executeRowsTfTfZQsFNaNbNiNfMPxflMPflmmZv+0x70>
+  6e:	f3 a4                	rep movsb (%rsi),(%rdi)
+  70:	48 ff c2             	inc    %rdx
+  73:	4c 39 ea             	cmp    %r13,%rdx
+  76:	72 af                	jb     27 <_D11row_codegen__T11executeRowsTfTfZQsFNaNbNiNfMPxflMPflmmZv+0x27>
+  78:	41 5f                	pop    %r15
+  7a:	41 5e                	pop    %r14
+  7c:	41 5d                	pop    %r13
+  7e:	41 5c                	pop    %r12
+  80:	5b                   	pop    %rbx
+  81:	48 8b e5             	mov    %rbp,%rsp
+  84:	5d                   	pop    %rbp
+  85:	c3                   	ret
+  86:	be 16 00 00 00       	mov    $0x16,%esi
+  8b:	48 8d 3d 00 00 00 00 	lea    0x0(%rip),%rdi        # 92 <_D11row_codegen__T11executeRowsTfTfZQsFNaNbNiNfMPxflMPflmmZv+0x92>
+			8e: R_X86_64_PC32	.rodata.str1.1-0x4
+  92:	e8 00 00 00 00       	call   97 <_D11row_codegen__T11executeRowsTfTfZQsFNaNbNiNfMPxflMPflmmZv+0x97>
+			93: R_X86_64_PLT32	_d_arrayboundsp-0x4
+  97:	41 5f                	pop    %r15
+  99:	41 5e                	pop    %r14
+  9b:	41 5d                	pop    %r13
+  9d:	41 5c                	pop    %r12
+  9f:	5b                   	pop    %rbx
+  a0:	48 8b e5             	mov    %rbp,%rsp
+  a3:	5d                   	pop    %rbp
+  a4:	c3                   	ret
+  a5:	00 00                	add    %al,(%rax)
+	...
+
+Disassembly of section .text._D11row_codegen__T7readRowTfZQlFNaNbNiNeNkMPxflmmZAxf:
+
+0000000000000000 <_D11row_codegen__T7readRowTfZQlFNaNbNiNeNkMPxflmmZAxf>:
+   0:	50                   	push   %rax
+   1:	48 89 14 24          	mov    %rdx,(%rsp)
+   5:	48 8b c7             	mov    %rdi,%rax
+   8:	4c 8b c6             	mov    %rsi,%r8
+   b:	4c 0f af 04 24       	imul   (%rsp),%r8
+  10:	4a 8d 14 81          	lea    (%rcx,%r8,4),%rdx
+  14:	59                   	pop    %rcx
+  15:	c3                   	ret
+	...
+
+Disassembly of section .text._D11row_codegen__T8writeRowTfZQmFNaNbNiNeNkMPflmmZAf:
+
+0000000000000000 <_D11row_codegen__T8writeRowTfZQmFNaNbNiNeNkMPflmmZAf>:
+   0:	50                   	push   %rax
+   1:	48 89 14 24          	mov    %rdx,(%rsp)
+   5:	48 8b c7             	mov    %rdi,%rax
+   8:	4c 8b c6             	mov    %rsi,%r8
+   b:	4c 0f af 04 24       	imul   (%rsp),%r8
+  10:	4a 8d 14 81          	lea    (%rcx,%r8,4),%rdx
+  14:	59                   	pop    %rcx
+  15:	c3                   	ret
+	...
+
+Disassembly of section .text._D11row_codegen__T11executeRowsTSQBf3PodTQjZQBaFNaNbNiNfMPxSQCgQBblMPQBllmmZv:
+
+0000000000000000 <_D11row_codegen__T11executeRowsTSQBf3PodTQjZQBaFNaNbNiNfMPxSQCgQBblMPQBllmmZv>:
+   0:	55                   	push   %rbp
+   1:	48 8b ec             	mov    %rsp,%rbp
+   4:	50                   	push   %rax
+   5:	53                   	push   %rbx
+   6:	41 54                	push   %r12
+   8:	41 55                	push   %r13
+   a:	41 56                	push   %r14
+   c:	41 57                	push   %r15
+   e:	49 89 fd             	mov    %rdi,%r13
+  11:	49 89 f3             	mov    %rsi,%r11
+  14:	49 89 d6             	mov    %rdx,%r14
+  17:	49 89 cf             	mov    %rcx,%r15
+  1a:	4c 89 c3             	mov    %r8,%rbx
+  1d:	4d 89 cc             	mov    %r9,%r12
+  20:	31 d2                	xor    %edx,%edx
+  22:	4d 85 ed             	test   %r13,%r13
+  25:	74 51                	je     78 <_D11row_codegen__T11executeRowsTSQBf3PodTQjZQBaFNaNbNiNfMPxSQCgQBblMPQBllmmZv+0x78>
+  27:	48 8b c2             	mov    %rdx,%rax
+  2a:	48 0f af c3          	imul   %rbx,%rax
+  2e:	4d 8d 04 c4          	lea    (%r12,%rax,8),%r8
+  32:	48 8b ca             	mov    %rdx,%rcx
+  35:	49 0f af ce          	imul   %r14,%rcx
+  39:	4d 8d 0c cf          	lea    (%r15,%rcx,8),%r9
+  3d:	4d 3b db             	cmp    %r11,%r11
+  40:	75 44                	jne    86 <_D11row_codegen__T11executeRowsTSQBf3PodTQjZQBaFNaNbNiNfMPxSQCgQBblMPQBllmmZv+0x86>
+  42:	49 8b f3             	mov    %r11,%rsi
+  45:	48 c1 e6 03          	shl    $0x3,%rsi
+  49:	4a 8d 3c 0e          	lea    (%rsi,%r9,1),%rdi
+  4d:	49 39 f8             	cmp    %rdi,%r8
+  50:	73 09                	jae    5b <_D11row_codegen__T11executeRowsTSQBf3PodTQjZQBaFNaNbNiNfMPxSQCgQBblMPQBllmmZv+0x5b>
+  52:	4e 8d 14 06          	lea    (%rsi,%r8,1),%r10
+  56:	4d 39 d1             	cmp    %r10,%r9
+  59:	72 2b                	jb     86 <_D11row_codegen__T11executeRowsTSQBf3PodTQjZQBaFNaNbNiNfMPxSQCgQBblMPQBllmmZv+0x86>
+  5b:	49 8b f0             	mov    %r8,%rsi
+  5e:	4a 8d 0c dd 00 00 00 	lea    0x0(,%r11,8),%rcx
+  65:	00 
+  66:	49 8b f9             	mov    %r9,%rdi
+  69:	48 85 c9             	test   %rcx,%rcx
+  6c:	74 02                	je     70 <_D11row_codegen__T11executeRowsTSQBf3PodTQjZQBaFNaNbNiNfMPxSQCgQBblMPQBllmmZv+0x70>
+  6e:	f3 a4                	rep movsb (%rsi),(%rdi)
+  70:	48 ff c2             	inc    %rdx
+  73:	4c 39 ea             	cmp    %r13,%rdx
+  76:	72 af                	jb     27 <_D11row_codegen__T11executeRowsTSQBf3PodTQjZQBaFNaNbNiNfMPxSQCgQBblMPQBllmmZv+0x27>
+  78:	41 5f                	pop    %r15
+  7a:	41 5e                	pop    %r14
+  7c:	41 5d                	pop    %r13
+  7e:	41 5c                	pop    %r12
+  80:	5b                   	pop    %rbx
+  81:	48 8b e5             	mov    %rbp,%rsp
+  84:	5d                   	pop    %rbp
+  85:	c3                   	ret
+  86:	be 16 00 00 00       	mov    $0x16,%esi
+  8b:	48 8d 3d 00 00 00 00 	lea    0x0(%rip),%rdi        # 92 <_D11row_codegen__T11executeRowsTSQBf3PodTQjZQBaFNaNbNiNfMPxSQCgQBblMPQBllmmZv+0x92>
+			8e: R_X86_64_PC32	.rodata.str1.1-0x4
+  92:	e8 00 00 00 00       	call   97 <_D11row_codegen__T11executeRowsTSQBf3PodTQjZQBaFNaNbNiNfMPxSQCgQBblMPQBllmmZv+0x97>
+			93: R_X86_64_PLT32	_d_arrayboundsp-0x4
+  97:	41 5f                	pop    %r15
+  99:	41 5e                	pop    %r14
+  9b:	41 5d                	pop    %r13
+  9d:	41 5c                	pop    %r12
+  9f:	5b                   	pop    %rbx
+  a0:	48 8b e5             	mov    %rbp,%rsp
+  a3:	5d                   	pop    %rbp
+  a4:	c3                   	ret
+  a5:	00 00                	add    %al,(%rax)
+	...
+
+Disassembly of section .text._D11row_codegen__T7readRowTSQBa3PodZQsFNaNbNiNeNkMPxSQBzQzlmmZAxQm:
+
+0000000000000000 <_D11row_codegen__T7readRowTSQBa3PodZQsFNaNbNiNeNkMPxSQBzQzlmmZAxQm>:
+   0:	50                   	push   %rax
+   1:	48 89 14 24          	mov    %rdx,(%rsp)
+   5:	48 8b c7             	mov    %rdi,%rax
+   8:	4c 8b c6             	mov    %rsi,%r8
+   b:	4c 0f af 04 24       	imul   (%rsp),%r8
+  10:	4a 8d 14 c1          	lea    (%rcx,%r8,8),%rdx
+  14:	59                   	pop    %rcx
+  15:	c3                   	ret
+	...
+
+Disassembly of section .text._D11row_codegen__T8writeRowTSQBb3PodZQtFNaNbNiNeNkMPQylmmZAQBf:
+
+0000000000000000 <_D11row_codegen__T8writeRowTSQBb3PodZQtFNaNbNiNeNkMPQylmmZAQBf>:
+   0:	50                   	push   %rax
+   1:	48 89 14 24          	mov    %rdx,(%rsp)
+   5:	48 8b c7             	mov    %rdi,%rax
+   8:	4c 8b c6             	mov    %rsi,%r8
+   b:	4c 0f af 04 24       	imul   (%rsp),%r8
+  10:	4a 8d 14 c1          	lea    (%rcx,%r8,8),%rdx
+  14:	59                   	pop    %rcx
+  15:	c3                   	ret
+	...
+
+Disassembly of section .text._D11row_codegen__T11executeRowsThTfZQsFNaNbNiNfMPxhlMPflmmZv:
+
+0000000000000000 <_D11row_codegen__T11executeRowsThTfZQsFNaNbNiNfMPxhlMPflmmZv>:
+   0:	55                   	push   %rbp
+   1:	48 8b ec             	mov    %rsp,%rbp
+   4:	48 83 ec 30          	sub    $0x30,%rsp
+   8:	48 89 5d d0          	mov    %rbx,-0x30(%rbp)
+   c:	4c 89 65 d8          	mov    %r12,-0x28(%rbp)
+  10:	4c 89 6d e0          	mov    %r13,-0x20(%rbp)
+  14:	4c 89 75 e8          	mov    %r14,-0x18(%rbp)
+  18:	4c 89 7d f0          	mov    %r15,-0x10(%rbp)
+  1c:	4c 89 45 f8          	mov    %r8,-0x8(%rbp)
+  20:	49 89 fc             	mov    %rdi,%r12
+  23:	49 89 f3             	mov    %rsi,%r11
+  26:	49 89 d6             	mov    %rdx,%r14
+  29:	49 89 cf             	mov    %rcx,%r15
+  2c:	4c 89 cb             	mov    %r9,%rbx
+  2f:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
+  33:	31 ff                	xor    %edi,%edi
+  35:	4d 85 e4             	test   %r12,%r12
+  38:	74 58                	je     92 <_D11row_codegen__T11executeRowsThTfZQsFNaNbNiNfMPxhlMPflmmZv+0x92>
+  3a:	48 89 45 f8          	mov    %rax,-0x8(%rbp)
+  3e:	49 39 fb             	cmp    %rdi,%r11
+  41:	41 0f 95 c5          	setne  %r13b
+  45:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
+  49:	48 8b d7             	mov    %rdi,%rdx
+  4c:	48 0f af d0          	imul   %rax,%rdx
+  50:	48 03 d3             	add    %rbx,%rdx
+  53:	48 8b cf             	mov    %rdi,%rcx
+  56:	49 0f af ce          	imul   %r14,%rcx
+  5a:	49 8d 34 8f          	lea    (%r15,%rcx,4),%rsi
+  5e:	45 31 c0             	xor    %r8d,%r8d
+  61:	45 84 ed             	test   %r13b,%r13b
+  64:	74 24                	je     8a <_D11row_codegen__T11executeRowsThTfZQsFNaNbNiNfMPxhlMPflmmZv+0x8a>
+  66:	41 0f b6 0c 10       	movzbl (%r8,%rdx,1),%ecx
+  6b:	4d 39 d8             	cmp    %r11,%r8
+  6e:	73 3b                	jae    ab <_D11row_codegen__T11executeRowsThTfZQsFNaNbNiNfMPxhlMPflmmZv+0xab>
+  70:	44 0f b6 c9          	movzbl %cl,%r9d
+  74:	45 8b c9             	mov    %r9d,%r9d
+  77:	f3 49 0f 2a c1       	cvtsi2ss %r9,%xmm0
+  7c:	f3 42 0f 11 04 86    	movss  %xmm0,(%rsi,%r8,4)
+  82:	49 ff c0             	inc    %r8
+  85:	4d 39 d8             	cmp    %r11,%r8
+  88:	72 dc                	jb     66 <_D11row_codegen__T11executeRowsThTfZQsFNaNbNiNfMPxhlMPflmmZv+0x66>
+  8a:	48 ff c7             	inc    %rdi
+  8d:	4c 39 e7             	cmp    %r12,%rdi
+  90:	72 b7                	jb     49 <_D11row_codegen__T11executeRowsThTfZQsFNaNbNiNfMPxhlMPflmmZv+0x49>
+  92:	48 8b 5d d0          	mov    -0x30(%rbp),%rbx
+  96:	4c 8b 65 d8          	mov    -0x28(%rbp),%r12
+  9a:	4c 8b 6d e0          	mov    -0x20(%rbp),%r13
+  9e:	4c 8b 75 e8          	mov    -0x18(%rbp),%r14
+  a2:	4c 8b 7d f0          	mov    -0x10(%rbp),%r15
+  a6:	48 8b e5             	mov    %rbp,%rsp
+  a9:	5d                   	pop    %rbp
+  aa:	c3                   	ret
+  ab:	49 8b cb             	mov    %r11,%rcx
+  ae:	49 8b d0             	mov    %r8,%rdx
+  b1:	be 1a 00 00 00       	mov    $0x1a,%esi
+  b6:	48 8d 3d 00 00 00 00 	lea    0x0(%rip),%rdi        # bd <_D11row_codegen__T11executeRowsThTfZQsFNaNbNiNfMPxhlMPflmmZv+0xbd>
+			b9: R_X86_64_PC32	.rodata.str1.1-0x4
+  bd:	e8 00 00 00 00       	call   c2 <_D11row_codegen__T11executeRowsThTfZQsFNaNbNiNfMPxhlMPflmmZv+0xc2>
+			be: R_X86_64_PLT32	_d_arraybounds_indexp-0x4
+  c2:	48 8b 5d d0          	mov    -0x30(%rbp),%rbx
+  c6:	4c 8b 65 d8          	mov    -0x28(%rbp),%r12
+  ca:	4c 8b 6d e0          	mov    -0x20(%rbp),%r13
+  ce:	4c 8b 75 e8          	mov    -0x18(%rbp),%r14
+  d2:	4c 8b 7d f0          	mov    -0x10(%rbp),%r15
+  d6:	48 8b e5             	mov    %rbp,%rsp
+  d9:	5d                   	pop    %rbp
+  da:	c3                   	ret
+	...
+
+Disassembly of section .text.d_dso_init:
+
+0000000000000000 <.text.d_dso_init>:
+   0:	55                   	push   %rbp
+   1:	48 8b ec             	mov    %rsp,%rbp
+   4:	48 8d 05 00 00 00 00 	lea    0x0(%rip),%rax        # b <.text.d_dso_init+0xb>
+			7: R_X86_64_PC32	__stop_minfo-0x4
+   b:	50                   	push   %rax
+   c:	48 8d 05 00 00 00 00 	lea    0x0(%rip),%rax        # 13 <.text.d_dso_init+0x13>
+			f: R_X86_64_PC32	__start_minfo-0x4
+  13:	50                   	push   %rax
+  14:	48 8d 05 00 00 00 00 	lea    0x0(%rip),%rax        # 1b <.text.d_dso_init+0x1b>
+			17: R_X86_64_PC32	.data.d_dso_rec-0x4
+  1b:	50                   	push   %rax
+  1c:	6a 01                	push   $0x1
+  1e:	48 8b fc             	mov    %rsp,%rdi
+  21:	e8 00 00 00 00       	call   26 <.text.d_dso_init+0x26>
+			22: R_X86_64_PLT32	_d_dso_registry-0x4
+  26:	c9                   	leave
+  27:	c3                   	ret
+Isolated actual-source row kernels: ldc2
+LDC - the LLVM D compiler (1.41.0):
+  based on DMD v2.111.0 and LLVM 19.1.7
+  built with LDC - the LLVM D compiler (1.41.0)
+  Default target: x86_64-pc-linux-gnu
+  Host CPU: skylake
+  http://dlang.org - http://wiki.dlang.org/LDC
+
+
+  Registered Targets:
+    aarch64     - AArch64 (little endian)
+    aarch64_32  - AArch64 (little endian ILP32)
+    aarch64_be  - AArch64 (big endian)
+    amdgcn      - AMD GCN GPUs
+    arm         - ARM
+    arm64       - ARM64 (little endian)
+    arm64_32    - ARM64 (little endian ILP32)
+    armeb       - ARM (big endian)
+    avr         - Atmel AVR Microcontroller
+    bpf         - BPF (host endian)
+    bpfeb       - BPF (big endian)
+    bpfel       - BPF (little endian)
+    hexagon     - Hexagon
+    lanai       - Lanai
+    loongarch32 - 32-bit LoongArch
+    loongarch64 - 64-bit LoongArch
+    m68k        - Motorola 68000 family
+    mips        - MIPS (32-bit big endian)
+    mips64      - MIPS (64-bit big endian)
+    mips64el    - MIPS (64-bit little endian)
+    mipsel      - MIPS (32-bit little endian)
+    msp430      - MSP430 [experimental]
+    nvptx       - NVIDIA PTX 32-bit
+    nvptx64     - NVIDIA PTX 64-bit
+    ppc32       - PowerPC 32
+    ppc32le     - PowerPC 32 LE
+    ppc64       - PowerPC 64
+    ppc64le     - PowerPC 64 LE
+    r600        - AMD GPUs HD2XXX-HD6XXX
+    riscv32     - 32-bit RISC-V
+    riscv64     - 64-bit RISC-V
+    sparc       - Sparc
+    sparcel     - Sparc LE
+    sparcv9     - Sparc V9
+    systemz     - SystemZ
+    thumb       - Thumb
+    thumbeb     - Thumb (big endian)
+    ve          - VE
+    wasm32      - WebAssembly 32-bit
+    wasm64      - WebAssembly 64-bit
+    x86         - 32-bit X86: Pentium-Pro and above
+    x86-64      - 64-bit X86: EM64T and AMD64
+    xcore       - XCore
+    xtensa      - Xtensa 32
++ ldc2 -release -enable-inlining -O3 -preview=dip1000 -c -of=/tmp/tmp.xRVvg3e68c/ldc2.o /tmp/tmp.xRVvg3e68c/rows.d
++ set +x
+
+/tmp/tmp.xRVvg3e68c/ldc2.o:     Dateiformat elf64-x86-64
+
+
+Disassembly of section .text.copyUbyte:
+
+0000000000000000 <copyUbyte>:
+   0:	4d 85 c9             	test   %r9,%r9
+   3:	74 5b                	je     60 <copyUbyte+0x60>
+   5:	55                   	push   %rbp
+   6:	41 57                	push   %r15
+   8:	41 56                	push   %r14
+   a:	41 55                	push   %r13
+   c:	41 54                	push   %r12
+   e:	53                   	push   %rbx
+   f:	50                   	push   %rax
+  10:	4c 89 cb             	mov    %r9,%rbx
+  13:	4d 89 c6             	mov    %r8,%r14
+  16:	49 89 cf             	mov    %rcx,%r15
+  19:	49 89 d4             	mov    %rdx,%r12
+  1c:	49 89 f5             	mov    %rsi,%r13
+  1f:	48 89 fd             	mov    %rdi,%rbp
+  22:	66 66 66 66 66 2e 0f 	data16 data16 data16 data16 cs nopw 0x0(%rax,%rax,1)
+  29:	1f 84 00 00 00 00 00 
+  30:	41 b8 01 00 00 00    	mov    $0x1,%r8d
+  36:	4c 89 e7             	mov    %r12,%rdi
+  39:	4c 89 f6             	mov    %r14,%rsi
+  3c:	48 89 ea             	mov    %rbp,%rdx
+  3f:	4c 89 f1             	mov    %r14,%rcx
+  42:	e8 00 00 00 00       	call   47 <copyUbyte+0x47>
+			43: R_X86_64_PLT32	_d_array_slice_copy-0x4
+  47:	4d 01 fc             	add    %r15,%r12
+  4a:	4c 01 ed             	add    %r13,%rbp
+  4d:	48 ff cb             	dec    %rbx
+  50:	75 de                	jne    30 <copyUbyte+0x30>
+  52:	48 83 c4 08          	add    $0x8,%rsp
+  56:	5b                   	pop    %rbx
+  57:	41 5c                	pop    %r12
+  59:	41 5d                	pop    %r13
+  5b:	41 5e                	pop    %r14
+  5d:	41 5f                	pop    %r15
+  5f:	5d                   	pop    %rbp
+  60:	c3                   	ret
+
+Disassembly of section .text._D11row_codegen__T11executeRowsThThZQsFNaNbNiNfMPxhlMPhlmmZv:
+
+0000000000000000 <_D11row_codegen__T11executeRowsThThZQsFNaNbNiNfMPxhlMPhlmmZv>:
+   0:	4d 85 c9             	test   %r9,%r9
+   3:	74 5b                	je     60 <_D11row_codegen__T11executeRowsThThZQsFNaNbNiNfMPxhlMPhlmmZv+0x60>
+   5:	55                   	push   %rbp
+   6:	41 57                	push   %r15
+   8:	41 56                	push   %r14
+   a:	41 55                	push   %r13
+   c:	41 54                	push   %r12
+   e:	53                   	push   %rbx
+   f:	50                   	push   %rax
+  10:	4c 89 cb             	mov    %r9,%rbx
+  13:	4d 89 c6             	mov    %r8,%r14
+  16:	49 89 cf             	mov    %rcx,%r15
+  19:	49 89 d4             	mov    %rdx,%r12
+  1c:	49 89 f5             	mov    %rsi,%r13
+  1f:	48 89 fd             	mov    %rdi,%rbp
+  22:	66 66 66 66 66 2e 0f 	data16 data16 data16 data16 cs nopw 0x0(%rax,%rax,1)
+  29:	1f 84 00 00 00 00 00 
+  30:	41 b8 01 00 00 00    	mov    $0x1,%r8d
+  36:	4c 89 e7             	mov    %r12,%rdi
+  39:	4c 89 f6             	mov    %r14,%rsi
+  3c:	48 89 ea             	mov    %rbp,%rdx
+  3f:	4c 89 f1             	mov    %r14,%rcx
+  42:	e8 00 00 00 00       	call   47 <_D11row_codegen__T11executeRowsThThZQsFNaNbNiNfMPxhlMPhlmmZv+0x47>
+			43: R_X86_64_PLT32	_d_array_slice_copy-0x4
+  47:	4c 01 ed             	add    %r13,%rbp
+  4a:	4d 01 fc             	add    %r15,%r12
+  4d:	48 ff cb             	dec    %rbx
+  50:	75 de                	jne    30 <_D11row_codegen__T11executeRowsThThZQsFNaNbNiNfMPxhlMPhlmmZv+0x30>
+  52:	48 83 c4 08          	add    $0x8,%rsp
+  56:	5b                   	pop    %rbx
+  57:	41 5c                	pop    %r12
+  59:	41 5d                	pop    %r13
+  5b:	41 5e                	pop    %r14
+  5d:	41 5f                	pop    %r15
+  5f:	5d                   	pop    %rbp
+  60:	c3                   	ret
+
+Disassembly of section .text.copyFloat:
+
+0000000000000000 <copyFloat>:
+   0:	4d 85 c9             	test   %r9,%r9
+   3:	74 5b                	je     60 <copyFloat+0x60>
+   5:	55                   	push   %rbp
+   6:	41 57                	push   %r15
+   8:	41 56                	push   %r14
+   a:	41 55                	push   %r13
+   c:	41 54                	push   %r12
+   e:	53                   	push   %rbx
+   f:	50                   	push   %rax
+  10:	4c 89 cb             	mov    %r9,%rbx
+  13:	4d 89 c6             	mov    %r8,%r14
+  16:	49 89 cf             	mov    %rcx,%r15
+  19:	49 89 d4             	mov    %rdx,%r12
+  1c:	49 89 f5             	mov    %rsi,%r13
+  1f:	48 89 fd             	mov    %rdi,%rbp
+  22:	49 c1 e7 02          	shl    $0x2,%r15
+  26:	49 c1 e5 02          	shl    $0x2,%r13
+  2a:	66 0f 1f 44 00 00    	nopw   0x0(%rax,%rax,1)
+  30:	41 b8 04 00 00 00    	mov    $0x4,%r8d
+  36:	4c 89 e7             	mov    %r12,%rdi
+  39:	4c 89 f6             	mov    %r14,%rsi
+  3c:	48 89 ea             	mov    %rbp,%rdx
+  3f:	4c 89 f1             	mov    %r14,%rcx
+  42:	e8 00 00 00 00       	call   47 <copyFloat+0x47>
+			43: R_X86_64_PLT32	_d_array_slice_copy-0x4
+  47:	4d 01 fc             	add    %r15,%r12
+  4a:	4c 01 ed             	add    %r13,%rbp
+  4d:	48 ff cb             	dec    %rbx
+  50:	75 de                	jne    30 <copyFloat+0x30>
+  52:	48 83 c4 08          	add    $0x8,%rsp
+  56:	5b                   	pop    %rbx
+  57:	41 5c                	pop    %r12
+  59:	41 5d                	pop    %r13
+  5b:	41 5e                	pop    %r14
+  5d:	41 5f                	pop    %r15
+  5f:	5d                   	pop    %rbp
+  60:	c3                   	ret
+
+Disassembly of section .text._D11row_codegen__T11executeRowsTfTfZQsFNaNbNiNfMPxflMPflmmZv:
+
+0000000000000000 <_D11row_codegen__T11executeRowsTfTfZQsFNaNbNiNfMPxflMPflmmZv>:
+   0:	4d 85 c9             	test   %r9,%r9
+   3:	74 5b                	je     60 <_D11row_codegen__T11executeRowsTfTfZQsFNaNbNiNfMPxflMPflmmZv+0x60>
+   5:	55                   	push   %rbp
+   6:	41 57                	push   %r15
+   8:	41 56                	push   %r14
+   a:	41 55                	push   %r13
+   c:	41 54                	push   %r12
+   e:	53                   	push   %rbx
+   f:	50                   	push   %rax
+  10:	4c 89 cb             	mov    %r9,%rbx
+  13:	4d 89 c6             	mov    %r8,%r14
+  16:	49 89 cf             	mov    %rcx,%r15
+  19:	49 89 d4             	mov    %rdx,%r12
+  1c:	49 89 f5             	mov    %rsi,%r13
+  1f:	48 89 fd             	mov    %rdi,%rbp
+  22:	49 c1 e5 02          	shl    $0x2,%r13
+  26:	49 c1 e7 02          	shl    $0x2,%r15
+  2a:	66 0f 1f 44 00 00    	nopw   0x0(%rax,%rax,1)
+  30:	41 b8 04 00 00 00    	mov    $0x4,%r8d
+  36:	4c 89 e7             	mov    %r12,%rdi
+  39:	4c 89 f6             	mov    %r14,%rsi
+  3c:	48 89 ea             	mov    %rbp,%rdx
+  3f:	4c 89 f1             	mov    %r14,%rcx
+  42:	e8 00 00 00 00       	call   47 <_D11row_codegen__T11executeRowsTfTfZQsFNaNbNiNfMPxflMPflmmZv+0x47>
+			43: R_X86_64_PLT32	_d_array_slice_copy-0x4
+  47:	4c 01 ed             	add    %r13,%rbp
+  4a:	4d 01 fc             	add    %r15,%r12
+  4d:	48 ff cb             	dec    %rbx
+  50:	75 de                	jne    30 <_D11row_codegen__T11executeRowsTfTfZQsFNaNbNiNfMPxflMPflmmZv+0x30>
+  52:	48 83 c4 08          	add    $0x8,%rsp
+  56:	5b                   	pop    %rbx
+  57:	41 5c                	pop    %r12
+  59:	41 5d                	pop    %r13
+  5b:	41 5e                	pop    %r14
+  5d:	41 5f                	pop    %r15
+  5f:	5d                   	pop    %rbp
+  60:	c3                   	ret
+
+Disassembly of section .text.copyPod:
+
+0000000000000000 <copyPod>:
+   0:	4d 85 c9             	test   %r9,%r9
+   3:	74 5b                	je     60 <copyPod+0x60>
+   5:	55                   	push   %rbp
+   6:	41 57                	push   %r15
+   8:	41 56                	push   %r14
+   a:	41 55                	push   %r13
+   c:	41 54                	push   %r12
+   e:	53                   	push   %rbx
+   f:	50                   	push   %rax
+  10:	4c 89 cb             	mov    %r9,%rbx
+  13:	4d 89 c6             	mov    %r8,%r14
+  16:	49 89 cf             	mov    %rcx,%r15
+  19:	49 89 d4             	mov    %rdx,%r12
+  1c:	49 89 f5             	mov    %rsi,%r13
+  1f:	48 89 fd             	mov    %rdi,%rbp
+  22:	49 c1 e7 03          	shl    $0x3,%r15
+  26:	49 c1 e5 03          	shl    $0x3,%r13
+  2a:	66 0f 1f 44 00 00    	nopw   0x0(%rax,%rax,1)
+  30:	41 b8 08 00 00 00    	mov    $0x8,%r8d
+  36:	4c 89 e7             	mov    %r12,%rdi
+  39:	4c 89 f6             	mov    %r14,%rsi
+  3c:	48 89 ea             	mov    %rbp,%rdx
+  3f:	4c 89 f1             	mov    %r14,%rcx
+  42:	e8 00 00 00 00       	call   47 <copyPod+0x47>
+			43: R_X86_64_PLT32	_d_array_slice_copy-0x4
+  47:	4d 01 fc             	add    %r15,%r12
+  4a:	4c 01 ed             	add    %r13,%rbp
+  4d:	48 ff cb             	dec    %rbx
+  50:	75 de                	jne    30 <copyPod+0x30>
+  52:	48 83 c4 08          	add    $0x8,%rsp
+  56:	5b                   	pop    %rbx
+  57:	41 5c                	pop    %r12
+  59:	41 5d                	pop    %r13
+  5b:	41 5e                	pop    %r14
+  5d:	41 5f                	pop    %r15
+  5f:	5d                   	pop    %rbp
+  60:	c3                   	ret
+
+Disassembly of section .text._D11row_codegen__T11executeRowsTSQBf3PodTQjZQBaFNaNbNiNfMPxSQCgQBblMPQBllmmZv:
+
+0000000000000000 <_D11row_codegen__T11executeRowsTSQBf3PodTQjZQBaFNaNbNiNfMPxSQCgQBblMPQBllmmZv>:
+   0:	4d 85 c9             	test   %r9,%r9
+   3:	74 5b                	je     60 <_D11row_codegen__T11executeRowsTSQBf3PodTQjZQBaFNaNbNiNfMPxSQCgQBblMPQBllmmZv+0x60>
+   5:	55                   	push   %rbp
+   6:	41 57                	push   %r15
+   8:	41 56                	push   %r14
+   a:	41 55                	push   %r13
+   c:	41 54                	push   %r12
+   e:	53                   	push   %rbx
+   f:	50                   	push   %rax
+  10:	4c 89 cb             	mov    %r9,%rbx
+  13:	4d 89 c6             	mov    %r8,%r14
+  16:	49 89 cf             	mov    %rcx,%r15
+  19:	49 89 d4             	mov    %rdx,%r12
+  1c:	49 89 f5             	mov    %rsi,%r13
+  1f:	48 89 fd             	mov    %rdi,%rbp
+  22:	49 c1 e5 03          	shl    $0x3,%r13
+  26:	49 c1 e7 03          	shl    $0x3,%r15
+  2a:	66 0f 1f 44 00 00    	nopw   0x0(%rax,%rax,1)
+  30:	41 b8 08 00 00 00    	mov    $0x8,%r8d
+  36:	4c 89 e7             	mov    %r12,%rdi
+  39:	4c 89 f6             	mov    %r14,%rsi
+  3c:	48 89 ea             	mov    %rbp,%rdx
+  3f:	4c 89 f1             	mov    %r14,%rcx
+  42:	e8 00 00 00 00       	call   47 <_D11row_codegen__T11executeRowsTSQBf3PodTQjZQBaFNaNbNiNfMPxSQCgQBblMPQBllmmZv+0x47>
+			43: R_X86_64_PLT32	_d_array_slice_copy-0x4
+  47:	4c 01 ed             	add    %r13,%rbp
+  4a:	4d 01 fc             	add    %r15,%r12
+  4d:	48 ff cb             	dec    %rbx
+  50:	75 de                	jne    30 <_D11row_codegen__T11executeRowsTSQBf3PodTQjZQBaFNaNbNiNfMPxSQCgQBblMPQBllmmZv+0x30>
+  52:	48 83 c4 08          	add    $0x8,%rsp
+  56:	5b                   	pop    %rbx
+  57:	41 5c                	pop    %r12
+  59:	41 5d                	pop    %r13
+  5b:	41 5e                	pop    %r14
+  5d:	41 5f                	pop    %r15
+  5f:	5d                   	pop    %rbp
+  60:	c3                   	ret
+
+Disassembly of section .text.convertExact:
+
+0000000000000000 <convertExact>:
+   0:	55                   	push   %rbp
+   1:	41 57                	push   %r15
+   3:	41 56                	push   %r14
+   5:	41 55                	push   %r13
+   7:	41 54                	push   %r12
+   9:	53                   	push   %rbx
+   a:	4c 89 4c 24 f8       	mov    %r9,-0x8(%rsp)
+   f:	4d 85 c9             	test   %r9,%r9
+  12:	0f 94 c0             	sete   %al
+  15:	4d 85 c0             	test   %r8,%r8
+  18:	41 0f 94 c2          	sete   %r10b
+  1c:	41 08 c2             	or     %al,%r10b
+  1f:	74 0b                	je     2c <convertExact+0x2c>
+  21:	5b                   	pop    %rbx
+  22:	41 5c                	pop    %r12
+  24:	41 5d                	pop    %r13
+  26:	41 5e                	pop    %r14
+  28:	41 5f                	pop    %r15
+  2a:	5d                   	pop    %rbp
+  2b:	c3                   	ret
+  2c:	48 8b 44 24 f8       	mov    -0x8(%rsp),%rax
+  31:	48 ff c8             	dec    %rax
+  34:	49 89 c2             	mov    %rax,%r10
+  37:	4c 0f af d1          	imul   %rcx,%r10
+  3b:	4d 01 c2             	add    %r8,%r10
+  3e:	4e 8d 14 92          	lea    (%rdx,%r10,4),%r10
+  42:	48 0f af c6          	imul   %rsi,%rax
+  46:	48 01 f8             	add    %rdi,%rax
+  49:	4c 01 c0             	add    %r8,%rax
+  4c:	48 39 d0             	cmp    %rdx,%rax
+  4f:	0f 97 c0             	seta   %al
+  52:	49 39 fa             	cmp    %rdi,%r10
+  55:	41 0f 97 c2          	seta   %r10b
+  59:	41 20 c2             	and    %al,%r10b
+  5c:	49 89 cb             	mov    %rcx,%r11
+  5f:	49 c1 eb 3d          	shr    $0x3d,%r11
+  63:	41 83 e3 01          	and    $0x1,%r11d
+  67:	48 85 f6             	test   %rsi,%rsi
+  6a:	41 0f 98 c1          	sets   %r9b
+  6e:	45 08 d9             	or     %r11b,%r9b
+  71:	45 08 d1             	or     %r10b,%r9b
+  74:	4d 89 c2             	mov    %r8,%r10
+  77:	49 83 e2 f8          	and    $0xfffffffffffffff8,%r10
+  7b:	45 89 c3             	mov    %r8d,%r11d
+  7e:	41 83 e3 03          	and    $0x3,%r11d
+  82:	48 8d 5f 04          	lea    0x4(%rdi),%rbx
+  86:	4c 8d 72 10          	lea    0x10(%rdx),%r14
+  8a:	48 c1 e1 02          	shl    $0x2,%rcx
+  8e:	45 31 ff             	xor    %r15d,%r15d
+  91:	66 0f ef c0          	pxor   %xmm0,%xmm0
+  95:	eb 23                	jmp    ba <convertExact+0xba>
+  97:	66 0f 1f 84 00 00 00 	nopw   0x0(%rax,%rax,1)
+  9e:	00 00 
+  a0:	49 ff c7             	inc    %r15
+  a3:	48 01 f3             	add    %rsi,%rbx
+  a6:	49 01 ce             	add    %rcx,%r14
+  a9:	48 01 ca             	add    %rcx,%rdx
+  ac:	48 01 f7             	add    %rsi,%rdi
+  af:	4c 3b 7c 24 f8       	cmp    -0x8(%rsp),%r15
+  b4:	0f 84 67 ff ff ff    	je     21 <convertExact+0x21>
+  ba:	49 83 f8 08          	cmp    $0x8,%r8
+  be:	40 0f 92 c5          	setb   %bpl
+  c2:	44 08 cd             	or     %r9b,%bpl
+  c5:	40 f6 c5 01          	test   $0x1,%bpl
+  c9:	74 05                	je     d0 <convertExact+0xd0>
+  cb:	45 31 ed             	xor    %r13d,%r13d
+  ce:	eb 4f                	jmp    11f <convertExact+0x11f>
+  d0:	45 31 e4             	xor    %r12d,%r12d
+  d3:	66 66 66 66 2e 0f 1f 	data16 data16 data16 cs nopw 0x0(%rax,%rax,1)
+  da:	84 00 00 00 00 00 
+  e0:	66 42 0f 6e 4c 23 fc 	movd   -0x4(%rbx,%r12,1),%xmm1
+  e7:	66 42 0f 6e 14 23    	movd   (%rbx,%r12,1),%xmm2
+  ed:	66 0f 60 c8          	punpcklbw %xmm0,%xmm1
+  f1:	66 0f 61 c8          	punpcklwd %xmm0,%xmm1
+  f5:	0f 5b c9             	cvtdq2ps %xmm1,%xmm1
+  f8:	66 0f 60 d0          	punpcklbw %xmm0,%xmm2
+  fc:	66 0f 61 d0          	punpcklwd %xmm0,%xmm2
+ 100:	0f 5b d2             	cvtdq2ps %xmm2,%xmm2
+ 103:	43 0f 11 4c a6 f0    	movups %xmm1,-0x10(%r14,%r12,4)
+ 109:	43 0f 11 14 a6       	movups %xmm2,(%r14,%r12,4)
+ 10e:	49 83 c4 08          	add    $0x8,%r12
+ 112:	4d 39 e2             	cmp    %r12,%r10
+ 115:	75 c9                	jne    e0 <convertExact+0xe0>
+ 117:	4d 89 d5             	mov    %r10,%r13
+ 11a:	4d 39 c2             	cmp    %r8,%r10
+ 11d:	74 81                	je     a0 <convertExact+0xa0>
+ 11f:	4d 89 ec             	mov    %r13,%r12
+ 122:	4d 85 db             	test   %r11,%r11
+ 125:	74 23                	je     14a <convertExact+0x14a>
+ 127:	4c 89 dd             	mov    %r11,%rbp
+ 12a:	4d 89 ec             	mov    %r13,%r12
+ 12d:	0f 1f 00             	nopl   (%rax)
+ 130:	42 0f b6 04 27       	movzbl (%rdi,%r12,1),%eax
+ 135:	0f 57 c9             	xorps  %xmm1,%xmm1
+ 138:	f3 0f 2a c8          	cvtsi2ss %eax,%xmm1
+ 13c:	f3 42 0f 11 0c a2    	movss  %xmm1,(%rdx,%r12,4)
+ 142:	49 ff c4             	inc    %r12
+ 145:	48 ff cd             	dec    %rbp
+ 148:	75 e6                	jne    130 <convertExact+0x130>
+ 14a:	4d 29 c5             	sub    %r8,%r13
+ 14d:	49 83 fd fc          	cmp    $0xfffffffffffffffc,%r13
+ 151:	0f 87 49 ff ff ff    	ja     a0 <convertExact+0xa0>
+ 157:	66 0f 1f 84 00 00 00 	nopw   0x0(%rax,%rax,1)
+ 15e:	00 00 
+ 160:	42 0f b6 04 27       	movzbl (%rdi,%r12,1),%eax
+ 165:	0f 57 c9             	xorps  %xmm1,%xmm1
+ 168:	f3 0f 2a c8          	cvtsi2ss %eax,%xmm1
+ 16c:	f3 42 0f 11 0c a2    	movss  %xmm1,(%rdx,%r12,4)
+ 172:	42 0f b6 44 27 01    	movzbl 0x1(%rdi,%r12,1),%eax
+ 178:	0f 57 c9             	xorps  %xmm1,%xmm1
+ 17b:	f3 0f 2a c8          	cvtsi2ss %eax,%xmm1
+ 17f:	f3 42 0f 11 4c a2 04 	movss  %xmm1,0x4(%rdx,%r12,4)
+ 186:	42 0f b6 44 27 02    	movzbl 0x2(%rdi,%r12,1),%eax
+ 18c:	0f 57 c9             	xorps  %xmm1,%xmm1
+ 18f:	f3 0f 2a c8          	cvtsi2ss %eax,%xmm1
+ 193:	f3 42 0f 11 4c a2 08 	movss  %xmm1,0x8(%rdx,%r12,4)
+ 19a:	42 0f b6 44 27 03    	movzbl 0x3(%rdi,%r12,1),%eax
+ 1a0:	0f 57 c9             	xorps  %xmm1,%xmm1
+ 1a3:	f3 0f 2a c8          	cvtsi2ss %eax,%xmm1
+ 1a7:	f3 42 0f 11 4c a2 0c 	movss  %xmm1,0xc(%rdx,%r12,4)
+ 1ae:	49 83 c4 04          	add    $0x4,%r12
+ 1b2:	4d 39 e0             	cmp    %r12,%r8
+ 1b5:	75 a9                	jne    160 <convertExact+0x160>
+ 1b7:	e9 e4 fe ff ff       	jmp    a0 <convertExact+0xa0>
+
+Disassembly of section .text._D11row_codegen__T11executeRowsThTfZQsFNaNbNiNfMPxhlMPflmmZv:
+
+0000000000000000 <_D11row_codegen__T11executeRowsThTfZQsFNaNbNiNfMPxhlMPflmmZv>:
+   0:	55                   	push   %rbp
+   1:	41 57                	push   %r15
+   3:	41 56                	push   %r14
+   5:	41 55                	push   %r13
+   7:	41 54                	push   %r12
+   9:	53                   	push   %rbx
+   a:	4c 89 4c 24 f8       	mov    %r9,-0x8(%rsp)
+   f:	4d 85 c9             	test   %r9,%r9
+  12:	0f 94 c0             	sete   %al
+  15:	4d 85 c0             	test   %r8,%r8
+  18:	41 0f 94 c2          	sete   %r10b
+  1c:	41 08 c2             	or     %al,%r10b
+  1f:	74 0b                	je     2c <_D11row_codegen__T11executeRowsThTfZQsFNaNbNiNfMPxhlMPflmmZv+0x2c>
+  21:	5b                   	pop    %rbx
+  22:	41 5c                	pop    %r12
+  24:	41 5d                	pop    %r13
+  26:	41 5e                	pop    %r14
+  28:	41 5f                	pop    %r15
+  2a:	5d                   	pop    %rbp
+  2b:	c3                   	ret
+  2c:	48 8b 44 24 f8       	mov    -0x8(%rsp),%rax
+  31:	48 ff c8             	dec    %rax
+  34:	49 89 c2             	mov    %rax,%r10
+  37:	4c 0f af d1          	imul   %rcx,%r10
+  3b:	4d 01 c2             	add    %r8,%r10
+  3e:	4e 8d 14 92          	lea    (%rdx,%r10,4),%r10
+  42:	48 0f af c6          	imul   %rsi,%rax
+  46:	48 01 f8             	add    %rdi,%rax
+  49:	4c 01 c0             	add    %r8,%rax
+  4c:	48 39 d0             	cmp    %rdx,%rax
+  4f:	0f 97 c0             	seta   %al
+  52:	49 39 fa             	cmp    %rdi,%r10
+  55:	41 0f 97 c2          	seta   %r10b
+  59:	41 20 c2             	and    %al,%r10b
+  5c:	49 89 cb             	mov    %rcx,%r11
+  5f:	49 c1 eb 3d          	shr    $0x3d,%r11
+  63:	41 83 e3 01          	and    $0x1,%r11d
+  67:	48 85 f6             	test   %rsi,%rsi
+  6a:	41 0f 98 c1          	sets   %r9b
+  6e:	45 08 d9             	or     %r11b,%r9b
+  71:	45 08 d1             	or     %r10b,%r9b
+  74:	4d 89 c2             	mov    %r8,%r10
+  77:	49 83 e2 f8          	and    $0xfffffffffffffff8,%r10
+  7b:	45 89 c3             	mov    %r8d,%r11d
+  7e:	41 83 e3 03          	and    $0x3,%r11d
+  82:	48 8d 5f 04          	lea    0x4(%rdi),%rbx
+  86:	4c 8d 72 10          	lea    0x10(%rdx),%r14
+  8a:	48 c1 e1 02          	shl    $0x2,%rcx
+  8e:	45 31 ff             	xor    %r15d,%r15d
+  91:	66 0f ef c0          	pxor   %xmm0,%xmm0
+  95:	eb 23                	jmp    ba <_D11row_codegen__T11executeRowsThTfZQsFNaNbNiNfMPxhlMPflmmZv+0xba>
+  97:	66 0f 1f 84 00 00 00 	nopw   0x0(%rax,%rax,1)
+  9e:	00 00 
+  a0:	49 ff c7             	inc    %r15
+  a3:	48 01 f3             	add    %rsi,%rbx
+  a6:	49 01 ce             	add    %rcx,%r14
+  a9:	48 01 ca             	add    %rcx,%rdx
+  ac:	48 01 f7             	add    %rsi,%rdi
+  af:	4c 3b 7c 24 f8       	cmp    -0x8(%rsp),%r15
+  b4:	0f 84 67 ff ff ff    	je     21 <_D11row_codegen__T11executeRowsThTfZQsFNaNbNiNfMPxhlMPflmmZv+0x21>
+  ba:	49 83 f8 08          	cmp    $0x8,%r8
+  be:	40 0f 92 c5          	setb   %bpl
+  c2:	44 08 cd             	or     %r9b,%bpl
+  c5:	40 f6 c5 01          	test   $0x1,%bpl
+  c9:	74 05                	je     d0 <_D11row_codegen__T11executeRowsThTfZQsFNaNbNiNfMPxhlMPflmmZv+0xd0>
+  cb:	45 31 ed             	xor    %r13d,%r13d
+  ce:	eb 4f                	jmp    11f <_D11row_codegen__T11executeRowsThTfZQsFNaNbNiNfMPxhlMPflmmZv+0x11f>
+  d0:	45 31 e4             	xor    %r12d,%r12d
+  d3:	66 66 66 66 2e 0f 1f 	data16 data16 data16 cs nopw 0x0(%rax,%rax,1)
+  da:	84 00 00 00 00 00 
+  e0:	66 42 0f 6e 4c 23 fc 	movd   -0x4(%rbx,%r12,1),%xmm1
+  e7:	66 42 0f 6e 14 23    	movd   (%rbx,%r12,1),%xmm2
+  ed:	66 0f 60 c8          	punpcklbw %xmm0,%xmm1
+  f1:	66 0f 61 c8          	punpcklwd %xmm0,%xmm1
+  f5:	0f 5b c9             	cvtdq2ps %xmm1,%xmm1
+  f8:	66 0f 60 d0          	punpcklbw %xmm0,%xmm2
+  fc:	66 0f 61 d0          	punpcklwd %xmm0,%xmm2
+ 100:	0f 5b d2             	cvtdq2ps %xmm2,%xmm2
+ 103:	43 0f 11 4c a6 f0    	movups %xmm1,-0x10(%r14,%r12,4)
+ 109:	43 0f 11 14 a6       	movups %xmm2,(%r14,%r12,4)
+ 10e:	49 83 c4 08          	add    $0x8,%r12
+ 112:	4d 39 e2             	cmp    %r12,%r10
+ 115:	75 c9                	jne    e0 <_D11row_codegen__T11executeRowsThTfZQsFNaNbNiNfMPxhlMPflmmZv+0xe0>
+ 117:	4d 89 d5             	mov    %r10,%r13
+ 11a:	4d 39 c2             	cmp    %r8,%r10
+ 11d:	74 81                	je     a0 <_D11row_codegen__T11executeRowsThTfZQsFNaNbNiNfMPxhlMPflmmZv+0xa0>
+ 11f:	4d 89 ec             	mov    %r13,%r12
+ 122:	4d 85 db             	test   %r11,%r11
+ 125:	74 23                	je     14a <_D11row_codegen__T11executeRowsThTfZQsFNaNbNiNfMPxhlMPflmmZv+0x14a>
+ 127:	4c 89 dd             	mov    %r11,%rbp
+ 12a:	4d 89 ec             	mov    %r13,%r12
+ 12d:	0f 1f 00             	nopl   (%rax)
+ 130:	42 0f b6 04 27       	movzbl (%rdi,%r12,1),%eax
+ 135:	0f 57 c9             	xorps  %xmm1,%xmm1
+ 138:	f3 0f 2a c8          	cvtsi2ss %eax,%xmm1
+ 13c:	f3 42 0f 11 0c a2    	movss  %xmm1,(%rdx,%r12,4)
+ 142:	49 ff c4             	inc    %r12
+ 145:	48 ff cd             	dec    %rbp
+ 148:	75 e6                	jne    130 <_D11row_codegen__T11executeRowsThTfZQsFNaNbNiNfMPxhlMPflmmZv+0x130>
+ 14a:	4d 29 c5             	sub    %r8,%r13
+ 14d:	49 83 fd fc          	cmp    $0xfffffffffffffffc,%r13
+ 151:	0f 87 49 ff ff ff    	ja     a0 <_D11row_codegen__T11executeRowsThTfZQsFNaNbNiNfMPxhlMPflmmZv+0xa0>
+ 157:	66 0f 1f 84 00 00 00 	nopw   0x0(%rax,%rax,1)
+ 15e:	00 00 
+ 160:	42 0f b6 04 27       	movzbl (%rdi,%r12,1),%eax
+ 165:	0f 57 c9             	xorps  %xmm1,%xmm1
+ 168:	f3 0f 2a c8          	cvtsi2ss %eax,%xmm1
+ 16c:	f3 42 0f 11 0c a2    	movss  %xmm1,(%rdx,%r12,4)
+ 172:	42 0f b6 44 27 01    	movzbl 0x1(%rdi,%r12,1),%eax
+ 178:	0f 57 c9             	xorps  %xmm1,%xmm1
+ 17b:	f3 0f 2a c8          	cvtsi2ss %eax,%xmm1
+ 17f:	f3 42 0f 11 4c a2 04 	movss  %xmm1,0x4(%rdx,%r12,4)
+ 186:	42 0f b6 44 27 02    	movzbl 0x2(%rdi,%r12,1),%eax
+ 18c:	0f 57 c9             	xorps  %xmm1,%xmm1
+ 18f:	f3 0f 2a c8          	cvtsi2ss %eax,%xmm1
+ 193:	f3 42 0f 11 4c a2 08 	movss  %xmm1,0x8(%rdx,%r12,4)
+ 19a:	42 0f b6 44 27 03    	movzbl 0x3(%rdi,%r12,1),%eax
+ 1a0:	0f 57 c9             	xorps  %xmm1,%xmm1
+ 1a3:	f3 0f 2a c8          	cvtsi2ss %eax,%xmm1
+ 1a7:	f3 42 0f 11 4c a2 0c 	movss  %xmm1,0xc(%rdx,%r12,4)
+ 1ae:	49 83 c4 04          	add    $0x4,%r12
+ 1b2:	4d 39 e0             	cmp    %r12,%r8
+ 1b5:	75 a9                	jne    160 <_D11row_codegen__T11executeRowsThTfZQsFNaNbNiNfMPxhlMPflmmZv+0x160>
+ 1b7:	e9 e4 fe ff ff       	jmp    a0 <_D11row_codegen__T11executeRowsThTfZQsFNaNbNiNfMPxhlMPflmmZv+0xa0>
+
+Disassembly of section .text._D11row_codegen__T7readRowThZQlFNaNbNiNeNkMPxhlmmZAxh:
+
+0000000000000000 <_D11row_codegen__T7readRowThZQlFNaNbNiNeNkMPxhlmmZAxh>:
+   0:	48 89 c8             	mov    %rcx,%rax
+   3:	48 0f af d6          	imul   %rsi,%rdx
+   7:	48 01 fa             	add    %rdi,%rdx
+   a:	c3                   	ret
+
+Disassembly of section .text._D11row_codegen__T8writeRowThZQmFNaNbNiNeNkMPhlmmZAh:
+
+0000000000000000 <_D11row_codegen__T8writeRowThZQmFNaNbNiNeNkMPhlmmZAh>:
+   0:	48 89 c8             	mov    %rcx,%rax
+   3:	48 0f af d6          	imul   %rsi,%rdx
+   7:	48 01 fa             	add    %rdi,%rdx
+   a:	c3                   	ret
+
+Disassembly of section .text._D11row_codegen__T7readRowTfZQlFNaNbNiNeNkMPxflmmZAxf:
+
+0000000000000000 <_D11row_codegen__T7readRowTfZQlFNaNbNiNeNkMPxflmmZAxf>:
+   0:	48 89 c8             	mov    %rcx,%rax
+   3:	48 0f af f2          	imul   %rdx,%rsi
+   7:	48 8d 14 b7          	lea    (%rdi,%rsi,4),%rdx
+   b:	c3                   	ret
+
+Disassembly of section .text._D11row_codegen__T8writeRowTfZQmFNaNbNiNeNkMPflmmZAf:
+
+0000000000000000 <_D11row_codegen__T8writeRowTfZQmFNaNbNiNeNkMPflmmZAf>:
+   0:	48 89 c8             	mov    %rcx,%rax
+   3:	48 0f af f2          	imul   %rdx,%rsi
+   7:	48 8d 14 b7          	lea    (%rdi,%rsi,4),%rdx
+   b:	c3                   	ret
+
+Disassembly of section .text._D11row_codegen__T7readRowTSQBa3PodZQsFNaNbNiNeNkMPxSQBzQzlmmZAxQm:
+
+0000000000000000 <_D11row_codegen__T7readRowTSQBa3PodZQsFNaNbNiNeNkMPxSQBzQzlmmZAxQm>:
+   0:	48 89 c8             	mov    %rcx,%rax
+   3:	48 0f af f2          	imul   %rdx,%rsi
+   7:	48 8d 14 f7          	lea    (%rdi,%rsi,8),%rdx
+   b:	c3                   	ret
+
+Disassembly of section .text._D11row_codegen__T8writeRowTSQBb3PodZQtFNaNbNiNeNkMPQylmmZAQBf:
+
+0000000000000000 <_D11row_codegen__T8writeRowTSQBb3PodZQtFNaNbNiNeNkMPQylmmZAQBf>:
+   0:	48 89 c8             	mov    %rcx,%rax
+   3:	48 0f af f2          	imul   %rdx,%rsi
+   7:	48 8d 14 f7          	lea    (%rdi,%rsi,8),%rdx
+   b:	c3                   	ret

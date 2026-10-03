@@ -1,0 +1,27 @@
+// Candidate kernel: caller has completed plane/shape/empty/injectivity and exact
+// sample-byte disjointness validation. Both sample strides equal one. Validated
+// backing bounds all signed y*stride products and each width-sample row; source
+// may repeat rows. Slices are invocation-local borrows and no operand escapes.
+// Only pointer arithmetic and slice construction require trust.
+private const(T)[] readRow(T)(return scope const(T)* base,ptrdiff_t stride,
+    size_t y,size_t width) @trusted pure nothrow @nogc
+{ return (base+cast(ptrdiff_t)y*stride)[0..width]; }
+private T[] writeRow(T)(return scope T* base,ptrdiff_t stride,
+    size_t y,size_t width) @trusted pure nothrow @nogc
+{ return (base+cast(ptrdiff_t)y*stride)[0..width]; }
+private void executeRows(S,D)(scope const(S)* source,ptrdiff_t sr,
+    scope D* target,ptrdiff_t dr,size_t width,size_t height)
+@safe pure nothrow @nogc
+{
+    foreach(y;0..height)
+    {
+        scope const row=readRow(source,sr,y,width);
+        scope auto destination=writeRow(target,dr,y,width);
+        static if(is(S==D)) destination[]=row[];
+        else
+        {
+            static assert(is(S==ubyte) && is(D==float));
+            foreach(x,value;row) destination[x]=cast(float)value;
+        }
+    }
+}

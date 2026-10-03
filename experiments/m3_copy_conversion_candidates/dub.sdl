@@ -1,0 +1,7 @@
+name "raster-m3-copy-conversion-candidates"
+description "Complete public copy/conversion bounds and row-execution candidates"
+targetType "executable"
+dependency "raster-d" path="../../../raster-d"
+sourcePaths "source"
+sourceFiles "cpp_reference.o"
+dflags "-preview=dip1000"
