@@ -40,3 +40,8 @@ See `PROVENANCE.md` for the pinned source and verification record.
 complete public consumer with pointer and safe row-slice candidates, including
 non-injective layouts. The experiment and XPS collector are in
 `experiments/m3_fill_executor/`.
+
+[M3.9 exact-vector crossover](docs/research/m3-conversion-crossover.md) measures
+438 full public width/height/layout workloads against a fresh scoped C++
+executor. It retains small-width regressions and remaining conversion gaps;
+selection requires reference XPS qualification.

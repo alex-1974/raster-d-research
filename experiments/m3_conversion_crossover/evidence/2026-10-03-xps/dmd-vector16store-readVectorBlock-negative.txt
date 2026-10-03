@@ -1,0 +1,3 @@
+/tmp/raster-public-crossover-cokurvzr/narrow.d(18): Error: using `block.ptr` (instead of `&block[0])` is not allowed in a `@safe` function
+        return loadUnaligned(cast(const(ubyte16)*)block.ptr);
+                                                  ^
