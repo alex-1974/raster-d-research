@@ -90,7 +90,22 @@ cmp /tmp/replayed.csv /tmp/conversion-crossover/summary.csv
 ```
 
 `--compiler dmd|ldc2|both`, `--processes 1..6`; output must be new. CI uses one
-process for qualification, with no timing claim. The pinned XPS launcher is
-added after the qualified source commit exists. No branch merge is assumed.
+process for qualification, with no timing claim. The pinned XPS launcher prepares detached sibling worktrees at qualified
+Research source `0635b298a5fae79b25c98d0e0186c7000a930a6b` and unchanged
+Production PR61. It checks baseline D compiler/DUB versions, records GCC and
+resolved dependency versions, runs both compilers with six processes, verifies
+hashes and replay, and prints an upload archive. No user working branch is
+switched or cleaned. Partial files/worktrees remain on failure. The archive
+contains original uncompressed evidence and an extended manifest; its original
+collector manifest is preserved separately as `audit-SHA256SUMS`.
+
+```bash
+bash experiments/m3_conversion_crossover/run_xps.sh "$HOME/Programmiersprachen/dlang/d-geospatial-workspace/libs"
+```
+
+A second `--prepare-only` argument checks versions/pins and prepares worktrees;
+it does not benchmark or qualify the XPS. Keep power conditions consistent and
+close heavy background workloads for the actual reference run. No branch merge
+is assumed.
 
 [Findings and remaining gates](../../docs/research/m3-conversion-crossover.md).

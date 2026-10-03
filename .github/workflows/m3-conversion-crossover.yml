@@ -30,6 +30,8 @@ jobs:
           compiler: ${{ matrix.compiler }}
           dub: 1.40.0
           dc_format: shortname
+      - name: Pinned launcher syntax
+        run: bash -n experiments/m3_conversion_crossover/run_xps.sh
       - name: Complete public and C++ semantic / trust qualification
         run: python3 experiments/m3_conversion_crossover/audit.py artifacts --compiler "$DC" --processes 1
       - uses: actions/upload-artifact@v7

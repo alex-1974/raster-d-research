@@ -124,3 +124,12 @@ path where it wins, all public contracts, exactness and independent trust gates.
 Investigate the remaining signed-LDC and scoped DMD execution gaps with fresh
 comparisons; no historical ratio division or C++ parity claim is permitted.
 Issues #30/#28/#22 and Production promotion remain open.
+
+## Pinned reference XPS launcher
+
+`run_xps.sh` uses qualified source `0635b298a5fae79b25c98d0e0186c7000a930a6b`
+and unchanged Production PR61 in new detached sibling worktrees. It records
+complete D/GCC/toolchain/dependency provenance, preserves the original manifest,
+verifies the summary and extended manifest, and prints the upload archive.
+Bash syntax and a local prepare-only smoke passed; this is not an XPS runtime
+measurement. The actual reference sweep remains the next gate.
