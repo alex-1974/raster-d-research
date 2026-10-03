@@ -107,26 +107,85 @@ copies also contain extra bounds/overlap checks, stack stores and copying;
 store-form assembly contains unaligned SIMD writes. This is a diagnostic
 observation, not proof assigning all runtime change to one instruction.
 
-## Decision and next gate
+## Reference XPS qualified — 2026-10-03
 
-Retain vector16store as the first materially promising full public DMD candidate
-in this residual stream. Reject promotion of vector16safe on current evidence;
-keep its executable negative result. Do not change Production PR61 yet. New
-trust must be justified by independent reference-hardware benefit and all
-Production gates, not by this container measurement alone.
+Uploaded archive: `raster-vector-xps-run-rORpT2.tar.gz`, SHA256
+`565c6d4a935fdf33a6436609868c0fa37d3c598cc38cbe2ac6d64ba439ab0a45`.
+All 103 extracted files are retained byte-for-byte under
+`experiments/m3_conversion_vector/evidence/2026-10-03-xps/`.
+Original collector manifest: 97 verified entries; launcher extended manifest:
+102 verified entries, including the unchanged original `audit-SHA256SUMS` and
+four supplementary toolchain/run/dependency files. The file set is complete.
+Summary regeneration is byte-exact. Source pins and generated-source hashes
+match the container byte-for-byte; all eighteen workload fingerprints also
+match across hardware, forms, compilers and processes.
 
-Run the checked-in collector on the reference XPS at the published Research
-head with the same pinned Production PR61 proposal. Verify raw checksums,
-fingerprints, versions, summary and process stability before proposing a clean
-Production change with internal compiler/architecture selection and unchanged
-public contract. Issue #28 and parent #22 stay open for this gate. The existing
-negative-row LDC gap still requires separate investigation.
+Reference hardware: Intel Core i7-9750H, affinity CPU 0, Linux 6.17.0-22,
+glibc 2.43. DMD 2.111.0, LDC 1.41.0 / frontend 2.111.0 / LLVM 19.1.7, DUB 1.40.0,
+Python 3.14.4, GNU objdump 2.46. Resolved dependencies: mir-algorithm 3.22.4,
+mir-core 1.7.4, silly 1.1.1. LLVM/backend/host differ from the container; no
+cross-machine absolute timing equality is assumed. Frequency and thermal
+conditions are unchanged and unmonitored.
 
-No C++ executor is timed in this experiment. Historical scoped C++ ratios must
-not be divided by these speedups to infer current parity: compiler, hardware,
-packaging and timing conditions differ. A corresponding fresh comparison is
-needed to establish the remaining C++ gap. Container success is not an XPS
-result or universal compiler/architecture claim.
+Both compiler families pass all forty inherited test modules, default/forced
+portable public fixtures, all attribute/trust gates, isolated 10,240-case
+bitwise/rounding/offset controls, forty guard-page widths and nine further
+vector-active shared-backing cases. The twelve complete timing processes
+retain 5,832 blocks and 8,475,840 public calls. No semantic mismatch is observed.
+
+2048x512 XPS store-form results. Ratio is original/vector16store; the last
+column measures store-form process-median spread. Larger ratios favor it.
+
+| Compiler | Layout | Median ratio | Process ratio range | Store spread |
+| --- | --- | --- | --- | --- |
+| dmd | contiguous | 2.375 | 1.917–2.381 | 36.177% |
+| dmd | padded | 3.045 | 2.963–3.114 | 16.435% |
+| dmd | negative-source | 3.107 | 2.718–3.185 | 32.227% |
+| dmd | negative-both | 3.073 | 2.926–3.196 | 46.330% |
+| dmd | repeated-source | 3.124 | 3.044–3.144 | 11.345% |
+| dmd | universal | 1.017 | 0.980–1.077 | 11.930% |
+| ldc2 | contiguous | 1.011 | 0.978–1.040 | 9.468% |
+| ldc2 | padded | 0.974 | 0.925–1.023 | 32.840% |
+| ldc2 | negative-source | 1.001 | 0.968–1.009 | 7.469% |
+| ldc2 | negative-both | 0.993 | 0.904–1.102 | 14.721% |
+| ldc2 | repeated-source | 0.998 | 0.973–1.041 | 10.825% |
+| ldc2 | universal | 1.007 | 0.972–1.027 | 14.351% |
+
+The DMD gain persists on reference hardware: medians 2.375–3.124 across the
+five unit-sample-stride layouts, and every corresponding process favors the
+store form (smallest observed ratio 1.917 for contiguous). Medium 256x128
+unit-stride medians are 2.373–3.157, also favorable in every process. These are
+material scoped improvements, not the container's 4.132–4.420 factors.
+
+Stability is limited: maximum DMD process spread is 46.330% (large negative-both
+store), maximum LDC spread 36.209% (medium negative-source store). LDC large
+store-form medians are 0.974–1.011, with process ratios crossing one; no LDC gain
+or small regression is qualified from these differences. Its original scalar
+expression/autovectorization remains selected. Universal execution is unchanged;
+small timing differences cannot be attributed to the vector algorithm.
+
+A concrete crossover problem remains. Small contiguous 31x17 DMD conversion
+has original/store median ratio 0.904 (range 0.900–0.927); the candidate is
+about 10.6% slower and every process favors original. Small non-flat unit-stride
+medians are 1.120–1.131. The safe-copy vector form is rejected again: its five
+large unit-stride DMD medians are 0.456–0.606. A blanket SIMD selection would
+therefore hide an observed small-flat regression.
+
+## Decision and remaining gates
+
+Keep the SIMD-store kernel as a hardware-qualified Research candidate for the
+measured medium/large DMD unit-stride workloads. Do not promote the current
+unconditional row selection into Production PR61. First measure a controlled
+width/size crossover and qualify a conservative internal selection preserving
+the original small-flat path. The three retained sizes do not establish an
+optimal threshold. Keep safe-copy as a measured rejected alternative.
+
+A fresh scoped C++ execution comparison remains necessary before claiming the
+C++ gap closed. No C++ executor is timed here; historical C++ ratios must not be
+divided by these speedups because timing conditions/packaging differ. The
+negative-row LDC gap also stays open. Issues #28 and #22 track the remaining
+selection/comparison/promotion work; XPS collection itself is complete.
+Production PR61 stays unchanged and pending integration.
 
 `.workspace/` was unavailable. Tracked AGENTS and the supplied canonical D
 safety/benchmark, quality and Research/Git policies were consulted. The existing

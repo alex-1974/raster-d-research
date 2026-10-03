@@ -126,7 +126,8 @@ cmp /tmp/replayed.csv /tmp/conversion-vector/summary.csv
 
 `--compiler dmd|ldc2|both`, `--processes 1..6`; output must be new. `collect.sh`
 runs both families with six processes, verifies checksums and creates a compressed
-XPS evidence archive. No uploaded XPS result is assumed.
+XPS evidence archive. The qualified uploaded XPS result is retained under `evidence/2026-10-03-xps/`;
+see the findings for scoped gains, variability and the small-flat regression.
 
 [Findings and next gate](../../docs/research/m3-conversion-vector.md).
 
