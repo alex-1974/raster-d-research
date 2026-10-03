@@ -129,3 +129,32 @@ runs both families with six processes, verifies checksums and creates a compress
 XPS evidence archive. No uploaded XPS result is assumed.
 
 [Findings and next gate](../../docs/research/m3-conversion-vector.md).
+
+## Pinned local-XPS launcher
+
+`run_xps.sh` prepares detached sibling worktrees from existing local repositories;
+it never checks out a user's working branch or cleans a user's files. It pins
+the audited experiment source commit `a38fd30c16a395f9b0d6eab3e51cb06131a3ce50`
+and Production PR61 commit `7dcdf01babf87e9a80af2864fbad75efe8e7d0ef`.
+Missing objects are fetched from the existing repository's origin by exact SHA.
+The launcher itself can be taken from a later PR29 head without changing this
+qualified source baseline.
+
+```bash
+bash experiments/m3_conversion_vector/run_xps.sh "$HOME/Programmiersprachen/dlang/d-geospatial-workspace/libs"
+```
+
+Requires the baseline compiler/DUB versions on PATH; LLVM backend identity is
+recorded rather than forced to the container build. On Linux x86-64 it runs both
+compilers and six processes, preserves original collector files/manifest, records
+launcher logs, full tool versions and resolved dependencies, verifies summary
+regeneration and the extended manifest, then prints `UPLOAD: /tmp/...tar.gz`.
+Supplementary files and the original `audit-SHA256SUMS` are included in the
+archive; its extended manifest has five more entries than the original collector
+manifest. Worktrees and partial evidence remain available on failure or success.
+Frequency/thermal controls are unchanged. Use the actual reference XPS, close
+heavy background workloads and keep power conditions consistent.
+
+A second argument `--prepare-only` checks tools/pins and prepares worktrees,
+without running a benchmark or claiming hardware qualification. It is the local
+launcher smoke check, not evidence of an XPS measurement.
