@@ -1,0 +1,1365 @@
+{
+  "modes": {
+    "prior-long": {
+      "31x17_selected_ratios": {
+        "contiguous": {
+          "max": "0.723953",
+          "median": "0.693761",
+          "min": "0.679979"
+        },
+        "negative-both": {
+          "max": "0.848819",
+          "median": "0.808677",
+          "min": "0.798651"
+        },
+        "negative-source": {
+          "max": "0.823572",
+          "median": "0.807250",
+          "min": "0.784040"
+        },
+        "padded": {
+          "max": "0.844146",
+          "median": "0.801646",
+          "min": "0.766864"
+        },
+        "repeated-source": {
+          "max": "0.821842",
+          "median": "0.806048",
+          "min": "0.796566"
+        },
+        "universal": {
+          "max": "0.984664",
+          "median": "0.975799",
+          "min": "0.963307"
+        }
+      },
+      "linked_assembly_sha256": "f9b0c8e7019263908061a70618416fda9d065e71a72ad035f03e6c4a56720e7d",
+      "paths": {
+        "affine": {
+          "original": {
+            "bounds_jump": {
+              "crosses_32": false,
+              "end_exclusive": "0xce5cc",
+              "end_mod32": 12,
+              "ends_on_32": false,
+              "start": "0xce5c6",
+              "start_mod32": 6
+            },
+            "instruction_count": 10,
+            "loop_listing": [
+              {
+                "address": "0xce5be",
+                "assembly": "movzbl (%r8,%rdx,1),%ecx",
+                "bytes": "410fb60c10"
+              },
+              {
+                "address": "0xce5c3",
+                "assembly": "cmp    %r9,%r8",
+                "bytes": "4d39c8"
+              },
+              {
+                "address": "0xce5c6",
+                "assembly": "jae    ce66d <_D6raster8internal19conversion_dispatch35convertApprovedUbyteToFloatAffine2DFNbNiNfMSQDf4view__T10RasterViewThZQpmMKSQEl13writable_view__T18WritableRasterViewTfZQxmZv+0x18d>",
+                "bytes": "0f83a1000000"
+              },
+              {
+                "address": "0xce5cc",
+                "assembly": "movzbl %cl,%r10d",
+                "bytes": "440fb6d1"
+              },
+              {
+                "address": "0xce5d0",
+                "assembly": "mov    %r10d,%r10d",
+                "bytes": "458bd2"
+              },
+              {
+                "address": "0xce5d3",
+                "assembly": "cvtsi2ss %r10,%xmm0",
+                "bytes": "f3490f2ac2"
+              },
+              {
+                "address": "0xce5d8",
+                "assembly": "movss  %xmm0,(%rsi,%r8,4)",
+                "bytes": "f3420f110486"
+              },
+              {
+                "address": "0xce5de",
+                "assembly": "inc    %r8",
+                "bytes": "49ffc0"
+              },
+              {
+                "address": "0xce5e1",
+                "assembly": "cmp    %rdi,%r8",
+                "bytes": "4939f8"
+              },
+              {
+                "address": "0xce5e4",
+                "assembly": "jb     ce5be <_D6raster8internal19conversion_dispatch35convertApprovedUbyteToFloatAffine2DFNbNiNfMSQDf4view__T10RasterViewThZQpmMKSQEl13writable_view__T18WritableRasterViewTfZQxmZv+0xde>",
+                "bytes": "72d8"
+              }
+            ],
+            "loop_start": "0xce5be",
+            "normalized_loop_sha256": "ad9b0281f2ab34e5495cbbf5e27c0789a7c875b4fbc2147448fd17219d9274c2",
+            "symbol": "00000000000ce4e0 <_D6raster8internal19conversion_dispatch35convertApprovedUbyteToFloatAffine2DFNbNiNfMSQDf4view__T10RasterViewThZQpmMKSQEl13writable_view__T18WritableRasterViewTfZQxmZv>:",
+            "tail_compare_branch_span": {
+              "crosses_32": false,
+              "end_exclusive": "0xce5e6",
+              "end_mod32": 6,
+              "ends_on_32": false,
+              "start": "0xce5e1",
+              "start_mod32": 1
+            }
+          },
+          "selected64": {
+            "bounds_jump": {
+              "crosses_32": false,
+              "end_exclusive": "0xbff6a",
+              "end_mod32": 10,
+              "ends_on_32": false,
+              "start": "0xbff64",
+              "start_mod32": 4
+            },
+            "instruction_count": 10,
+            "loop_listing": [
+              {
+                "address": "0xbff5c",
+                "assembly": "movzbl (%r8,%rdx,1),%ecx",
+                "bytes": "410fb60c10"
+              },
+              {
+                "address": "0xbff61",
+                "assembly": "cmp    %r9,%r8",
+                "bytes": "4d39c8"
+              },
+              {
+                "address": "0xbff64",
+                "assembly": "jae    c0014 <_D6raster27variant_selected64_dispatch35convertApprovedUbyteToFloatAffine2DFNbNiNfMSQDe4view__T10RasterViewThZQpmMKSQEk13writable_view__T18WritableRasterViewTfZQxmZv+0x248>",
+                "bytes": "0f83aa000000"
+              },
+              {
+                "address": "0xbff6a",
+                "assembly": "movzbl %cl,%r10d",
+                "bytes": "440fb6d1"
+              },
+              {
+                "address": "0xbff6e",
+                "assembly": "mov    %r10d,%r10d",
+                "bytes": "458bd2"
+              },
+              {
+                "address": "0xbff71",
+                "assembly": "cvtsi2ss %r10,%xmm0",
+                "bytes": "f3490f2ac2"
+              },
+              {
+                "address": "0xbff76",
+                "assembly": "movss  %xmm0,(%rsi,%r8,4)",
+                "bytes": "f3420f110486"
+              },
+              {
+                "address": "0xbff7c",
+                "assembly": "inc    %r8",
+                "bytes": "49ffc0"
+              },
+              {
+                "address": "0xbff7f",
+                "assembly": "cmp    %rdi,%r8",
+                "bytes": "4939f8"
+              },
+              {
+                "address": "0xbff82",
+                "assembly": "jb     bff5c <_D6raster27variant_selected64_dispatch35convertApprovedUbyteToFloatAffine2DFNbNiNfMSQDe4view__T10RasterViewThZQpmMKSQEk13writable_view__T18WritableRasterViewTfZQxmZv+0x190>",
+                "bytes": "72d8"
+              }
+            ],
+            "loop_start": "0xbff5c",
+            "normalized_loop_sha256": "ad9b0281f2ab34e5495cbbf5e27c0789a7c875b4fbc2147448fd17219d9274c2",
+            "symbol": "00000000000bfdcc <_D6raster27variant_selected64_dispatch35convertApprovedUbyteToFloatAffine2DFNbNiNfMSQDe4view__T10RasterViewThZQpmMKSQEk13writable_view__T18WritableRasterViewTfZQxmZv>:",
+            "tail_compare_branch_span": {
+              "crosses_32": true,
+              "end_exclusive": "0xbff84",
+              "end_mod32": 4,
+              "ends_on_32": false,
+              "start": "0xbff7f",
+              "start_mod32": 31
+            }
+          }
+        },
+        "flat": {
+          "original": {
+            "bounds_jump": {
+              "crosses_32": false,
+              "end_exclusive": "0xced7c",
+              "end_mod32": 28,
+              "ends_on_32": false,
+              "start": "0xced76",
+              "start_mod32": 22
+            },
+            "instruction_count": 10,
+            "loop_listing": [
+              {
+                "address": "0xced6e",
+                "assembly": "movzbl (%r8,%rdx,1),%ecx",
+                "bytes": "410fb60c10"
+              },
+              {
+                "address": "0xced73",
+                "assembly": "cmp    %r9,%r8",
+                "bytes": "4d39c8"
+              },
+              {
+                "address": "0xced76",
+                "assembly": "jae    ceecf <_D6raster8internal19conversion_dispatch30convertUbyteToFloatRasterPlaneFNbNiNfMSQDa4view__T10RasterViewThZQpmMKSQEg13writable_view__T18WritableRasterViewTfZQxmZEQGdQFzQFt28ExactUbyteToFloatRasterError+0x3bf>",
+                "bytes": "0f8353010000"
+              },
+              {
+                "address": "0xced7c",
+                "assembly": "movzbl %cl,%r10d",
+                "bytes": "440fb6d1"
+              },
+              {
+                "address": "0xced80",
+                "assembly": "mov    %r10d,%r10d",
+                "bytes": "458bd2"
+              },
+              {
+                "address": "0xced83",
+                "assembly": "cvtsi2ss %r10,%xmm0",
+                "bytes": "f3490f2ac2"
+              },
+              {
+                "address": "0xced88",
+                "assembly": "movss  %xmm0,(%rsi,%r8,4)",
+                "bytes": "f3420f110486"
+              },
+              {
+                "address": "0xced8e",
+                "assembly": "inc    %r8",
+                "bytes": "49ffc0"
+              },
+              {
+                "address": "0xced91",
+                "assembly": "cmp    %rdi,%r8",
+                "bytes": "4939f8"
+              },
+              {
+                "address": "0xced94",
+                "assembly": "jb     ced6e <_D6raster8internal19conversion_dispatch30convertUbyteToFloatRasterPlaneFNbNiNfMSQDa4view__T10RasterViewThZQpmMKSQEg13writable_view__T18WritableRasterViewTfZQxmZEQGdQFzQFt28ExactUbyteToFloatRasterError+0x25e>",
+                "bytes": "72d8"
+              }
+            ],
+            "loop_start": "0xced6e",
+            "normalized_loop_sha256": "ad9b0281f2ab34e5495cbbf5e27c0789a7c875b4fbc2147448fd17219d9274c2",
+            "symbol": "00000000000ceb10 <_D6raster8internal19conversion_dispatch30convertUbyteToFloatRasterPlaneFNbNiNfMSQDa4view__T10RasterViewThZQpmMKSQEg13writable_view__T18WritableRasterViewTfZQxmZEQGdQFzQFt28ExactUbyteToFloatRasterError>:",
+            "tail_compare_branch_span": {
+              "crosses_32": false,
+              "end_exclusive": "0xced96",
+              "end_mod32": 22,
+              "ends_on_32": false,
+              "start": "0xced91",
+              "start_mod32": 17
+            }
+          },
+          "selected64": {
+            "bounds_jump": {
+              "crosses_32": true,
+              "end_exclusive": "0xc0802",
+              "end_mod32": 2,
+              "ends_on_32": false,
+              "start": "0xc07fc",
+              "start_mod32": 28
+            },
+            "instruction_count": 10,
+            "loop_listing": [
+              {
+                "address": "0xc07f4",
+                "assembly": "movzbl (%r8,%rdx,1),%ecx",
+                "bytes": "410fb60c10"
+              },
+              {
+                "address": "0xc07f9",
+                "assembly": "cmp    %r9,%r8",
+                "bytes": "4d39c8"
+              },
+              {
+                "address": "0xc07fc",
+                "assembly": "jae    c0985 <_D6raster27variant_selected64_dispatch30convertUbyteToFloatRasterPlaneFNbNiNfMSQCz4view__T10RasterViewThZQpmMKSQEf13writable_view__T18WritableRasterViewTfZQxmZEQGcQFy28ExactUbyteToFloatRasterError+0x4c5>",
+                "bytes": "0f8383010000"
+              },
+              {
+                "address": "0xc0802",
+                "assembly": "movzbl %cl,%r10d",
+                "bytes": "440fb6d1"
+              },
+              {
+                "address": "0xc0806",
+                "assembly": "mov    %r10d,%r10d",
+                "bytes": "458bd2"
+              },
+              {
+                "address": "0xc0809",
+                "assembly": "cvtsi2ss %r10,%xmm0",
+                "bytes": "f3490f2ac2"
+              },
+              {
+                "address": "0xc080e",
+                "assembly": "movss  %xmm0,(%rsi,%r8,4)",
+                "bytes": "f3420f110486"
+              },
+              {
+                "address": "0xc0814",
+                "assembly": "inc    %r8",
+                "bytes": "49ffc0"
+              },
+              {
+                "address": "0xc0817",
+                "assembly": "cmp    %rdi,%r8",
+                "bytes": "4939f8"
+              },
+              {
+                "address": "0xc081a",
+                "assembly": "jb     c07f4 <_D6raster27variant_selected64_dispatch30convertUbyteToFloatRasterPlaneFNbNiNfMSQCz4view__T10RasterViewThZQpmMKSQEf13writable_view__T18WritableRasterViewTfZQxmZEQGcQFy28ExactUbyteToFloatRasterError+0x334>",
+                "bytes": "72d8"
+              }
+            ],
+            "loop_start": "0xc07f4",
+            "normalized_loop_sha256": "ad9b0281f2ab34e5495cbbf5e27c0789a7c875b4fbc2147448fd17219d9274c2",
+            "symbol": "00000000000c04c0 <_D6raster27variant_selected64_dispatch30convertUbyteToFloatRasterPlaneFNbNiNfMSQCz4view__T10RasterViewThZQpmMKSQEf13writable_view__T18WritableRasterViewTfZQxmZEQGcQFy28ExactUbyteToFloatRasterError>:",
+            "tail_compare_branch_span": {
+              "crosses_32": false,
+              "end_exclusive": "0xc081c",
+              "end_mod32": 28,
+              "ends_on_32": false,
+              "start": "0xc0817",
+              "start_mod32": 23
+            }
+          }
+        }
+      }
+    },
+    "prior-short": {
+      "31x17_selected_ratios": {
+        "contiguous": {
+          "max": "0.700656",
+          "median": "0.693202",
+          "min": "0.685446"
+        },
+        "negative-both": {
+          "max": "0.834677",
+          "median": "0.809686",
+          "min": "0.801231"
+        },
+        "negative-source": {
+          "max": "0.822631",
+          "median": "0.806287",
+          "min": "0.795845"
+        },
+        "padded": {
+          "max": "0.831602",
+          "median": "0.803108",
+          "min": "0.793122"
+        },
+        "repeated-source": {
+          "max": "0.821350",
+          "median": "0.800632",
+          "min": "0.792666"
+        },
+        "universal": {
+          "max": "0.993419",
+          "median": "0.987156",
+          "min": "0.970462"
+        }
+      },
+      "linked_assembly_sha256": "549c2db27373ded304d8cad937c5184faba5a7e78aca9d28f19a214b15a4da00",
+      "paths": {
+        "affine": {
+          "original": {
+            "bounds_jump": {
+              "crosses_32": false,
+              "end_exclusive": "0xce5cc",
+              "end_mod32": 12,
+              "ends_on_32": false,
+              "start": "0xce5c6",
+              "start_mod32": 6
+            },
+            "instruction_count": 10,
+            "loop_listing": [
+              {
+                "address": "0xce5be",
+                "assembly": "movzbl (%r8,%rdx,1),%ecx",
+                "bytes": "410fb60c10"
+              },
+              {
+                "address": "0xce5c3",
+                "assembly": "cmp    %r9,%r8",
+                "bytes": "4d39c8"
+              },
+              {
+                "address": "0xce5c6",
+                "assembly": "jae    ce66d <_D6raster8internal19conversion_dispatch35convertApprovedUbyteToFloatAffine2DFNbNiNfMSQDf4view__T10RasterViewThZQpmMKSQEl13writable_view__T18WritableRasterViewTfZQxmZv+0x18d>",
+                "bytes": "0f83a1000000"
+              },
+              {
+                "address": "0xce5cc",
+                "assembly": "movzbl %cl,%r10d",
+                "bytes": "440fb6d1"
+              },
+              {
+                "address": "0xce5d0",
+                "assembly": "mov    %r10d,%r10d",
+                "bytes": "458bd2"
+              },
+              {
+                "address": "0xce5d3",
+                "assembly": "cvtsi2ss %r10,%xmm0",
+                "bytes": "f3490f2ac2"
+              },
+              {
+                "address": "0xce5d8",
+                "assembly": "movss  %xmm0,(%rsi,%r8,4)",
+                "bytes": "f3420f110486"
+              },
+              {
+                "address": "0xce5de",
+                "assembly": "inc    %r8",
+                "bytes": "49ffc0"
+              },
+              {
+                "address": "0xce5e1",
+                "assembly": "cmp    %rdi,%r8",
+                "bytes": "4939f8"
+              },
+              {
+                "address": "0xce5e4",
+                "assembly": "jb     ce5be <_D6raster8internal19conversion_dispatch35convertApprovedUbyteToFloatAffine2DFNbNiNfMSQDf4view__T10RasterViewThZQpmMKSQEl13writable_view__T18WritableRasterViewTfZQxmZv+0xde>",
+                "bytes": "72d8"
+              }
+            ],
+            "loop_start": "0xce5be",
+            "normalized_loop_sha256": "ad9b0281f2ab34e5495cbbf5e27c0789a7c875b4fbc2147448fd17219d9274c2",
+            "symbol": "00000000000ce4e0 <_D6raster8internal19conversion_dispatch35convertApprovedUbyteToFloatAffine2DFNbNiNfMSQDf4view__T10RasterViewThZQpmMKSQEl13writable_view__T18WritableRasterViewTfZQxmZv>:",
+            "tail_compare_branch_span": {
+              "crosses_32": false,
+              "end_exclusive": "0xce5e6",
+              "end_mod32": 6,
+              "ends_on_32": false,
+              "start": "0xce5e1",
+              "start_mod32": 1
+            }
+          },
+          "selected64": {
+            "bounds_jump": {
+              "crosses_32": false,
+              "end_exclusive": "0xbff6a",
+              "end_mod32": 10,
+              "ends_on_32": false,
+              "start": "0xbff64",
+              "start_mod32": 4
+            },
+            "instruction_count": 10,
+            "loop_listing": [
+              {
+                "address": "0xbff5c",
+                "assembly": "movzbl (%r8,%rdx,1),%ecx",
+                "bytes": "410fb60c10"
+              },
+              {
+                "address": "0xbff61",
+                "assembly": "cmp    %r9,%r8",
+                "bytes": "4d39c8"
+              },
+              {
+                "address": "0xbff64",
+                "assembly": "jae    c0014 <_D6raster27variant_selected64_dispatch35convertApprovedUbyteToFloatAffine2DFNbNiNfMSQDe4view__T10RasterViewThZQpmMKSQEk13writable_view__T18WritableRasterViewTfZQxmZv+0x248>",
+                "bytes": "0f83aa000000"
+              },
+              {
+                "address": "0xbff6a",
+                "assembly": "movzbl %cl,%r10d",
+                "bytes": "440fb6d1"
+              },
+              {
+                "address": "0xbff6e",
+                "assembly": "mov    %r10d,%r10d",
+                "bytes": "458bd2"
+              },
+              {
+                "address": "0xbff71",
+                "assembly": "cvtsi2ss %r10,%xmm0",
+                "bytes": "f3490f2ac2"
+              },
+              {
+                "address": "0xbff76",
+                "assembly": "movss  %xmm0,(%rsi,%r8,4)",
+                "bytes": "f3420f110486"
+              },
+              {
+                "address": "0xbff7c",
+                "assembly": "inc    %r8",
+                "bytes": "49ffc0"
+              },
+              {
+                "address": "0xbff7f",
+                "assembly": "cmp    %rdi,%r8",
+                "bytes": "4939f8"
+              },
+              {
+                "address": "0xbff82",
+                "assembly": "jb     bff5c <_D6raster27variant_selected64_dispatch35convertApprovedUbyteToFloatAffine2DFNbNiNfMSQDe4view__T10RasterViewThZQpmMKSQEk13writable_view__T18WritableRasterViewTfZQxmZv+0x190>",
+                "bytes": "72d8"
+              }
+            ],
+            "loop_start": "0xbff5c",
+            "normalized_loop_sha256": "ad9b0281f2ab34e5495cbbf5e27c0789a7c875b4fbc2147448fd17219d9274c2",
+            "symbol": "00000000000bfdcc <_D6raster27variant_selected64_dispatch35convertApprovedUbyteToFloatAffine2DFNbNiNfMSQDe4view__T10RasterViewThZQpmMKSQEk13writable_view__T18WritableRasterViewTfZQxmZv>:",
+            "tail_compare_branch_span": {
+              "crosses_32": true,
+              "end_exclusive": "0xbff84",
+              "end_mod32": 4,
+              "ends_on_32": false,
+              "start": "0xbff7f",
+              "start_mod32": 31
+            }
+          }
+        },
+        "flat": {
+          "original": {
+            "bounds_jump": {
+              "crosses_32": false,
+              "end_exclusive": "0xced7c",
+              "end_mod32": 28,
+              "ends_on_32": false,
+              "start": "0xced76",
+              "start_mod32": 22
+            },
+            "instruction_count": 10,
+            "loop_listing": [
+              {
+                "address": "0xced6e",
+                "assembly": "movzbl (%r8,%rdx,1),%ecx",
+                "bytes": "410fb60c10"
+              },
+              {
+                "address": "0xced73",
+                "assembly": "cmp    %r9,%r8",
+                "bytes": "4d39c8"
+              },
+              {
+                "address": "0xced76",
+                "assembly": "jae    ceecf <_D6raster8internal19conversion_dispatch30convertUbyteToFloatRasterPlaneFNbNiNfMSQDa4view__T10RasterViewThZQpmMKSQEg13writable_view__T18WritableRasterViewTfZQxmZEQGdQFzQFt28ExactUbyteToFloatRasterError+0x3bf>",
+                "bytes": "0f8353010000"
+              },
+              {
+                "address": "0xced7c",
+                "assembly": "movzbl %cl,%r10d",
+                "bytes": "440fb6d1"
+              },
+              {
+                "address": "0xced80",
+                "assembly": "mov    %r10d,%r10d",
+                "bytes": "458bd2"
+              },
+              {
+                "address": "0xced83",
+                "assembly": "cvtsi2ss %r10,%xmm0",
+                "bytes": "f3490f2ac2"
+              },
+              {
+                "address": "0xced88",
+                "assembly": "movss  %xmm0,(%rsi,%r8,4)",
+                "bytes": "f3420f110486"
+              },
+              {
+                "address": "0xced8e",
+                "assembly": "inc    %r8",
+                "bytes": "49ffc0"
+              },
+              {
+                "address": "0xced91",
+                "assembly": "cmp    %rdi,%r8",
+                "bytes": "4939f8"
+              },
+              {
+                "address": "0xced94",
+                "assembly": "jb     ced6e <_D6raster8internal19conversion_dispatch30convertUbyteToFloatRasterPlaneFNbNiNfMSQDa4view__T10RasterViewThZQpmMKSQEg13writable_view__T18WritableRasterViewTfZQxmZEQGdQFzQFt28ExactUbyteToFloatRasterError+0x25e>",
+                "bytes": "72d8"
+              }
+            ],
+            "loop_start": "0xced6e",
+            "normalized_loop_sha256": "ad9b0281f2ab34e5495cbbf5e27c0789a7c875b4fbc2147448fd17219d9274c2",
+            "symbol": "00000000000ceb10 <_D6raster8internal19conversion_dispatch30convertUbyteToFloatRasterPlaneFNbNiNfMSQDa4view__T10RasterViewThZQpmMKSQEg13writable_view__T18WritableRasterViewTfZQxmZEQGdQFzQFt28ExactUbyteToFloatRasterError>:",
+            "tail_compare_branch_span": {
+              "crosses_32": false,
+              "end_exclusive": "0xced96",
+              "end_mod32": 22,
+              "ends_on_32": false,
+              "start": "0xced91",
+              "start_mod32": 17
+            }
+          },
+          "selected64": {
+            "bounds_jump": {
+              "crosses_32": true,
+              "end_exclusive": "0xc0802",
+              "end_mod32": 2,
+              "ends_on_32": false,
+              "start": "0xc07fc",
+              "start_mod32": 28
+            },
+            "instruction_count": 10,
+            "loop_listing": [
+              {
+                "address": "0xc07f4",
+                "assembly": "movzbl (%r8,%rdx,1),%ecx",
+                "bytes": "410fb60c10"
+              },
+              {
+                "address": "0xc07f9",
+                "assembly": "cmp    %r9,%r8",
+                "bytes": "4d39c8"
+              },
+              {
+                "address": "0xc07fc",
+                "assembly": "jae    c0985 <_D6raster27variant_selected64_dispatch30convertUbyteToFloatRasterPlaneFNbNiNfMSQCz4view__T10RasterViewThZQpmMKSQEf13writable_view__T18WritableRasterViewTfZQxmZEQGcQFy28ExactUbyteToFloatRasterError+0x4c5>",
+                "bytes": "0f8383010000"
+              },
+              {
+                "address": "0xc0802",
+                "assembly": "movzbl %cl,%r10d",
+                "bytes": "440fb6d1"
+              },
+              {
+                "address": "0xc0806",
+                "assembly": "mov    %r10d,%r10d",
+                "bytes": "458bd2"
+              },
+              {
+                "address": "0xc0809",
+                "assembly": "cvtsi2ss %r10,%xmm0",
+                "bytes": "f3490f2ac2"
+              },
+              {
+                "address": "0xc080e",
+                "assembly": "movss  %xmm0,(%rsi,%r8,4)",
+                "bytes": "f3420f110486"
+              },
+              {
+                "address": "0xc0814",
+                "assembly": "inc    %r8",
+                "bytes": "49ffc0"
+              },
+              {
+                "address": "0xc0817",
+                "assembly": "cmp    %rdi,%r8",
+                "bytes": "4939f8"
+              },
+              {
+                "address": "0xc081a",
+                "assembly": "jb     c07f4 <_D6raster27variant_selected64_dispatch30convertUbyteToFloatRasterPlaneFNbNiNfMSQCz4view__T10RasterViewThZQpmMKSQEf13writable_view__T18WritableRasterViewTfZQxmZEQGcQFy28ExactUbyteToFloatRasterError+0x334>",
+                "bytes": "72d8"
+              }
+            ],
+            "loop_start": "0xc07f4",
+            "normalized_loop_sha256": "ad9b0281f2ab34e5495cbbf5e27c0789a7c875b4fbc2147448fd17219d9274c2",
+            "symbol": "00000000000c04c0 <_D6raster27variant_selected64_dispatch30convertUbyteToFloatRasterPlaneFNbNiNfMSQCz4view__T10RasterViewThZQpmMKSQEf13writable_view__T18WritableRasterViewTfZQxmZEQGcQFy28ExactUbyteToFloatRasterError>:",
+            "tail_compare_branch_span": {
+              "crosses_32": false,
+              "end_exclusive": "0xc081c",
+              "end_mod32": 28,
+              "ends_on_32": false,
+              "start": "0xc0817",
+              "start_mod32": 23
+            }
+          }
+        }
+      }
+    },
+    "sweep-long": {
+      "31x17_selected_ratios": {
+        "contiguous": {
+          "max": "0.728278",
+          "median": "0.700025",
+          "min": "0.691874"
+        },
+        "negative-both": {
+          "max": "0.815760",
+          "median": "0.807531",
+          "min": "0.795124"
+        },
+        "negative-source": {
+          "max": "0.808786",
+          "median": "0.800842",
+          "min": "0.781820"
+        },
+        "padded": {
+          "max": "0.840679",
+          "median": "0.808035",
+          "min": "0.785348"
+        },
+        "repeated-source": {
+          "max": "0.811098",
+          "median": "0.791845",
+          "min": "0.774167"
+        },
+        "universal": {
+          "max": "0.995792",
+          "median": "0.985935",
+          "min": "0.977155"
+        }
+      },
+      "linked_assembly_sha256": "11e2c968a8f0e619dc30ad5b8322441439463f1f408cc7645fe88ff2d206aa85",
+      "paths": {
+        "affine": {
+          "original": {
+            "bounds_jump": {
+              "crosses_32": false,
+              "end_exclusive": "0xceb0c",
+              "end_mod32": 12,
+              "ends_on_32": false,
+              "start": "0xceb06",
+              "start_mod32": 6
+            },
+            "instruction_count": 10,
+            "loop_listing": [
+              {
+                "address": "0xceafe",
+                "assembly": "movzbl (%r8,%rdx,1),%ecx",
+                "bytes": "410fb60c10"
+              },
+              {
+                "address": "0xceb03",
+                "assembly": "cmp    %r9,%r8",
+                "bytes": "4d39c8"
+              },
+              {
+                "address": "0xceb06",
+                "assembly": "jae    cebad <_D6raster8internal19conversion_dispatch35convertApprovedUbyteToFloatAffine2DFNbNiNfMSQDf4view__T10RasterViewThZQpmMKSQEl13writable_view__T18WritableRasterViewTfZQxmZv+0x18d>",
+                "bytes": "0f83a1000000"
+              },
+              {
+                "address": "0xceb0c",
+                "assembly": "movzbl %cl,%r10d",
+                "bytes": "440fb6d1"
+              },
+              {
+                "address": "0xceb10",
+                "assembly": "mov    %r10d,%r10d",
+                "bytes": "458bd2"
+              },
+              {
+                "address": "0xceb13",
+                "assembly": "cvtsi2ss %r10,%xmm0",
+                "bytes": "f3490f2ac2"
+              },
+              {
+                "address": "0xceb18",
+                "assembly": "movss  %xmm0,(%rsi,%r8,4)",
+                "bytes": "f3420f110486"
+              },
+              {
+                "address": "0xceb1e",
+                "assembly": "inc    %r8",
+                "bytes": "49ffc0"
+              },
+              {
+                "address": "0xceb21",
+                "assembly": "cmp    %rdi,%r8",
+                "bytes": "4939f8"
+              },
+              {
+                "address": "0xceb24",
+                "assembly": "jb     ceafe <_D6raster8internal19conversion_dispatch35convertApprovedUbyteToFloatAffine2DFNbNiNfMSQDf4view__T10RasterViewThZQpmMKSQEl13writable_view__T18WritableRasterViewTfZQxmZv+0xde>",
+                "bytes": "72d8"
+              }
+            ],
+            "loop_start": "0xceafe",
+            "normalized_loop_sha256": "ad9b0281f2ab34e5495cbbf5e27c0789a7c875b4fbc2147448fd17219d9274c2",
+            "symbol": "00000000000cea20 <_D6raster8internal19conversion_dispatch35convertApprovedUbyteToFloatAffine2DFNbNiNfMSQDf4view__T10RasterViewThZQpmMKSQEl13writable_view__T18WritableRasterViewTfZQxmZv>:",
+            "tail_compare_branch_span": {
+              "crosses_32": false,
+              "end_exclusive": "0xceb26",
+              "end_mod32": 6,
+              "ends_on_32": false,
+              "start": "0xceb21",
+              "start_mod32": 1
+            }
+          },
+          "selected64": {
+            "bounds_jump": {
+              "crosses_32": false,
+              "end_exclusive": "0xc04aa",
+              "end_mod32": 10,
+              "ends_on_32": false,
+              "start": "0xc04a4",
+              "start_mod32": 4
+            },
+            "instruction_count": 10,
+            "loop_listing": [
+              {
+                "address": "0xc049c",
+                "assembly": "movzbl (%r8,%rdx,1),%ecx",
+                "bytes": "410fb60c10"
+              },
+              {
+                "address": "0xc04a1",
+                "assembly": "cmp    %r9,%r8",
+                "bytes": "4d39c8"
+              },
+              {
+                "address": "0xc04a4",
+                "assembly": "jae    c0554 <_D6raster27variant_selected64_dispatch35convertApprovedUbyteToFloatAffine2DFNbNiNfMSQDe4view__T10RasterViewThZQpmMKSQEk13writable_view__T18WritableRasterViewTfZQxmZv+0x248>",
+                "bytes": "0f83aa000000"
+              },
+              {
+                "address": "0xc04aa",
+                "assembly": "movzbl %cl,%r10d",
+                "bytes": "440fb6d1"
+              },
+              {
+                "address": "0xc04ae",
+                "assembly": "mov    %r10d,%r10d",
+                "bytes": "458bd2"
+              },
+              {
+                "address": "0xc04b1",
+                "assembly": "cvtsi2ss %r10,%xmm0",
+                "bytes": "f3490f2ac2"
+              },
+              {
+                "address": "0xc04b6",
+                "assembly": "movss  %xmm0,(%rsi,%r8,4)",
+                "bytes": "f3420f110486"
+              },
+              {
+                "address": "0xc04bc",
+                "assembly": "inc    %r8",
+                "bytes": "49ffc0"
+              },
+              {
+                "address": "0xc04bf",
+                "assembly": "cmp    %rdi,%r8",
+                "bytes": "4939f8"
+              },
+              {
+                "address": "0xc04c2",
+                "assembly": "jb     c049c <_D6raster27variant_selected64_dispatch35convertApprovedUbyteToFloatAffine2DFNbNiNfMSQDe4view__T10RasterViewThZQpmMKSQEk13writable_view__T18WritableRasterViewTfZQxmZv+0x190>",
+                "bytes": "72d8"
+              }
+            ],
+            "loop_start": "0xc049c",
+            "normalized_loop_sha256": "ad9b0281f2ab34e5495cbbf5e27c0789a7c875b4fbc2147448fd17219d9274c2",
+            "symbol": "00000000000c030c <_D6raster27variant_selected64_dispatch35convertApprovedUbyteToFloatAffine2DFNbNiNfMSQDe4view__T10RasterViewThZQpmMKSQEk13writable_view__T18WritableRasterViewTfZQxmZv>:",
+            "tail_compare_branch_span": {
+              "crosses_32": true,
+              "end_exclusive": "0xc04c4",
+              "end_mod32": 4,
+              "ends_on_32": false,
+              "start": "0xc04bf",
+              "start_mod32": 31
+            }
+          }
+        },
+        "flat": {
+          "original": {
+            "bounds_jump": {
+              "crosses_32": false,
+              "end_exclusive": "0xcf2bc",
+              "end_mod32": 28,
+              "ends_on_32": false,
+              "start": "0xcf2b6",
+              "start_mod32": 22
+            },
+            "instruction_count": 10,
+            "loop_listing": [
+              {
+                "address": "0xcf2ae",
+                "assembly": "movzbl (%r8,%rdx,1),%ecx",
+                "bytes": "410fb60c10"
+              },
+              {
+                "address": "0xcf2b3",
+                "assembly": "cmp    %r9,%r8",
+                "bytes": "4d39c8"
+              },
+              {
+                "address": "0xcf2b6",
+                "assembly": "jae    cf40f <_D6raster8internal19conversion_dispatch30convertUbyteToFloatRasterPlaneFNbNiNfMSQDa4view__T10RasterViewThZQpmMKSQEg13writable_view__T18WritableRasterViewTfZQxmZEQGdQFzQFt28ExactUbyteToFloatRasterError+0x3bf>",
+                "bytes": "0f8353010000"
+              },
+              {
+                "address": "0xcf2bc",
+                "assembly": "movzbl %cl,%r10d",
+                "bytes": "440fb6d1"
+              },
+              {
+                "address": "0xcf2c0",
+                "assembly": "mov    %r10d,%r10d",
+                "bytes": "458bd2"
+              },
+              {
+                "address": "0xcf2c3",
+                "assembly": "cvtsi2ss %r10,%xmm0",
+                "bytes": "f3490f2ac2"
+              },
+              {
+                "address": "0xcf2c8",
+                "assembly": "movss  %xmm0,(%rsi,%r8,4)",
+                "bytes": "f3420f110486"
+              },
+              {
+                "address": "0xcf2ce",
+                "assembly": "inc    %r8",
+                "bytes": "49ffc0"
+              },
+              {
+                "address": "0xcf2d1",
+                "assembly": "cmp    %rdi,%r8",
+                "bytes": "4939f8"
+              },
+              {
+                "address": "0xcf2d4",
+                "assembly": "jb     cf2ae <_D6raster8internal19conversion_dispatch30convertUbyteToFloatRasterPlaneFNbNiNfMSQDa4view__T10RasterViewThZQpmMKSQEg13writable_view__T18WritableRasterViewTfZQxmZEQGdQFzQFt28ExactUbyteToFloatRasterError+0x25e>",
+                "bytes": "72d8"
+              }
+            ],
+            "loop_start": "0xcf2ae",
+            "normalized_loop_sha256": "ad9b0281f2ab34e5495cbbf5e27c0789a7c875b4fbc2147448fd17219d9274c2",
+            "symbol": "00000000000cf050 <_D6raster8internal19conversion_dispatch30convertUbyteToFloatRasterPlaneFNbNiNfMSQDa4view__T10RasterViewThZQpmMKSQEg13writable_view__T18WritableRasterViewTfZQxmZEQGdQFzQFt28ExactUbyteToFloatRasterError>:",
+            "tail_compare_branch_span": {
+              "crosses_32": false,
+              "end_exclusive": "0xcf2d6",
+              "end_mod32": 22,
+              "ends_on_32": false,
+              "start": "0xcf2d1",
+              "start_mod32": 17
+            }
+          },
+          "selected64": {
+            "bounds_jump": {
+              "crosses_32": true,
+              "end_exclusive": "0xc0d42",
+              "end_mod32": 2,
+              "ends_on_32": false,
+              "start": "0xc0d3c",
+              "start_mod32": 28
+            },
+            "instruction_count": 10,
+            "loop_listing": [
+              {
+                "address": "0xc0d34",
+                "assembly": "movzbl (%r8,%rdx,1),%ecx",
+                "bytes": "410fb60c10"
+              },
+              {
+                "address": "0xc0d39",
+                "assembly": "cmp    %r9,%r8",
+                "bytes": "4d39c8"
+              },
+              {
+                "address": "0xc0d3c",
+                "assembly": "jae    c0ec5 <_D6raster27variant_selected64_dispatch30convertUbyteToFloatRasterPlaneFNbNiNfMSQCz4view__T10RasterViewThZQpmMKSQEf13writable_view__T18WritableRasterViewTfZQxmZEQGcQFy28ExactUbyteToFloatRasterError+0x4c5>",
+                "bytes": "0f8383010000"
+              },
+              {
+                "address": "0xc0d42",
+                "assembly": "movzbl %cl,%r10d",
+                "bytes": "440fb6d1"
+              },
+              {
+                "address": "0xc0d46",
+                "assembly": "mov    %r10d,%r10d",
+                "bytes": "458bd2"
+              },
+              {
+                "address": "0xc0d49",
+                "assembly": "cvtsi2ss %r10,%xmm0",
+                "bytes": "f3490f2ac2"
+              },
+              {
+                "address": "0xc0d4e",
+                "assembly": "movss  %xmm0,(%rsi,%r8,4)",
+                "bytes": "f3420f110486"
+              },
+              {
+                "address": "0xc0d54",
+                "assembly": "inc    %r8",
+                "bytes": "49ffc0"
+              },
+              {
+                "address": "0xc0d57",
+                "assembly": "cmp    %rdi,%r8",
+                "bytes": "4939f8"
+              },
+              {
+                "address": "0xc0d5a",
+                "assembly": "jb     c0d34 <_D6raster27variant_selected64_dispatch30convertUbyteToFloatRasterPlaneFNbNiNfMSQCz4view__T10RasterViewThZQpmMKSQEf13writable_view__T18WritableRasterViewTfZQxmZEQGcQFy28ExactUbyteToFloatRasterError+0x334>",
+                "bytes": "72d8"
+              }
+            ],
+            "loop_start": "0xc0d34",
+            "normalized_loop_sha256": "ad9b0281f2ab34e5495cbbf5e27c0789a7c875b4fbc2147448fd17219d9274c2",
+            "symbol": "00000000000c0a00 <_D6raster27variant_selected64_dispatch30convertUbyteToFloatRasterPlaneFNbNiNfMSQCz4view__T10RasterViewThZQpmMKSQEf13writable_view__T18WritableRasterViewTfZQxmZEQGcQFy28ExactUbyteToFloatRasterError>:",
+            "tail_compare_branch_span": {
+              "crosses_32": false,
+              "end_exclusive": "0xc0d5c",
+              "end_mod32": 28,
+              "ends_on_32": false,
+              "start": "0xc0d57",
+              "start_mod32": 23
+            }
+          }
+        }
+      }
+    },
+    "sweep-short": {
+      "31x17_selected_ratios": {
+        "contiguous": {
+          "max": "1.188221",
+          "median": "1.127215",
+          "min": "1.098320"
+        },
+        "negative-both": {
+          "max": "1.379880",
+          "median": "0.964552",
+          "min": "0.902120"
+        },
+        "negative-source": {
+          "max": "1.107365",
+          "median": "0.984236",
+          "min": "0.938136"
+        },
+        "padded": {
+          "max": "1.052700",
+          "median": "0.994876",
+          "min": "0.917106"
+        },
+        "repeated-source": {
+          "max": "0.993485",
+          "median": "0.969320",
+          "min": "0.962554"
+        },
+        "universal": {
+          "max": "1.077475",
+          "median": "1.035672",
+          "min": "1.018786"
+        }
+      },
+      "linked_assembly_sha256": "c9ae9c2d8cadce1817f6fea2229c7f47b54387e2e97fe63605fba2434e459938",
+      "paths": {
+        "affine": {
+          "original": {
+            "bounds_jump": {
+              "crosses_32": false,
+              "end_exclusive": "0xcda7c",
+              "end_mod32": 28,
+              "ends_on_32": false,
+              "start": "0xcda76",
+              "start_mod32": 22
+            },
+            "instruction_count": 10,
+            "loop_listing": [
+              {
+                "address": "0xcda6e",
+                "assembly": "movzbl (%r8,%rdx,1),%ecx",
+                "bytes": "410fb60c10"
+              },
+              {
+                "address": "0xcda73",
+                "assembly": "cmp    %r9,%r8",
+                "bytes": "4d39c8"
+              },
+              {
+                "address": "0xcda76",
+                "assembly": "jae    cdb1d <_D6raster8internal19conversion_dispatch35convertApprovedUbyteToFloatAffine2DFNbNiNfMSQDf4view__T10RasterViewThZQpmMKSQEl13writable_view__T18WritableRasterViewTfZQxmZv+0x18d>",
+                "bytes": "0f83a1000000"
+              },
+              {
+                "address": "0xcda7c",
+                "assembly": "movzbl %cl,%r10d",
+                "bytes": "440fb6d1"
+              },
+              {
+                "address": "0xcda80",
+                "assembly": "mov    %r10d,%r10d",
+                "bytes": "458bd2"
+              },
+              {
+                "address": "0xcda83",
+                "assembly": "cvtsi2ss %r10,%xmm0",
+                "bytes": "f3490f2ac2"
+              },
+              {
+                "address": "0xcda88",
+                "assembly": "movss  %xmm0,(%rsi,%r8,4)",
+                "bytes": "f3420f110486"
+              },
+              {
+                "address": "0xcda8e",
+                "assembly": "inc    %r8",
+                "bytes": "49ffc0"
+              },
+              {
+                "address": "0xcda91",
+                "assembly": "cmp    %rdi,%r8",
+                "bytes": "4939f8"
+              },
+              {
+                "address": "0xcda94",
+                "assembly": "jb     cda6e <_D6raster8internal19conversion_dispatch35convertApprovedUbyteToFloatAffine2DFNbNiNfMSQDf4view__T10RasterViewThZQpmMKSQEl13writable_view__T18WritableRasterViewTfZQxmZv+0xde>",
+                "bytes": "72d8"
+              }
+            ],
+            "loop_start": "0xcda6e",
+            "normalized_loop_sha256": "ad9b0281f2ab34e5495cbbf5e27c0789a7c875b4fbc2147448fd17219d9274c2",
+            "symbol": "00000000000cd990 <_D6raster8internal19conversion_dispatch35convertApprovedUbyteToFloatAffine2DFNbNiNfMSQDf4view__T10RasterViewThZQpmMKSQEl13writable_view__T18WritableRasterViewTfZQxmZv>:",
+            "tail_compare_branch_span": {
+              "crosses_32": false,
+              "end_exclusive": "0xcda96",
+              "end_mod32": 22,
+              "ends_on_32": false,
+              "start": "0xcda91",
+              "start_mod32": 17
+            }
+          },
+          "selected64": {
+            "bounds_jump": {
+              "crosses_32": false,
+              "end_exclusive": "0xbf41a",
+              "end_mod32": 26,
+              "ends_on_32": false,
+              "start": "0xbf414",
+              "start_mod32": 20
+            },
+            "instruction_count": 10,
+            "loop_listing": [
+              {
+                "address": "0xbf40c",
+                "assembly": "movzbl (%r8,%rdx,1),%ecx",
+                "bytes": "410fb60c10"
+              },
+              {
+                "address": "0xbf411",
+                "assembly": "cmp    %r9,%r8",
+                "bytes": "4d39c8"
+              },
+              {
+                "address": "0xbf414",
+                "assembly": "jae    bf4c4 <_D6raster27variant_selected64_dispatch35convertApprovedUbyteToFloatAffine2DFNbNiNfMSQDe4view__T10RasterViewThZQpmMKSQEk13writable_view__T18WritableRasterViewTfZQxmZv+0x248>",
+                "bytes": "0f83aa000000"
+              },
+              {
+                "address": "0xbf41a",
+                "assembly": "movzbl %cl,%r10d",
+                "bytes": "440fb6d1"
+              },
+              {
+                "address": "0xbf41e",
+                "assembly": "mov    %r10d,%r10d",
+                "bytes": "458bd2"
+              },
+              {
+                "address": "0xbf421",
+                "assembly": "cvtsi2ss %r10,%xmm0",
+                "bytes": "f3490f2ac2"
+              },
+              {
+                "address": "0xbf426",
+                "assembly": "movss  %xmm0,(%rsi,%r8,4)",
+                "bytes": "f3420f110486"
+              },
+              {
+                "address": "0xbf42c",
+                "assembly": "inc    %r8",
+                "bytes": "49ffc0"
+              },
+              {
+                "address": "0xbf42f",
+                "assembly": "cmp    %rdi,%r8",
+                "bytes": "4939f8"
+              },
+              {
+                "address": "0xbf432",
+                "assembly": "jb     bf40c <_D6raster27variant_selected64_dispatch35convertApprovedUbyteToFloatAffine2DFNbNiNfMSQDe4view__T10RasterViewThZQpmMKSQEk13writable_view__T18WritableRasterViewTfZQxmZv+0x190>",
+                "bytes": "72d8"
+              }
+            ],
+            "loop_start": "0xbf40c",
+            "normalized_loop_sha256": "ad9b0281f2ab34e5495cbbf5e27c0789a7c875b4fbc2147448fd17219d9274c2",
+            "symbol": "00000000000bf27c <_D6raster27variant_selected64_dispatch35convertApprovedUbyteToFloatAffine2DFNbNiNfMSQDe4view__T10RasterViewThZQpmMKSQEk13writable_view__T18WritableRasterViewTfZQxmZv>:",
+            "tail_compare_branch_span": {
+              "crosses_32": false,
+              "end_exclusive": "0xbf434",
+              "end_mod32": 20,
+              "ends_on_32": false,
+              "start": "0xbf42f",
+              "start_mod32": 15
+            }
+          }
+        },
+        "flat": {
+          "original": {
+            "bounds_jump": {
+              "crosses_32": false,
+              "end_exclusive": "0xce22c",
+              "end_mod32": 12,
+              "ends_on_32": false,
+              "start": "0xce226",
+              "start_mod32": 6
+            },
+            "instruction_count": 10,
+            "loop_listing": [
+              {
+                "address": "0xce21e",
+                "assembly": "movzbl (%r8,%rdx,1),%ecx",
+                "bytes": "410fb60c10"
+              },
+              {
+                "address": "0xce223",
+                "assembly": "cmp    %r9,%r8",
+                "bytes": "4d39c8"
+              },
+              {
+                "address": "0xce226",
+                "assembly": "jae    ce37f <_D6raster8internal19conversion_dispatch30convertUbyteToFloatRasterPlaneFNbNiNfMSQDa4view__T10RasterViewThZQpmMKSQEg13writable_view__T18WritableRasterViewTfZQxmZEQGdQFzQFt28ExactUbyteToFloatRasterError+0x3bf>",
+                "bytes": "0f8353010000"
+              },
+              {
+                "address": "0xce22c",
+                "assembly": "movzbl %cl,%r10d",
+                "bytes": "440fb6d1"
+              },
+              {
+                "address": "0xce230",
+                "assembly": "mov    %r10d,%r10d",
+                "bytes": "458bd2"
+              },
+              {
+                "address": "0xce233",
+                "assembly": "cvtsi2ss %r10,%xmm0",
+                "bytes": "f3490f2ac2"
+              },
+              {
+                "address": "0xce238",
+                "assembly": "movss  %xmm0,(%rsi,%r8,4)",
+                "bytes": "f3420f110486"
+              },
+              {
+                "address": "0xce23e",
+                "assembly": "inc    %r8",
+                "bytes": "49ffc0"
+              },
+              {
+                "address": "0xce241",
+                "assembly": "cmp    %rdi,%r8",
+                "bytes": "4939f8"
+              },
+              {
+                "address": "0xce244",
+                "assembly": "jb     ce21e <_D6raster8internal19conversion_dispatch30convertUbyteToFloatRasterPlaneFNbNiNfMSQDa4view__T10RasterViewThZQpmMKSQEg13writable_view__T18WritableRasterViewTfZQxmZEQGdQFzQFt28ExactUbyteToFloatRasterError+0x25e>",
+                "bytes": "72d8"
+              }
+            ],
+            "loop_start": "0xce21e",
+            "normalized_loop_sha256": "ad9b0281f2ab34e5495cbbf5e27c0789a7c875b4fbc2147448fd17219d9274c2",
+            "symbol": "00000000000cdfc0 <_D6raster8internal19conversion_dispatch30convertUbyteToFloatRasterPlaneFNbNiNfMSQDa4view__T10RasterViewThZQpmMKSQEg13writable_view__T18WritableRasterViewTfZQxmZEQGdQFzQFt28ExactUbyteToFloatRasterError>:",
+            "tail_compare_branch_span": {
+              "crosses_32": false,
+              "end_exclusive": "0xce246",
+              "end_mod32": 6,
+              "ends_on_32": false,
+              "start": "0xce241",
+              "start_mod32": 1
+            }
+          },
+          "selected64": {
+            "bounds_jump": {
+              "crosses_32": false,
+              "end_exclusive": "0xbfcb2",
+              "end_mod32": 18,
+              "ends_on_32": false,
+              "start": "0xbfcac",
+              "start_mod32": 12
+            },
+            "instruction_count": 10,
+            "loop_listing": [
+              {
+                "address": "0xbfca4",
+                "assembly": "movzbl (%r8,%rdx,1),%ecx",
+                "bytes": "410fb60c10"
+              },
+              {
+                "address": "0xbfca9",
+                "assembly": "cmp    %r9,%r8",
+                "bytes": "4d39c8"
+              },
+              {
+                "address": "0xbfcac",
+                "assembly": "jae    bfe35 <_D6raster27variant_selected64_dispatch30convertUbyteToFloatRasterPlaneFNbNiNfMSQCz4view__T10RasterViewThZQpmMKSQEf13writable_view__T18WritableRasterViewTfZQxmZEQGcQFy28ExactUbyteToFloatRasterError+0x4c5>",
+                "bytes": "0f8383010000"
+              },
+              {
+                "address": "0xbfcb2",
+                "assembly": "movzbl %cl,%r10d",
+                "bytes": "440fb6d1"
+              },
+              {
+                "address": "0xbfcb6",
+                "assembly": "mov    %r10d,%r10d",
+                "bytes": "458bd2"
+              },
+              {
+                "address": "0xbfcb9",
+                "assembly": "cvtsi2ss %r10,%xmm0",
+                "bytes": "f3490f2ac2"
+              },
+              {
+                "address": "0xbfcbe",
+                "assembly": "movss  %xmm0,(%rsi,%r8,4)",
+                "bytes": "f3420f110486"
+              },
+              {
+                "address": "0xbfcc4",
+                "assembly": "inc    %r8",
+                "bytes": "49ffc0"
+              },
+              {
+                "address": "0xbfcc7",
+                "assembly": "cmp    %rdi,%r8",
+                "bytes": "4939f8"
+              },
+              {
+                "address": "0xbfcca",
+                "assembly": "jb     bfca4 <_D6raster27variant_selected64_dispatch30convertUbyteToFloatRasterPlaneFNbNiNfMSQCz4view__T10RasterViewThZQpmMKSQEf13writable_view__T18WritableRasterViewTfZQxmZEQGcQFy28ExactUbyteToFloatRasterError+0x334>",
+                "bytes": "72d8"
+              }
+            ],
+            "loop_start": "0xbfca4",
+            "normalized_loop_sha256": "ad9b0281f2ab34e5495cbbf5e27c0789a7c875b4fbc2147448fd17219d9274c2",
+            "symbol": "00000000000bf970 <_D6raster27variant_selected64_dispatch30convertUbyteToFloatRasterPlaneFNbNiNfMSQCz4view__T10RasterViewThZQpmMKSQEf13writable_view__T18WritableRasterViewTfZQxmZEQGcQFy28ExactUbyteToFloatRasterError>:",
+            "tail_compare_branch_span": {
+              "crosses_32": false,
+              "end_exclusive": "0xbfccc",
+              "end_mod32": 12,
+              "ends_on_32": false,
+              "start": "0xbfcc7",
+              "start_mod32": 7
+            }
+          }
+        }
+      }
+    }
+  },
+  "normalized_scalar_loop": [
+    "movzbl (%r8,%rdx,1),%ecx",
+    "cmp    %r9,%r8",
+    "jae <target>",
+    "movzbl %cl,%r10d",
+    "mov    %r10d,%r10d",
+    "cvtsi2ss %r10,%xmm0",
+    "movss  %xmm0,(%rsi,%r8,4)",
+    "inc    %r8",
+    "cmp    %rdi,%r8",
+    "jb <target>"
+  ],
+  "scope": "retained DMD linked code; no new compilation or measurement"
+}
