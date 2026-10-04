@@ -77,7 +77,9 @@ def load_indexed():
 
         def control(assembly, position):
             result = original_control(assembly, position)
-            if result['scalar_body_sha256'] in (INDEXED_BODY, HYBRID_BODY):
+            scalar_digest = scalar_body_digest(assembly, boundary.SCALAR)
+            result['scalar_body_sha256'] = scalar_digest
+            if scalar_digest in (INDEXED_BODY, HYBRID_BODY):
                 raise ValueError('pointer loop produced unchanged prior scalar code')
             blocks = [b for b in re.split(r'(?=^[0-9a-f]+ <)', assembly, flags=re.M) if b]
             scalar = next(b for b in blocks if '<' + boundary.SCALAR + '>:' in b.splitlines()[0])
@@ -104,11 +106,22 @@ def load_indexed():
         replay = boundary.replay
 
         def replay_pointer(root):
-            result = replay(root)
+            # The inherited indexed replay requires identical scalar bytes across
+            # placements. A relative call to this helper has placement-dependent
+            # displacement bytes, so replace only that inherited comparison;
+            # this wrapper checks scalar invariance within each placement below.
+            indexed_digest = indexed.scalar_body_digest
+            indexed.scalar_body_digest = lambda assembly, symbol: 'pointer-call-relocation'
+            try:
+                result = replay(root)
+            finally:
+                indexed.scalar_body_digest = indexed_digest
             metadata = json.loads((root / 'collection.json').read_text())
-            digests = set()
+            helper_digests = set()
+            scalar_by_position = {}
             for item in metadata['cohorts']:
                 if item['compiler'] == 'dmd':
+                    position_digests = scalar_by_position.setdefault(item['position'], set())
                     for mode in boundary.MODES:
                         full = gzip.decompress((root / item['cohort'] / mode / 'full-linked-assembly.txt.gz').read_bytes()).decode()
                         blocks = [b for b in re.split(r'(?=^[0-9a-f]+ <)', full, flags=re.M) if b]
@@ -118,8 +131,11 @@ def load_indexed():
                         if len(calls) != 1 or len(helper) != 1:
                             raise ValueError('replay missing unique DMD pointer helper call')
                         symbol = helper[0].splitlines()[0].split('<', 1)[1].split('>:', 1)[0]
-                        digests.add(scalar_body_digest(full, symbol))
-            if any(item['compiler'] == 'dmd' for item in metadata['cohorts']) and len(digests) != 1:
+                        helper_digests.add(scalar_body_digest(full, symbol))
+                        position_digests.add(scalar_body_digest(full, boundary.SCALAR))
+            if any(len(digests) != 1 for digests in scalar_by_position.values()):
+                raise ValueError('DMD scalar code differs across modes at a placement')
+            if any(item['compiler'] == 'dmd' for item in metadata['cohorts']) and len(helper_digests) != 1:
                 raise ValueError('pointer helper machine code differs across modes or positions')
             return result
 
