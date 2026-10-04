@@ -1,0 +1,6 @@
+{
+  "source/raster/conversion.d": "837fe4ef749a059991311155acd7c3127022da636143782893e5d8c0077d8d00",
+  "source/raster/internal/conversion_dispatch.d": "3c1cc242754c84e12e95d2372883845b452e7685fe56cbd407d99d48be655c93",
+  "source/raster/internal/validated_affine_relation.d": "6b9170ccc3667b9298e2fde001a0c8d302d459d2f4b4985a0179cf120de06c39",
+  "tests/integration/raster_copy_conversion/source/probe.d": "3e8b4be92699be466b6cf5d5698c9db15cbb5961bf6a8de4b344af7cd0a13328"
+}

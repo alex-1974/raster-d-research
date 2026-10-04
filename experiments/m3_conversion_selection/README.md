@@ -116,3 +116,17 @@ bash experiments/m3_conversion_selection/run_xps.sh "$HOME/Programmiersprachen/d
 Append `--prepare-only` to check pinned worktree preparation without measuring.
 
 [Findings and decision gates](../../docs/research/m3-conversion-selection.md).
+
+## Reference XPS result
+
+The exact pinned operation-level candidate is now XPS-qualified as a measured
+negative selection result: large DMD cases improve, but below-gate 31x17
+regresses ~44% in the prior consumers and ~43% in expanded long. Production
+promotion is blocked. See the findings for all four modes, conflicting expanded
+short results, source identities, raw evidence and next codegen investigation.
+
+```bash
+python3 experiments/m3_conversion_selection/support/verify.py experiments/m3_conversion_selection/evidence/2026-10-04-xps
+python3 experiments/m3_conversion_selection/collect.py experiments/m3_conversion_selection/evidence/2026-10-04-xps --replay > /tmp/selection-xps-replay.csv
+cmp /tmp/selection-xps-replay.csv experiments/m3_conversion_selection/evidence/2026-10-04-xps/summary.csv
+```

@@ -164,3 +164,79 @@ compilers in all four consumer/block modes with one process and no timing
 threshold. C++ is timed only in the expanded consumer and still omits public
 validation: no equivalent full-public parity or isolated validation cost is
 inferred. Remaining signed-LDC/DMD conversion work stays open.
+
+## Reference XPS qualification — 2026-10-04
+
+The exact operation-level candidate fails the small-operation performance goal
+on the reference XPS. Retain its large-operation gain, but do **not** promote
+this implementation into Production. Source-level preservation of the small
+executor did not preserve its measured consumer performance.
+
+[evidence/2026-10-04-xps](../../experiments/m3_conversion_selection/evidence/2026-10-04-xps)
+preserves the uploaded archive contents byte-exactly, directly or through
+lossless deterministic gzip. Uploaded archive SHA256:
+`fb083a91d42141f6bac59039696f53ad38801f2fa0d48f76594775a867d6129d`.
+All 463 uploaded extended and 458 original collector manifest entries pass,
+as do 112 original entries in each of four modes. The retained recursive
+manifest has 468 entries; lossless original-manifest verification and byte-exact
+summary replay pass. All twelve experiment input hashes match the exact pinned
+producer `0e32179e32e3670ba28a89c24b2f44e7ced3d21c` and VM cohort. Production pin
+remains `7dcdf01babf87e9a80af2864fbad75efe8e7d0ef`.
+
+Host: Intel Core i7-9750H, CPU0 affinity; DMD2.111.0, LDC1.41.0/frontend2.111.0/
+LLVM19.1.7, DUB1.40.0, GCC15.2. Four separately compiled modes, six processes
+per compiler (48 total), 231,984 timed blocks and 308,242,584 full public calls.
+Every mode passes inherited 40-module tests, public backing/Copy/default and
+portable checks, attributes and actual-source trust challenges, 10,240-case
+bitwise/four-rounding-mode and protected-page controls, 54 public boundary and
+18 shared-backing controls. Replay validates all declared workloads, cyclic
+order, iteration budgets and 438 cross-mode/process/compiler fingerprints.
+Thermal/frequency conditions are unmonitored; no cross-machine speed factor
+or cause attribution is inferred.
+
+| DMD contiguous original/selected | Prior short | Prior long | Expanded short | Expanded long |
+| --- | ---: | ---: | ---: | ---: |
+| 31x17 | 0.693202 | 0.693761 | 1.127215 | 0.700025 |
+| 2048x512 | 2.067749 | 1.787401 | 2.288003 | 1.889309 |
+
+Ratios >1 favor selection. At 31x17 contiguous the prior short/long modes show
+~44% candidate slowdown, and expanded long ~43%. Every paired process loses:
+prior short range 0.685446–0.700656; prior long 0.679979–0.723953; expanded long
+0.691874–0.728278. Expanded short instead favors it (1.098320–1.188221).
+These conflicting consumer/block observations remain evidence, not grounds
+for discarding the regressions. Non-contiguous unit-stride 31x17 layouts also
+lose ~24–26% in prior and expanded-long modes.
+
+All 200 wide unit-stride expanded-short workload medians favor selection
+(1.177790–2.452840), but three individual process ratios lose: 65x1
+negative-both (0.720698), 65x1 padded (0.813770), 95x17 padded (0.781489).
+All forty focused wide expanded-long workloads win in every process:
+median range 1.125139–2.475388, minimum paired process ratio 1.012096.
+At width 63, all fifteen unit-stride expanded-long cases lose: median range
+0.643569–0.869323, minimum process ratio 0.625263. Widths 64/65 win there in
+every process. The gate activates the fast path, but its below-gate behavior
+still fails the intended policy. Raising the threshold alone has no demonstrated
+solution to this below-gate regression.
+
+Large 2048x512 unit-stride DMD medians span 1.787401–2.475388 across modes.
+Fresh scoped selected-DMD/C++ ratios are 2.016030–2.392246 in expanded short
+and 2.143868–2.459340 in expanded long. Signed LDC/C++ ratios remain
+2.396676–2.676144 across those modes. The C++ reference omits public validation;
+these are execution-reference diagnostics, not equivalent full-public parity.
+LDC keeps the original algorithmic route; no LDC gain is claimed. Selected
+process spread peaks at 169.572% DMD and 424.913% LDC across modes, reinforcing
+limits on near-one or small claimed improvements.
+
+Decision: XPS qualification is complete and **Production promotion is blocked
+by reproducible small-operation regressions**. Preserve all three rejected
+selection formulations and prior PR29/PR31 results. Research PR33 may integrate
+as evidence independently of Production adoption; neither repository is merged
+by this evaluation, and Production PR61 is unchanged.
+
+Next isolated step: compare generated and linked code for original versus
+below-gate selected operations in prior-short, prior-long and expanded-long
+binaries, including the unchanged generic executor and its call sites. Test a
+formulation that isolates the fast executor from the original small-operation
+route; do not select it from source appearance alone. Repeat both consumer
+shapes and block lengths, then qualify the actual corrected candidate on XPS.
+Keep DMD/C++ and signed-LDC residual work open separately.
