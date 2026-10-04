@@ -12,13 +12,21 @@ BOUNDARY = ROOT.with_name('m3_conversion_boundary')
 INDEXED_HASH = 'be0e77145fb726ad0a629f23d3d6920f38333016bbe29e39cbaf237c2ac2b9bc'
 INDEXED_BODY = '1e12d663df492a5320df276f34039af51cd4c52b8cc9a5c63e9a23712473ec4d'
 OLD_LOOP = 'foreach (x, value; row)\n                destination[x] = cast(float)value;'
-NEW_LOOP = '''scope const(ubyte)[] remainingSource = row;
-            scope auto remainingDestination = destination;
-            while (remainingSource.length != 0 && remainingDestination.length != 0)
+NEW_LOOP = '''if (width < 64)
             {
-                remainingDestination[0] = cast(float)remainingSource[0];
-                remainingSource = remainingSource[1 .. $];
-                remainingDestination = remainingDestination[1 .. $];
+                foreach (x, value; row)
+                    destination[x] = cast(float)value;
+            }
+            else
+            {
+                scope const(ubyte)[] remainingSource = row;
+                scope auto remainingDestination = destination;
+                while (remainingSource.length != 0 && remainingDestination.length != 0)
+                {
+                    remainingDestination[0] = cast(float)remainingSource[0];
+                    remainingSource = remainingSource[1 .. $];
+                    remainingDestination = remainingDestination[1 .. $];
+                }
             }'''
 
 
@@ -40,7 +48,7 @@ def load_indexed():
         def control(assembly, position):
             result = original_control(assembly, position)
             if result['scalar_body_sha256'] == INDEXED_BODY:
-                raise ValueError('paired slices produced unchanged indexed scalar code')
+                raise ValueError('hybrid loop produced unchanged indexed scalar code')
             return result
 
         boundary.linked_control = control
@@ -66,7 +74,7 @@ def main():
         boundary = indexed.load_boundary()
         metadata = json.loads((root / 'collection.json').read_text())
         metadata['indexed_adapter_inputs'] = {'collect.py': INDEXED_HASH}
-        metadata['scope'] = 'focused 72-workload sweep; DMD paired remaining slices with preserved boundary'
+        metadata['scope'] = 'focused 72-workload sweep; DMD hybrid loop: foreach below width 64, paired slices from 64'
         (root / 'collection.json').write_text(json.dumps(metadata, indent=2) + '\n')
         (root / 'SHA256SUMS').write_text(boundary.manifest(root))
 
