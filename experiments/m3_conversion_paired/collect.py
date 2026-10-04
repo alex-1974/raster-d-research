@@ -49,6 +49,25 @@ def scalar_body_digest(assembly, symbol):
     raise ValueError('function return not found: ' + symbol)
 
 
+
+def scalar_digest_without_helper_relocation(assembly, symbol):
+    blocks = [b for b in re.split(r'(?=^[0-9a-f]+ <)', assembly, flags=re.M) if b]
+    block = next(b for b in blocks if f'<{symbol}>:' in b.splitlines()[0])
+    chunks = []
+    for line in block.splitlines()[1:]:
+        match = re.match(r'\s*[0-9a-f]+:\s*((?:[0-9a-f]{2} )+)\s*(.+)', line)
+        if match:
+            raw = bytes.fromhex(match[1])
+            instruction = match[2].strip()
+            if 'call' in instruction and 'convertPairedPointerRow' in instruction:
+                if len(raw) != 5 or raw[0] != 0xE8:
+                    raise ValueError('unexpected pointer helper call encoding')
+                raw = b'\xe8\x00\x00\x00\x00'
+            chunks.append(raw)
+            if instruction == 'ret':
+                return hashlib.sha256(b''.join(chunks)).hexdigest()
+    raise ValueError('scalar return not found: ' + symbol)
+
 def load_indexed():
     path = INDEXED / 'collect.py'
     if hashlib.sha256(path.read_bytes()).hexdigest() != INDEXED_HASH:
@@ -118,10 +137,9 @@ def load_indexed():
                 indexed.scalar_body_digest = indexed_digest
             metadata = json.loads((root / 'collection.json').read_text())
             helper_digests = set()
-            scalar_by_position = {}
+            scalar_digests = set()
             for item in metadata['cohorts']:
                 if item['compiler'] == 'dmd':
-                    position_digests = scalar_by_position.setdefault(item['position'], set())
                     for mode in boundary.MODES:
                         full = gzip.decompress((root / item['cohort'] / mode / 'full-linked-assembly.txt.gz').read_bytes()).decode()
                         blocks = [b for b in re.split(r'(?=^[0-9a-f]+ <)', full, flags=re.M) if b]
@@ -132,9 +150,9 @@ def load_indexed():
                             raise ValueError('replay missing unique DMD pointer helper call')
                         symbol = helper[0].splitlines()[0].split('<', 1)[1].split('>:', 1)[0]
                         helper_digests.add(scalar_body_digest(full, symbol))
-                        position_digests.add(scalar_body_digest(full, boundary.SCALAR))
-            if any(len(digests) != 1 for digests in scalar_by_position.values()):
-                raise ValueError('DMD scalar code differs across modes at a placement')
+                        scalar_digests.add(scalar_digest_without_helper_relocation(full, boundary.SCALAR))
+            if any(item['compiler'] == 'dmd' for item in metadata['cohorts']) and len(scalar_digests) != 1:
+                raise ValueError('DMD scalar code differs beyond helper-call relocation')
             if any(item['compiler'] == 'dmd' for item in metadata['cohorts']) and len(helper_digests) != 1:
                 raise ValueError('pointer helper machine code differs across modes or positions')
             return result
