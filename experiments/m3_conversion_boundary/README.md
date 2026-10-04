@@ -15,7 +15,7 @@ scalar template declaration is adapted: where `vectorEnabled` is true (DMD
 x86-64, portable override off), `pragma(inline, false)` preserves the scalar
 row executor as a function. The inactive alternative is the original template
 declaration. LDC, forced portable and other targets retain that declaration.
-No new pointer operations, instructions, public exports or `@trusted` code are
+No new pointer operations, handwritten instructions, public exports or `@trusted` code are
 introduced. Compiler safety/attribute gates still apply to the actual source.
 
 Each binary compares complete public Original, selected-with-boundary and

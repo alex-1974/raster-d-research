@@ -111,6 +111,7 @@ def collect_mode(audit, overlay, output, compiler, position, mode, processes):
             actual.insert(1, '-L-T' + str(script))
         if timing_build:
             (log.parent / 'actual-timing-link-command.json').write_text(json.dumps(actual, indent=2) + '\n')
+            (log.parent / 'gnu-ld-version.txt').write_bytes(subprocess.check_output(['ld', '--version']))
         result = original_run(actual, log, cwd, succeeds)
         if timing_build:
             binary = Path(next(arg[4:] for arg in actual if arg.startswith('-of=')))
@@ -234,6 +235,8 @@ def main():
         raise ValueError('required DUB 1.40.0')
     root = args.output.resolve()
     root.mkdir(parents=True, exist_ok=False)
+    own_inputs = {p.name: hashlib.sha256(p.read_bytes()).hexdigest()
+                  for p in ROOT.glob('*.py')}
     audit = load_parent()
     parent_hashes = {p.name: hashlib.sha256(p.read_bytes()).hexdigest() for p in PARENT.iterdir()
                      if p.is_file() and p.suffix in {'.py', '.d', '.cpp', '.json'}}
@@ -259,10 +262,12 @@ def main():
     if parent_hashes != {p.name: hashlib.sha256(p.read_bytes()).hexdigest() for p in PARENT.iterdir()
                         if p.is_file() and p.suffix in {'.py', '.d', '.cpp', '.json'}}:
         raise ValueError('parent experiment changed during collection')
+    if own_inputs != {p.name: hashlib.sha256(p.read_bytes()).hexdigest() for p in ROOT.glob('*.py')}:
+        raise ValueError('boundary harness changed during collection')
     (root / 'collection.json').write_text(json.dumps({
         'cohorts': cohorts, 'compiler': args.compiler, 'positions': positions,
         'processes': args.processes, 'parent_inputs': parent_hashes,
-        'driver_sha256': hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
+        'own_inputs': own_inputs,
         'scope': 'focused 72-workload sweep; public selection with DMD scalar boundary',
     }, indent=2) + '\n')
     (root / 'summary.csv').write_text(replay(root))

@@ -1,3 +1,4 @@
+PASS old inlined candidate rejected by actual-call control
 PASS GNU linker offset 0 other function addresses fixed
 PASS GNU linker offset 8 other function addresses fixed
 PASS GNU linker offset 16 other function addresses fixed

@@ -1,13 +1,14 @@
 #!/usr/bin/env python3
 """Check source adaptation and GNU linker controls without claiming D builds."""
 import hashlib
+import gzip
 import json
 from pathlib import Path
 import re
 import subprocess
 import sys
 import tempfile
-from collect import PARENT, linker_script, load_parent, preserve_boundary
+from collect import PARENT, linker_script, linked_control, load_parent, preserve_boundary
 
 
 def main():
@@ -18,6 +19,15 @@ def main():
         if hashlib.sha256(data).hexdigest() != digest:
             raise ValueError('production source pin mismatch')
         sources[name] = data.decode()
+    prior = PARENT / 'evidence/2026-10-04-xps/prior-short/dmd-linked-assembly.txt.gz'
+    try:
+        linked_control(gzip.decompress(prior.read_bytes()).decode(), 'native')
+    except ValueError as error:
+        if 'scalar boundary not preserved' not in str(error):
+            raise
+        print('PASS old inlined candidate rejected by actual-call control')
+    else:
+        raise ValueError('inlined prior candidate falsely accepted')
     with tempfile.TemporaryDirectory(prefix='raster-boundary-setup-') as temp:
         root = Path(temp)
         for profile in ('prior', 'sweep'):
