@@ -1,7 +1,7 @@
-name: M3 Paired Remaining Slices and Controlled Placement
+name: M3 Bounded Pointer Kernel and Controlled Placement
 on:
   push:
-    branches: [research/m3-conversion-paired]
+    branches: [research/m3-conversion-paired, research/m3-conversion-hybrid-width64, research/m3-conversion-pointer-width64]
     paths:
       - 'experiments/m3_conversion_boundary/**'
       - 'experiments/m3_conversion_indexed/**'
@@ -58,6 +58,6 @@ jobs:
       - uses: actions/upload-artifact@v7
         if: always()
         with:
-          name: scalar-paired-${{ matrix.compiler }}-${{ matrix.position }}
+          name: scalar-pointer-${{ matrix.compiler }}-${{ matrix.position }}
           path: artifacts/
           retention-days: 14
