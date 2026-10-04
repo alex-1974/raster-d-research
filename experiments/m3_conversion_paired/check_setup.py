@@ -11,10 +11,22 @@ import collect as pointer
 
 def main():
     sys.modules['collect'] = pointer
-    spec = importlib.util.spec_from_file_location('indexed_setup', pointer.INDEXED / 'check_setup.py')
-    setup = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(setup)
-    setup.main()
+    original_load = pointer.load_boundary
+
+    def inherited_load():
+        boundary = original_load()
+        boundary.preserve_boundary = boundary._base_preserve_boundary
+        boundary.linked_control = boundary._base_linked_control
+        return boundary
+
+    pointer.load_boundary = inherited_load
+    try:
+        spec = importlib.util.spec_from_file_location('indexed_setup', pointer.INDEXED / 'check_setup.py')
+        setup = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(setup)
+        setup.main()
+    finally:
+        pointer.load_boundary = original_load
     boundary = pointer.load_boundary()
     helper = pointer.POINTER_HELPER
     compiler = os.environ.get('DC', 'dmd')
