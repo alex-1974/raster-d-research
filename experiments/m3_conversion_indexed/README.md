@@ -81,8 +81,35 @@ The inherited CLI supports `--compiler dmd|ldc2|both`,
 
 ## Status
 
-Local source isolation, old-code rejection and GNU linker smoke checks pass.
-The local environment has no D compiler. Independent six-job compiler CI
-must qualify actual source semantics, changed scalar code, preserved calls
-and requested positions. Hardware performance remains open. Production and
-the previous experiments remain unchanged; no promotion or merge is selected.
+All six jobs in [compiler CI run 37206330671](https://github.com/alex-1974/raster-d-research/actions/runs/37206330671)
+pass at source `4f93ec4814e1d346551de1c0be245dc4694d7967`.
+Independent archive SHA256 checks, 1,548 manifest entries and combined exact
+replay of all 4,104 summary rows pass. The twenty DMD bodies share a changed
+machine-code digest, differ from the old body, preserve actual calls and
+requested offsets, and keep all other retained function entries fixed across
+controlled placements in every mode. Generated inputs and 72 backing
+fingerprints agree. See [compact qualification record](evidence/ci-37206330671.json).
+This derived record does not replace full raw CI artifacts, retained on the
+run for 14 days.
+
+DMD's indexed body retains source and destination bounds checks; changed
+instruction shape does not establish speed or stability. CI uses one process
+per cohort/mode for qualification only. Six-process XPS hardware performance
+remains open. Production and previous experiments remain unchanged.
+
+## Pinned XPS launcher
+
+`run_xps.sh` deliberately executes qualified source
+`4f93ec4814e1d346551de1c0be245dc4694d7967` and Production
+`7dcdf01babf87e9a80af2864fbad75efe8e7d0ef` in detached sibling worktrees.
+It checks setup, resolves dependencies, collects all 144 processes, verifies
+manifest and exact replay, and emits an upload archive. Branches are not
+switched. Worktrees and partial evidence remain on failure.
+
+```bash
+bash experiments/m3_conversion_indexed/run_xps.sh
+```
+
+Optional first argument: workspace `libs` directory. Append `--prepare-only`
+for worktree preparation without measurement. The launcher is added after
+the qualified collector source commit and executes that earlier pinned state.
