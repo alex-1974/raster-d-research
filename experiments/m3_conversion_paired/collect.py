@@ -12,7 +12,7 @@ BOUNDARY = ROOT.with_name('m3_conversion_boundary')
 INDEXED_HASH = 'be0e77145fb726ad0a629f23d3d6920f38333016bbe29e39cbaf237c2ac2b9bc'
 INDEXED_BODY = '1e12d663df492a5320df276f34039af51cd4c52b8cc9a5c63e9a23712473ec4d'
 OLD_LOOP = 'foreach (x, value; row)\n                destination[x] = cast(float)value;'
-NEW_LOOP = '''scope auto remainingSource = row;
+NEW_LOOP = '''scope const(ubyte)[] remainingSource = row;
             scope auto remainingDestination = destination;
             while (remainingSource.length != 0 && remainingDestination.length != 0)
             {

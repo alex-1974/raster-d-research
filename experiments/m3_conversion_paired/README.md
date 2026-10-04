@@ -4,7 +4,7 @@ Refs #32/#22; follows PR35's qualified negative indexed-loop result.
 This Research candidate changes only the active selected DMD scalar loop:
 
 ```d
-scope auto remainingSource = row;
+scope const(ubyte)[] remainingSource = row;
 scope auto remainingDestination = destination;
 while (remainingSource.length != 0 && remainingDestination.length != 0)
 {
