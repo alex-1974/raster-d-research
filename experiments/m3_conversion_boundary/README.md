@@ -95,9 +95,38 @@ four placements; the full collector is required for that gate.
 
 ## Current status
 
-Local source adaptation, parent/Production hashes, Python syntax and four GNU
-linker smoke replicas pass. The local execution environment has no D compiler;
-D compilation, preserved actual call sites and inherited gates are qualified
-through the new independent compiler CI. No six-process hardware timings or
-candidate speedup are claimed before actual collection. Promotion remains
-blocked pending the corrected candidate's semantic and performance evidence.
+Source commit `cd293ff6443ebce0fdbeec1d2962eb85a4e13ec9` passed all six
+jobs in [CI run 37197495646](https://github.com/alex-1974/raster-d-research/actions/runs/37197495646).
+Five DMD placements and the LDC native control each passed all four modes,
+inherited gates, individual manifests and replay (one process per mode).
+All six ZIP archive digests and 1,548 manifest entries were independently
+verified after download. Combining their unchanged child directories passes
+the full replay: 72 cross-cohort backing fingerprints, identical generated
+inputs, actual scalar calls at both dispatchers, exact requested offsets,
+and all other retained DMD function entries fixed across the four controlled
+placements in every mode. The combined summary contains 4,104 rows.
+
+[Compact qualification record](evidence/ci-37197495646.json) retains actual
+call instructions, entries, binary/listing hashes and digests of the other
+function maps. It is a derived record, not the complete raw CI evidence.
+Full archives remain attached to the CI run (14-day artifact retention).
+No CI timing is accepted as a hardware performance result. Six-process XPS
+measurements and any candidate speedup remain open; Production is unchanged.
+
+## Pinned XPS launcher
+
+`run_xps.sh` creates detached sibling worktrees at the qualified source commit
+above and Production `7dcdf01babf87e9a80af2864fbad75efe8e7d0ef`, resolves
+pinned dependencies, checks setup, runs the complete 144-process collection,
+verifies its manifest and exact replay, then emits an upload archive. Existing
+working branches are not switched. Worktrees and partial evidence are retained
+on failure. Frequency and thermal conditions remain unmonitored.
+
+```bash
+bash experiments/m3_conversion_boundary/run_xps.sh
+```
+
+Optional first argument: workspace `libs` directory. Append `--prepare-only`
+to check pinned worktree preparation without measuring. The launcher itself
+is added after the qualified source commit; it deliberately executes that
+older, qualified collector rather than the current branch head.

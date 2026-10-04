@@ -1,0 +1,517 @@
+{
+  "checks": {
+    "archive_digests": true,
+    "combined_replay": true,
+    "cross_cohort_backing_fingerprints": 72,
+    "individual_manifests": true,
+    "individual_replays": true,
+    "other_function_addresses_fixed": true
+  },
+  "placements": [
+    {
+      "binary_sha256": "81193aced6ff73043f2602184de09130fd251107f076cfcb4ba244cc604e118d",
+      "callers": {
+        "convertApprovedUbyteToFloatAffine2D": {
+          "entry": "00000000000bfdcc",
+          "scalar_calls": [
+            "bff3c:\te8 33 0d 00 00       \tcall   c0c74 <_D6raster27variant_selected64_dispatch__T19executeApprovedRowsThTfZQBaFNaNbNiNfMPxhlMPflmmZv>"
+          ]
+        },
+        "convertUbyteToFloatRasterPlane": {
+          "entry": "00000000000c0444",
+          "scalar_calls": [
+            "c0747:\te8 28 05 00 00       \tcall   c0c74 <_D6raster27variant_selected64_dispatch__T19executeApprovedRowsThTfZQBaFNaNbNiNfMPxhlMPflmmZv>"
+          ]
+        }
+      },
+      "cohort": "dmd-native",
+      "full_assembly_sha256": "92475c18243937893b08e9314b4fcd6e6d5fa19e749e40958cc9b4f9c64d02c2",
+      "mode": "prior-short",
+      "other_entries_sha256": "18599550c02e8a10b4df535e53621779b4b5b9d21b18c794bf20ce2ddf14cf97",
+      "other_function_count": 3450,
+      "requested_position": "native",
+      "scalar_entry": "0xc0c74",
+      "scalar_entry_mod32": 20
+    },
+    {
+      "binary_sha256": "f0da8f51a6252dee5458707c3b8cdae28c77433f39c5d38859e8331ba8bab830",
+      "callers": {
+        "convertApprovedUbyteToFloatAffine2D": {
+          "entry": "00000000000bfdcc",
+          "scalar_calls": [
+            "bff3c:\te8 33 0d 00 00       \tcall   c0c74 <_D6raster27variant_selected64_dispatch__T19executeApprovedRowsThTfZQBaFNaNbNiNfMPxhlMPflmmZv>"
+          ]
+        },
+        "convertUbyteToFloatRasterPlane": {
+          "entry": "00000000000c0444",
+          "scalar_calls": [
+            "c0747:\te8 28 05 00 00       \tcall   c0c74 <_D6raster27variant_selected64_dispatch__T19executeApprovedRowsThTfZQBaFNaNbNiNfMPxhlMPflmmZv>"
+          ]
+        }
+      },
+      "cohort": "dmd-native",
+      "full_assembly_sha256": "0586f3618593e2377431df56a6456c72e593b391b1c2b991ff58cc407c470a25",
+      "mode": "prior-long",
+      "other_entries_sha256": "18599550c02e8a10b4df535e53621779b4b5b9d21b18c794bf20ce2ddf14cf97",
+      "other_function_count": 3450,
+      "requested_position": "native",
+      "scalar_entry": "0xc0c74",
+      "scalar_entry_mod32": 20
+    },
+    {
+      "binary_sha256": "e6a547d2aa3cf413feaa7bde4bec4b813a164b17a31cb7bfcfc3930bc80b4fad",
+      "callers": {
+        "convertApprovedUbyteToFloatAffine2D": {
+          "entry": "00000000000c030c",
+          "scalar_calls": [
+            "c047c:\te8 33 0d 00 00       \tcall   c11b4 <_D6raster27variant_selected64_dispatch__T19executeApprovedRowsThTfZQBaFNaNbNiNfMPxhlMPflmmZv>"
+          ]
+        },
+        "convertUbyteToFloatRasterPlane": {
+          "entry": "00000000000c0984",
+          "scalar_calls": [
+            "c0c87:\te8 28 05 00 00       \tcall   c11b4 <_D6raster27variant_selected64_dispatch__T19executeApprovedRowsThTfZQBaFNaNbNiNfMPxhlMPflmmZv>"
+          ]
+        }
+      },
+      "cohort": "dmd-native",
+      "full_assembly_sha256": "bf27fcc5bf516d2284ec34644ea415e6b3e889abcce4dc65b97e65d40806d62c",
+      "mode": "sweep-short",
+      "other_entries_sha256": "9cdd2f1aae26c66975f23fd7b714abad5fcd9220dc53dfda748aa19a05667122",
+      "other_function_count": 3454,
+      "requested_position": "native",
+      "scalar_entry": "0xc11b4",
+      "scalar_entry_mod32": 20
+    },
+    {
+      "binary_sha256": "853251f518750cb430d0fb38e01bdb0f679e8734ffd8c1705ae53794b081c277",
+      "callers": {
+        "convertApprovedUbyteToFloatAffine2D": {
+          "entry": "00000000000c030c",
+          "scalar_calls": [
+            "c047c:\te8 33 0d 00 00       \tcall   c11b4 <_D6raster27variant_selected64_dispatch__T19executeApprovedRowsThTfZQBaFNaNbNiNfMPxhlMPflmmZv>"
+          ]
+        },
+        "convertUbyteToFloatRasterPlane": {
+          "entry": "00000000000c0984",
+          "scalar_calls": [
+            "c0c87:\te8 28 05 00 00       \tcall   c11b4 <_D6raster27variant_selected64_dispatch__T19executeApprovedRowsThTfZQBaFNaNbNiNfMPxhlMPflmmZv>"
+          ]
+        }
+      },
+      "cohort": "dmd-native",
+      "full_assembly_sha256": "a8158a446b16fb588c2024ed616476dda72f2addc4a61a00f5a6e1e861b99c40",
+      "mode": "sweep-long",
+      "other_entries_sha256": "9cdd2f1aae26c66975f23fd7b714abad5fcd9220dc53dfda748aa19a05667122",
+      "other_function_count": 3454,
+      "requested_position": "native",
+      "scalar_entry": "0xc11b4",
+      "scalar_entry_mod32": 20
+    },
+    {
+      "binary_sha256": "774563a89f7a6cf4537d2879226a0b290e10bc7dd62dc2fb6b09db43f2ece180",
+      "callers": {
+        "convertApprovedUbyteToFloatAffine2D": {
+          "entry": "00000000000c160c",
+          "scalar_calls": [
+            "c177c:\te8 7f 18 fd ff       \tcall   93000 <_D6raster27variant_selected64_dispatch__T19executeApprovedRowsThTfZQBaFNaNbNiNfMPxhlMPflmmZv>"
+          ]
+        },
+        "convertUbyteToFloatRasterPlane": {
+          "entry": "00000000000c1c84",
+          "scalar_calls": [
+            "c1f87:\te8 74 10 fd ff       \tcall   93000 <_D6raster27variant_selected64_dispatch__T19executeApprovedRowsThTfZQBaFNaNbNiNfMPxhlMPflmmZv>"
+          ]
+        }
+      },
+      "cohort": "dmd-0",
+      "full_assembly_sha256": "5265589ba8301c61e4f6c2665c060f1a7aaacc529630494af01d3bb94b1022c6",
+      "mode": "prior-short",
+      "other_entries_sha256": "a682fc4e021a498d20c58e56dd65888dc6922c83a95dfcd43db331d820aae0d7",
+      "other_function_count": 3470,
+      "requested_position": "0",
+      "scalar_entry": "0x93000",
+      "scalar_entry_mod32": 0
+    },
+    {
+      "binary_sha256": "58c1bb4304cacca1fc1443593351c202f0fca3dd55cc5c401d27953247da60a6",
+      "callers": {
+        "convertApprovedUbyteToFloatAffine2D": {
+          "entry": "00000000000c160c",
+          "scalar_calls": [
+            "c177c:\te8 7f 18 fd ff       \tcall   93000 <_D6raster27variant_selected64_dispatch__T19executeApprovedRowsThTfZQBaFNaNbNiNfMPxhlMPflmmZv>"
+          ]
+        },
+        "convertUbyteToFloatRasterPlane": {
+          "entry": "00000000000c1c84",
+          "scalar_calls": [
+            "c1f87:\te8 74 10 fd ff       \tcall   93000 <_D6raster27variant_selected64_dispatch__T19executeApprovedRowsThTfZQBaFNaNbNiNfMPxhlMPflmmZv>"
+          ]
+        }
+      },
+      "cohort": "dmd-0",
+      "full_assembly_sha256": "8e8cd2df246565342e041fc14e29e1f6c70d18b06a6b9e51066a5163bb0a7301",
+      "mode": "prior-long",
+      "other_entries_sha256": "a682fc4e021a498d20c58e56dd65888dc6922c83a95dfcd43db331d820aae0d7",
+      "other_function_count": 3470,
+      "requested_position": "0",
+      "scalar_entry": "0x93000",
+      "scalar_entry_mod32": 0
+    },
+    {
+      "binary_sha256": "f017852f9d6c71e6f9a701763c7378902a5f0cd621690ebf2903fd138cd0a110",
+      "callers": {
+        "convertApprovedUbyteToFloatAffine2D": {
+          "entry": "00000000000c1b4c",
+          "scalar_calls": [
+            "c1cbc:\te8 3f 13 fd ff       \tcall   93000 <_D6raster27variant_selected64_dispatch__T19executeApprovedRowsThTfZQBaFNaNbNiNfMPxhlMPflmmZv>"
+          ]
+        },
+        "convertUbyteToFloatRasterPlane": {
+          "entry": "00000000000c21c4",
+          "scalar_calls": [
+            "c24c7:\te8 34 0b fd ff       \tcall   93000 <_D6raster27variant_selected64_dispatch__T19executeApprovedRowsThTfZQBaFNaNbNiNfMPxhlMPflmmZv>"
+          ]
+        }
+      },
+      "cohort": "dmd-0",
+      "full_assembly_sha256": "692b2f6532df29b731111781d50c86a0adf07c316b33ef323a8e720af74a4814",
+      "mode": "sweep-short",
+      "other_entries_sha256": "9e05404ee67e5b44aaf5f21e861afb92b8d1039611a63f26c2932ffb0baec46a",
+      "other_function_count": 3473,
+      "requested_position": "0",
+      "scalar_entry": "0x93000",
+      "scalar_entry_mod32": 0
+    },
+    {
+      "binary_sha256": "746c1972ee853c4c24bb2dff921860c4aed81a3bb516901e6b3ec4c3b67028b0",
+      "callers": {
+        "convertApprovedUbyteToFloatAffine2D": {
+          "entry": "00000000000c1b4c",
+          "scalar_calls": [
+            "c1cbc:\te8 3f 13 fd ff       \tcall   93000 <_D6raster27variant_selected64_dispatch__T19executeApprovedRowsThTfZQBaFNaNbNiNfMPxhlMPflmmZv>"
+          ]
+        },
+        "convertUbyteToFloatRasterPlane": {
+          "entry": "00000000000c21c4",
+          "scalar_calls": [
+            "c24c7:\te8 34 0b fd ff       \tcall   93000 <_D6raster27variant_selected64_dispatch__T19executeApprovedRowsThTfZQBaFNaNbNiNfMPxhlMPflmmZv>"
+          ]
+        }
+      },
+      "cohort": "dmd-0",
+      "full_assembly_sha256": "69a3ac535c72933f94cde61e99ab532f040edf35695fdd719e294b565c0efaf7",
+      "mode": "sweep-long",
+      "other_entries_sha256": "9e05404ee67e5b44aaf5f21e861afb92b8d1039611a63f26c2932ffb0baec46a",
+      "other_function_count": 3473,
+      "requested_position": "0",
+      "scalar_entry": "0x93000",
+      "scalar_entry_mod32": 0
+    },
+    {
+      "binary_sha256": "f7589f880303224e535380f7aafb4ab0c05d1c0e4aac1c22d1e8d84b9d407a24",
+      "callers": {
+        "convertApprovedUbyteToFloatAffine2D": {
+          "entry": "00000000000c160c",
+          "scalar_calls": [
+            "c177c:\te8 87 18 fd ff       \tcall   93008 <_D6raster27variant_selected64_dispatch__T19executeApprovedRowsThTfZQBaFNaNbNiNfMPxhlMPflmmZv>"
+          ]
+        },
+        "convertUbyteToFloatRasterPlane": {
+          "entry": "00000000000c1c84",
+          "scalar_calls": [
+            "c1f87:\te8 7c 10 fd ff       \tcall   93008 <_D6raster27variant_selected64_dispatch__T19executeApprovedRowsThTfZQBaFNaNbNiNfMPxhlMPflmmZv>"
+          ]
+        }
+      },
+      "cohort": "dmd-8",
+      "full_assembly_sha256": "ebb95e49e684e57f05de2609511eb76949965fe007672fe6015bef3b72818a63",
+      "mode": "prior-short",
+      "other_entries_sha256": "a682fc4e021a498d20c58e56dd65888dc6922c83a95dfcd43db331d820aae0d7",
+      "other_function_count": 3470,
+      "requested_position": "8",
+      "scalar_entry": "0x93008",
+      "scalar_entry_mod32": 8
+    },
+    {
+      "binary_sha256": "2f21b0c59f9d8100787bd503cdf2061621724f0f705a67b44fe9995a086c56c6",
+      "callers": {
+        "convertApprovedUbyteToFloatAffine2D": {
+          "entry": "00000000000c160c",
+          "scalar_calls": [
+            "c177c:\te8 87 18 fd ff       \tcall   93008 <_D6raster27variant_selected64_dispatch__T19executeApprovedRowsThTfZQBaFNaNbNiNfMPxhlMPflmmZv>"
+          ]
+        },
+        "convertUbyteToFloatRasterPlane": {
+          "entry": "00000000000c1c84",
+          "scalar_calls": [
+            "c1f87:\te8 7c 10 fd ff       \tcall   93008 <_D6raster27variant_selected64_dispatch__T19executeApprovedRowsThTfZQBaFNaNbNiNfMPxhlMPflmmZv>"
+          ]
+        }
+      },
+      "cohort": "dmd-8",
+      "full_assembly_sha256": "a3947e3cd6502744956829e863ef6e435d5cce99a9748025a2a814dba6320813",
+      "mode": "prior-long",
+      "other_entries_sha256": "a682fc4e021a498d20c58e56dd65888dc6922c83a95dfcd43db331d820aae0d7",
+      "other_function_count": 3470,
+      "requested_position": "8",
+      "scalar_entry": "0x93008",
+      "scalar_entry_mod32": 8
+    },
+    {
+      "binary_sha256": "007d2d0f74d541e9ea50036dc96640ac029a827eaf27481f01efb5011c5d4aca",
+      "callers": {
+        "convertApprovedUbyteToFloatAffine2D": {
+          "entry": "00000000000c1b4c",
+          "scalar_calls": [
+            "c1cbc:\te8 47 13 fd ff       \tcall   93008 <_D6raster27variant_selected64_dispatch__T19executeApprovedRowsThTfZQBaFNaNbNiNfMPxhlMPflmmZv>"
+          ]
+        },
+        "convertUbyteToFloatRasterPlane": {
+          "entry": "00000000000c21c4",
+          "scalar_calls": [
+            "c24c7:\te8 3c 0b fd ff       \tcall   93008 <_D6raster27variant_selected64_dispatch__T19executeApprovedRowsThTfZQBaFNaNbNiNfMPxhlMPflmmZv>"
+          ]
+        }
+      },
+      "cohort": "dmd-8",
+      "full_assembly_sha256": "d93f79c90ac7dc9fe3d92f1e278fdcca0a003df891afb013f19cccf8986cae7b",
+      "mode": "sweep-short",
+      "other_entries_sha256": "9e05404ee67e5b44aaf5f21e861afb92b8d1039611a63f26c2932ffb0baec46a",
+      "other_function_count": 3473,
+      "requested_position": "8",
+      "scalar_entry": "0x93008",
+      "scalar_entry_mod32": 8
+    },
+    {
+      "binary_sha256": "5f71c82e99eba07efb21eeb1f48764ca0cf37eda932d29fe1b799f5df63d7c94",
+      "callers": {
+        "convertApprovedUbyteToFloatAffine2D": {
+          "entry": "00000000000c1b4c",
+          "scalar_calls": [
+            "c1cbc:\te8 47 13 fd ff       \tcall   93008 <_D6raster27variant_selected64_dispatch__T19executeApprovedRowsThTfZQBaFNaNbNiNfMPxhlMPflmmZv>"
+          ]
+        },
+        "convertUbyteToFloatRasterPlane": {
+          "entry": "00000000000c21c4",
+          "scalar_calls": [
+            "c24c7:\te8 3c 0b fd ff       \tcall   93008 <_D6raster27variant_selected64_dispatch__T19executeApprovedRowsThTfZQBaFNaNbNiNfMPxhlMPflmmZv>"
+          ]
+        }
+      },
+      "cohort": "dmd-8",
+      "full_assembly_sha256": "e4ec542da02bf4acdd4bd8be539d377e4bb2a6801601838601866abd46414071",
+      "mode": "sweep-long",
+      "other_entries_sha256": "9e05404ee67e5b44aaf5f21e861afb92b8d1039611a63f26c2932ffb0baec46a",
+      "other_function_count": 3473,
+      "requested_position": "8",
+      "scalar_entry": "0x93008",
+      "scalar_entry_mod32": 8
+    },
+    {
+      "binary_sha256": "affc717b533ced2d634a4a2c986bf5ffcc5fd9ba353da5214ba194be9bae7b68",
+      "callers": {
+        "convertApprovedUbyteToFloatAffine2D": {
+          "entry": "00000000000c160c",
+          "scalar_calls": [
+            "c177c:\te8 8f 18 fd ff       \tcall   93010 <_D6raster27variant_selected64_dispatch__T19executeApprovedRowsThTfZQBaFNaNbNiNfMPxhlMPflmmZv>"
+          ]
+        },
+        "convertUbyteToFloatRasterPlane": {
+          "entry": "00000000000c1c84",
+          "scalar_calls": [
+            "c1f87:\te8 84 10 fd ff       \tcall   93010 <_D6raster27variant_selected64_dispatch__T19executeApprovedRowsThTfZQBaFNaNbNiNfMPxhlMPflmmZv>"
+          ]
+        }
+      },
+      "cohort": "dmd-16",
+      "full_assembly_sha256": "d2456ba71b0fbf8ada15502a5369f4838e17cdbbcd752c36fc72de006379e861",
+      "mode": "prior-short",
+      "other_entries_sha256": "a682fc4e021a498d20c58e56dd65888dc6922c83a95dfcd43db331d820aae0d7",
+      "other_function_count": 3470,
+      "requested_position": "16",
+      "scalar_entry": "0x93010",
+      "scalar_entry_mod32": 16
+    },
+    {
+      "binary_sha256": "90cc6ea8e451b52a8395605406b1cfa652a8c44af7cbaae5644b78af64f2c9ba",
+      "callers": {
+        "convertApprovedUbyteToFloatAffine2D": {
+          "entry": "00000000000c160c",
+          "scalar_calls": [
+            "c177c:\te8 8f 18 fd ff       \tcall   93010 <_D6raster27variant_selected64_dispatch__T19executeApprovedRowsThTfZQBaFNaNbNiNfMPxhlMPflmmZv>"
+          ]
+        },
+        "convertUbyteToFloatRasterPlane": {
+          "entry": "00000000000c1c84",
+          "scalar_calls": [
+            "c1f87:\te8 84 10 fd ff       \tcall   93010 <_D6raster27variant_selected64_dispatch__T19executeApprovedRowsThTfZQBaFNaNbNiNfMPxhlMPflmmZv>"
+          ]
+        }
+      },
+      "cohort": "dmd-16",
+      "full_assembly_sha256": "4bf1e8514103706e5e06e432be053e895ecf2e3e4a49977de2a667419057c3c4",
+      "mode": "prior-long",
+      "other_entries_sha256": "a682fc4e021a498d20c58e56dd65888dc6922c83a95dfcd43db331d820aae0d7",
+      "other_function_count": 3470,
+      "requested_position": "16",
+      "scalar_entry": "0x93010",
+      "scalar_entry_mod32": 16
+    },
+    {
+      "binary_sha256": "b662af8318545667f05b00a85236b26db1148d807dc5e2dec696477a7a4e2e06",
+      "callers": {
+        "convertApprovedUbyteToFloatAffine2D": {
+          "entry": "00000000000c1b4c",
+          "scalar_calls": [
+            "c1cbc:\te8 4f 13 fd ff       \tcall   93010 <_D6raster27variant_selected64_dispatch__T19executeApprovedRowsThTfZQBaFNaNbNiNfMPxhlMPflmmZv>"
+          ]
+        },
+        "convertUbyteToFloatRasterPlane": {
+          "entry": "00000000000c21c4",
+          "scalar_calls": [
+            "c24c7:\te8 44 0b fd ff       \tcall   93010 <_D6raster27variant_selected64_dispatch__T19executeApprovedRowsThTfZQBaFNaNbNiNfMPxhlMPflmmZv>"
+          ]
+        }
+      },
+      "cohort": "dmd-16",
+      "full_assembly_sha256": "ee9de21f420909dca62d294da32d9c45c358095631724d98589a1e538c7ea4ea",
+      "mode": "sweep-short",
+      "other_entries_sha256": "9e05404ee67e5b44aaf5f21e861afb92b8d1039611a63f26c2932ffb0baec46a",
+      "other_function_count": 3473,
+      "requested_position": "16",
+      "scalar_entry": "0x93010",
+      "scalar_entry_mod32": 16
+    },
+    {
+      "binary_sha256": "8e680391729773f10f8dc895b330c9d1bb71db144df92c835904fb372de1981b",
+      "callers": {
+        "convertApprovedUbyteToFloatAffine2D": {
+          "entry": "00000000000c1b4c",
+          "scalar_calls": [
+            "c1cbc:\te8 4f 13 fd ff       \tcall   93010 <_D6raster27variant_selected64_dispatch__T19executeApprovedRowsThTfZQBaFNaNbNiNfMPxhlMPflmmZv>"
+          ]
+        },
+        "convertUbyteToFloatRasterPlane": {
+          "entry": "00000000000c21c4",
+          "scalar_calls": [
+            "c24c7:\te8 44 0b fd ff       \tcall   93010 <_D6raster27variant_selected64_dispatch__T19executeApprovedRowsThTfZQBaFNaNbNiNfMPxhlMPflmmZv>"
+          ]
+        }
+      },
+      "cohort": "dmd-16",
+      "full_assembly_sha256": "9eee371e83fa57f2e7679afc9090c84041b18efa76e1b25cf2ae1f2779807d94",
+      "mode": "sweep-long",
+      "other_entries_sha256": "9e05404ee67e5b44aaf5f21e861afb92b8d1039611a63f26c2932ffb0baec46a",
+      "other_function_count": 3473,
+      "requested_position": "16",
+      "scalar_entry": "0x93010",
+      "scalar_entry_mod32": 16
+    },
+    {
+      "binary_sha256": "ce15e70b81e74492a54a4c58c236c3e524ca920a86de322f8df1532cc2ebfd8a",
+      "callers": {
+        "convertApprovedUbyteToFloatAffine2D": {
+          "entry": "00000000000c160c",
+          "scalar_calls": [
+            "c177c:\te8 97 18 fd ff       \tcall   93018 <_D6raster27variant_selected64_dispatch__T19executeApprovedRowsThTfZQBaFNaNbNiNfMPxhlMPflmmZv>"
+          ]
+        },
+        "convertUbyteToFloatRasterPlane": {
+          "entry": "00000000000c1c84",
+          "scalar_calls": [
+            "c1f87:\te8 8c 10 fd ff       \tcall   93018 <_D6raster27variant_selected64_dispatch__T19executeApprovedRowsThTfZQBaFNaNbNiNfMPxhlMPflmmZv>"
+          ]
+        }
+      },
+      "cohort": "dmd-24",
+      "full_assembly_sha256": "8bd41c55ec883806b90c5cc858c2d0d4c85c2255051a1f11f3d95e25260fbee5",
+      "mode": "prior-short",
+      "other_entries_sha256": "a682fc4e021a498d20c58e56dd65888dc6922c83a95dfcd43db331d820aae0d7",
+      "other_function_count": 3470,
+      "requested_position": "24",
+      "scalar_entry": "0x93018",
+      "scalar_entry_mod32": 24
+    },
+    {
+      "binary_sha256": "e849d88643ba8a40d81c79ceb721d7832ba6d2c6497d5b305f5f930b749c1862",
+      "callers": {
+        "convertApprovedUbyteToFloatAffine2D": {
+          "entry": "00000000000c160c",
+          "scalar_calls": [
+            "c177c:\te8 97 18 fd ff       \tcall   93018 <_D6raster27variant_selected64_dispatch__T19executeApprovedRowsThTfZQBaFNaNbNiNfMPxhlMPflmmZv>"
+          ]
+        },
+        "convertUbyteToFloatRasterPlane": {
+          "entry": "00000000000c1c84",
+          "scalar_calls": [
+            "c1f87:\te8 8c 10 fd ff       \tcall   93018 <_D6raster27variant_selected64_dispatch__T19executeApprovedRowsThTfZQBaFNaNbNiNfMPxhlMPflmmZv>"
+          ]
+        }
+      },
+      "cohort": "dmd-24",
+      "full_assembly_sha256": "91196ed2f6688c7b2382e09c9398248d9d2faa4b334e09f812d413e922cc28ec",
+      "mode": "prior-long",
+      "other_entries_sha256": "a682fc4e021a498d20c58e56dd65888dc6922c83a95dfcd43db331d820aae0d7",
+      "other_function_count": 3470,
+      "requested_position": "24",
+      "scalar_entry": "0x93018",
+      "scalar_entry_mod32": 24
+    },
+    {
+      "binary_sha256": "359742402e6c4302c8332d3cfb477bb11fe9e3628ff900361bd77d54d3a476f2",
+      "callers": {
+        "convertApprovedUbyteToFloatAffine2D": {
+          "entry": "00000000000c1b4c",
+          "scalar_calls": [
+            "c1cbc:\te8 57 13 fd ff       \tcall   93018 <_D6raster27variant_selected64_dispatch__T19executeApprovedRowsThTfZQBaFNaNbNiNfMPxhlMPflmmZv>"
+          ]
+        },
+        "convertUbyteToFloatRasterPlane": {
+          "entry": "00000000000c21c4",
+          "scalar_calls": [
+            "c24c7:\te8 4c 0b fd ff       \tcall   93018 <_D6raster27variant_selected64_dispatch__T19executeApprovedRowsThTfZQBaFNaNbNiNfMPxhlMPflmmZv>"
+          ]
+        }
+      },
+      "cohort": "dmd-24",
+      "full_assembly_sha256": "d1024d914c5cce9c6153d885285c1de4943f3af3fa691168bae10b8152013da4",
+      "mode": "sweep-short",
+      "other_entries_sha256": "9e05404ee67e5b44aaf5f21e861afb92b8d1039611a63f26c2932ffb0baec46a",
+      "other_function_count": 3473,
+      "requested_position": "24",
+      "scalar_entry": "0x93018",
+      "scalar_entry_mod32": 24
+    },
+    {
+      "binary_sha256": "164e766b03e331b99d126f94261e872920ffb6266c568ee7a74535e5648c1e4a",
+      "callers": {
+        "convertApprovedUbyteToFloatAffine2D": {
+          "entry": "00000000000c1b4c",
+          "scalar_calls": [
+            "c1cbc:\te8 57 13 fd ff       \tcall   93018 <_D6raster27variant_selected64_dispatch__T19executeApprovedRowsThTfZQBaFNaNbNiNfMPxhlMPflmmZv>"
+          ]
+        },
+        "convertUbyteToFloatRasterPlane": {
+          "entry": "00000000000c21c4",
+          "scalar_calls": [
+            "c24c7:\te8 4c 0b fd ff       \tcall   93018 <_D6raster27variant_selected64_dispatch__T19executeApprovedRowsThTfZQBaFNaNbNiNfMPxhlMPflmmZv>"
+          ]
+        }
+      },
+      "cohort": "dmd-24",
+      "full_assembly_sha256": "a27fcdac931d710a773dd36f4636e06e750feda89f955aef9fa1c870a4ec0fbe",
+      "mode": "sweep-long",
+      "other_entries_sha256": "9e05404ee67e5b44aaf5f21e861afb92b8d1039611a63f26c2932ffb0baec46a",
+      "other_function_count": 3473,
+      "requested_position": "24",
+      "scalar_entry": "0x93018",
+      "scalar_entry_mod32": 24
+    }
+  ],
+  "processes_per_cohort_mode": 1,
+  "run_id": 37197495646,
+  "source_commit": "cd293ff6443ebce0fdbeec1d2962eb85a4e13ec9",
+  "summary_rows": 4104,
+  "summary_sha256": "a7114ebd2af9d34d44c3274a55f2a0014ac4725fc070d173791a2128ff56bd6d"
+}
