@@ -1,0 +1,14 @@
+{
+  "profile": "prior",
+  "block": "long",
+  "forms": [
+    "original",
+    "selected64",
+    "vector16store"
+  ],
+  "compilers": [
+    "dmd",
+    "ldc2"
+  ],
+  "samples_per_block": 8388608
+}

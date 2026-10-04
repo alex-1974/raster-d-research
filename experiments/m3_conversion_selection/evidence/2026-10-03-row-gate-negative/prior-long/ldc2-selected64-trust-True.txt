@@ -1,0 +1,75 @@
+/tmp/raster-public-selection-x0g380fg/control.d(18): Error: pointer arithmetic is not allowed in a `@safe` function
+    return (base + cast(ptrdiff_t)y * stride)[0 .. width];
+            ^
+/tmp/raster-public-selection-x0g380fg/control.d(45): Error: template instance `control.readApprovedRow!ubyte` error instantiating
+            readApprovedRow(source, sourceRowStride, y, width);
+                           ^
+/tmp/raster-public-selection-x0g380fg/control.d(132):        instantiated from here: `executeApprovedRows!(ubyte, ubyte)`
+    executeApprovedRows(a.ptr,2,b.ptr,2,2,2);
+                       ^
+/tmp/raster-public-selection-x0g380fg/control.d(29): Error: pointer arithmetic is not allowed in a `@safe` function
+    return (base + cast(ptrdiff_t)y * stride)[0 .. width];
+            ^
+/tmp/raster-public-selection-x0g380fg/control.d(47): Error: template instance `control.writeApprovedRow!ubyte` error instantiating
+            writeApprovedRow(target, targetRowStride, y, width);
+                            ^
+/tmp/raster-public-selection-x0g380fg/control.d(132):        instantiated from here: `executeApprovedRows!(ubyte, ubyte)`
+    executeApprovedRows(a.ptr,2,b.ptr,2,2,2);
+                       ^
+/tmp/raster-public-selection-x0g380fg/control.d(18): Error: pointer arithmetic is not allowed in a `@safe` function
+    return (base + cast(ptrdiff_t)y * stride)[0 .. width];
+            ^
+/tmp/raster-public-selection-x0g380fg/control.d(45): Error: template instance `control.readApprovedRow!float` error instantiating
+            readApprovedRow(source, sourceRowStride, y, width);
+                           ^
+/tmp/raster-public-selection-x0g380fg/control.d(133):        instantiated from here: `executeApprovedRows!(float, float)`
+    executeApprovedRows(c.ptr,2,d.ptr,2,2,2);
+                       ^
+/tmp/raster-public-selection-x0g380fg/control.d(29): Error: pointer arithmetic is not allowed in a `@safe` function
+    return (base + cast(ptrdiff_t)y * stride)[0 .. width];
+            ^
+/tmp/raster-public-selection-x0g380fg/control.d(47): Error: template instance `control.writeApprovedRow!float` error instantiating
+            writeApprovedRow(target, targetRowStride, y, width);
+                            ^
+/tmp/raster-public-selection-x0g380fg/control.d(133):        instantiated from here: `executeApprovedRows!(float, float)`
+    executeApprovedRows(c.ptr,2,d.ptr,2,2,2);
+                       ^
+/tmp/raster-public-selection-x0g380fg/control.d(18): Error: pointer arithmetic is not allowed in a `@safe` function
+    return (base + cast(ptrdiff_t)y * stride)[0 .. width];
+            ^
+/tmp/raster-public-selection-x0g380fg/control.d(45): Error: template instance `control.readApprovedRow!(Pod)` error instantiating
+            readApprovedRow(source, sourceRowStride, y, width);
+                           ^
+/tmp/raster-public-selection-x0g380fg/control.d(134):        instantiated from here: `executeApprovedRows!(Pod, Pod)`
+    executeApprovedRows(e.ptr,2,f.ptr,2,2,2);
+                       ^
+/tmp/raster-public-selection-x0g380fg/control.d(29): Error: pointer arithmetic is not allowed in a `@safe` function
+    return (base + cast(ptrdiff_t)y * stride)[0 .. width];
+            ^
+/tmp/raster-public-selection-x0g380fg/control.d(47): Error: template instance `control.writeApprovedRow!(Pod)` error instantiating
+            writeApprovedRow(target, targetRowStride, y, width);
+                            ^
+/tmp/raster-public-selection-x0g380fg/control.d(134):        instantiated from here: `executeApprovedRows!(Pod, Pod)`
+    executeApprovedRows(e.ptr,2,f.ptr,2,2,2);
+                       ^
+/tmp/raster-public-selection-x0g380fg/control.d(18): Error: pointer arithmetic is not allowed in a `@safe` function
+    return (base + cast(ptrdiff_t)y * stride)[0 .. width];
+            ^
+/tmp/raster-public-selection-x0g380fg/control.d(45): Error: template instance `control.readApprovedRow!(uint[2])` error instantiating
+            readApprovedRow(source, sourceRowStride, y, width);
+                           ^
+/tmp/raster-public-selection-x0g380fg/control.d(135):        instantiated from here: `executeApprovedRows!(uint[2], uint[2])`
+    executeApprovedRows(g.ptr,2,h.ptr,2,2,2);
+                       ^
+/tmp/raster-public-selection-x0g380fg/control.d(29): Error: pointer arithmetic is not allowed in a `@safe` function
+    return (base + cast(ptrdiff_t)y * stride)[0 .. width];
+            ^
+/tmp/raster-public-selection-x0g380fg/control.d(47): Error: template instance `control.writeApprovedRow!(uint[2])` error instantiating
+            writeApprovedRow(target, targetRowStride, y, width);
+                            ^
+/tmp/raster-public-selection-x0g380fg/control.d(135):        instantiated from here: `executeApprovedRows!(uint[2], uint[2])`
+    executeApprovedRows(g.ptr,2,h.ptr,2,2,2);
+                       ^
+/tmp/raster-public-selection-x0g380fg/control.d(136): Error: template instance `control.executeApprovedRows!(ubyte, float)` error instantiating
+    executeApprovedRows(a.ptr,2,c.ptr,2,2,2);
+                       ^

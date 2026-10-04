@@ -1,0 +1,2 @@
+dmd PASS full public codegen / inherited tests / backing and trust controls
+ldc2 PASS full public codegen / inherited tests / backing and trust controls

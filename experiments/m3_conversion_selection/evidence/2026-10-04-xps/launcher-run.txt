@@ -1,0 +1,13 @@
+QUALIFY prior-short
+dmd PASS full public codegen / inherited tests / backing and trust controls
+ldc2 PASS full public codegen / inherited tests / backing and trust controls
+QUALIFY prior-long
+dmd PASS full public codegen / inherited tests / backing and trust controls
+ldc2 PASS full public codegen / inherited tests / backing and trust controls
+QUALIFY sweep-short
+dmd PASS full public codegen / inherited tests / backing and trust controls
+ldc2 PASS full public codegen / inherited tests / backing and trust controls
+QUALIFY sweep-long
+dmd PASS full public codegen / inherited tests / backing and trust controls
+ldc2 PASS full public codegen / inherited tests / backing and trust controls
+PASS four independently compiled consumer/block audits

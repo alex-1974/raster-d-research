@@ -1,0 +1,42 @@
+name: M3 Conservative Exact Conversion Selection
+on:
+  push:
+    branches: [research/m3-conversion-selection]
+    paths:
+      - 'experiments/m3_conversion_selection/**'
+      - 'docs/research/m3-conversion-selection.md'
+      - '.github/workflows/m3-conversion-selection.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  qualify:
+    strategy:
+      fail-fast: false
+      matrix:
+        compiler: [dmd-2.111.0, ldc-1.41.0]
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/checkout@v7
+        with:
+          repository: alex-1974/raster-d
+          ref: 7dcdf01babf87e9a80af2864fbad75efe8e7d0ef
+          path: raster-d
+      - name: Expose sibling layout
+        run: ln -s "$GITHUB_WORKSPACE/raster-d" "$GITHUB_WORKSPACE/../raster-d"
+      - uses: dlang-community/setup-dlang@v2
+        with:
+          compiler: ${{ matrix.compiler }}
+          dub: 1.40.0
+          dc_format: shortname
+      - name: Launcher syntax
+        run: bash -n experiments/m3_conversion_selection/run_xps.sh
+      - name: Both consumers / both block lengths, semantic and trust qualification
+        run: python3 experiments/m3_conversion_selection/collect.py artifacts --compiler "$DC" --processes 1
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: conversion-selection-${{ matrix.compiler }}
+          path: artifacts/
+          retention-days: 14
