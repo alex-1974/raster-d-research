@@ -26,8 +26,9 @@ index is bounded by that length, and the pointers remain local. The assertion
 checks the slice invariant during assertion-enabled builds. The isolated
 `@safe` replacement is required to fail, so the trust boundary is tested
 independently. The bounded count loop must retain generated linked code as a
-separate call; collection and replay check that call and require identical
-helper machine code across DMD modes and controlled positions.
+separate call. Replay requires scalar machine code to match across modes at
+each placement, and helper machine code to match across all DMD modes and
+controlled positions. The scalar call displacement may vary with its placement.
 
 ## Scope and qualification
 
