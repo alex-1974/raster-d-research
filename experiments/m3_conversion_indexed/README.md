@@ -94,8 +94,10 @@ run for 14 days.
 
 DMD's indexed body retains source and destination bounds checks; changed
 instruction shape does not establish speed or stability. CI uses one process
-per cohort/mode for qualification only. Six-process XPS hardware performance
-remains open. Production and previous experiments remain unchanged.
+per cohort/mode for qualification only. Six-process XPS hardware qualification now passes, but the candidate fails
+the performance goal: native loses all twenty small approved expanded-case
+medians; even offsets 0/8 lose twelve. See [negative XPS result](../../docs/research/m3-indexed-xps-results.md).
+Keep this as a rejected candidate; Production and previous experiments remain unchanged.
 
 ## Pinned XPS launcher
 
