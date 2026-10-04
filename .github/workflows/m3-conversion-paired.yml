@@ -8,6 +8,14 @@ on:
       - 'experiments/m3_conversion_paired/**'
       - 'experiments/m3_conversion_selection/**'
       - '.github/workflows/m3-conversion-paired.yml'
+  pull_request:
+    branches: [research/m3-conversion-hybrid-width64]
+    paths:
+      - 'experiments/m3_conversion_boundary/**'
+      - 'experiments/m3_conversion_indexed/**'
+      - 'experiments/m3_conversion_paired/**'
+      - 'experiments/m3_conversion_selection/**'
+      - '.github/workflows/m3-conversion-paired.yml'
   workflow_dispatch:
 permissions:
   contents: read
