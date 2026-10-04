@@ -10,6 +10,7 @@ import sys
 
 ROOT = Path(__file__).resolve().parent
 INDEXED = ROOT.with_name('m3_conversion_indexed')
+BOUNDARY = ROOT.with_name('m3_conversion_boundary')
 INDEXED_HASH = 'be0e77145fb726ad0a629f23d3d6920f38333016bbe29e39cbaf237c2ac2b9bc'
 INDEXED_BODY = '1e12d663df492a5320df276f34039af51cd4c52b8cc9a5c63e9a23712473ec4d'
 HYBRID_BODY = 'ead375777e4af6042cdce7bc46053d9e8adbc2c1858a157a1a10ded3ba9deed2'
@@ -96,6 +97,8 @@ def load_indexed():
             helper_stats[position] = scalar_body_digest(assembly, symbol)
             return result
 
+        boundary._base_preserve_boundary = original_preserve
+        boundary._base_linked_control = original_control
         boundary.preserve_boundary = preserve
         boundary.linked_control = control
         replay = boundary.replay
