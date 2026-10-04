@@ -110,8 +110,11 @@ placements in every mode. The combined summary contains 4,104 rows.
 call instructions, entries, binary/listing hashes and digests of the other
 function maps. It is a derived record, not the complete raw CI evidence.
 Full archives remain attached to the CI run (14-day artifact retention).
-No CI timing is accepted as a hardware performance result. Six-process XPS
-measurements and any candidate speedup remain open; Production is unchanged.
+No CI timing is accepted as a hardware performance result. The full 144-process
+XPS collection now passes exact qualification. It establishes substantial scalar
+placement sensitivity, but native placement still regresses in small layouts.
+See [XPS results](../../docs/research/m3-boundary-xps-results.md). No Production
+promotion is selected.
 
 ## Pinned XPS launcher
 
