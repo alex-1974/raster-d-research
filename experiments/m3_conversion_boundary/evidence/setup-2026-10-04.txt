@@ -1,0 +1,6 @@
+PASS GNU linker offset 0 other function addresses fixed
+PASS GNU linker offset 8 other function addresses fixed
+PASS GNU linker offset 16 other function addresses fixed
+PASS GNU linker offset 24 other function addresses fixed
+PASS source adaptation / existing trust markers / four GNU linker replicas
+D compiler semantics and timings still require compiler qualification
