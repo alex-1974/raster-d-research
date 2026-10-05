@@ -1,0 +1,8 @@
+name "raster-m3-conversion-vector-refresh"
+description "Refresh exact SSE2 conversion against current Production pointer path"
+authors "Alexander Bernardi"
+license "MIT"
+targetType "executable"
+sourcePaths "generated"
+dflags "-preview=dip1000"
+dependency "raster-d" path="../../../raster-d"
