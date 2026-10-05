@@ -3,53 +3,65 @@
 Refs #39/#22. This follows PR #38 and the retained XPS pointer-vs-Hybrid
 comparison. That comparison showed only a small DMD pointer advantage at width
 64 and above, while the magnitude moved with binary placement and repeat pair.
-The next question is therefore deliberately narrower: does the loop-form
-difference survive when both forms live in the same executable and are measured
-in the same process?
 
-## Diagnostic
+## First same-binary control
 
-One executable contains four replicated Hybrid/Pointer pairs:
+The first CI version put replicated Hybrid and Pointer functions in one
+executable. That was still not layout-neutral enough: under DMD 2.111.0, widths
+31 and 63 execute identical scalar source yet showed pooled
+Hybrid/Pointer medians about 1.39x and 1.69x. Individual replicated pairs moved
+materially as well. LDC's identical-source controls also moved by pair.
 
-- pair 0 declares Hybrid then Pointer;
-- pair 1 declares Pointer then Hybrid;
-- pair 2 declares Hybrid then Pointer;
-- pair 3 declares Pointer then Hybrid.
+That negative control is intentionally retained. It demonstrates that merely
+sharing an executable does not remove function-placement effects.
 
-Every function is explicitly non-inlined. The build records the actual linked
-symbol addresses, so declaration order is not assumed to equal final placement.
-Widths 31 and 63 execute the identical original scalar foreach path in both
-forms and therefore act as placement/noise controls. Widths 64 and above differ
-only in the row execution body:
+## Shared-entry diagnostic
+
+The primary diagnostic now adds two non-inlined shared entry functions. For
+each function, both logical forms use the same entry address and the same caller.
+Widths below 64 return through exactly the same scalar path before the runtime
+form selector is inspected. At width 64 and above:
+
+- shared pair 0 maps selector 0 to Hybrid and selector 1 to Pointer;
+- shared pair 1 reverses that mapping.
+
+Reversing the selector branch provides a taken/fallthrough control without
+changing the logical algorithms. The older four separate-entry pairs remain as
+an explicit placement-sensitivity control.
+
+The two wide bodies are unchanged from the preceding research:
 
 - Hybrid: paired remaining safe slices;
 - Pointer: bounded local pointer/count traversal.
 
-Both operate on the same validated equal-length slices. The pointer body remains
-Research-only and is @trusted for local pointer indexing; no Production API or
-implementation is changed.
+Both operate on the same validated equal-length slices. Pointer indexing is
+confined to the Research-only trusted helper; no Production API or
+implementation changes.
 
-Each pair alternates measurement order by repetition and reports medians from
-17 samples after four warmups. Four independent same-binary pairs make it
-possible to distinguish a stable loop-form effect from one favorable code
-location. LDC is retained as a compiler/layout control, not as a proposed
-Production specialization.
+Each comparison alternates measurement order by repetition and reports medians
+from 17 samples after four warmups. CI builds one release executable per
+compiler, records its SHA256 and linked symbol addresses, then runs that exact
+binary six times. DMD 2.111.0 is primary; LDC 1.41.0 remains a compiler/layout
+control.
 
 ## Qualification rule
 
-Do not promote the pointer form from this diagnostic alone. It is worth a
-full-public follow-up only if:
+Do not promote the pointer form from this diagnostic alone. A full-public
+follow-up is justified only if the **shared-entry** result satisfies all of the
+following:
 
-1. width >= 64 favors Pointer repeatably across the replicated pairs rather
-   than only one linked location;
-2. widths 31/63, where both forms execute identical source, do not show
-   differences of the same order as the claimed wide-loop gain;
-3. repeated processes preserve the direction under ordinary native layout; and
-4. the result is not contradicted by the LDC/noise control.
+1. widths 31/63 remain near unity in both shared selectors, establishing that
+   identical-source timing is no longer dominated by placement;
+2. width >=64 favors Pointer repeatably in both reversed selector mappings;
+3. the wide advantage is materially larger than the narrow control spread;
+4. six repeated processes preserve the direction; and
+5. the LDC control does not expose a comparable unexplained shift.
 
-If these conditions fail, close the pointer source form as non-actionable
-placement-sensitive evidence and continue with another explanation for the
-remaining DMD conversion gap.
+The separate-entry numbers are diagnostic controls, not promotion evidence.
+
+If the shared-entry conditions fail, close the pointer source form as
+non-actionable placement-sensitive evidence and continue with another
+explanation for the remaining DMD conversion gap.
 
 ## Run
 
@@ -61,5 +73,7 @@ dub run \
   --force
 ```
 
-For hardware qualification, build once and run the same binary at least six
-times. Preserve the executable hash and `nm -n` output with every cohort.
+For XPS qualification, build once and run the same binary at least six times.
+Preserve the executable hash, compiler version and `nm -n` output with the
+cohort. No XPS run is warranted until compiler CI validates the shared-entry
+control.
