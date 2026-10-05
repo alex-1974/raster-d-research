@@ -1,0 +1,8 @@
+name "raster-m3-conversion-ldc-signed-row"
+description "Full-public LDC signed-row optimizer-boundary qualification"
+authors "Alexander Bernardi"
+license "MIT"
+targetType "executable"
+sourcePaths "generated"
+dflags "-preview=dip1000"
+dependency "raster-d" path="../../../raster-d"
