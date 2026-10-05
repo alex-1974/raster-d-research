@@ -1,0 +1,132 @@
+name: M3 Same-Binary Conversion Diagnostic
+on:
+  push:
+    branches: [research/m3-conversion-same-binary]
+    paths:
+      - 'experiments/m3_conversion_same_binary/**'
+      - '.github/workflows/m3-conversion-same-binary.yml'
+  pull_request:
+    branches: [research/m3-conversion-pointer-width64]
+    paths:
+      - 'experiments/m3_conversion_same_binary/**'
+      - '.github/workflows/m3-conversion-same-binary.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  qualify:
+    strategy:
+      fail-fast: false
+      matrix:
+        compiler: [dmd-2.111.0, ldc-1.41.0]
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: dlang-community/setup-dlang@v2
+        with:
+          compiler: ${{ matrix.compiler }}
+          dub: 1.40.0
+          dc_format: shortname
+
+      - name: Build one release binary
+        shell: bash
+        run: |
+          set -euo pipefail
+          dub build \
+            --root=experiments/m3_conversion_same_binary \
+            --compiler="$DC" \
+            --build=release \
+            --force
+          mkdir -p artifacts
+          cp experiments/m3_conversion_same_binary/raster-m3-conversion-same-binary artifacts/
+          sha256sum artifacts/raster-m3-conversion-same-binary > artifacts/binary.sha256
+          "$DC" --version > artifacts/compiler.txt
+
+      - name: Record linked function placement
+        shell: bash
+        run: |
+          set -euo pipefail
+          BIN=artifacts/raster-m3-conversion-same-binary
+          nm -n "$BIN" | grep -E 'm3_(hybrid|pointer)_[0-3]$' > artifacts/symbols.txt
+          cat artifacts/symbols.txt
+          python3 - <<'PY'
+          from pathlib import Path
+          lines = Path("artifacts/symbols.txt").read_text().splitlines()
+          names = [line.split()[-1] for line in lines if line.strip()]
+          expected = {f"m3_{kind}_{i}" for kind in ("hybrid","pointer") for i in range(4)}
+          if set(names) != expected or len(names) != 8:
+              raise SystemExit(f"unexpected symbol set: {names}")
+          addresses = {line.split()[-1]: int(line.split()[0], 16) for line in lines}
+          with Path("artifacts/pairs.txt").open("w") as out:
+              for i in range(4):
+                  h = addresses[f"m3_hybrid_{i}"]
+                  p = addresses[f"m3_pointer_{i}"]
+                  out.write(f"pair={i} hybrid=0x{h:x} pointer=0x{p:x} delta={p-h}\n")
+          PY
+          cat artifacts/pairs.txt
+
+      - name: Run repeated same-binary cohort
+        shell: bash
+        run: |
+          set -euo pipefail
+          BIN=artifacts/raster-m3-conversion-same-binary
+          for i in 0 1 2 3 4 5; do
+            "$BIN" > "artifacts/run-$i.txt"
+            grep '^m3_same_binary ' "artifacts/run-$i.txt" | wc -l
+          done
+
+      - name: Check semantic fingerprints and summarize ratios
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          import statistics
+
+          rows = []
+          fingerprints = {}
+          for path in sorted(Path("artifacts").glob("run-*.txt")):
+              for line in path.read_text().splitlines():
+                  if not line.startswith("m3_same_binary "):
+                      continue
+                  fields = dict(item.split("=",1) for item in line.split()[1:])
+                  pair = int(fields["pair"])
+                  width = int(fields["width"])
+                  ratio = float(fields["hybrid_over_pointer"])
+                  fp = fields["fingerprint"]
+                  fingerprints.setdefault(width, set()).add(fp)
+                  rows.append((path.name, pair, width, ratio))
+
+          if len(rows) != 6 * 4 * 8:
+              raise SystemExit(f"expected 192 rows, got {len(rows)}")
+          if any(len(values) != 1 for values in fingerprints.values()):
+              raise SystemExit(f"fingerprint mismatch: {fingerprints}")
+
+          with Path("artifacts/summary.txt").open("w") as out:
+              for width in sorted(fingerprints):
+                  values = [ratio for _,_,w,ratio in rows if w == width]
+                  out.write(
+                      f"width={width} n={len(values)} "
+                      f"median_hybrid_over_pointer={statistics.median(values):.6f} "
+                      f"min={min(values):.6f} max={max(values):.6f}\n"
+                  )
+              out.write("\nper_pair_wide:\n")
+              for pair in range(4):
+                  values = [ratio for _,p,w,ratio in rows if p == pair and w >= 64]
+                  out.write(
+                      f"pair={pair} n={len(values)} "
+                      f"median={statistics.median(values):.6f} "
+                      f"min={min(values):.6f} max={max(values):.6f}\n"
+                  )
+          PY
+          cat artifacts/summary.txt
+
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: same-binary-${{ matrix.compiler }}
+          path: artifacts/
+          retention-days: 14
