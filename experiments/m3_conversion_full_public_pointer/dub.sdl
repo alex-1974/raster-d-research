@@ -1,0 +1,8 @@
+name "raster-m3-conversion-full-public-pointer"
+description "Full-public shared-boundary DMD pointer qualification"
+authors "Alexander Bernardi"
+license "MIT"
+targetType "executable"
+sourcePaths "generated"
+dflags "-preview=dip1000"
+dependency "raster-d" path="../../../raster-d"
