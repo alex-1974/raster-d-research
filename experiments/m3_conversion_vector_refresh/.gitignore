@@ -1,0 +1,5 @@
+/generated/
+/.dub/
+/dub.selections.json
+/raster-m3-conversion-vector-refresh
+/raster-m3-conversion-vector-refresh.exe
