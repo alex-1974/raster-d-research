@@ -37,7 +37,7 @@ jobs:
         run: |
           set -euo pipefail
           ln -s "$GITHUB_WORKSPACE/raster-d" "$GITHUB_WORKSPACE/../raster-d"
-          test "$(git -C "$GITHUB_WORKSPACE/../raster-d" rev-parse HEAD)" =             "10549e045bfa5a99afe6552b0fb41b76fe203fa5"
+          test "$(git -C "$GITHUB_WORKSPACE/raster-d" rev-parse HEAD)" =             "10549e045bfa5a99afe6552b0fb41b76fe203fa5"
 
       - uses: dlang-community/setup-dlang@v2
         with:
@@ -49,7 +49,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          dub test             --root="$GITHUB_WORKSPACE/../raster-d"             --compiler="$DC"             --force
+          dub test             --root="$GITHUB_WORKSPACE/raster-d"             --compiler="$DC"             --force
 
       - name: Generate candidate and challenge trust
         shell: bash
@@ -70,7 +70,7 @@ jobs:
           mkdir -p artifacts
           sha256sum             experiments/m3_conversion_full_public_pointer/generated/raster/variant_full_public_pointer_dispatch.d             experiments/m3_conversion_full_public_pointer/generated/raster/variant_full_public_pointer.d             experiments/m3_conversion_full_public_pointer/generated/app.d             > artifacts/generated.sha256
           "$DC" --version > artifacts/compiler.txt
-          git -C "$GITHUB_WORKSPACE/../raster-d" rev-parse HEAD > artifacts/production-head.txt
+          git -C "$GITHUB_WORKSPACE/raster-d" rev-parse HEAD > artifacts/production-head.txt
 
       - uses: actions/upload-artifact@v7
         if: always()
