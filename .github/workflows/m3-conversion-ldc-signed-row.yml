@@ -85,9 +85,10 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          SRC=experiments/m3_conversion_ldc_signed_row/generated/raster/variant_ldc_signed_row_dispatch.d
-          ldc2 -O3 -release -enable-inlining -boundscheck=off -output-s -of=artifacts/dispatch.s "$SRC"
-          grep -n -E 'convertResearchLdcSignedRow|executeApprovedRows' artifacts/dispatch.s | head -n 80 || true
+          BIN=experiments/m3_conversion_ldc_signed_row/raster-m3-conversion-ldc-signed-row
+          objdump -dr "$BIN" > artifacts/binary-codegen.txt
+          nm -n "$BIN" > artifacts/symbols.txt
+          grep -n -E 'convertResearchLdcSignedRow|executeApprovedRows' artifacts/symbols.txt | head -n 80 || true
 
       - uses: actions/upload-artifact@v7
         if: always()
