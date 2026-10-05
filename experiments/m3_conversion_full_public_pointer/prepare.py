@@ -150,7 +150,7 @@ def make_public(source):
 def make_fixture(source):
     source = source.replace(
         "module raster.tests.copy_conversion_contract;",
-        "module app;",
+        "module raster.tests.full_public_pointer_contract;",
         1,
     )
     source = source.replace(
