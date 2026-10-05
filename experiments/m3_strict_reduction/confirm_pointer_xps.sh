@@ -121,8 +121,8 @@ for compiler in ("dmd","ldc"):
                 continue
             fields=dict(x.split("=",1) for x in line.split() if "=" in x)
             try:
-                width=int(fields["width"])
-                height=int(fields["height"])
+                width=int(fields["w"])
+                height=int(fields["h"])
                 layout=fields["layout"]
                 corpus=fields["corpus"]
                 public=int(fields["public_ns"])
