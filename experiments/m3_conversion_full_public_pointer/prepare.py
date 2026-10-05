@@ -155,7 +155,10 @@ def make_fixture(source):
     )
     source = source.replace(
         "import std.stdio : writeln;",
-        """import std.stdio : writeln;
+        """import core.time : MonoTime;
+import std.algorithm.sorting : sort;
+import std.conv : to;
+import std.stdio : writeln, writefln;
 import raster.variant_full_public_pointer :
     researchConvert = tryConvertUbyteToFloatPlane;
 import raster.variant_full_public_pointer_dispatch :
@@ -212,8 +215,224 @@ import raster.variant_full_public_pointer_dispatch :
     anchor = "void main(){run();}"
     if source.count(anchor) != 1:
         raise ValueError("fixture main anchor changed")
-    source = source.replace(anchor, "void main(){run();" + boundary + "}", 1)
+    source = source.replace(
+        anchor,
+        "void runVerification(){run();" + boundary + "}",
+        1,
+    )
     source = source.replace("unittest{run();}", "")
+
+    timing = r'''
+
+private enum size_t timingWarmups = 4;
+private enum size_t timingSamples = 9;
+
+private long timingMedian(long[timingSamples] values)
+{
+    sort(values[]);
+    return values[timingSamples / 2];
+}
+
+private long timedPublic(
+    ubyte form,
+    size_t iterations,
+    scope RasterView!ubyte source,
+    scope ref WritableRasterView!float target)
+{
+    setResearchConversionExecutionForm(form);
+    UbyteToFloatConversionError error;
+    const start = MonoTime.currTime;
+    foreach (_; 0 .. iterations)
+    {
+        if (!researchConvert(source, 0, target, 0, error) || error != 0)
+            assert(0, "timing public conversion failed");
+    }
+    return (MonoTime.currTime - start).total!"nsecs";
+}
+
+private void timingCase(
+    size_t w,
+    size_t h,
+    string layout,
+    size_t targetSamples,
+    uint process)
+{
+    ptrdiff_t sr = cast(ptrdiff_t)(w + 32);
+    ptrdiff_t sx = 1;
+    ptrdiff_t dr = sr;
+    ptrdiff_t dx = 1;
+
+    switch (layout)
+    {
+        case "contiguous":
+            sr = dr = cast(ptrdiff_t)w;
+            break;
+        case "padded":
+            break;
+        case "negative-source":
+            sr = -sr;
+            break;
+        case "negative-both":
+            sr = -sr;
+            dr = -dr;
+            break;
+        case "repeated-source":
+            sr = 0;
+            break;
+        case "universal":
+            sx = dx = 2;
+            sr = dr = cast(ptrdiff_t)(2 * w + 32);
+            break;
+        default:
+            assert(0, "unknown timing layout");
+    }
+
+    const sg = geometry(w, h, sr, sx);
+    const dg = geometry(w, h, dr, dx);
+    auto input = new ubyte[sg.length];
+    auto output = new float[dg.length];
+
+    input[] = sample!ubyte(29);
+    output[] = sample!float(17);
+    foreach (y; 0 .. h)
+        foreach (x; 0 .. w)
+            input[index(sg, x, y)] = sample!ubyte(y * w + x);
+
+    const PlaneDescriptor[1] sd =
+        [PlaneDescriptor(input.ptr + sg.offset, sr, sx)];
+    const PlaneDescriptor[1] dd =
+        [PlaneDescriptor(output.ptr + dg.offset, dr, dx)];
+    const ResourceEntry[1] rs =
+        [ResourceEntry(
+            output.ptr,
+            output.length * float.sizeof,
+            null,
+            null,
+            ResourceAccess.readWrite)];
+
+    scope auto source =
+        makeRasterViewAssumeValidated!ubyte(sd[], Region2D(0, 0, w, h));
+    scope auto target =
+        writable!float(rs[], dd[], Region2D(0, 0, w, h));
+
+    foreach (form; 0 .. 2)
+    {
+        setResearchConversionExecutionForm(cast(ubyte)form);
+        UbyteToFloatConversionError error;
+        assert(researchConvert(source, 0, target, 0, error));
+        assert(error == UbyteToFloatConversionError.none);
+        foreach (y; 0 .. h)
+            foreach (x; 0 .. w)
+                assert(
+                    output[index(dg, x, y)]
+                    == cast(float)input[index(sg, x, y)]);
+    }
+
+    size_t iterations = targetSamples / (w * h);
+    if (iterations == 0)
+        iterations = 1;
+    if (iterations > 32768)
+        iterations = 32768;
+
+    foreach (_; 0 .. timingWarmups)
+    {
+        timedPublic(0, iterations, source, target);
+        timedPublic(1, iterations, source, target);
+    }
+
+    long[timingSamples] currentSamples;
+    long[timingSamples] pointerSamples;
+
+    foreach (round; 0 .. timingSamples)
+    {
+        if (((round + process) & 1) == 0)
+        {
+            currentSamples[round] =
+                timedPublic(0, iterations, source, target);
+            pointerSamples[round] =
+                timedPublic(1, iterations, source, target);
+        }
+        else
+        {
+            pointerSamples[round] =
+                timedPublic(1, iterations, source, target);
+            currentSamples[round] =
+                timedPublic(0, iterations, source, target);
+        }
+    }
+
+    const currentMedian = timingMedian(currentSamples);
+    const pointerMedian = timingMedian(pointerSamples);
+    writefln(
+        "m3_full_public process=%s width=%s height=%s layout=%s iterations=%s current_ns=%s pointer_ns=%s current_over_pointer=%.6f source_fp=%016x target_fp=%016x",
+        process,
+        w,
+        h,
+        layout,
+        iterations,
+        currentMedian,
+        pointerMedian,
+        cast(double)currentMedian / cast(double)pointerMedian,
+        fingerprint!ubyte(input),
+        fingerprint!float(output));
+}
+
+private void runTiming(bool longBlock, uint process)
+{
+    const targetSamples = longBlock ? 8_388_608UL : 262_144UL;
+    const size_t[2][] shapes =
+    [
+        [31UL, 17UL],
+        [63UL, 17UL],
+        [64UL, 17UL],
+        [65UL, 17UL],
+        [96UL, 17UL],
+        [256UL, 128UL],
+        [2048UL, 512UL],
+    ];
+    const layouts =
+    [
+        "contiguous",
+        "padded",
+        "negative-source",
+        "negative-both",
+        "repeated-source",
+        "universal",
+    ];
+
+    foreach (shape; shapes)
+        foreach (layout; layouts)
+            timingCase(
+                shape[0],
+                shape[1],
+                layout,
+                targetSamples,
+                process);
+}
+
+void main(string[] args)
+{
+    if (args.length == 1)
+    {
+        runVerification();
+        return;
+    }
+
+    if (args.length != 3)
+        assert(0, "usage: binary [--timing-short|--timing-long PROCESS]");
+
+    const process = args[2].to!uint;
+    assert(process < 6);
+
+    if (args[1] == "--timing-short")
+        runTiming(false, process);
+    else if (args[1] == "--timing-long")
+        runTiming(true, process);
+    else
+        assert(0, "unknown timing mode");
+}
+'''
+    source += timing
     return source
 
 
