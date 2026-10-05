@@ -63,6 +63,15 @@ jobs:
           set -euo pipefail
           dub run             --root=experiments/m3_conversion_full_public_pointer             --compiler="$DC"             --build=release             --force
 
+      - name: Same-entry full-public timing smoke
+        shell: bash
+        run: |
+          set -euo pipefail
+          BIN=experiments/m3_conversion_full_public_pointer/raster-m3-conversion-full-public-pointer
+          "$BIN" --timing-short 0 > /tmp/full-public-timing.txt
+          test "$(grep -c '^m3_full_public ' /tmp/full-public-timing.txt)" -eq 42
+          cp /tmp/full-public-timing.txt artifacts-timing.txt
+
       - name: Retain generated source identity
         shell: bash
         run: |
@@ -70,6 +79,7 @@ jobs:
           mkdir -p artifacts
           sha256sum             experiments/m3_conversion_full_public_pointer/generated/raster/variant_full_public_pointer_dispatch.d             experiments/m3_conversion_full_public_pointer/generated/raster/variant_full_public_pointer.d             experiments/m3_conversion_full_public_pointer/generated/app.d             > artifacts/generated.sha256
           "$DC" --version > artifacts/compiler.txt
+          cp artifacts-timing.txt artifacts/timing-smoke.txt
           git -C "$GITHUB_WORKSPACE/raster-d" rev-parse HEAD > artifacts/production-head.txt
 
       - uses: actions/upload-artifact@v7
