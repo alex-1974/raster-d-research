@@ -61,8 +61,18 @@ TEMP_PRODUCTION="$TEMP_LIBS/raster-d"
 mkdir -p "$TEMP_RESEARCH/experiments"
 cp -a "$SOURCE_EXP" "$EXP"
 
+git -C "$PRODUCTION_REPO" fetch origin develop \
+    > "$OUT/production-fetch.txt" 2>&1
+
 git -C "$PRODUCTION_REPO" cat-file -e "$PIN^{commit}"
-git -C "$PRODUCTION_REPO" worktree add --detach "$TEMP_PRODUCTION" "$PIN"     > "$OUT/production-worktree.txt" 2>&1
+
+if ! git -C "$PRODUCTION_REPO" merge-base --is-ancestor "$PIN" origin/develop; then
+    echo "STOP: pinned Production commit is not reachable from origin/develop" >&2
+    exit 1
+fi
+
+git -C "$PRODUCTION_REPO" worktree add --detach "$TEMP_PRODUCTION" "$PIN" \
+    > "$OUT/production-worktree.txt" 2>&1
 
 cleanup()
 {
