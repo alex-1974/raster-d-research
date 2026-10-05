@@ -1,0 +1,163 @@
+{
+  "checks": [
+    "root and all four per-run SHA256 manifests verified",
+    "all four summary-replayed.csv files byte-match summary.csv",
+    "all four summaries contain exactly 4,104 data rows",
+    "selected64 case keys match within both ABBA pairs"
+  ],
+  "commits": {
+    "Hybrid baseline commit": "603e67b650a0287dadf77aabdb76da56eb41a390",
+    "Pointer candidate commit": "9ade083b49d5c2e4ac02e2d8270a17c4149fe176",
+    "Production commit": "7dcdf01babf87e9a80af2864fbad75efe8e7d0ef"
+  },
+  "comparison_csv_sha256": "a36ca7e762cfa5d59e21ee0072a7cbdafb2c1d76e5927d1da6f774dd56ac62de",
+  "manifests": {
+    "root": 6673,
+    "runs": {
+      "hybrid-1": {
+        "SHA256SUMS": 1658,
+        "audit-SHA256SUMS": 1658
+      },
+      "hybrid-2": {
+        "SHA256SUMS": 1658,
+        "audit-SHA256SUMS": 1658
+      },
+      "pointer-1": {
+        "SHA256SUMS": 1658,
+        "audit-SHA256SUMS": 1658
+      },
+      "pointer-2": {
+        "SHA256SUMS": 1658,
+        "audit-SHA256SUMS": 1658
+      }
+    }
+  },
+  "own_inputs": {
+    "hybrid-1": {
+      "check_setup.py": "a7ad316042d7f222194966c5def4d535f8fb137d890c0cf734fcd848c6f9e2e7",
+      "collect.py": "9614059c1f7d768fc80d5fb719b0fa0efd33d38afc1baf47b45ba639cf8c0529"
+    },
+    "hybrid-2": {
+      "check_setup.py": "a7ad316042d7f222194966c5def4d535f8fb137d890c0cf734fcd848c6f9e2e7",
+      "collect.py": "9614059c1f7d768fc80d5fb719b0fa0efd33d38afc1baf47b45ba639cf8c0529"
+    },
+    "pointer-1": {
+      "check_setup.py": "8233cf31fa8363606ea52b8421457dbf34e5669e5eba76601520952be34ccafa",
+      "collect.py": "c7a96636376284eeb35c7bf8fade6f34eb44570a0c9cc1bf49a8f646d83306a9"
+    },
+    "pointer-2": {
+      "check_setup.py": "8233cf31fa8363606ea52b8421457dbf34e5669e5eba76601520952be34ccafa",
+      "collect.py": "c7a96636376284eeb35c7bf8fade6f34eb44570a0c9cc1bf49a8f646d83306a9"
+    }
+  },
+  "raw_archive": {
+    "bytes": 127893219,
+    "name": "raster-pointer-vs-hybrid-xps-8DP3OT.tar.gz",
+    "sha256": "f64b70b5a8c995950f092162c1269b87582022a980afeaa9fc9245feb6b5d36c"
+  },
+  "rows_per_run": {
+    "hybrid-1": 4104,
+    "hybrid-2": 4104,
+    "pointer-1": 4104,
+    "pointer-2": 4104
+  },
+  "run_order": [
+    "hybrid-1",
+    "pointer-1",
+    "pointer-2",
+    "hybrid-2"
+  ],
+  "scope": {
+    "hybrid-1": "focused 72-workload sweep; DMD hybrid loop: foreach below width 64, paired slices from 64",
+    "hybrid-2": "focused 72-workload sweep; DMD hybrid loop: foreach below width 64, paired slices from 64",
+    "pointer-1": "focused 72-workload sweep; DMD foreach below width 64, bounded pointer/count helper from 64",
+    "pointer-2": "focused 72-workload sweep; DMD foreach below width 64, bounded pointer/count helper from 64"
+  },
+  "selected64_dmd_by_position_width_ge_64": {
+    "hybrid-1/pointer-1": {
+      "dmd-0": {
+        "matched_cases": 120,
+        "max": 1.101296253557966,
+        "median_hybrid_over_pointer": 1.0130903003368896,
+        "min": 0.9665243291686436
+      },
+      "dmd-16": {
+        "matched_cases": 120,
+        "max": 1.0673123776468878,
+        "median_hybrid_over_pointer": 0.986800894854679,
+        "min": 0.9030737740165471
+      },
+      "dmd-24": {
+        "matched_cases": 120,
+        "max": 1.134289309180963,
+        "median_hybrid_over_pointer": 1.0195707517826178,
+        "min": 0.9484320807305903
+      },
+      "dmd-8": {
+        "matched_cases": 120,
+        "max": 1.0843109526560042,
+        "median_hybrid_over_pointer": 1.0081792988256808,
+        "min": 0.9470450712628842
+      },
+      "dmd-native": {
+        "matched_cases": 120,
+        "max": 1.13397730469849,
+        "median_hybrid_over_pointer": 1.0488139973856523,
+        "min": 0.9790281445097815
+      }
+    },
+    "hybrid-2/pointer-2": {
+      "dmd-0": {
+        "matched_cases": 120,
+        "max": 1.0987077059018446,
+        "median_hybrid_over_pointer": 1.0034084952564184,
+        "min": 0.936397169201936
+      },
+      "dmd-16": {
+        "matched_cases": 120,
+        "max": 1.179240853062023,
+        "median_hybrid_over_pointer": 1.0708702442488414,
+        "min": 1.0027209722760853
+      },
+      "dmd-24": {
+        "matched_cases": 120,
+        "max": 1.1606709744311343,
+        "median_hybrid_over_pointer": 1.0519052549628873,
+        "min": 0.9487922871062925
+      },
+      "dmd-8": {
+        "matched_cases": 120,
+        "max": 1.1168347530099674,
+        "median_hybrid_over_pointer": 1.032609561116574,
+        "min": 0.9067606006482768
+      },
+      "dmd-native": {
+        "matched_cases": 120,
+        "max": 1.1667645446715214,
+        "median_hybrid_over_pointer": 1.0497799327900144,
+        "min": 0.9855709715277889
+      }
+    }
+  },
+  "selected64_dmd_width_ge_64": {
+    "hybrid-1/pointer-1": {
+      "matched_cases": 600,
+      "median_hybrid_over_pointer": 1.0142659910836982
+    },
+    "hybrid-2/pointer-2": {
+      "matched_cases": 600,
+      "median_hybrid_over_pointer": 1.0439731820617504
+    }
+  },
+  "selected64_ldc_width_ge_64_control": {
+    "hybrid-1/pointer-1": {
+      "matched_cases": 120,
+      "median_hybrid_over_pointer": 1.000730816854211
+    },
+    "hybrid-2/pointer-2": {
+      "matched_cases": 120,
+      "median_hybrid_over_pointer": 0.9086574815280981
+    }
+  },
+  "summary_csv_gz_sha256": "55de5dd1bd5d02b5b958f37109d6287d532de3278dd1bd8d545c5b16f1f33d3d"
+}
