@@ -45,3 +45,37 @@ retained; zero-median ratios are omitted, and all large raw samples must be
 positive. It writes SHA256SUMS. Container timing is diagnostic. The completed XPS baseline audit keeps the
 existing default and defers a layout-specific DMD Pointer opportunity; see
 `../../docs/research/m3-strict-reduction.md`. AArch64 remains unqualified.
+
+
+## Controlled DMD pointer confirmation
+
+Issue #21 follows the qualified M3.4 XPS audit. It does **not** reopen the
+strict-reduction semantics or change any candidate source. The purpose is only
+to decide whether the previously observed DMD Canonical Pointer benefit is
+stable enough to justify a narrow compiler-specific Production specialization.
+
+Run the retained fixed-source harness with six independent fixed-binary
+processes on one pinned CPU:
+
+```bash
+experiments/m3_strict_reduction/confirm_pointer_xps.sh \
+    /tmp/raster-m3-reduction-pointer-confirm 0
+```
+
+The collector reuses the exact qualified M3.4 generator, D/C++ sources,
+semantic matrix, trust challenges and codegen probes. It adds:
+
+- six fixed-binary processes per compiler instead of three;
+- CPU pinning for every timed process;
+- frequency/governor and thermal snapshots before, around and after runs;
+- a focused per-case public/Pointer summary;
+- one recursive manifest and tar archive.
+
+Promotion evidence is limited to representative large Canonical
+padded/negative/repeated-row DMD cases. Contiguous and Universal layouts remain
+controls. LDC remains a compiler control. The one-accumulator row-major
+float-to-double semantic is unchanged; reassociation, fixed-lane SIMD and
+threading remain out of scope.
+
+A DMD-only Production specialization is justified only if the repeated XPS
+cohort preserves a representative material gain without control regressions.
