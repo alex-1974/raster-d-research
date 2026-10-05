@@ -1,0 +1,80 @@
+name: M3 Full-Public Pointer Candidate
+
+on:
+  push:
+    branches: [research/m3-conversion-full-public-pointer]
+    paths:
+      - 'experiments/m3_conversion_full_public_pointer/**'
+      - '.github/workflows/m3-conversion-full-public-pointer.yml'
+  pull_request:
+    branches: [research/m3-conversion-same-binary]
+    paths:
+      - 'experiments/m3_conversion_full_public_pointer/**'
+      - '.github/workflows/m3-conversion-full-public-pointer.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  qualify:
+    strategy:
+      fail-fast: false
+      matrix:
+        compiler: [dmd-2.111.0, ldc-1.41.0]
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/checkout@v7
+        with:
+          repository: alex-1974/raster-d
+          ref: 10549e045bfa5a99afe6552b0fb41b76fe203fa5
+          path: raster-d
+
+      - name: Expose pinned Production sibling
+        shell: bash
+        run: |
+          set -euo pipefail
+          ln -s "$GITHUB_WORKSPACE/raster-d" "$GITHUB_WORKSPACE/../raster-d"
+          test "$(git -C "$GITHUB_WORKSPACE/../raster-d" rev-parse HEAD)" =             "10549e045bfa5a99afe6552b0fb41b76fe203fa5"
+
+      - uses: dlang-community/setup-dlang@v2
+        with:
+          compiler: ${{ matrix.compiler }}
+          dub: 1.40.0
+          dc_format: shortname
+
+      - name: Production unit-test baseline
+        shell: bash
+        run: |
+          set -euo pipefail
+          dub test             --root="$GITHUB_WORKSPACE/../raster-d"             --compiler="$DC"             --force
+
+      - name: Generate candidate and challenge trust
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 experiments/m3_conversion_full_public_pointer/check_setup.py
+
+      - name: Full public backing and boundary controls
+        shell: bash
+        run: |
+          set -euo pipefail
+          dub run             --root=experiments/m3_conversion_full_public_pointer             --compiler="$DC"             --build=release             --force
+
+      - name: Retain generated source identity
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts
+          sha256sum             experiments/m3_conversion_full_public_pointer/generated/raster/variant_full_public_pointer_dispatch.d             experiments/m3_conversion_full_public_pointer/generated/raster/variant_full_public_pointer.d             experiments/m3_conversion_full_public_pointer/generated/app.d             > artifacts/generated.sha256
+          "$DC" --version > artifacts/compiler.txt
+          git -C "$GITHUB_WORKSPACE/../raster-d" rev-parse HEAD > artifacts/production-head.txt
+
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: full-public-pointer-${{ matrix.compiler }}
+          path: artifacts/
+          retention-days: 14
