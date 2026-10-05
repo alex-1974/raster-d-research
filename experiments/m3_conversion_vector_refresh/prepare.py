@@ -91,6 +91,15 @@ void setResearchConversionExecutionForm(ubyte form)
 
     marker = "private void executeApprovedRows(S, D)(\n"
     start = source.index(marker)
+    body_start = source.index("{", start)
+    attrs = source.rfind("@safe pure nothrow @nogc", start, body_start)
+    if attrs < 0:
+        raise ValueError("executeApprovedRows attributes changed")
+    source = (
+        source[:attrs]
+        + "@safe nothrow @nogc"
+        + source[attrs + len("@safe pure nothrow @nogc"):]
+    )
     source = source[:start] + VECTOR_SOURCE + "\n\n" + source[start:]
 
     old = r'''            version (DigitalMars)
