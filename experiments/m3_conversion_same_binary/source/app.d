@@ -39,6 +39,13 @@ private void pointerBody(scope const(ubyte)[] row, scope float[] destination)
         destinationPointer[i] = cast(float)sourcePointer[i];
 }
 
+/*
+ * Replicated separate-entry controls.
+ *
+ * These intentionally preserve the first version of this experiment. Widths
+ * below 64 run identical source in distinct functions and therefore expose how
+ * much same-binary function placement alone can move the measurement.
+ */
 pragma(inline, false)
 extern(C) void m3_hybrid_0(scope const(ubyte)[] row, scope float[] destination)
     @safe pure nothrow @nogc
@@ -49,7 +56,7 @@ extern(C) void m3_hybrid_0(scope const(ubyte)[] row, scope float[] destination)
 
 pragma(inline, false)
 extern(C) void m3_pointer_0(scope const(ubyte)[] row, scope float[] destination)
-    @trusted pure nothrow @nogc
+    @safe pure nothrow @nogc
 {
     if (row.length < 64) scalarLoop(row, destination);
     else pointerBody(row, destination);
@@ -57,7 +64,7 @@ extern(C) void m3_pointer_0(scope const(ubyte)[] row, scope float[] destination)
 
 pragma(inline, false)
 extern(C) void m3_pointer_1(scope const(ubyte)[] row, scope float[] destination)
-    @trusted pure nothrow @nogc
+    @safe pure nothrow @nogc
 {
     if (row.length < 64) scalarLoop(row, destination);
     else pointerBody(row, destination);
@@ -81,7 +88,7 @@ extern(C) void m3_hybrid_2(scope const(ubyte)[] row, scope float[] destination)
 
 pragma(inline, false)
 extern(C) void m3_pointer_2(scope const(ubyte)[] row, scope float[] destination)
-    @trusted pure nothrow @nogc
+    @safe pure nothrow @nogc
 {
     if (row.length < 64) scalarLoop(row, destination);
     else pointerBody(row, destination);
@@ -89,7 +96,7 @@ extern(C) void m3_pointer_2(scope const(ubyte)[] row, scope float[] destination)
 
 pragma(inline, false)
 extern(C) void m3_pointer_3(scope const(ubyte)[] row, scope float[] destination)
-    @trusted pure nothrow @nogc
+    @safe pure nothrow @nogc
 {
     if (row.length < 64) scalarLoop(row, destination);
     else pointerBody(row, destination);
@@ -101,6 +108,52 @@ extern(C) void m3_hybrid_3(scope const(ubyte)[] row, scope float[] destination)
 {
     if (row.length < 64) scalarLoop(row, destination);
     else hybridBody(row, destination);
+}
+
+/*
+ * Primary shared-entry diagnostic.
+ *
+ * Hybrid and Pointer enter the same function and share the same caller. Widths
+ * below 64 return through exactly the same scalar body before the selector is
+ * inspected. For wide rows shared_0 and shared_1 reverse which form occupies
+ * the first selector branch, controlling for fallthrough/taken-branch layout.
+ */
+pragma(inline, false)
+extern(C) void m3_shared_0(
+    ubyte form,
+    scope const(ubyte)[] row,
+    scope float[] destination)
+    @safe pure nothrow @nogc
+{
+    if (row.length < 64)
+    {
+        scalarLoop(row, destination);
+        return;
+    }
+
+    if (form == 0)
+        hybridBody(row, destination);
+    else
+        pointerBody(row, destination);
+}
+
+pragma(inline, false)
+extern(C) void m3_shared_1(
+    ubyte form,
+    scope const(ubyte)[] row,
+    scope float[] destination)
+    @safe pure nothrow @nogc
+{
+    if (row.length < 64)
+    {
+        scalarLoop(row, destination);
+        return;
+    }
+
+    if (form == 0)
+        pointerBody(row, destination);
+    else
+        hybridBody(row, destination);
 }
 
 private ulong fingerprint(scope const(float)[] values)
@@ -133,6 +186,25 @@ private long elapsed(alias kernel)(
     return (MonoTime.currTime - start).total!"nsecs";
 }
 
+private long elapsedShared(alias kernel)(
+    ubyte form,
+    scope const(ubyte)[] source,
+    scope float[] destination,
+    size_t width)
+{
+    const rows = source.length / width;
+    const start = MonoTime.currTime;
+    foreach (y; 0 .. rows)
+    {
+        const offset = y * width;
+        kernel(
+            form,
+            source[offset .. offset + width],
+            destination[offset .. offset + width]);
+    }
+    return (MonoTime.currTime - start).total!"nsecs";
+}
+
 private long median(long[repetitions] values)
 {
     sort(values[]);
@@ -151,6 +223,27 @@ private void verify(alias kernel)(
         const offset = y * width;
         kernel(source[offset .. offset + width],
                destination[offset .. offset + width]);
+    }
+
+    foreach (i, value; source)
+        assert(destination[i] == cast(float)value);
+}
+
+private void verifyShared(alias kernel)(
+    ubyte form,
+    scope const(ubyte)[] source,
+    scope float[] destination,
+    size_t width)
+{
+    destination[] = float.nan;
+    const rows = source.length / width;
+    foreach (y; 0 .. rows)
+    {
+        const offset = y * width;
+        kernel(
+            form,
+            source[offset .. offset + width],
+            destination[offset .. offset + width]);
     }
 
     foreach (i, value; source)
@@ -214,6 +307,63 @@ private void runPair(
         fingerprint(hybridOutput));
 }
 
+private void runShared(
+    alias kernel)(
+    size_t pair,
+    ubyte hybridForm,
+    ubyte pointerForm,
+    scope const(ubyte)[] source,
+    scope float[] hybridOutput,
+    scope float[] pointerOutput,
+    size_t width)
+{
+    verifyShared!kernel(hybridForm, source, hybridOutput, width);
+    verifyShared!kernel(pointerForm, source, pointerOutput, width);
+    assert(hybridOutput == pointerOutput);
+
+    foreach (_; 0 .. warmups)
+    {
+        elapsedShared!kernel(hybridForm, source, hybridOutput, width);
+        elapsedShared!kernel(pointerForm, source, pointerOutput, width);
+    }
+
+    long[repetitions] hybridSamples;
+    long[repetitions] pointerSamples;
+
+    foreach (r; 0 .. repetitions)
+    {
+        if ((r & 1) == 0)
+        {
+            hybridSamples[r] =
+                elapsedShared!kernel(hybridForm, source, hybridOutput, width);
+            pointerSamples[r] =
+                elapsedShared!kernel(pointerForm, source, pointerOutput, width);
+        }
+        else
+        {
+            pointerSamples[r] =
+                elapsedShared!kernel(pointerForm, source, pointerOutput, width);
+            hybridSamples[r] =
+                elapsedShared!kernel(hybridForm, source, hybridOutput, width);
+        }
+        consume(hybridOutput);
+        consume(pointerOutput);
+    }
+
+    const hybridMedian = median(hybridSamples);
+    const pointerMedian = median(pointerSamples);
+
+    writefln(
+        "m3_shared_boundary pair=%s width=%s height=%s hybrid_ns=%s pointer_ns=%s hybrid_over_pointer=%.6f fingerprint=%016x",
+        pair,
+        width,
+        height,
+        hybridMedian,
+        pointerMedian,
+        cast(double)hybridMedian / cast(double)pointerMedian,
+        fingerprint(hybridOutput));
+}
+
 private void runWidth(size_t width)
 {
     auto source = new ubyte[width * height];
@@ -231,6 +381,11 @@ private void runWidth(size_t width)
         2, source, hybridOutput, pointerOutput, width);
     runPair!(m3_hybrid_3, m3_pointer_3)(
         3, source, hybridOutput, pointerOutput, width);
+
+    runShared!m3_shared_0(
+        0, 0, 1, source, hybridOutput, pointerOutput, width);
+    runShared!m3_shared_1(
+        1, 1, 0, source, hybridOutput, pointerOutput, width);
 }
 
 int main()
