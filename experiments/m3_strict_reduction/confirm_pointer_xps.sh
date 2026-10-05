@@ -2,7 +2,9 @@
 set -euo pipefail
 
 ROOT="$(git rev-parse --show-toplevel)"
-EXP="$ROOT/experiments/m3_strict_reduction"
+SOURCE_EXP="$ROOT/experiments/m3_strict_reduction"
+PRODUCTION_REPO="$ROOT/../raster-d"
+BASELINE="1671fb2e51a7b1e7311f78f575d9457e9f279fd4"
 EXPECTED_HEAD="1a5f28d2183094e339c0e7d791a67672892888f1"
 CPU="${2:-0}"
 OUT="${1:-/tmp/raster-m3-reduction-pointer-confirm-$(date +%Y%m%d-%H%M%S)}"
@@ -59,12 +61,30 @@ snapshot_freq() {
 
 snapshot_freq before
 
+tmp="$(mktemp -d)"
+TEMP_LIBS="$tmp/libs"
+TEMP_RESEARCH="$TEMP_LIBS/raster-d-research"
+EXP="$TEMP_RESEARCH/experiments/m3_strict_reduction"
+TEMP_PRODUCTION="$TEMP_LIBS/raster-d"
+
+mkdir -p "$TEMP_RESEARCH/experiments"
+cp -a "$SOURCE_EXP" "$EXP"
+
+git -C "$PRODUCTION_REPO" cat-file -e "$BASELINE^{commit}"
+git -C "$PRODUCTION_REPO" worktree add --detach "$TEMP_PRODUCTION" "$BASELINE"     > "$OUT/production-worktree.txt" 2>&1
+
+cleanup() {
+    git -C "$PRODUCTION_REPO" worktree remove --force "$TEMP_PRODUCTION"         >/dev/null 2>&1 || true
+    rm -rf "$tmp"
+}
+trap cleanup EXIT
+
+test "$(git -C "$TEMP_PRODUCTION" rev-parse HEAD)" = "$BASELINE"
+test -z "$(git -C "$TEMP_PRODUCTION" status --short)"
+
 python3 "$EXP/generate.py" > "$OUT/generation.txt"
 "$EXP/build_cpp.sh" > "$OUT/cpp-build.txt" 2>&1
 objdump -dr "$EXP/cpp_reference.o" > "$OUT/cpp-codegen.txt"
-
-tmp="$(mktemp -d)"
-trap 'rm -rf "$tmp"' EXIT
 
 sha256sum "$EXP/cpp_reference.o" > "$OUT/binaries.sha256"
 
