@@ -1,0 +1,97 @@
+name: M3 LDC Signed-Row Conversion
+
+on:
+  push:
+    branches: [research/m3-conversion-ldc-signed-row]
+    paths:
+      - 'experiments/m3_conversion_ldc_signed_row/**'
+      - '.github/workflows/m3-conversion-ldc-signed-row.yml'
+  pull_request:
+    branches: [research/m3-conversion-full-public-pointer]
+    paths:
+      - 'experiments/m3_conversion_ldc_signed_row/**'
+      - '.github/workflows/m3-conversion-ldc-signed-row.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  qualify:
+    strategy:
+      fail-fast: false
+      matrix:
+        compiler: [dmd-2.111.0, ldc-1.41.0]
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/checkout@v7
+        with:
+          repository: alex-1974/raster-d
+          ref: dd5b753b3e6e062aa679a31bfdaa45a16adf533c
+          path: raster-d
+
+      - name: Expose pinned Production sibling
+        shell: bash
+        run: |
+          set -euo pipefail
+          ln -s "$GITHUB_WORKSPACE/raster-d" "$GITHUB_WORKSPACE/../raster-d"
+          test "$(git -C "$GITHUB_WORKSPACE/raster-d" rev-parse HEAD)" =             "dd5b753b3e6e062aa679a31bfdaa45a16adf533c"
+
+      - uses: dlang-community/setup-dlang@v2
+        with:
+          compiler: ${{ matrix.compiler }}
+          dub: 1.40.0
+          dc_format: shortname
+
+      - name: Production unit-test baseline
+        shell: bash
+        run: |
+          set -euo pipefail
+          dub test --root="$GITHUB_WORKSPACE/raster-d" --compiler="$DC" --force
+
+      - name: Generate current and boundary forms
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 experiments/m3_conversion_ldc_signed_row/prepare.py
+
+      - name: Full public semantic controls
+        shell: bash
+        run: |
+          set -euo pipefail
+          dub run \
+            --root=experiments/m3_conversion_ldc_signed_row \
+            --compiler="$DC" \
+            --build=release \
+            --force
+
+      - name: Timing smoke
+        shell: bash
+        run: |
+          set -euo pipefail
+          BIN=experiments/m3_conversion_ldc_signed_row/raster-m3-conversion-ldc-signed-row
+          "$BIN" --timing-short 0 > /tmp/timing.txt
+          test "$(grep -c '^m3_ldc_signed ' /tmp/timing.txt)" -eq 35
+          mkdir -p artifacts
+          cp /tmp/timing.txt artifacts/timing.txt
+          "$DC" --version > artifacts/compiler.txt
+          sha256sum "$BIN" > artifacts/binary.sha256
+          git -C "$GITHUB_WORKSPACE/raster-d" rev-parse HEAD > artifacts/production-head.txt
+
+      - name: Retain LDC candidate codegen
+        if: matrix.compiler == 'ldc-1.41.0'
+        shell: bash
+        run: |
+          set -euo pipefail
+          SRC=experiments/m3_conversion_ldc_signed_row/generated/raster/variant_ldc_signed_row_dispatch.d
+          ldc2 -O3 -release -enable-inlining -boundscheck=off -output-s -of=artifacts/dispatch.s "$SRC"
+          grep -n -E 'convertResearchLdcSignedRow|executeApprovedRows' artifacts/dispatch.s | head -n 80 || true
+
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: ldc-signed-row-${{ matrix.compiler }}
+          path: artifacts/
+          retention-days: 14
