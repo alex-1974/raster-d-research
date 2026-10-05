@@ -1,0 +1,7 @@
+name "raster-m3-conversion-same-binary"
+description "M3 same-binary hybrid versus pointer conversion diagnostic"
+authors "Alexander Bernardi"
+license "MIT"
+targetType "executable"
+sourcePaths "source"
+dflags "-preview=dip1000"
