@@ -51,3 +51,24 @@ Before hardware timing:
 
 Only after those gates pass is a reference-XPS full-public comparison useful.
 No Production promotion follows from the isolated row result alone.
+
+
+## Reference-XPS collector
+
+After CI is green, update the local Research branch and the Production sibling
+to the pinned commits, then run:
+
+```bash
+bash experiments/m3_conversion_full_public_pointer/run_xps.sh
+```
+
+The collector builds one release binary per compiler, verifies the complete
+public-control mode, then reuses that exact binary for six CPU0-pinned
+short-block and six CPU0-pinned long-block processes. It retains compiler,
+binary and symbol identities, raw process output, semantic fingerprints,
+summaries and a recursive SHA256 manifest, then produces a tar.gz archive.
+
+The timing ratio is `current_over_pointer`; values above 1 favor the DMD
+pointer candidate. Widths 31/63 and Universal sample-stride-two layouts are
+controls because the candidate route must remain inactive there. LDC is a
+compiler control and must retain current Production row execution.
