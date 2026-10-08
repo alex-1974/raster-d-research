@@ -5,6 +5,8 @@ module retained_malloc;
 import core.stdc.stdlib : malloc, free;
 import core.lifetime : move;
 
+private __gshared size_t finalReleases;
+
 private struct Control {
     size_t references;
     size_t length;
@@ -21,8 +23,14 @@ public:
         assert(p !is null);
         p.references = 1;
         p.length = length;
+        // This prototype supports nonempty payloads only; failure handling
+        // must dispose of the control block before reporting OOM.
+        assert(length > 0);
         p.data = cast(ubyte*) malloc(length);
-        assert(p.data !is null);
+        if (p.data is null) {
+            free(p);
+            assert(0, "payload malloc failed");
+        }
         RetainedStorage result;
         result.control = p;
         return result;
@@ -43,12 +51,15 @@ public:
         if (--p.references == 0) {
             free(p.data);
             free(p);
+            ++finalReleases;
         }
     }
 
-    // This study intentionally avoids implicit assignment; the real raster-d
-    // owner uses a reviewed by-value-swap assignment contract.
-    @disable void opAssign(ref const RetainedStorage rhs);
+    // By-value copy/retain + swap: rhs's destructor releases the old lhs.
+    void opAssign(RetainedStorage rhs) @system {
+        import std.algorithm.mutation : swap;
+        swap(control, rhs.control);
+    }
 
     ubyte read(size_t index) const @system {
         assert(control !is null && index < control.length);
@@ -82,8 +93,29 @@ RetainedView makeEscapingView() @system {
 }
 
 unittest {
-    auto view = makeEscapingView();
-    assert(view.read(0) == 13);
-    auto copy = view;
-    assert(copy.read(0) == 13);
+    const before = finalReleases;
+    {
+        auto view = makeEscapingView();
+        assert(view.read(0) == 13);
+        auto copy = view;
+        assert(copy.read(0) == 13);
+    }
+    assert(finalReleases == before + 1);
+}
+
+unittest {
+    const before = finalReleases;
+    {
+        auto first = RetainedStorage.allocate(8);
+        auto second = RetainedStorage.allocate(8);
+        first.write(0, 17);
+        second.write(0, 29);
+        auto aliasOfFirst = first;
+        first = second;
+        assert(first.read(0) == 29);
+        assert(aliasOfFirst.read(0) == 17);
+        auto moved = move(first);
+        assert(moved.read(0) == 29);
+    }
+    assert(finalReleases == before + 2);
 }
