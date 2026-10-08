@@ -41,6 +41,35 @@ At this point there is **no A/B/C performance measurement** and no
 validated safety proof for the ownership model. Those are promotion gates,
 not optional polish.
 
+## R0.7 retained-owner qualification extension (2026-10-08)
+
+The malloc-backed prototype now has extra runtime assertions for:
+
+- copy of an escaping owning view (shared control lifetime);
+- assignment between two independently owned resources, with a prior alias
+  verifying the old resource remains live until its last reference exits;
+- `move` of an owner following assignment;
+- **one final free per physical resource** using a test-only global counter;
+- early cleanup of the control block when payload malloc fails.
+
+These are narrow smoke tests, **not** a complete allocation-failure suite:
+control-block OOM, zero-length semantics, release callbacks, concurrency,
+cross-thread visibility, and ownership held by real raster descriptors remain
+unqualified. The prototype is still deliberately `@system`; no
+`@safe`, `@nogc`, or `nothrow` production contract is claimed.
+
+`benchmark.d` adds an initial CPU read-only measurement with identical
+bytes and iteration counts for a borrowed buffer and a retained owner.
+A third plain-loop control is *not* a callback performance test. This
+preliminary measurement is particularly sensitive to bounds checks,
+compiler inlining, GC initialization, and dead-code optimization. It
+is not a raster hot-path benchmark and cannot alone justify an API
+decision. The checksum is validated and retained in a global sink.
+
+The research CI compiles the benchmark optimized and executes it on the
+baseline DMD/LDC jobs. No measured timing result is recorded until those
+runs have completed and the numerical outputs have been inspected.
+
 ## Experiment protocol
 
 1. Run `bash experiments/r0_7_lifetime_models/compile-matrix.sh dmd`
