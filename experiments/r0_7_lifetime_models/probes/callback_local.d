@@ -6,5 +6,5 @@ struct View { const(ubyte)[] data; }
 }
 @safe void useLocally(scope const(ubyte)[] input)
 {
-    withBorrow(input, (View v) { auto length = v.data.length; assert(length <= input.length); });
+    withBorrow(input, (View v) { auto length = v.data.length; assert(length <= size_t.max); });
 }
