@@ -1,9 +1,9 @@
 module callback_escape;
-struct View { const(ubyte)* ptr; }
+struct View { const(ubyte)[] data; }
 View escaped;
 @safe void withBorrow(scope const(ubyte)[] input, scope void delegate(View) visitor)
 {
-    visitor(View(input.ptr));
+    visitor(View(input));
 }
 @safe void testEscape(scope const(ubyte)[] input)
 {
