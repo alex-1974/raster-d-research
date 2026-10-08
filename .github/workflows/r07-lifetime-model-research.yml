@@ -2,6 +2,8 @@ name: R0.7 Lifetime Models Research
 on:
   push:
     branches: [research/borrow-lifetime-model-comparison]
+  pull_request:
+    branches: [main]
   workflow_dispatch:
 permissions:
   contents: read
