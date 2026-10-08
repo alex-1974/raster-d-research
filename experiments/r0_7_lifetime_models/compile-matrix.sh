@@ -6,6 +6,7 @@ tmp="$(mktemp -d)"
 trap 'rm -rf "$tmp"' EXIT
 "$compiler" --version | head -3
 printf '%s\n' 'compiler,mode,case,result'
+failures=0
 for mode in ordinary dip1000; do
     flags=()
     if [[ "$mode" == dip1000 ]]; then flags+=(-preview=dip1000); fi
@@ -17,12 +18,16 @@ for mode in ordinary dip1000; do
             outcome=rejected
         fi
         printf '%s,%s,%s,%s\n' "$compiler" "$mode" "$case_name" "$outcome"
+        if [[ "$case_name" == callback_local && "$outcome" != accepted ]]; then
+            echo "FAIL: positive callback_local must compile in $mode" >&2
+            failures=$((failures + 1))
+        fi
         if [[ "$outcome" == rejected ]]; then
             sed -n '1,5p' "$tmp/$case_name.log" | sed 's/^/  /'
         fi
     done
 done
-# This first step is observational. No acceptance is a safety certificate.
+# Negative cases remain observational pending verified failure reasons.\n# Positive callback_local is strict to avoid vacuous escape rejections.\nif (( failures != 0 )); then exit 1; fi
 
 # Independently exercise the malloc-backed owning model's copy/return path.
 # This is a toy functional check; the ownership proof is not yet complete.
