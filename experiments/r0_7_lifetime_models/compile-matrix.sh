@@ -27,7 +27,11 @@ for mode in ordinary dip1000; do
         fi
     done
 done
-# Negative cases remain observational pending verified failure reasons.\n# Positive callback_local is strict to avoid vacuous escape rejections.\nif (( failures != 0 )); then exit 1; fi
+# Negative cases remain observational pending verified failure reasons.
+# A failed positive callback case must fail the CI job.
+if (( failures != 0 )); then
+    exit 1
+fi
 
 # Independently exercise the malloc-backed owning model's copy/return path.
 # This is a toy functional check; the ownership proof is not yet complete.
