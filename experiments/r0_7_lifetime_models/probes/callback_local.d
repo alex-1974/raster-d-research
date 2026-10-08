@@ -1,6 +1,6 @@
 module callback_local;
 struct View { const(ubyte)[] data; }
-@safe void withBorrow(scope const(ubyte)[] input, scope void delegate(View) @safe visitor)
+@safe void withBorrow(scope const(ubyte)[] input, scope void delegate(scope View) @safe visitor)
 {
     visitor(View(input));
 }
