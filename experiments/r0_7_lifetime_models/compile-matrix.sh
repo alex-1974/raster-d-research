@@ -9,7 +9,7 @@ printf '%s\n' 'compiler,mode,case,result'
 for mode in ordinary dip1000; do
     flags=()
     if [[ "$mode" == dip1000 ]]; then flags+=(-preview=dip1000); fi
-    for case_name in borrowed_escape owned_return callback_escape callback_local; do
+    for case_name in borrowed_escape owned_return retained_malloc callback_escape callback_local; do
         if "$compiler" -c "${flags[@]}" -of="$tmp/$case_name.o" \
              "$root/probes/$case_name.d" >"$tmp/$case_name.log" 2>&1; then
             outcome=accepted
@@ -23,3 +23,10 @@ for mode in ordinary dip1000; do
     done
 done
 # This first step is observational. No acceptance is a safety certificate.
+
+# Independently exercise the malloc-backed owning model's copy/return path.
+# This is a toy functional check; the ownership proof is not yet complete.
+"$compiler" -unittest -main -of="$tmp/retained_model_test" \
+    "$root/probes/retained_malloc.d"
+"$tmp/retained_model_test"
+echo "PASS retained_malloc runtime unittest ($compiler)"
