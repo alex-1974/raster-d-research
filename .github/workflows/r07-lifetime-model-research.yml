@@ -23,3 +23,12 @@ jobs:
           dc_format: shortname
       - name: Compile all toy models in ordinary and DIP1000 modes
         run: bash experiments/r0_7_lifetime_models/compile-matrix.sh "$DC"
+      - name: Run preliminary retained-read microbenchmark
+        shell: bash
+        run: |
+          set -euo pipefail
+          root=experiments/r0_7_lifetime_models
+          "$DC" -O -release -I="$root/probes" \
+            -of=/tmp/r07-lifetime-bench \
+            "$root/benchmark.d" "$root/probes/retained_malloc.d"
+          /tmp/r07-lifetime-bench
