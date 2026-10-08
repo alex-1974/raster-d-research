@@ -23,6 +23,24 @@ Its B model uses a GC-owned class as an **analogy** for self-contained lifetime,
 GC reachability is not proof of correct custom-resource release. C is likewise
 not safe merely because an API accepts a callback.
 
+## First malloc-backed ownership model (added)
+
+`probes/retained_malloc.d` now models a separately allocated control block
+and a separately allocated payload with explicit reference counting. Returning
+`RetainedView` transfers a retained owner rather than borrowing a local
+owner, and a smoke unittest exercises creation, escape, read, and copy.
+
+This is deliberately `@system`. It is **not yet** qualified for concurrent
+sharing, callbacks, out-of-memory disposition, copy/assignment interactions,
+exception handling, `@nogc`, or raster-d's actual descriptor metadata.
+It demonstrates only the *shape* of a retained-resource approach. The
+compile matrix runs a separate executable unittest so the research
+does not silently accept compile-only evidence as a runtime qualification.
+
+At this point there is **no A/B/C performance measurement** and no
+validated safety proof for the ownership model. Those are promotion gates,
+not optional polish.
+
 ## Experiment protocol
 
 1. Run `bash experiments/r0_7_lifetime_models/compile-matrix.sh dmd`
