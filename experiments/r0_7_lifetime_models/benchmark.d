@@ -23,7 +23,7 @@ private __gshared ulong checksumSink;
 
 @system ulong callbackSum(const(ubyte)* data, size_t n) {
     ulong result = 0;
-    // An ordinary template callback, not a proof of @safe escape protection.
+    // Plain loop-control duplicate, not a callback performance measurement.
     foreach (i; 0 .. n) result += data[i];
     return result;
 }
@@ -44,17 +44,18 @@ private __gshared ulong checksumSink;
         auto start = MonoTime.currTime;
         ulong sum = 0;
         foreach (_; 0 .. repetitions) {
-            final switch (kind) {
+            switch (kind) {
                 case 0: sum += borrowedSum(data.ptr, width); break;
                 case 1: sum += retainedSum(owner, width); break;
                 case 2: sum += callbackSum(data.ptr, width); break;
+                default: assert(0);
             }
         }
         auto duration = MonoTime.currTime - start;
         checksumSink = sum;
         const double nsPerSample = cast(double) duration.total!"nsecs" /
             cast(double) (width * repetitions);
-        string label = kind == 0 ? "borrowed" : (kind == 1 ? "retained" : "callback_loop");
+        string label = kind == 0 ? "borrowed" : (kind == 1 ? "retained" : "loop_control");
         writeln(label, ",", nsPerSample, ",", sum);
         assert(sum == expected * repetitions);
     }
