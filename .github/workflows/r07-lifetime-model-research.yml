@@ -1,0 +1,23 @@
+name: R0.7 Lifetime Models Research
+on:
+  push:
+    branches: [research/borrow-lifetime-model-comparison]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  observe:
+    strategy:
+      fail-fast: false
+      matrix:
+        compiler: [dmd-2.111.0, ldc-1.41.0]
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dlang-community/setup-dlang@v2
+        with:
+          compiler: ${{ matrix.compiler }}
+          dub: 1.40.0
+          dc_format: shortname
+      - name: Compile all toy models in ordinary and DIP1000 modes
+        run: bash experiments/r0_7_lifetime_models/compile-matrix.sh "$DC"
