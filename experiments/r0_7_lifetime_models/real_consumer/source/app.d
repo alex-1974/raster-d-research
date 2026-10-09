@@ -49,8 +49,8 @@ private __gshared ulong observed;
     if (sampleRoi(lease, 5) == 0) throw new Exception("unexpected zero sum");
     writeln("trial,case,ns_per_operation,checksum");
     foreach (trial; 0 .. trials) {
-        foreach (slot; 0 .. 9) {
-            const kind = (trial + slot) % 9;
+        foreach (slot; 0 .. 10) {
+            const kind = (trial + slot) % 10;
             ulong checksum;
             auto start = MonoTime.currTime;
             foreach (i; 0 .. operations) {
@@ -95,12 +95,22 @@ private __gshared ulong observed;
                     if (!v.trySample(0, i % width, i % height, sample))
                         throw new Exception("owner switch read failed");
                     checksum += sample;
-                } else {
+                } else if (kind == 8) {
                     scope auto v = (i & 1) == 0 ? lease.view() : alternateLease.view();
                     ubyte sample;
                     if (!v.trySample(0, i % width, i % height, sample))
                         throw new Exception("borrow switch read failed");
                     checksum += sample;
+                } else {
+                    ulong localSum;
+                    foreach (y; 0 .. 24)
+                        foreach (x; 0 .. 32) {
+                            const sample = cast(ulong) baseline[(7 + y) * stride + offset + x];
+                            if (sample > ulong.max - localSum)
+                                throw new Exception("checked D ROI overflow");
+                            localSum += sample;
+                        }
+                    checksum += localSum;
                 }
             }
             observed = checksum;
@@ -110,7 +120,8 @@ private __gshared ulong observed;
                 kind == 3 ? "retained_copy_view" :
                 kind == 4 ? "borrow_view" : kind == 5 ?
                 "production_sum_roi" : kind == 6 ? "raw_d_roi_sum" :
-                kind == 7 ? "retained_switch_sample" : "borrow_switch_sample";
+                kind == 7 ? "retained_switch_sample" : kind == 8 ?
+                "borrow_switch_sample" : "checked_d_roi_sum";
             writeln(trial, ",", label, ",",
                 cast(double) elapsed.total!"nsecs" / operations, ",", checksum);
         }
