@@ -42,14 +42,15 @@ private __gshared ulong observed;
 
 @system void main() {
     auto lease = createLease();
+    auto alternateLease = createLease();
     ubyte[] baseline = new ubyte[stride * height];
     foreach (i; 0 .. baseline.length)
         baseline[i] = cast(ubyte)((i * 37 + 11) & 255);
     if (sampleRoi(lease, 5) == 0) throw new Exception("unexpected zero sum");
     writeln("trial,case,ns_per_operation,checksum");
     foreach (trial; 0 .. trials) {
-        foreach (slot; 0 .. 7) {
-            const kind = (trial + slot) % 7;
+        foreach (slot; 0 .. 9) {
+            const kind = (trial + slot) % 9;
             ulong checksum;
             auto start = MonoTime.currTime;
             foreach (i; 0 .. operations) {
@@ -83,10 +84,23 @@ private __gshared ulong observed;
                     const result = rasterSum!ulong(roi, 0);
                     if (!result.ok) throw new Exception("raster sum failed");
                     checksum += result.value;
-                } else {
+                } else if (kind == 6) {
                     foreach (y; 0 .. 24)
                         foreach (x; 0 .. 32)
                             checksum += baseline[(7 + y) * stride + offset + x];
+                } else if (kind == 7) {
+                    auto retained = (i & 1) == 0 ? lease : alternateLease;
+                    scope auto v = retained.view();
+                    ubyte sample;
+                    if (!v.trySample(0, i % width, i % height, sample))
+                        throw new Exception("owner switch read failed");
+                    checksum += sample;
+                } else {
+                    scope auto v = ((i & 1) == 0 ? lease : alternateLease).view();
+                    ubyte sample;
+                    if (!v.trySample(0, i % width, i % height, sample))
+                        throw new Exception("borrow switch read failed");
+                    checksum += sample;
                 }
             }
             observed = checksum;
@@ -95,7 +109,8 @@ private __gshared ulong observed;
                 kind == 1 ? "retained_copy_roi_sum" : kind == 2 ? "borrow_roi_sum" :
                 kind == 3 ? "retained_copy_view" :
                 kind == 4 ? "borrow_view" : kind == 5 ?
-                "production_sum_roi" : "raw_d_roi_sum";
+                "production_sum_roi" : kind == 6 ? "raw_d_roi_sum" :
+                kind == 7 ? "retained_switch_sample" : "borrow_switch_sample";
             writeln(trial, ",", label, ",",
                 cast(double) elapsed.total!"nsecs" / operations, ",", checksum);
         }
