@@ -99,3 +99,14 @@ jobs:
           ln -s "$raster" "$consumer/raster-d-local"
           echo "consumer dependency path: $(readlink -f "$consumer/raster-d-local")"
           dub run --root="$consumer" --compiler="$DC" --build=release
+
+      - name: C++20 ROI reference on same runner
+        shell: bash
+        run: |
+          set -euo pipefail
+          c++ --version > /tmp/r07-cxx-version.txt
+          sed -n '1p' /tmp/r07-cxx-version.txt
+          c++ -std=c++20 -O3 -DNDEBUG \
+            experiments/r0_7_lifetime_models/roi_sum_cpp.cpp \
+            -o /tmp/r07-roi-cpp
+          /tmp/r07-roi-cpp
