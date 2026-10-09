@@ -66,6 +66,16 @@ public:
         return control.data[index];
     }
 
+    // Research-only unchecked accessor: caller must validate index and owner.
+    ubyte readUnchecked(size_t index) const @system nothrow @nogc {
+        return control.data[index];
+    }
+
+    // Research-only pointer borrowed while this owner stays alive.
+    const(ubyte)* rawPointer() const @system nothrow @nogc {
+        return control.data;
+    }
+
     void write(size_t index, ubyte value) @system nothrow @nogc {
         assert(control !is null && index < control.length);
         control.data[index] = value;
