@@ -42,11 +42,14 @@ private __gshared ulong observed;
 
 @system void main() {
     auto lease = createLease();
+    ubyte[] baseline = new ubyte[stride * height];
+    foreach (i; 0 .. baseline.length)
+        baseline[i] = cast(ubyte)((i * 37 + 11) & 255);
     if (sampleRoi(lease, 5) == 0) throw new Exception("unexpected zero sum");
     writeln("trial,case,ns_per_operation,checksum");
     foreach (trial; 0 .. trials) {
-        foreach (slot; 0 .. 6) {
-            const kind = (trial + slot) % 6;
+        foreach (slot; 0 .. 7) {
+            const kind = (trial + slot) % 7;
             ulong checksum;
             auto start = MonoTime.currTime;
             foreach (i; 0 .. operations) {
@@ -72,7 +75,7 @@ private __gshared ulong observed;
                 } else if (kind == 4) {
                     scope auto v = lease.view();
                     checksum += v.width + offset;
-                } else {
+                } else if (kind == 5) {
                     scope auto v = lease.view();
                     bool ok;
                     scope auto roi = v.tryRoi(Region2D(offset, 7, 32, 24), ok);
@@ -80,6 +83,10 @@ private __gshared ulong observed;
                     const result = rasterSum!ulong(roi, 0);
                     if (!result.ok) throw new Exception("raster sum failed");
                     checksum += result.value;
+                } else {
+                    foreach (y; 0 .. 24)
+                        foreach (x; 0 .. 32)
+                            checksum += baseline[(7 + y) * stride + offset + x];
                 }
             }
             observed = checksum;
@@ -87,7 +94,8 @@ private __gshared ulong observed;
             const label = kind == 0 ? "borrow_roi_sample" :
                 kind == 1 ? "retained_copy_roi_sum" : kind == 2 ? "borrow_roi_sum" :
                 kind == 3 ? "retained_copy_view" :
-                kind == 4 ? "borrow_view" : "production_sum_roi";
+                kind == 4 ? "borrow_view" : kind == 5 ?
+                "production_sum_roi" : "raw_d_roi_sum";
             writeln(trial, ",", label, ",",
                 cast(double) elapsed.total!"nsecs" / operations, ",", checksum);
         }
