@@ -283,9 +283,15 @@ runtime timing are not normalized. Compare checksums first. Same runner
 does not imply equivalent system load; report per-compiler medians and
 variability, and remeasure on the target XPS before any C++ parity claim.
 
-A dedicated externally visible lease retain/release benchmark is still
-outstanding. Tiny view construction differences from run 37901584402
-cannot be interpreted as exact reference-count latency.
+The consumer now also includes two alternating-owner cases: it chooses
+between two live leases at runtime, either copying the chosen lease for
+one checked sample (`retained_switch_sample`) or borrowing directly
+(`borrow_switch_sample`). This makes ownership transitions observable
+through a live view/sample, but it **still does not isolate reference-count
+latency** from conditional selection, checking, and loop overhead. Tiny
+view-construction differences from run 37901584402 likewise cannot be
+interpreted as exact reference-count latency. An ownership-instrumented
+callback/release-count probe remains a separate qualification gate.
 
 ## Experiment protocol
 
