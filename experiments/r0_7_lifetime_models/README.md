@@ -387,6 +387,47 @@ CI compiles optimized `-O -release` on both compilers, adding
 The results are unqualified until the CI finishes. Never promote
 one of these shapes on timing alone or change the v0.2 API.
 
+## Linked codegen inspection — qualified DMD observation (2026-10-09)
+
+Artifacts from successful workflow
+[37916072037](https://github.com/alex-1974/raster-d-research/actions/runs/37916072037)
+were retrieved and inspected. These archives contain the linked consumer
+disassembly and symbol tables for DMD 2.111.0 and LDC 1.41.0.
+
+**DMD:** The linked binary has a distinct
+`executeStrictSum!(ubyte, ulong)` symbol starting at `0x6af90`.
+Within its inner sample loop (`0x6b035` onward), address
+`0x6b04e` contains a real `call` to
+`tryAddChecked!ulong` (`0x6b0d0`), followed by a success
+branch. The checked-add helper itself performs the unsigned
+overflow predicate, writes the output result via a pointer and
+returns success or failure. The inner loop also contains an
+end-of-row pointer-advance condition around `0x6b069`–`0x6b078`.
+Thus the existence of a **per-sample call and per-sample
+pointer-advance branch** is directly established for this
+DMD linked build; no cycle-level attribution is yet proven.
+
+**LDC:** No separately named `executeStrictSum` or
+`tryAddChecked` symbol is exposed in the corresponding
+linked consumer symbol listing. This is consistent with
+inlining/internalization, but is *not* by itself proof of
+the exact LDC hot-loop instructions or absence of overflow
+checks. Locate the inlined reduction inside `_Dmain` and
+perform a scoped instruction/branch audit before making a
+stronger codegen claim.
+
+The newly replaced `strict_sum_loop_shapes.d` is now structured
+to compare exactly one source-level dimension at a time:
+cached descriptor fields, indexed versus pointer traversal,
+and an algebraically equivalent unsigned overflow predicate.
+These are **research-only** alternatives. They validate
+every legal fixed-size ROI origin, non-unit sample stride,
+negative row and sample strides, zero-sized shapes, genuine
+ulong overflow and a no-overflow ulong control before timing.
+They have **not yet passed compiler CI** at the current commit.
+Do not compare the old loop-shape numbers to these changed
+implementations as though they measured the same variants.
+
 ## Experiment protocol
 
 1. Run `bash experiments/r0_7_lifetime_models/compile-matrix.sh dmd`
