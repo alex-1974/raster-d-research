@@ -266,6 +266,27 @@ The earlier `dub add-local`/registry-based consumer numbers were
 incorrectly attributed to the pinned release source. They remain
 historical exploratory observations only.
 
+## Initial C++ performance reference (new, not yet qualified)
+
+`roi_sum_cpp.cpp` executes seven repeated strided ROI sums over the
+same initialized 256×128 byte pattern (320-byte row stride; 32×24 ROI;
+x-origin `1 + operation % 13`; 4000 operations per trial). CI builds
+with `c++ -std=c++20 -O3 -DNDEBUG`, records the C++ compiler version,
+and prints the checksum with the duration. The real raster-d external
+consumer now includes `raw_d_roi_sum`, which performs equivalent raw
+D slice-indexed work under its normal DUB release build.
+
+These are **initial algorithm-matching baselines**, not controlled
+cross-language performance evidence yet: compiler flags, code generation,
+GC-owned D slice vs C++ vector, optimizer elimination risks, ABI and
+runtime timing are not normalized. Compare checksums first. Same runner
+does not imply equivalent system load; report per-compiler medians and
+variability, and remeasure on the target XPS before any C++ parity claim.
+
+A dedicated externally visible lease retain/release benchmark is still
+outstanding. Tiny view construction differences from run 37901584402
+cannot be interpreted as exact reference-count latency.
+
 ## Experiment protocol
 
 1. Run `bash experiments/r0_7_lifetime_models/compile-matrix.sh dmd`
