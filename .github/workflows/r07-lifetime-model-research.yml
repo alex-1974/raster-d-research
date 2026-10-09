@@ -32,3 +32,16 @@ jobs:
             -of=/tmp/r07-lifetime-bench \
             "$root/benchmark.d" "$root/probes/retained_malloc.d"
           /tmp/r07-lifetime-bench
+
+      - name: Inspect optimized benchmark object code
+        shell: bash
+        run: |
+          set -euo pipefail
+          root=experiments/r0_7_lifetime_models
+          "$DC" -O -release -c -I="$root/probes" \
+            -of=/tmp/r07-lifetime-codegen.o "$root/benchmark.d"
+          echo '=== relevant compiled symbols ==='
+          nm -C /tmp/r07-lifetime-codegen.o | grep -E 'borrowedSum|retainedSum|callbackSum|benchmark' || true
+          echo '=== object disassembly (first 120 lines) ==='
+          objdump -drC /tmp/r07-lifetime-codegen.o > /tmp/r07-lifetime-codegen.txt
+          sed -n '1,120p' /tmp/r07-lifetime-codegen.txt
