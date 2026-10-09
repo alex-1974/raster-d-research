@@ -45,3 +45,31 @@ jobs:
           echo '=== object disassembly (first 120 lines) ==='
           objdump -drC /tmp/r07-lifetime-codegen.o > /tmp/r07-lifetime-codegen.txt
           sed -n '1,120p' /tmp/r07-lifetime-codegen.txt
+
+      - name: Compare linked baseline and DMD inlining builds
+        shell: bash
+        run: |
+          set -euo pipefail
+          root=experiments/r0_7_lifetime_models
+          extra=()
+          if [[ "$DC" == "dmd" ]]; then
+            extra=(-inline)
+          fi
+          echo '=== linked baseline ==='
+          "$DC" -O -release -I="$root/probes" \
+            -of=/tmp/r07-baseline "$root/benchmark.d" "$root/probes/retained_malloc.d"
+          objdump -drC /tmp/r07-baseline > /tmp/r07-baseline.disasm
+          echo '=== retained read calls (baseline) ==='
+          grep -E 'call.*(RetainedStorage4read|retainedSum)' /tmp/r07-baseline.disasm | head -20 || true
+          echo '=== baseline measurements ==='
+          /tmp/r07-baseline
+          if (( ${#extra[@]} )); then
+            echo '=== linked DMD inline ==='
+            "$DC" -O -release "${extra[@]}" -I="$root/probes" \
+              -of=/tmp/r07-inline "$root/benchmark.d" "$root/probes/retained_malloc.d"
+            objdump -drC /tmp/r07-inline > /tmp/r07-inline.disasm
+            echo '=== retained read calls (inline) ==='
+            grep -E 'call.*(RetainedStorage4read|retainedSum)' /tmp/r07-inline.disasm | head -20 || true
+            echo '=== DMD inline measurements ==='
+            /tmp/r07-inline
+          fi
