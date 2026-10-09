@@ -15,8 +15,20 @@ struct Desc(T) {
     size_t width;
     size_t height;
 }
-enum Variant { guarded, cachedDimensions, indexed, alternateAdd }
+enum Variant { guarded, cachedDimensions, indexed, alternateAdd, checkedHelper }
 struct Outcome { bool ok; ulong value; }
+
+// Deliberately separately callable, so linked codegen can establish whether
+// this source form leaves a hot-loop call. No allocator, exception or GC.
+@safe nothrow @nogc
+bool addWithOutput(ulong lhs, ulong rhs, out ulong result) {
+    if (rhs > ulong.max - lhs) {
+        result = 0;
+        return false;
+    }
+    result = lhs + rhs;
+    return true;
+}
 
 @system Outcome strictSum(Variant variant, T)(Desc!T d) {
     if (d.width==0 || d.height==0) return Outcome(true, 0);
@@ -54,7 +66,11 @@ struct Outcome { bool ok; ulong value; }
             auto p=row;
             foreach(x;0..d.width) {
                 const v=cast(ulong)*p;
-                static if(variant==Variant.alternateAdd) {
+                static if(variant==Variant.checkedHelper) {
+                    ulong next;
+                    if(!addWithOutput(total,v,next)) return Outcome(false,0);
+                    total=next;
+                } else static if(variant==Variant.alternateAdd) {
                     // Equivalent overflow criterion via wrapped addition.
                     const next=total+v;
                     if(next<total) return Outcome(false,0);
@@ -77,12 +93,13 @@ struct Outcome { bool ok; ulong value; }
         case Variant.cachedDimensions: return strictSum!(Variant.cachedDimensions)(d);
         case Variant.indexed: return strictSum!(Variant.indexed)(d);
         case Variant.alternateAdd: return strictSum!(Variant.alternateAdd)(d);
+        case Variant.checkedHelper: return strictSum!(Variant.checkedHelper)(d);
     }
 }
 
 @system void validate(T)(Desc!T d) {
     const reference=strictSum!(Variant.guarded)(d);
-    foreach(v;[Variant.cachedDimensions,Variant.indexed,Variant.alternateAdd])
+    foreach(v;[Variant.cachedDimensions,Variant.indexed,Variant.alternateAdd,Variant.checkedHelper])
         if(run(v,d)!=reference)
             throw new Exception("strict sum variant mismatch");
 }
@@ -108,8 +125,8 @@ struct Outcome { bool ok; ulong value; }
     ulong[3] exact=[1,2,3];
     validate(Desc!ulong(exact.ptr,3,1,3,1));
     writeln("trial,case,ns_per_operation,checksum");
-    foreach(t;0..TRIALS) foreach(slot;0..4) {
-        const v=cast(Variant)((t+slot)%4);
+    foreach(t;0..TRIALS) foreach(slot;0..5) {
+        const v=cast(Variant)((t+slot)%5);
         ulong checksum;
         auto start=MonoTime.currTime;
         foreach(i;0..OPS) {
@@ -122,7 +139,8 @@ struct Outcome { bool ok; ulong value; }
         auto elapsed=MonoTime.currTime-start;
         const label=v==Variant.guarded?"guarded_pointer":
                     v==Variant.cachedDimensions?"cached_dimensions":
-                    v==Variant.indexed?"indexed_pointer":"alternate_checked_add";
+                    v==Variant.indexed?"indexed_pointer":
+                    v==Variant.alternateAdd?"alternate_checked_add":"checked_helper";
         writeln(t,",",label,",",cast(double)elapsed.total!"nsecs"/OPS,",",checksum);
     }
 }
