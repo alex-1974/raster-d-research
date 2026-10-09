@@ -3,9 +3,5 @@ description "Research-only consumer of frozen raster-d release/0.2"
 targetType "executable"
 targetPath "build"
 targetName "real-raster-consumer"
-sourcePaths ".."
-sourceFiles "../real_raster_consumer.d"
+sourcePaths "source"
 dependency "raster-d" version="*"
-buildType "release" {
-    buildOptions "releaseMode" "optimize" "inline"
-}
