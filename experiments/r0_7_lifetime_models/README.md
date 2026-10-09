@@ -228,6 +228,44 @@ The CI step symlinks `raster-d-local` to the checkout at the exact
 commit. Future compiler and performance claims must be based on a green
 run with this path dependency, not on previous registry-resolved runs.
 
+## R0.7 qualified interim evidence — pinned source (2026-10-09)
+
+Source: GitHub Actions [run 37901584402](https://github.com/alex-1974/raster-d-research/actions/runs/37901584402),
+DMD 2.111.0 and LDC 1.41.0, each completed successfully. Consumer path dependency
+resolved to the checked-out `raster-d` source commit
+`cca63a9b2821cd26a98792d322207c8f07bd734f`; DUB built
+`raster-d ~master` from that local path. Values below are seven-trial
+**medians in nanoseconds per operation**, measured on GitHub-hosted VMs:
+
+| Workload | DMD | LDC | Scope |
+| --- | ---: | ---: | --- |
+| borrow_roi_sample | 75.85 | 16.275 | one sample + ROI/view setup |
+| retained_copy_roi_sum | 4362.50 | 645.85 | 768 checked samples + lease copy |
+| borrow_roi_sum | 4359.12 | 642.15 | 768 checked samples |
+| retained_copy_view | 36.55 | 7.40 | lease copy + view/control observation |
+| borrow_view | 33.925 | 5.25 | borrowed view/control observation |
+| production_sum_roi | 2421.20 | 622.675 | 768 samples via actual `sum!ulong` |
+
+The two complete checked ROI traversals have identical checksums
+(`391680000`) and comparable work. The `production_sum_roi`
+checksum matches too. The per-operation median differences are
+3.38 ns (DMD) and 3.70 ns (LDC) for checked ROI sums with versus without
+the lease copy, but **this does not isolate refcount cost**. End-to-end
+operations, measurement variation and optimizer treatment confound that
+inference. `retained_copy_view` versus `borrow_view` differs by
+2.625 ns (DMD) and 2.15 ns (LDC) in these trials, again not an
+ownership microbenchmark proof.
+
+The public production sum engine is ~1.80× faster than checked
+`trySample` traversal on DMD, ~1.03× on LDC for this ROI shape;
+not a general speed claim. This is **not** an XPS or C++ parity result.
+`RasterLease` copying remains non-atomic and has no implicit
+cross-thread ownership contract.
+
+The earlier `dub add-local`/registry-based consumer numbers were
+incorrectly attributed to the pinned release source. They remain
+historical exploratory observations only.
+
 ## Experiment protocol
 
 1. Run `bash experiments/r0_7_lifetime_models/compile-matrix.sh dmd`
