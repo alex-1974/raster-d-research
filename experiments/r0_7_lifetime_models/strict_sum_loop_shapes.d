@@ -1,85 +1,119 @@
-// Standalone research-only loop-shape experiment; not a raster-d API.
+// Research-only controlled strict-sum loop shapes; no production API.
+module strict_sum_loop_shapes;
 import core.time : MonoTime;
 import std.stdio : writeln;
+
 enum size_t W=256, H=128, PITCH=320, RW=32, RH=24, OPS=4000, TRIALS=7;
 private __gshared ulong observed;
-enum Variant { baseline, cachedDimensions, pointerEnd, directChecked }
+
+// A signed-stride, already-validated research descriptor.
+// The caller must prove that every addressed element lies in the backing.
+struct Desc(T) {
+    const(T)* base;
+    ptrdiff_t rowStride;
+    ptrdiff_t sampleStride;
+    size_t width;
+    size_t height;
+}
+enum Variant { guarded, cachedDimensions, indexed, alternateAdd }
 struct Outcome { bool ok; ulong value; }
 
-@system Outcome accumulate(Variant variant, const(ubyte)* base,
-                           size_t pitch, size_t step, size_t w, size_t h) {
-    if (w==0 || h==0) return Outcome(true,0);
-    ulong total=0;
-    auto row=base;
-    if (variant==Variant.pointerEnd) {
+@system Outcome strictSum(T)(Desc!T d, Variant variant) {
+    if (d.width==0 || d.height==0) return Outcome(true, 0);
+    ulong total;
+    if (variant==Variant.cachedDimensions) {
+        // Only change: cache all geometry/stride fields before traversal.
+        const w=d.width, h=d.height;
+        const rs=d.rowStride, ss=d.sampleStride;
+        auto row=d.base;
         foreach(y;0..h) {
-            auto at=row;
+            auto p=row;
             foreach(x;0..w) {
-                const sample=cast(ulong)*at;
-                if (sample>ulong.max-total) return Outcome(false,0);
-                total+=sample;
-                // Pointer arithmetic is intentionally skipped after the last sample.
-                if (x+1<w) at+=step;
+                const v=cast(ulong)*p;
+                if(v>ulong.max-total) return Outcome(false,0);
+                total+=v;
+                if(x+1<w) p+=ss;
             }
-            if(y+1<h) row+=pitch;
+            if(y+1<h) row+=rs;
         }
-    } else if (variant==Variant.cachedDimensions) {
-        const localW=w, localH=h;
-        foreach(y;0..localH) {
-            auto at=row;
-            foreach(x;0..localW) {
-                const sample=cast(ulong)*at;
-                if(sample>ulong.max-total) return Outcome(false,0);
-                total+=sample;
-                if(x+1<localW) at+=step;
+    } else if(variant==Variant.indexed) {
+        // Only change from guarded: use an indexed row access rather
+        // than an incrementing per-sample pointer.
+        auto row=d.base;
+        foreach(y;0..d.height) {
+            foreach(x;0..d.width) {
+                const v=cast(ulong)row[cast(ptrdiff_t)x*d.sampleStride];
+                if(v>ulong.max-total) return Outcome(false,0);
+                total+=v;
             }
-            if(y+1<localH) row+=pitch;
+            if(y+1<d.height) row+=d.rowStride;
         }
     } else {
-        foreach(y;0..h) {
-            foreach(x;0..w) {
-                const sample=cast(ulong)row[x*step];
-                if(sample>ulong.max-total) return Outcome(false,0);
-                total+=sample;
+        auto row=d.base;
+        foreach(y;0..d.height) {
+            auto p=row;
+            foreach(x;0..d.width) {
+                const v=cast(ulong)*p;
+                if(variant==Variant.alternateAdd) {
+                    // Equivalent overflow criterion via wrapped addition.
+                    const next=total+v;
+                    if(next<total) return Outcome(false,0);
+                    total=next;
+                } else {
+                    if(v>ulong.max-total) return Outcome(false,0);
+                    total+=v;
+                }
+                if(x+1<d.width) p+=d.sampleStride;
             }
-            if(y+1<h) row+=pitch;
+            if(y+1<d.height) row+=d.rowStride;
         }
     }
     return Outcome(true,total);
 }
 
+@system void validate(T)(Desc!T d) {
+    const reference=strictSum(d,Variant.guarded);
+    foreach(v;[Variant.cachedDimensions,Variant.indexed,Variant.alternateAdd])
+        if(strictSum(d,v)!=reference)
+            throw new Exception("strict sum variant mismatch");
+}
+
 @system void main() {
     auto data=new ubyte[PITCH*H];
     foreach(i;0..data.length) data[i]=cast(ubyte)((i*37+11)&255);
-    const variants=[Variant.baseline, Variant.cachedDimensions, Variant.pointerEnd, Variant.directChecked];
-    foreach(y;0..H-RH+1) {
-        foreach(x;0..W-RW+1) {
-            const expected=accumulate(Variant.baseline,data.ptr+y*PITCH+x,PITCH,1,RW,RH);
-            if(!expected.ok) throw new Exception("unexpected overflow");
-            foreach(v;variants)
-                if(accumulate(v,data.ptr+y*PITCH+x,PITCH,1,RW,RH)!=expected)
-                    throw new Exception("variant mismatch");
-        }
-    }
-    // Semantic controls: empty shape, negative stride, and genuine overflow.
-    ulong[2] huge=[ulong.max,1];
-    if(accumulate(Variant.baseline,cast(const(ubyte)*)huge.ptr,0,1,0,2)!=Outcome(true,0))
-        throw new Exception("empty shape failed");
+    // Every valid ROI origin, including the last row and column.
+    foreach(y;0..H-RH+1) foreach(x;0..W-RW+1)
+        validate(Desc!ubyte(data.ptr+y*PITCH+x,PITCH,1,RW,RH));
+    // Different positive sample stride, negative row and sample strides,
+    // zero-sized shapes, and actual ulong overflow.
+    validate(Desc!ubyte(data.ptr, PITCH,2,16,16));
+    validate(Desc!ubyte(data.ptr+(RH-1)*PITCH, -cast(ptrdiff_t)PITCH,1,RW,RH));
+    validate(Desc!ubyte(data.ptr+RW-1,PITCH,-1,RW,RH));
+    validate(Desc!ubyte(null,ptrdiff_t.min,ptrdiff_t.min,0,9));
+    validate(Desc!ubyte(null,ptrdiff_t.min,ptrdiff_t.min,9,0));
+    ulong[3] overflow=[ulong.max,1,0];
+    auto overflowD=Desc!ulong(overflow.ptr,3,1,3,1);
+    validate(overflowD);
+    if(strictSum(overflowD,Variant.guarded).ok)
+        throw new Exception("overflow not detected");
+    ulong[3] exact=[1,2,3];
+    validate(Desc!ulong(exact.ptr,3,1,3,1));
     writeln("trial,case,ns_per_operation,checksum");
-    foreach(t;0..TRIALS) foreach(slot;0..variants.length) {
-        const v=variants[(t+slot)%variants.length];
-        ulong checksum=0;
-        const start=MonoTime.currTime;
+    foreach(t;0..TRIALS) foreach(slot;0..4) {
+        const v=cast(Variant)((t+slot)%4);
+        ulong checksum;
+        auto start=MonoTime.currTime;
         foreach(i;0..OPS) {
-            const result=accumulate(v,data.ptr+7*PITCH+1+i%13,PITCH,1,RW,RH);
-            if(!result.ok) throw new Exception("unexpected sum overflow");
+            auto d=Desc!ubyte(data.ptr+7*PITCH+1+i%13,PITCH,1,RW,RH);
+            const result=strictSum(d,v);
+            if(!result.ok) throw new Exception("unexpected overflow");
             checksum+=result.value;
         }
         observed=checksum;
-        const elapsed=MonoTime.currTime-start;
-        const label=v==Variant.baseline?"indexed_checked":
-           v==Variant.cachedDimensions?"cached_dimensions":
-           v==Variant.pointerEnd?"pointer_end_guard":"direct_checked";
+        auto elapsed=MonoTime.currTime-start;
+        const label=v==Variant.guarded?"guarded_pointer":
+                    v==Variant.cachedDimensions?"cached_dimensions":
+                    v==Variant.indexed?"indexed_pointer":"alternate_checked_add";
         writeln(t,",",label,",",cast(double)elapsed.total!"nsecs"/OPS,",",checksum);
     }
 }
