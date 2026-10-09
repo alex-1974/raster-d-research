@@ -61,12 +61,12 @@ public:
         swap(control, rhs.control);
     }
 
-    ubyte read(size_t index) const @system {
+    ubyte read(size_t index) const @system nothrow @nogc {
         assert(control !is null && index < control.length);
         return control.data[index];
     }
 
-    void write(size_t index, ubyte value) @system {
+    void write(size_t index, ubyte value) @system nothrow @nogc {
         assert(control !is null && index < control.length);
         control.data[index] = value;
     }
@@ -77,7 +77,7 @@ struct RetainedView {
     size_t first;
     size_t length;
 
-    ubyte read(size_t index) const @system {
+    ubyte read(size_t index) const @system nothrow @nogc {
         assert(index < length);
         return owner.read(first + index);
     }
