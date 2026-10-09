@@ -454,6 +454,27 @@ runtime-dispatched variant measurements or infer an isolated source
 effect from the previous numbers. Inspect generated linked symbols
 and assembly after the updated CI qualifies.
 
+## Checked-add helper versus inline predicate (new)
+
+The now independently compiled `checked_helper` case uses a separate
+`@safe nothrow @nogc` checked-add function with an `out ulong`
+result and the same pre-addition unsigned overflow predicate as the
+`guarded_pointer` baseline. The descriptor traversal is otherwise
+identical. All existing equivalence probes (including actual
+`ulong.max + 1` overflow, negative signed strides and empty shapes)
+also cover this case.
+
+**Hypothesis:** DMD's production strict-sum slowdown may partly
+reflect a surviving per-sample checked-add call/return and output
+parameter. Whether this research helper is inlined depends on the
+compiler and flags: a successful functional test alone does not
+prove either result. Compare the linked disassembly symbols and
+actual call sites before attributing a performance gap.
+
+This experiment is intentionally not a production change. It does not
+attempt to delete overflow checks, replace the public
+`RasterSumResult` contract or specialize away failure states.
+
 ## Experiment protocol
 
 1. Run `bash experiments/r0_7_lifetime_models/compile-matrix.sh dmd`
