@@ -199,6 +199,21 @@ The CI output for this new consumer is pending. The consumer may
 reveal public integration/compiler issues; no green result or numerical
 measurement is claimed until the new job logs have been checked.
 
+## Actual API: ownership setup versus production reduction
+
+The pinned external DUB consumer now contrasts a copied
+`RasterLease!ubyte` plus `view()` against directly borrowing
+`view()` without an extra owner copy. Both cases consume runtime-varying
+ROI offsets but use a small control-plane observation, so the numbers
+remain sensitive to compiler optimization and are not standalone
+reference-count latency proofs.
+
+A separate `production_sum_roi` case uses the public
+`sum!ulong(roi, 0)` API after a real `tryRoi`, rather than the
+control-plane `trySample` loop. Compare it only against matching
+full-ROI work and verify sums/checksums. All cases use the immutable
+release/0.2 source commit and do not cross package-private boundaries.
+
 ## Experiment protocol
 
 1. Run `bash experiments/r0_7_lifetime_models/compile-matrix.sh dmd`
