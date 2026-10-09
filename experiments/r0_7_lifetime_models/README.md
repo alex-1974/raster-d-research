@@ -584,3 +584,65 @@ the same session before considering any production adaptation.
 - raster-d `source/raster/backing.d` retained owner implementation
 - raster-d `source/raster/writable_view.d` certified borrowing boundary
 - Workspace `DESIGN_PRINCIPLES.md`, `DLANG_PRACTICES.md`, `QUALITY_GATES.md`.
+
+## Linked checked-add codegen: observed evidence (2026-10-09)
+
+Source: successful
+[workflow 37938280137](https://github.com/alex-1974/raster-d-research/actions/runs/37938280137);
+archived `r07-loop-shapes-codegen-dmd-2.111.0` and
+`r07-loop-shapes-codegen-ldc-1.41.0`, each containing
+`r07-codegen-loop-shapes.{txt,symbols}`.
+
+### DMD 2.111.0
+
+The linked symbol table contains **five distinct**
+`strictSum!(Variant.*, ubyte)` instantiations; this confirms
+compile-time specialization. Their start addresses are:
+guarded `0x61e54`, cached `0x62040`, indexed `0x62140`,
+alternate add `0x62234`, and helper `0x6232c`.
+The linked `addWithOutput` function starts at `0x608bc`.
+
+A scoped disassembly inspection of each `ubyte` function
+found **zero `call` instructions** inside the four
+direct-check loop kernels. The `checked_helper` function
+contains exactly one direct call site at **`0x623d3`**:
+`call 608bc <...addWithOutput...>`.
+That site lies in the helper kernel's per-sample traversal.
+These observations establish a surviving hot-path call in
+the DMD helper variant for this linked binary, rather
+than merely inferring it from timing.
+
+The corresponding seven-trial medians (ns/ROI) were
+guarded **962.075**, cached **666.600**, indexed **723.350**,
+alternate checked add **575.375**, and checked helper
+**1641.600**. These differences are **not** an isolated
+estimate of call overhead: branches, register allocation,
+different binary layout and uncontrolled CI runner variation
+remain confounders. They justify a matched local A/B
+experiment; they do not justify production adoption.
+
+### LDC 1.41.0
+
+The linked LDC binary does **not** expose separately named
+`strictSum` or `addWithOutput` symbols, although
+`validate` and `run` symbols exist. This indicates
+significant specialization/inlining/internalization at
+link time. Absence from a symbol table does not prove
+that all overflow tests disappear; no such removal is
+allowed. The five LDC medians were close:
+guarded **175.650**, cached **170.925**, indexed **170.400**,
+alternate **171.325**, helper **170.050** ns/ROI.
+
+### Decision gate
+
+**Qualified:** helper call-site presence under DMD, its
+absence as a separately named symbol under LDC, and
+functional equivalence on the tested input matrix.
+
+**Not qualified:** numerical performance attribution to
+the call alone, XPS hardware results, an exact instruction
+count for LDC's inlined hot loop, and parity with the
+production `executeStrictSum` semantics for arbitrary
+descriptors. Continue within `raster-d-research`; preserve
+the raster-d v0.2 API freeze.
+
