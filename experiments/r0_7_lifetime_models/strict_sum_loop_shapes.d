@@ -18,10 +18,10 @@ struct Desc(T) {
 enum Variant { guarded, cachedDimensions, indexed, alternateAdd }
 struct Outcome { bool ok; ulong value; }
 
-@system Outcome strictSum(T)(Desc!T d, Variant variant) {
+@system Outcome strictSum(Variant variant, T)(Desc!T d) {
     if (d.width==0 || d.height==0) return Outcome(true, 0);
     ulong total;
-    if (variant==Variant.cachedDimensions) {
+    static if (variant==Variant.cachedDimensions) {
         // Only change: cache all geometry/stride fields before traversal.
         const w=d.width, h=d.height;
         const rs=d.rowStride, ss=d.sampleStride;
@@ -36,7 +36,7 @@ struct Outcome { bool ok; ulong value; }
             }
             if(y+1<h) row+=rs;
         }
-    } else if(variant==Variant.indexed) {
+    } else static if(variant==Variant.indexed) {
         // Only change from guarded: use an indexed row access rather
         // than an incrementing per-sample pointer.
         auto row=d.base;
@@ -54,7 +54,7 @@ struct Outcome { bool ok; ulong value; }
             auto p=row;
             foreach(x;0..d.width) {
                 const v=cast(ulong)*p;
-                if(variant==Variant.alternateAdd) {
+                static if(variant==Variant.alternateAdd) {
                     // Equivalent overflow criterion via wrapped addition.
                     const next=total+v;
                     if(next<total) return Outcome(false,0);
@@ -71,10 +71,19 @@ struct Outcome { bool ok; ulong value; }
     return Outcome(true,total);
 }
 
+@system Outcome run(T)(Variant v, Desc!T d) {
+    final switch(v) {
+        case Variant.guarded: return strictSum!(Variant.guarded)(d);
+        case Variant.cachedDimensions: return strictSum!(Variant.cachedDimensions)(d);
+        case Variant.indexed: return strictSum!(Variant.indexed)(d);
+        case Variant.alternateAdd: return strictSum!(Variant.alternateAdd)(d);
+    }
+}
+
 @system void validate(T)(Desc!T d) {
-    const reference=strictSum(d,Variant.guarded);
+    const reference=strictSum!(Variant.guarded)(d);
     foreach(v;[Variant.cachedDimensions,Variant.indexed,Variant.alternateAdd])
-        if(strictSum(d,v)!=reference)
+        if(run(v,d)!=reference)
             throw new Exception("strict sum variant mismatch");
 }
 
@@ -94,7 +103,7 @@ struct Outcome { bool ok; ulong value; }
     ulong[3] overflow=[ulong.max,1,0];
     auto overflowD=Desc!ulong(overflow.ptr,3,1,3,1);
     validate(overflowD);
-    if(strictSum(overflowD,Variant.guarded).ok)
+    if(strictSum!(Variant.guarded)(overflowD).ok)
         throw new Exception("overflow not detected");
     ulong[3] exact=[1,2,3];
     validate(Desc!ulong(exact.ptr,3,1,3,1));
@@ -105,7 +114,7 @@ struct Outcome { bool ok; ulong value; }
         auto start=MonoTime.currTime;
         foreach(i;0..OPS) {
             auto d=Desc!ubyte(data.ptr+7*PITCH+1+i%13,PITCH,1,RW,RH);
-            const result=strictSum(d,v);
+            const result=run(v,d);
             if(!result.ok) throw new Exception("unexpected overflow");
             checksum+=result.value;
         }
