@@ -293,6 +293,38 @@ view-construction differences from run 37901584402 likewise cannot be
 interpreted as exact reference-count latency. An ownership-instrumented
 callback/release-count probe remains a separate qualification gate.
 
+## Strict-sum source audit and comparable C++ arithmetic (2026-10-09)
+
+Inspection of the exact pinned `raster-d` source at
+`cca63a9b2821cd26a98792d322207c8f07bd734f` identifies an
+important mismatch in the original baseline: `sum!ulong` dispatches
+to `raster.internal.strict_sum.executeStrictSum`. In its inner
+loop the implementation checks *each* unsigned addition using
+`tryAddChecked`, returns `accumulatorOverflow` upon failure, and
+preserves row/sample strides and the strict accumulation order.
+The previous `raw_d_roi_sum` and `cpp_roi_sum` loops **do not**
+perform equivalent overflow checks. Consequently the large measured
+gap between production sum and raw sums cannot be attributed solely
+to descriptor, dispatch, or borrow abstraction overhead.
+
+`roi_sum_checked_cpp.cpp` now adds a C++20 unsigned 64-bit
+per-sample checked accumulation using an overflow predicate before
+each addition. Its image values and ROI coordinates match the other
+baselines; this is a **closer numerical-contract reference**, not an
+exact clone of raster-d's public invalid-plane/stride handling.
+CI compiles it using `-std=c++20 -O3 -DNDEBUG` and prints checksum
+and overflow status. C++ compilation and performance numbers for
+this case are **unqualified until the new CI run completes**.
+
+Follow-up codegen qualification should inspect optimized linked
+disassembly of `sum!ulong`, including whether runtime overflow checks
+remain after optimization. An additional *checked D raw* control,
+equivalent compiler optimization flags, stable trial isolation, and
+XPS runs are required before claiming C++ parity or a safe
+specialization for bounded `ubyte` samples. **Do not remove or
+weaken the established checked-overflow contract based on these
+microbenchmarks.**
+
 ## Experiment protocol
 
 1. Run `bash experiments/r0_7_lifetime_models/compile-matrix.sh dmd`
