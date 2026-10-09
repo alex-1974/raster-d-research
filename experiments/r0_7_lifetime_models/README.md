@@ -646,3 +646,31 @@ production `executeStrictSum` semantics for arbitrary
 descriptors. Continue within `raster-d-research`; preserve
 the raster-d v0.2 API freeze.
 
+
+
+## Reproducible XPS local follow-up (not yet measured)
+
+From a clean `raster-d-research` worktree on the XPS, run:
+
+```bash
+bash experiments/r0_7_lifetime_models/run_xps_checked_add.sh \
+  /tmp/r07-checked-add-xps
+```
+
+The script requires `dmd`, `ldc2`, `objdump`, `sha256sum` and
+`python3`. It compiles the same research source with DMD
+(`-O -release -inline`) and LDC (`-O3 -release`), saves both
+linked disassemblies and binary hashes, executes nine outer runs per
+compiler (seven internal trials per variant), checks consistent
+checksums and expected sample counts, and writes `raw.csv`,
+`summary.csv` and `metadata.txt`. Preserve the **entire output
+directory** as raw evidence; do not cherry-pick only the best trials.
+
+The harness measures the five research loop-shape variants, **not**
+the pinned production `executeStrictSum` path. Therefore it can
+support a same-machine *research-kernel* comparison and assess
+run-to-run dispersion, but cannot by itself justify production
+performance or attribute the entire helper delta to call overhead.
+A production-versus-candidate A/B still requires equivalent public
+validation, dimensions, stride semantics, optimizer flags and
+a common hardware session. No XPS results are claimed here.
