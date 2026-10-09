@@ -101,6 +101,25 @@ Important limitations:
   conclusive codegen explanation requires checking the complete emitted
   object and compiler optimization settings.
 
+## Linked-codegen experiment: DMD `-inline`
+
+The preceding CI disassembly was taken from a *relocatable object*; it
+showed per-sample calls into `RetainedStorage.read` in both compilers'
+`retainedSum` bodies. That observation by itself does **not** establish
+the behavior of the final linked benchmark, nor does it demonstrate
+the reason for the DMD/LDC performance difference.
+
+The current CI now builds and executes the **fully linked** baseline
+on both compilers, plus an additional DMD `-O -release -inline`
+variant. It records retained-related call sites from `objdump` and
+seven trial timings for each build. This is a test of whether DMD's
+explicit inlining flag changes the generated hot path. It is not a
+general endorsement of global inlining for production. Compare
+the results and codegen before choosing a permanent optimization.
+
+No observed outcome is claimed for the newly added variant until CI
+has completed. The frozen `raster-d` public API is unchanged.
+
 ## Experiment protocol
 
 1. Run `bash experiments/r0_7_lifetime_models/compile-matrix.sh dmd`
