@@ -169,6 +169,36 @@ callbacks, cache/tile policies, and thread model), recording CPU/compiler
 metadata and machine-readable repeated-run evidence before deciding
 whether to promote a model.
 
+## Real raster-d API consumer — pinned release reference
+
+`real_consumer/` is an isolated DUB executable using the actual
+`raster-d` public `tryAdoptMallocResource`, `tryImportOwnedRaster`,
+`RasterLease!ubyte.view`, `RasterView!ubyte.tryRoi`, and
+`RasterView!ubyte.trySample` APIs. GitHub Actions clones the
+`release/0.2` source and checks out the fixed source commit
+`cca63a9b2821cd26a98792d322207c8f07bd734f`, then registers that
+checkout as a local DUB package. It does not alter `raster-d`.
+
+The workload uses a 256×128 resident single-plane byte raster
+with 320-byte row stride and 32×24 ROIs. Each trial rotates three
+cases: one sampled ROI after borrowing; a full ROI sum after copying
+the retained lease; and a full ROI sum without copying the lease.
+ROI x coordinates vary by operation. Side-effecting API calls are
+outside `assert` so `-release` cannot eliminate them.
+
+**Comparison constraints:** Single sample versus full ROI sum have
+different units of useful work and must not be ranked against each
+other as a pure ownership penalty. Compare `retained_copy_roi_sum`
+only to `borrow_roi_sum`; the borrow-only sampled-ROI case
+separately examines view/ROI setup. Even the pair is an end-to-end
+consumer measurement, not a precise standalone refcount cost.
+The public `trySample` method is a checked/control-plane accessor,
+not the package-internal optimized execution adapter.
+
+The CI output for this new consumer is pending. The consumer may
+reveal public integration/compiler issues; no green result or numerical
+measurement is claimed until the new job logs have been checked.
+
 ## Experiment protocol
 
 1. Run `bash experiments/r0_7_lifetime_models/compile-matrix.sh dmd`
