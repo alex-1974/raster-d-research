@@ -7,6 +7,7 @@ import retained_malloc : RetainedStorage;
 // It does not model raster-d descriptor validation or physical layout.
 enum size_t width = 4096;
 enum size_t repetitions = 4096;
+enum size_t trials = 7;
 private __gshared ulong checksumSink;
 
 @system ulong borrowedSum(const(ubyte)* data, size_t n) {
@@ -39,24 +40,29 @@ private __gshared ulong checksumSink;
     ulong expected = borrowedSum(data.ptr, width);
     assert(retainedSum(owner, width) == expected);
     assert(callbackSum(data.ptr, width) == expected);
-    writeln("case,ns_per_sample,checksum");
-    foreach (kind; 0 .. 3) {
-        auto start = MonoTime.currTime;
-        ulong sum = 0;
-        foreach (_; 0 .. repetitions) {
-            switch (kind) {
-                case 0: sum += borrowedSum(data.ptr, width); break;
-                case 1: sum += retainedSum(owner, width); break;
-                case 2: sum += callbackSum(data.ptr, width); break;
-                default: assert(0);
+    writeln("trial,case,ns_per_sample,checksum");
+    // Rotate order across trials so case order is not fixed.
+    foreach (trial; 0 .. trials) {
+        foreach (slot; 0 .. 3) {
+            const kind = (trial + slot) % 3;
+            auto start = MonoTime.currTime;
+            ulong sum = 0;
+            foreach (_; 0 .. repetitions) {
+                switch (kind) {
+                    case 0: sum += borrowedSum(data.ptr, width); break;
+                    case 1: sum += retainedSum(owner, width); break;
+                    case 2: sum += callbackSum(data.ptr, width); break;
+                    default: assert(0);
+                }
             }
+            auto duration = MonoTime.currTime - start;
+            checksumSink = sum;
+            const double nsPerSample = cast(double) duration.total!"nsecs" /
+                cast(double) (width * repetitions);
+            string label = kind == 0 ? "borrowed" :
+                (kind == 1 ? "retained" : "loop_control");
+            writeln(trial, ",", label, ",", nsPerSample, ",", sum);
+            assert(sum == expected * repetitions);
         }
-        auto duration = MonoTime.currTime - start;
-        checksumSink = sum;
-        const double nsPerSample = cast(double) duration.total!"nsecs" /
-            cast(double) (width * repetitions);
-        string label = kind == 0 ? "borrowed" : (kind == 1 ? "retained" : "loop_control");
-        writeln(label, ",", nsPerSample, ",", sum);
-        assert(sum == expected * repetitions);
     }
 }
