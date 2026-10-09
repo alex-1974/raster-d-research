@@ -214,6 +214,20 @@ control-plane `trySample` loop. Compare it only against matching
 full-ROI work and verify sums/checksums. All cases use the immutable
 release/0.2 source commit and do not cross package-private boundaries.
 
+## Dependency provenance correction
+
+The initial real-consumer workflow used `dub add-local` alongside a
+`version="*"` dependency. CI logs displayed `Fetching raster-d 0.1.0`,
+so they did **not** prove that the exact checked-out release/0.2 source
+was linked, despite printing the desired Git commit. These earlier
+consumer results must not be attributed to `cca63a9`.
+
+The dependency is now an explicit local path:
+`dependency "raster-d" path="raster-d-local"`.
+The CI step symlinks `raster-d-local` to the checkout at the exact
+commit. Future compiler and performance claims must be based on a green
+run with this path dependency, not on previous registry-resolved runs.
+
 ## Experiment protocol
 
 1. Run `bash experiments/r0_7_lifetime_models/compile-matrix.sh dmd`
