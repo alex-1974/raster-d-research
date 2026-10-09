@@ -66,7 +66,7 @@ def main():
         raise SystemExit(f"Patch precondition failed: {data.count(OLD)} matches")
     file.write_text(data.replace(OLD, NEW))
     delta = subprocess.check_output(["git", "-C", str(root), "diff", "--", str(TARGET)], text=True)
-    if delta.count("@@") != 1:
+    if len([line for line in delta.splitlines() if line.startswith("@@ ")]) != 1:
         raise SystemExit("Unexpected patch scope; inspect diff")
     print("source_sha256_before=" + hashlib.sha256(data.encode()).hexdigest())
     print("source_sha256_after=" + hashlib.sha256(file.read_bytes()).hexdigest())
