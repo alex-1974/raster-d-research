@@ -475,6 +475,64 @@ This experiment is intentionally not a production change. It does not
 attempt to delete overflow checks, replace the public
 `RasterSumResult` contract or specialize away failure states.
 
+## Linked assembly evidence: checked-add A/B (2026-10-09)
+
+Source: successful [GitHub Actions run 37938280137](https://github.com/alex-1974/raster-d-research/actions/runs/37938280137), artifact names
+`r07-loop-shapes-codegen-dmd-2.111.0` and
+`r07-loop-shapes-codegen-ldc-1.41.0`.
+The archived symbol tables and linked disassembly were inspected directly.
+
+DMD linked addresses (binary-relative; not stable API addresses):
+- `addWithOutput`: `0x608bc`;
+- specialized `strictSum!(Variant.guarded, ubyte)`: `0x61e54`;
+- specialized `strictSum!(Variant.alternateAdd, ubyte)`: `0x62234`;
+- specialized `strictSum!(Variant.checkedHelper, ubyte)`: `0x6232c`.
+
+The DMD `checkedHelper` inner loop contains a concrete
+`call 0x608bc` at `0x623d3` targeting `addWithOutput`;
+the call site is on the loop path, which branches back at
+`0x62426`. Neither the guarded direct-add kernel nor the
+alternative-add kernel has a call instruction in its compiled
+kernel body. The alternative checked-add path performs an
+address/register `lea` and compares the wrapped result with
+the previous accumulator (`0x6229d`–`0x622a4`); the
+baseline uses the complementary pre-add overflow comparison
+(`0x61ec4`–`0x61eca`). Both checked predicates remain present.
+
+LDC's archived linked symbol table exposes none of these
+individual `strictSum` specializations or `addWithOutput`
+as externally named entries; this is consistent with
+inlining/internalization. **It does not prove the absence of
+individual overflow checks or completely explain LDC throughput.**
+A follow-up should identify inlined callsites in `_Dmain`
+via branch/dataflow inspection or compile with explicit
+codegen instrumentation.
+
+Measurement from the same run (median of seven trials, ns/ROI):
+| Variant | DMD | LDC |
+|---|---:|---:|
+| guarded_pointer | 962.075 | 175.650 |
+| alternate_checked_add | 575.375 | 171.325 |
+| checked_helper | 1641.600 | 170.050 |
+
+All cases returned the same checksum `391680000`. The
+benchmark cases are *not* a matched production-raster API
+comparison, and compiler and runner effects remain. **The
+DMD helper call is proven; the exact fraction of runtime
+attributable solely to the call is not.** No production
+change or API modification is authorized by this evidence.
+
+Proposed XPS qualification: keep the implementation in the
+research repo; measure each variant through independent,
+non-inlined public entrypoints with matched input descriptors,
+seed, repetitions, optimization flags, and iteration order.
+Include positive/negative row and sample strides, empty ROI,
+and real ulong overflow in a correctness stage distinct from
+timed runs. Record compiler version, target CPU and
+optimization flags; retain median plus dispersion and linked
+assembly. Benchmark the pinned `raster-d` v0.2 baseline in
+the same session before considering any production adaptation.
+
 ## Experiment protocol
 
 1. Run `bash experiments/r0_7_lifetime_models/compile-matrix.sh dmd`
