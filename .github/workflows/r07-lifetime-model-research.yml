@@ -142,3 +142,17 @@ jobs:
           path: /tmp/r07-codegen/
           if-no-files-found: warn
           retention-days: 14
+
+      - name: Research checked strict-sum loop shapes
+        shell: bash
+        run: |
+          set -euo pipefail
+          root=experiments/r0_7_lifetime_models
+          options=(-O -release)
+          if [[ "$DC" == "dmd" ]]; then options+=(-inline); fi
+          "$DC" "${options[@]}" -of=/tmp/r07-loop-shapes \
+            "$root/strict_sum_loop_shapes.d"
+          /tmp/r07-loop-shapes
+          objdump -drwC /tmp/r07-loop-shapes > /tmp/r07-codegen-loop-shapes.txt
+          echo "loop shapes binary sha256:"
+          sha256sum /tmp/r07-loop-shapes
