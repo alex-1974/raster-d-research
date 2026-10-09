@@ -330,6 +330,37 @@ specialization for bounded `ubyte` samples. **Do not remove or
 weaken the established checked-overflow contract based on these
 microbenchmarks.**
 
+## Linked codegen audit — production strict sum (2026-10-09)
+
+A focused source audit of the pinned `raster-d` commit
+`cca63a9b2821cd26a98792d322207c8f07bd734f` traces the public
+`raster.reduction.sum!ulong` to
+`raster.internal.strict_sum.executeStrictSum!(ubyte, ulong)`.
+After validating the plane/strides and the empty-view case, it
+walks rows and samples in encounter order, checks each accumulator
+addition via `tryAddChecked`, and uses guarded pointer advances
+(`if (x + 1 < source.width)` and `if (y + 1 < source.height)`).
+Both the per-element overflow predicate and repeated last-element
+branches are plausible codegen costs; **their machine-level
+presence and relative cost are not yet demonstrated**. The kernel
+must continue to preserve overflow-failure behavior, signed stride
+correctness, empty-region handling and order of accumulation.
+
+The research workflow now retains `nm -anC` symbols and complete
+`objdump -drwC` output of the **linked external consumer binary**
+for DMD 2.111.0 and LDC 1.41.0, with compiler-labelled 14-day
+artifacts. The step records the binary SHA-256 and small relevant
+symbol/reference excerpts in the job log. Inlining may eliminate
+named symbols; lack of a symbol is **not proof** that an operation is
+absent. Compare the actual hot loop, branch structure, and call sites,
+not only an object-file listing.
+
+**Experiment gate:** retrieve the artifacts from a successful run;
+verify that the optimized loop is identifiable before attributing
+timings to any particular instruction. Do not change the frozen
+production implementation or weaken its overflow contract on the
+basis of this source-level hypothesis.
+
 ## Experiment protocol
 
 1. Run `bash experiments/r0_7_lifetime_models/compile-matrix.sh dmd`
