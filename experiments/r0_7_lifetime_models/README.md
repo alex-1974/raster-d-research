@@ -428,6 +428,32 @@ They have **not yet passed compiler CI** at the current commit.
 Do not compare the old loop-shape numbers to these changed
 implementations as though they measured the same variants.
 
+## Controlled follow-up: compile-time specialization (2026-10-09)
+
+The initial successful [run 37935538619](https://github.com/alex-1974/raster-d-research/actions/runs/37935538619)
+used a **runtime `Variant` switch** inside `strictSum`, so its
+four medians also reflected runtime dispatch/code layout and must
+not be treated as isolated effects of the source-level changes.
+Archived disassembly symbols confirm that the old loop-shape
+executable emitted a single `strictSum!ubyte` entry point on
+each compiler (plus `strictSum!ulong` for overflow validation),
+rather than four individually named specialized kernels.
+
+The new kernel accepts `Variant` as a **compile-time template
+parameter** and dispatches before entering it. Each variant is
+compiled separately: baseline guarded pointer, cached descriptor
+fields only, row-relative index instead of advancing sample pointer,
+and alternative equivalent unsigned checked addition.
+This removes the per-sample runtime variant check from the
+`alternate_checked_add` case. Every variant is validated against
+the baseline across ROI positions, positive/negative strides,
+empty shapes, and real `ulong` overflow before timing.
+
+Do **not** compare the new trial medians directly to the earlier
+runtime-dispatched variant measurements or infer an isolated source
+effect from the previous numbers. Inspect generated linked symbols
+and assembly after the updated CI qualifies.
+
 ## Experiment protocol
 
 1. Run `bash experiments/r0_7_lifetime_models/compile-matrix.sh dmd`
