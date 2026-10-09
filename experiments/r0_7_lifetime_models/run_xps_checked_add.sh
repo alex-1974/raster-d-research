@@ -16,7 +16,7 @@ for bin in dmd ldc2 objdump sha256sum; do command -v "$bin" >/dev/null || { echo
   echo "utc_timestamp=$(date -u +%FT%TZ)"
   echo "host=$(hostname)"
   echo "uname=$(uname -a)"
-  echo "cpu_model=$(sed -n 's/^model name[[:space:]]*:[[:space:]]*//p' /proc/cpuinfo | head -1)"
+  echo "cpu_model=$(awk -F: '/^model name/{sub(/^[[:space:]]+/, "", $2); print $2; exit}' /proc/cpuinfo)"
   echo "revision=$(git rev-parse HEAD)"
   echo "branch=$(git branch --show-current)"
   echo "source_sha256=$(sha256sum "$SRC")"
