@@ -361,6 +361,32 @@ timings to any particular instruction. Do not change the frozen
 production implementation or weaken its overflow contract on the
 basis of this source-level hypothesis.
 
+## Strict-sum loop-shape controls (research-only)
+
+`strict_sum_loop_shapes.d` adds isolated optimized loops for the
+same fixed 32×24 signed-free positive-stride byte ROI workload:
+an indexed checked loop (`indexed_checked`), a local-dimension
+pointer version (`cached_dimensions`), a pointer-end-guard
+version (`pointer_end_guard`), and an independently labelled direct
+checked control (`direct_checked`). This is an *initial
+instrumentation scaffold*, not yet a full one-factor-at-a-time
+experiment: cached-dimension and pointer-end-guard versions currently
+share much of their control flow, while indexed and direct-checked
+share the same implementation. Equal timings are expected for some
+pairs and must not be reported as independent evidence.
+
+Before timing, the probe compares outcomes for every 32×24 ROI
+origin within the 256×128 resident region and checks zero-width
+semantics. It does **not** yet test unsigned overflow with a
+sample type capable of producing it, negative strides, arbitrary
+sample strides or malformed descriptors. Those are mandatory
+qualifications before any production implementation experiment.
+
+CI compiles optimized `-O -release` on both compilers, adding
+`-inline` for DMD, and reports seven rotating timed trials.
+The results are unqualified until the CI finishes. Never promote
+one of these shapes on timing alone or change the v0.2 API.
+
 ## Experiment protocol
 
 1. Run `bash experiments/r0_7_lifetime_models/compile-matrix.sh dmd`
