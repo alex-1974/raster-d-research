@@ -70,6 +70,37 @@ The research CI compiles the benchmark optimized and executes it on the
 baseline DMD/LDC jobs. No measured timing result is recorded until those
 runs have completed and the numerical outputs have been inspected.
 
+## DMD read-path gap — follow-up instrumentation
+
+The first GitHub-hosted run (#37844586245) reported borrowed/retained
+single-trial read costs of **0.349/1.916 ns per sample on DMD 2.111.0**
+and **0.163/0.156 ns on LDC 1.41.0**. Those figures are single
+measurements on runners and are *not* an established performance ratio.
+
+The latest benchmark now records seven independently timed trials per
+compiler, rotating the case order for each trial, and preserves identical
+checksums. A separate CI step emits compiler-produced object symbols
+and an initial disassembly excerpt. This is **instrumentation**: no root
+cause is confirmed until those CI artifacts are examined.
+
+The retained sample access has also been annotated `@system nothrow
+@nogc` as a compiler acceptance probe. `@safe` is intentionally
+*not* claimed for the raw-pointer implementation. Production-safe
+construction, ownership failure paths and true scoped execution must
+still be audited separately.
+
+Important limitations:
+- CI-hosted timings remain noisy. Median, spread and raw runs should be
+  recorded before interpreting any DMD/LDC performance difference.
+- Current read model includes accessor checks; the borrow model does not
+  have identical bounds-check placement. Future measurements must
+  distinguish **checked read**, **validated hot-path read**, and
+  **ownership copy/retain** separately.
+- The third `loop_control` case is not a callback implementation.
+- The included disassembly excerpt may omit inlined loop bodies; a
+  conclusive codegen explanation requires checking the complete emitted
+  object and compiler optimization settings.
+
 ## Experiment protocol
 
 1. Run `bash experiments/r0_7_lifetime_models/compile-matrix.sh dmd`
