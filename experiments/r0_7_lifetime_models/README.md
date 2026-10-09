@@ -141,6 +141,34 @@ benchmark has validated its indices and retains the owner throughout.
 Interpret timings only after examining the latest compiler matrix and
 linked codegen.
 
+## Strided descriptor and ROI microbenchmark (new)
+
+`descriptor_benchmark.d` introduces a **research surrogate** of a
+row-strided raster descriptor (256×128, row stride 320), plus an owning
+descriptor retaining the malloc-backed reference-counted storage.
+It exercises borrowed/retained descriptor copying, 32×24 ROI creation,
+and row-strided ROI sample aggregation with seven rotating trials under
+DMD and LDC (DMD with `-inline`). All sums are computed from the
+same initialized bytes, and matching ROI sums are asserted.
+
+**Important limitation:** These are not yet the production
+`raster-d` `RasterView` / `RasterLease` types or validated APIs.
+No cross-repository dependency or change to the frozen API was made.
+The first CI runs demonstrate that the surrogate compiles and executes,
+but they also expose a benchmark pitfall: constant-time copy/ROI cases
+can be folded, hoisted or eliminated by an optimizing compiler, yielding
+near-zero reported nanoseconds on LDC. Those timings **must not** be
+interpreted as genuine retained-reference-copy costs. Future
+qualification must make input choices runtime-variable, establish
+observable ownership transitions, and isolate ROI construction from
+sample traversal.
+
+The remaining production-near qualification requires testing the
+actual raster-d descriptors (including region layouts, storage
+callbacks, cache/tile policies, and thread model), recording CPU/compiler
+metadata and machine-readable repeated-run evidence before deciding
+whether to promote a model.
+
 ## Experiment protocol
 
 1. Run `bash experiments/r0_7_lifetime_models/compile-matrix.sh dmd`
