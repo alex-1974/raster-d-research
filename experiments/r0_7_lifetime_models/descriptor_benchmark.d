@@ -76,8 +76,8 @@ struct OwnedDescriptor {
             ulong total;
             foreach (iteration; 0 .. operations) {
                 switch (kind) {
-                    case 0: { auto v = borrowed; total += v.width; break; }
-                    case 1: { auto v = retained; total += v.width; break; }
+                    case 0: { auto v = borrowed; total += v.sample(0, 0); break; }
+                    case 1: { auto v = retained; total += v.borrow().sample(0, 0); break; }
                     case 2: { auto v = borrowed.roi(5, 7, 32, 24); total += v.offset; break; }
                     case 3: { auto v = retained.roi(5, 7, 32, 24); total += v.offset; break; }
                     case 4: { auto v = borrowed.roi(5, 7, 32, 24); total += sumRegion(v); break; }
