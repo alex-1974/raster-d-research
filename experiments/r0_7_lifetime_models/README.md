@@ -318,8 +318,13 @@ this case are **unqualified until the new CI run completes**.
 
 Follow-up codegen qualification should inspect optimized linked
 disassembly of `sum!ulong`, including whether runtime overflow checks
-remain after optimization. An additional *checked D raw* control,
-equivalent compiler optimization flags, stable trial isolation, and
+remain after optimization. The external consumer now adds `checked_d_roi_sum`, with a `ulong`
+accumulator reset for each ROI and a per-sample overflow predicate
+before addition. Its checksum must match the production and C++
+checked sums. It is still not a substitute for full raster layout
+validation or the production overflow result object.
+
+Equivalent compiler optimization flags, stable trial isolation, and
 XPS runs are required before claiming C++ parity or a safe
 specialization for bounded `ubyte` samples. **Do not remove or
 weaken the established checked-overflow contract based on these
