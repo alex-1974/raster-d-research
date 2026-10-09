@@ -2,6 +2,7 @@ import core.stdc.stdlib : malloc;
 import core.time : MonoTime;
 import std.stdio : writeln;
 import raster;
+import raster.reduction : rasterSum = sum;
 
 enum size_t width = 256, height = 128, stride = 320;
 enum size_t trials = 7, operations = 4_000;
@@ -76,7 +77,7 @@ private __gshared ulong observed;
                     bool ok;
                     scope auto roi = v.tryRoi(Region2D(offset, 7, 32, 24), ok);
                     if (!ok) throw new Exception("ROI failed");
-                    const result = sum!ulong(roi, 0);
+                    const result = rasterSum!ulong(roi, 0);
                     if (!result.ok) throw new Exception("raster sum failed");
                     checksum += result.value;
                 }
