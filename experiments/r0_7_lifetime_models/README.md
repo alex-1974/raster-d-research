@@ -120,6 +120,27 @@ the results and codegen before choosing a permanent optimization.
 No observed outcome is claimed for the newly added variant until CI
 has completed. The frozen `raster-d` public API is unchanged.
 
+## Controlled follow-up: LDC pipeline and DMD read overhead
+
+The compiler-version line in `compile-matrix.sh` now writes a complete
+version report to a temporary file before printing the first three lines.
+This avoids LDC's broken-pipe failure with Bash `pipefail`.
+
+The repeated benchmark now includes `retained_unchecked` (control-block
+indirection without per-element assertions) and `retained_cached` (one
+control-block lookup before looping over a borrowed raw data pointer),
+in addition to checked `retained`, `borrowed`, and `loop_control`.
+Both extra accessors are **research-only @system** facilities, not
+candidate public API additions. All five cases verify the same checksum
+and their order rotates across seven trials.
+
+This separates the cost of repeated checked access from repeated control
+lookup and the cost of a once-per-operation validated access path.
+No correctness/safety contract is inferred for unchecked reads: the
+benchmark has validated its indices and retains the owner throughout.
+Interpret timings only after examining the latest compiler matrix and
+linked codegen.
+
 ## Experiment protocol
 
 1. Run `bash experiments/r0_7_lifetime_models/compile-matrix.sh dmd`
