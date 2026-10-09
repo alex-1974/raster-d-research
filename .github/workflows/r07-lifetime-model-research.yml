@@ -99,6 +99,20 @@ jobs:
           ln -s "$raster" "$consumer/raster-d-local"
           echo "consumer dependency path: $(readlink -f "$consumer/raster-d-local")"
           dub run --root="$consumer" --compiler="$DC" --build=release
+          binary="$consumer/build/real-raster-consumer"
+          test -x "$binary"
+          mkdir -p /tmp/r07-codegen
+          nm -anC "$binary" > /tmp/r07-codegen/symbols.txt
+          objdump -drwC "$binary" > /tmp/r07-codegen/consumer.disasm
+          echo '=== strict sum / checked addition linked symbols ==='
+          grep -Ei 'strict.sum|strictsum|tryaddchecked|rasterSum|reduction.*sum' \
+            /tmp/r07-codegen/symbols.txt | head -60 || true
+          echo '=== strict sum / checked addition disassembly references ==='
+          grep -Ein -m 60 'strict.sum|strictsum|tryaddchecked' \
+            /tmp/r07-codegen/consumer.disasm || true
+          echo '=== codegen audit provenance ==='
+          sha256sum "$binary"
+          ls -lh "$binary" /tmp/r07-codegen/*
 
       - name: C++20 ROI reference on same runner
         shell: bash
@@ -119,3 +133,12 @@ jobs:
             experiments/r0_7_lifetime_models/roi_sum_checked_cpp.cpp \
             -o /tmp/r07-roi-checked-cpp
           /tmp/r07-roi-checked-cpp
+
+      - name: Preserve linked consumer disassembly evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: r07-linked-codegen-${{ matrix.compiler }}
+          path: /tmp/r07-codegen/
+          if-no-files-found: warn
+          retention-days: 14
