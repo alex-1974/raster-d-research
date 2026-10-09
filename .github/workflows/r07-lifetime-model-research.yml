@@ -154,5 +154,18 @@ jobs:
             "$root/strict_sum_loop_shapes.d"
           /tmp/r07-loop-shapes
           objdump -drwC /tmp/r07-loop-shapes > /tmp/r07-codegen-loop-shapes.txt
+          nm -anC /tmp/r07-loop-shapes > /tmp/r07-codegen-loop-shapes.symbols
+          grep -E 'strictSum|strict_sum_loop_shapes' /tmp/r07-codegen-loop-shapes.symbols | head -40 || true
           echo "loop shapes binary sha256:"
           sha256sum /tmp/r07-loop-shapes
+
+      - name: Preserve loop-shape linked codegen
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: r07-loop-shapes-codegen-${{ matrix.compiler }}
+          path: |
+            /tmp/r07-codegen-loop-shapes.txt
+            /tmp/r07-codegen-loop-shapes.symbols
+          if-no-files-found: warn
+          retention-days: 14
