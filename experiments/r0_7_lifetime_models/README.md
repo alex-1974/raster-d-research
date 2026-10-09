@@ -674,3 +674,44 @@ performance or attribute the entire helper delta to call overhead.
 A production-versus-candidate A/B still requires equivalent public
 validation, dimensions, stride semantics, optimizer flags and
 a common hardware session. No XPS results are claimed here.
+
+
+## Frozen production-source checked-add A/B (new; pending execution)
+
+Run from a **clean** research worktree:
+
+```bash
+bash experiments/r0_7_lifetime_models/run_production_checked_add_ab.sh \
+  /tmp/r07-production-checked-ab
+```
+
+This creates **two independent detached clones** at the identical pinned
+`raster-d` SHA `cca63a9b2821cd26a98792d322207c8f07bd734f`.
+The baseline is untouched. The candidate changes **one internal**
+`executeStrictSum` call site, and only when
+`Accumulator == ulong`: it substitutes the direct predicate
+`value > ulong.max - total` and the subsequent `total += value`.
+Every other accumulator, row traversal, view/plane validation,
+signed stride operation, empty handling, output status and public
+signature stays on the original code path. The patch script
+checks the frozen source revision, a clean checkout, a unique
+source anchor and a single diff hunk; the full candidate diff is retained.
+
+The **same** existing real-consumer source is built through DUB
+against each clone, using DMD and LDC independently. The existing
+`production_sum_roi` public API operation (including lease/view,
+ROI creation, validation and result check) is timed for seven pairs
+of baseline/candidate runs per compiler, with seven internal trials.
+Pairs alternate execution order to mitigate order bias. Each binary's
+linked symbols, assembly, checksum and build provenance are saved.
+The summary contains 49 measurements per compiler/arm and refuses
+unequal checksums or missing trials.
+
+**Limits:** only `ubyte -> ulong` ROI summation is timed; the
+source candidate is designed to preserve other integer and floating
+instantiations but this harness alone does not exhaustively validate
+them. A successful build is not a completed public numeric-contract
+matrix; retain existing frozen-source tests and extend candidate
+signed/unsigned overflow cases before any promotion. No XPS A/B
+numbers or production speedups are claimed before execution. This
+is a research-only copy; the production repository is untouched.
