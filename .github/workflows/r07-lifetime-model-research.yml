@@ -73,3 +73,15 @@ jobs:
             echo '=== DMD inline measurements ==='
             /tmp/r07-inline
           fi
+
+      - name: Benchmark strided descriptors and retained ROI operations
+        shell: bash
+        run: |
+          set -euo pipefail
+          root=experiments/r0_7_lifetime_models
+          options=(-O -release)
+          if [[ "$DC" == "dmd" ]]; then options+=(-inline); fi
+          "$DC" "${options[@]}" -I="$root/probes" \
+            -of=/tmp/r07-descriptor-bench \
+            "$root/descriptor_benchmark.d" "$root/probes/retained_malloc.d"
+          /tmp/r07-descriptor-bench
