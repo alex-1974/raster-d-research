@@ -44,8 +44,8 @@ private __gshared ulong observed;
     if (sampleRoi(lease, 5) == 0) throw new Exception("unexpected zero sum");
     writeln("trial,case,ns_per_operation,checksum");
     foreach (trial; 0 .. trials) {
-        foreach (slot; 0 .. 3) {
-            const kind = (trial + slot) % 3;
+        foreach (slot; 0 .. 5) {
+            const kind = (trial + slot) % 5;
             ulong checksum;
             auto start = MonoTime.currTime;
             foreach (i; 0 .. operations) {
@@ -62,14 +62,22 @@ private __gshared ulong observed;
                 } else if (kind == 1) {
                     auto retained = lease;
                     checksum += sampleRoi(retained, offset);
-                } else {
+                } else if (kind == 2) {
                     checksum += sampleRoi(lease, offset);
+                } else if (kind == 3) {
+                    auto retained = lease;
+                    scope auto v = retained.view();
+                    checksum += v.width + offset;
+                } else {
+                    scope auto v = lease.view();
+                    checksum += v.width + offset;
                 }
             }
             observed = checksum;
             const elapsed = MonoTime.currTime - start;
             const label = kind == 0 ? "borrow_roi_sample" :
-                kind == 1 ? "retained_copy_roi_sum" : "borrow_roi_sum";
+                kind == 1 ? "retained_copy_roi_sum" : kind == 2 ? "borrow_roi_sum" :
+                kind == 3 ? "retained_copy_view" : "borrow_view";
             writeln(trial, ",", label, ",",
                 cast(double) elapsed.total!"nsecs" / operations, ",", checksum);
         }
