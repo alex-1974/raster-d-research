@@ -30,7 +30,7 @@ struct Descriptor {
 struct OwnedDescriptor {
     RetainedStorage owner;
     size_t offset, width, height, rowStride;
-    @system OwnedDescriptor roi(size_t x, size_t y, size_t w, size_t h) const {
+    @system OwnedDescriptor roi(size_t x, size_t y, size_t w, size_t h) {
         assert(x <= width && w <= width - x);
         assert(y <= height && h <= height - y);
         OwnedDescriptor result;
