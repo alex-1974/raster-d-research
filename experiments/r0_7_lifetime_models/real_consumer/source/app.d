@@ -96,7 +96,7 @@ private __gshared ulong observed;
                         throw new Exception("owner switch read failed");
                     checksum += sample;
                 } else {
-                    scope auto v = ((i & 1) == 0 ? lease : alternateLease).view();
+                    scope auto v = (i & 1) == 0 ? lease.view() : alternateLease.view();
                     ubyte sample;
                     if (!v.trySample(0, i % width, i % height, sample))
                         throw new Exception("borrow switch read failed");
