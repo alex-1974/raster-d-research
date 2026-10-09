@@ -4,7 +4,8 @@ compiler="${1:-dmd}"
 root="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 tmp="$(mktemp -d)"
 trap 'rm -rf "$tmp"' EXIT
-"$compiler" --version | head -3
+"$compiler" --version >"$tmp/compiler-version.txt" 2>&1
+sed -n '1,3p' "$tmp/compiler-version.txt"
 printf '%s\n' 'compiler,mode,case,result'
 failures=0
 for mode in ordinary dip1000; do
