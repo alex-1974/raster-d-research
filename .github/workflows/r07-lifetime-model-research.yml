@@ -95,6 +95,7 @@ jobs:
             https://github.com/alex-1974/raster-d.git "$raster"
           git -C "$raster" checkout --detach cca63a9b2821cd26a98792d322207c8f07bd734f
           echo "frozen raster-d source: $(git -C "$raster" rev-parse HEAD)"
-          dub add-local "$raster"
           consumer=experiments/r0_7_lifetime_models/real_consumer
+          ln -s "$raster" "$consumer/raster-d-local"
+          echo "consumer dependency path: $(readlink -f "$consumer/raster-d-local")"
           dub run --root="$consumer" --compiler="$DC" --build=release
