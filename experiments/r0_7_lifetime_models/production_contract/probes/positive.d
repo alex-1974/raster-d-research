@@ -1,5 +1,7 @@
 module positive;
-import raster : RasterLease, RasterView, Region2D;
+import raster.backing : RasterLease;
+import raster.view : RasterView;
+import raster.region : Region2D;
 @safe void check(ref RasterLease!ubyte lease) {
     scope auto v = lease.view();
     bool ok;
