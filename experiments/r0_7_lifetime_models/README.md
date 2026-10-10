@@ -811,3 +811,42 @@ Compare matching `ubyte, ulong` instantiations only, and check the
 machine instruction path, compiler flags, and public status before
 promotion. The new CI codegen collection has not yet been qualified.
 No change to the raster-d v0.2 public API or production source.
+
+
+## Qualified production-source linked codegen (2026-10-10)
+
+Successful workflow [38037058275](https://github.com/alex-1974/raster-d-research/actions/runs/38037058275)
+on commit `0a60363` completed DMD 2.111.0 and LDC 1.41.0
+baseline/candidate unit tests and the linked production A/B audit.
+The workflow retained the full `r07-production-ab-codegen-*`
+artifacts. This is **real external-consumer linked code**, not
+the earlier surrogate loop-shape probe.
+
+| Compiler/arm | Named `executeStrictSum!(ubyte, ulong)` | Calls in that function | Direct `tryAddChecked` call sites |
+| --- | ---: | ---: | ---: |
+| DMD baseline | 1 | 3 | **1** |
+| DMD candidate | 1 | 2 | **0** |
+| LDC baseline | 0 visible | not attributable | not attributable |
+| LDC candidate | 0 visible | not attributable | not attributable |
+
+This verifies that the candidate **eliminates the direct checked-add
+helper call site from the DMD production kernel** while retaining the
+overflow precondition in source. A static call site count does not
+measure dynamic call frequency or explain the entire XPS delta.
+Under LDC, lack of a separately named function is consistent with
+inlining/internalization, not evidence that numerical checks are
+removed.
+
+The same previously recorded paired XPS results remain:
+DMD baseline **2293.22** versus candidate **1103.70** ns/ROI;
+LDC baseline **587.075** versus candidate **591.35** ns/ROI.
+No new physical-machine measurement was taken by this CI audit.
+
+**Recommendation for the future production development branch:**
+a single internal checked-`ulong` source path, rather than a
+compiler-specific `version (LDC)` branch, is the smallest qualified
+change *for the tested matrix*. This is an engineering recommendation,
+**not approval to change the frozen raster-d v0.2 release**.
+Architecture-specific variants remain research candidates requiring
+their own AArch64/x86-64 regression, codegen and performance evidence.
+Retain the raw XPS measurements and linked CI artifacts as provenance.
