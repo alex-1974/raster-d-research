@@ -19,8 +19,8 @@ for mode in ordinary dip1000; do
             outcome=rejected
         fi
         printf '%s,%s,%s,%s\n' "$compiler" "$mode" "$case_name" "$outcome"
-        if [[ ( "$case_name" == callback_local || "$case_name" == callback_scope_positive ) && "$outcome" != accepted ]]; then
-            echo "FAIL: positive $case_name must compile in $mode" >&2
+        if ! python3 "$root/check_lifetime_diagnostics.py" \
+            "$mode" "$case_name" "$outcome" "$tmp/$case_name.log"; then
             failures=$((failures + 1))
         fi
         if [[ "$outcome" == rejected ]]; then
@@ -28,8 +28,9 @@ for mode in ordinary dip1000; do
         fi
     done
 done
-# Negative cases remain observational pending verified failure reasons.
-# A failed positive callback case must fail the CI job.
+# Outcome/diagnostic expectations are gated only for the pinned baseline
+# compiler versions. Unsafe ordinary-mode acceptances remain documented
+# observations, NOT proof of the safety of those programs.
 if (( failures != 0 )); then
     exit 1
 fi
