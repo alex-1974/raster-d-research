@@ -66,8 +66,11 @@ def main():
         raise SystemExit(f"Patch precondition failed: {data.count(OLD)} matches")
     file.write_text(data.replace(OLD, NEW))
     delta = subprocess.check_output(["git", "-C", str(root), "diff", "--", str(TARGET)], text=True)
-    if len([line for line in delta.splitlines() if line.startswith("@@ ")]) != 1:
-        raise SystemExit("Unexpected patch scope; inspect diff")
+    changed = subprocess.check_output(["git", "-C", str(root), "diff", "--name-only"], text=True).splitlines()
+    if changed != [str(TARGET)] or not delta.startswith("diff --git a/" + str(TARGET)):
+        raise SystemExit(f"Unexpected changed files: {changed}")
+    if file.read_text() != data.replace(OLD, NEW):
+        raise SystemExit("Candidate no longer matches the single anchored replacement")
     print("source_sha256_before=" + hashlib.sha256(data.encode()).hexdigest())
     print("source_sha256_after=" + hashlib.sha256(file.read_bytes()).hexdigest())
     print("frozen_revision=" + sha)
