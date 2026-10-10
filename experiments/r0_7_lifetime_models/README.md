@@ -850,3 +850,60 @@ change *for the tested matrix*. This is an engineering recommendation,
 Architecture-specific variants remain research candidates requiring
 their own AArch64/x86-64 regression, codegen and performance evidence.
 Retain the raw XPS measurements and linked CI artifacts as provenance.
+
+
+## Promotion record — checked ulong accumulation (2026-10-10)
+
+**Promoted to the raster-d development line.** Production
+[PR #209](https://github.com/alex-1974/raster-d/pull/209)
+was merged into `develop` with merge commit
+[`694c539fc54efe14fa9b8a015bcc52728bfa42b6`](https://github.com/alex-1974/raster-d/commit/694c539fc54efe14fa9b8a015bcc52728bfa42b6).
+Its final head was `1f9d91cd1e572cf49aafdf378dd535ac882fcc55`.
+The final production PR workflow
+[38039587278](https://github.com/alex-1974/raster-d/actions/runs/38039587278)
+completed successfully with Linux x86-64 DMD and LDC jobs.
+
+**Production change:** one internal `static if (is(Accumulator == ulong))`
+branch in `executeStrictSum` computes the unsigned overflow
+precondition directly, then commits the sum only when safe. The
+remaining accumulator types retain `tryAddChecked`; plane validation,
+signed row/sample strides, empty handling, result/status contract
+and all public declarations remain unchanged. Three additional
+production unittests cover exactly `ulong.max`, subsequent overflow
+and simultaneous negative row/sample strides. No `version (LDC)`
+or CPU-architecture branch was introduced.
+
+**Research evidence preserved:**
+- Pinned frozen-source baseline
+  `cca63a9b2821cd26a98792d322207c8f07bd734f`.
+- XPS production-path paired A/B (49 values per arm/compiler):
+  DMD median **2293.22 → 1103.70 ns/ROI** (51.9% less runtime);
+  LDC **587.075 → 591.35 ns/ROI** (0.7% increase).
+  These are measurements on the tested XPS configuration only,
+  not general all-platform performance claims.
+- Research CI
+  [38036410055](https://github.com/alex-1974/raster-d-research/actions/runs/38036410055)
+  passed baseline/candidate regressions, including 1,024
+  deterministic `ulong` overflow-oracle cases under both compiler
+  families.
+- Linked production A/B codegen CI
+  [38037058275](https://github.com/alex-1974/raster-d-research/actions/runs/38037058275)
+  confirmed a named DMD `executeStrictSum!(ubyte, ulong)`
+  with one `tryAddChecked` call site in the baseline and
+  none in the candidate. The absence of a named LDC symbol
+  does not establish the precise final instruction sequence.
+
+**Scope / transition:** The optimization is integrated only into
+`raster-d/develop`, **not** into the frozen v0.2 release line or
+`main`. This promotion closes the *checked-ulong optimization*
+subtask, **not** the entire R0.7 lifetime-model comparison.
+The borrowed/retained/lexical ownership questions, architecture
+portability (including AArch64), wider compiler matrix and public
+lifetime guarantees remain separate research and promotion gates.
+This repository keeps the original probes, rejected variants,
+raw benchmark methodology and references; production tests and
+contracts remain owned by `raster-d`.
+
+**Status:** checked-`ulong` optimization **promoted to develop**;
+R0.7 lifetime-model research **ongoing**; research PR #48 remains
+draft pending its independent research review.
