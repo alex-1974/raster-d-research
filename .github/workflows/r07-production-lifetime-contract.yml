@@ -1,0 +1,28 @@
+name: R0.7 production lease-view contract (observational)
+on:
+  push:
+    branches:
+      - research/borrow-lifetime-model-comparison
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  contract:
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - setup: dmd-2.111.0
+            binary: dmd
+          - setup: ldc-1.41.0
+            binary: ldc2
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dlang-community/setup-dlang@v2
+        with:
+          compiler: ${{ matrix.setup }}
+      - name: Verify real raster-d public compile contract and existing unittests
+        shell: bash
+        run: bash experiments/r0_7_lifetime_models/production_contract/run.sh "${{ matrix.binary }}"
