@@ -1,0 +1,106 @@
+// Research-only unittest fragment appended to copied frozen strict_sum.d.
+// Same fragment must be appended to BOTH baseline and candidate.
+version (unittest) {
+    unittest {
+        import raster.descriptor : PlaneDescriptor;
+        import raster.region : Region2D;
+        import raster.view : makeRasterViewAssumeValidated;
+        // Genuine ulong overflow after one successful addition.
+        ulong[3] v = [ulong.max - 2, 2, 1];
+        const PlaneDescriptor[1] planes = [
+            PlaneDescriptor(v.ptr, 3, 1)
+        ];
+        scope auto view = makeRasterViewAssumeValidated!ulong(
+            planes[], Region2D(0, 0, 3, 1));
+        const result = executeStrictSum!(ulong, ulong)(view, 0);
+        assert(!result.ok);
+        assert(result.status == StrictSumStatus.accumulatorOverflow);
+        assert(result.value == 0);
+    }
+    unittest {
+        import raster.descriptor : PlaneDescriptor;
+        import raster.region : Region2D;
+        import raster.view : makeRasterViewAssumeValidated;
+        // Exact upper boundary is accepted; no premature overflow.
+        ulong[3] v = [ulong.max - 2, 1, 1];
+        const PlaneDescriptor[1] planes = [
+            PlaneDescriptor(v.ptr, 3, 1)
+        ];
+        scope auto view = makeRasterViewAssumeValidated!ulong(
+            planes[], Region2D(0, 0, 3, 1));
+        const result = executeStrictSum!(ulong, ulong)(view, 0);
+        assert(result.ok);
+        assert(result.value == ulong.max);
+    }
+    unittest {
+        import raster.descriptor : PlaneDescriptor;
+        import raster.region : Region2D;
+        import raster.view : makeRasterViewAssumeValidated;
+        // Negative row and sample strides preserve logical encounter order.
+        ulong[8] v = [1, 99, 2, 99, 3, 99, 4, 99];
+        const PlaneDescriptor[1] planes = [
+            PlaneDescriptor(v.ptr + 6, -4, -2)
+        ];
+        scope auto view = makeRasterViewAssumeValidated!ulong(
+            planes[], Region2D(0, 0, 2, 2));
+        const result = executeStrictSum!(ulong, ulong)(view, 0);
+        assert(result.ok);
+        assert(result.value == 10);
+    }
+    unittest {
+        import raster.descriptor : PlaneDescriptor;
+        import raster.region : Region2D;
+        import raster.view : makeRasterViewAssumeValidated;
+        // Empty geometry never dereferences an unusable base pointer.
+        const PlaneDescriptor[1] planes = [
+            PlaneDescriptor(null, ptrdiff_t.min, ptrdiff_t.min)
+        ];
+        scope auto view = makeRasterViewAssumeValidated!ulong(
+            planes[], Region2D(size_t.max, size_t.max, 0, 7));
+        const result = executeStrictSum!(ulong, ulong)(view, 0);
+        assert(result.ok);
+        assert(result.value == 0);
+    }
+}
+
+
+version (unittest) {
+    unittest {
+        import raster.descriptor : PlaneDescriptor;
+        import raster.region : Region2D;
+        import raster.view : makeRasterViewAssumeValidated;
+        // Deterministic mathematical oracle over 1,024 mixed small and
+        // boundary-valued sequences. Preserve strict first-overflow status.
+        ulong[8] storage;
+        const ulong[8] values = [
+            0, 1, 2, 255, ulong.max, ulong.max - 1,
+            ulong.max / 2, ulong.max / 2 + 1
+        ];
+        foreach (seed; 0 .. 1024) {
+            size_t state = seed + 1;
+            size_t n = seed % 8 + 1;
+            ulong expected;
+            bool valid = true;
+            foreach (i; 0 .. n) {
+                state = state * cast(size_t) 1664525 + 1013904223;
+                storage[i] = values[(state >> 8) % values.length];
+                if (valid) {
+                    if (storage[i] > ulong.max - expected)
+                        valid = false;
+                    else
+                        expected += storage[i];
+                }
+            }
+            const PlaneDescriptor[1] planes = [
+                PlaneDescriptor(storage.ptr, 8, 1)
+            ];
+            scope auto view = makeRasterViewAssumeValidated!ulong(
+                planes[], Region2D(0, 0, n, 1));
+            const result = executeStrictSum!(ulong, ulong)(view, 0);
+            assert(result.ok == valid);
+            assert(result.status == (valid ? StrictSumStatus.none :
+                StrictSumStatus.accumulatorOverflow));
+            assert(result.value == (valid ? expected : 0));
+        }
+    }
+}

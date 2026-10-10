@@ -1,0 +1,235 @@
+name: R0.7 Lifetime Models Research
+on:
+  push:
+    branches: [research/borrow-lifetime-model-comparison]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  observe:
+    strategy:
+      fail-fast: false
+      matrix:
+        compiler: [dmd-2.111.0, ldc-1.41.0]
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dlang-community/setup-dlang@v2
+        with:
+          compiler: ${{ matrix.compiler }}
+          dub: 1.40.0
+          dc_format: shortname
+      - name: Compile all toy models in ordinary and DIP1000 modes
+        run: bash experiments/r0_7_lifetime_models/compile-matrix.sh "$DC"
+      - name: Run preliminary retained-read microbenchmark
+        shell: bash
+        run: |
+          set -euo pipefail
+          root=experiments/r0_7_lifetime_models
+          "$DC" -O -release -I="$root/probes" \
+            -of=/tmp/r07-lifetime-bench \
+            "$root/benchmark.d" "$root/probes/retained_malloc.d"
+          /tmp/r07-lifetime-bench
+
+      - name: Inspect optimized benchmark object code
+        shell: bash
+        run: |
+          set -euo pipefail
+          root=experiments/r0_7_lifetime_models
+          "$DC" -O -release -c -I="$root/probes" \
+            -of=/tmp/r07-lifetime-codegen.o "$root/benchmark.d"
+          echo '=== relevant compiled symbols ==='
+          nm -C /tmp/r07-lifetime-codegen.o | grep -E 'borrowedSum|retainedSum|callbackSum|benchmark' || true
+          echo '=== object disassembly (first 120 lines) ==='
+          objdump -drC /tmp/r07-lifetime-codegen.o > /tmp/r07-lifetime-codegen.txt
+          sed -n '1,120p' /tmp/r07-lifetime-codegen.txt
+
+      - name: Compare linked baseline and DMD inlining builds
+        shell: bash
+        run: |
+          set -euo pipefail
+          root=experiments/r0_7_lifetime_models
+          extra=()
+          if [[ "$DC" == "dmd" ]]; then
+            extra=(-inline)
+          fi
+          echo '=== linked baseline ==='
+          "$DC" -O -release -I="$root/probes" \
+            -of=/tmp/r07-baseline "$root/benchmark.d" "$root/probes/retained_malloc.d"
+          objdump -drC /tmp/r07-baseline > /tmp/r07-baseline.disasm
+          echo '=== retained read calls (baseline) ==='
+          grep -E 'call.*(RetainedStorage4read|retainedSum)' /tmp/r07-baseline.disasm | head -20 || true
+          echo '=== baseline measurements ==='
+          /tmp/r07-baseline
+          if (( ${#extra[@]} )); then
+            echo '=== linked DMD inline ==='
+            "$DC" -O -release "${extra[@]}" -I="$root/probes" \
+              -of=/tmp/r07-inline "$root/benchmark.d" "$root/probes/retained_malloc.d"
+            objdump -drC /tmp/r07-inline > /tmp/r07-inline.disasm
+            echo '=== retained read calls (inline) ==='
+            grep -E 'call.*(RetainedStorage4read|retainedSum)' /tmp/r07-inline.disasm | head -20 || true
+            echo '=== DMD inline measurements ==='
+            /tmp/r07-inline
+          fi
+
+      - name: Benchmark strided descriptors and retained ROI operations
+        shell: bash
+        run: |
+          set -euo pipefail
+          root=experiments/r0_7_lifetime_models
+          options=(-O -release)
+          if [[ "$DC" == "dmd" ]]; then options+=(-inline); fi
+          "$DC" "${options[@]}" -I="$root/probes" \
+            -of=/tmp/r07-descriptor-bench \
+            "$root/descriptor_benchmark.d" "$root/probes/retained_malloc.d"
+          /tmp/r07-descriptor-bench
+
+      - name: Benchmark frozen raster-d public API as external DUB consumer
+        shell: bash
+        run: |
+          set -euo pipefail
+          raster=/tmp/r07-raster-d-release02
+          git clone --quiet --single-branch --branch release/0.2 \
+            https://github.com/alex-1974/raster-d.git "$raster"
+          git -C "$raster" checkout --detach cca63a9b2821cd26a98792d322207c8f07bd734f
+          echo "frozen raster-d source: $(git -C "$raster" rev-parse HEAD)"
+          consumer=experiments/r0_7_lifetime_models/real_consumer
+          ln -s "$raster" "$consumer/raster-d-local"
+          echo "consumer dependency path: $(readlink -f "$consumer/raster-d-local")"
+          dub run --root="$consumer" --compiler="$DC" --build=release
+          binary="$consumer/build/real-raster-consumer"
+          test -x "$binary"
+          mkdir -p /tmp/r07-codegen
+          nm -anC "$binary" > /tmp/r07-codegen/symbols.txt
+          objdump -drwC "$binary" > /tmp/r07-codegen/consumer.disasm
+          echo '=== strict sum / checked addition linked symbols ==='
+          grep -Ei 'strict.sum|strictsum|tryaddchecked|rasterSum|reduction.*sum' \
+            /tmp/r07-codegen/symbols.txt | head -60 || true
+          echo '=== strict sum / checked addition disassembly references ==='
+          grep -Ein -m 60 'strict.sum|strictsum|tryaddchecked' \
+            /tmp/r07-codegen/consumer.disasm || true
+          echo '=== codegen audit provenance ==='
+          sha256sum "$binary"
+          ls -lh "$binary" /tmp/r07-codegen/*
+
+      - name: C++20 ROI reference on same runner
+        shell: bash
+        run: |
+          set -euo pipefail
+          c++ --version > /tmp/r07-cxx-version.txt
+          sed -n '1p' /tmp/r07-cxx-version.txt
+          c++ -std=c++20 -O3 -DNDEBUG \
+            experiments/r0_7_lifetime_models/roi_sum_cpp.cpp \
+            -o /tmp/r07-roi-cpp
+          /tmp/r07-roi-cpp
+
+      - name: C++20 checked unsigned ROI reduction reference
+        shell: bash
+        run: |
+          set -euo pipefail
+          c++ -std=c++20 -O3 -DNDEBUG \
+            experiments/r0_7_lifetime_models/roi_sum_checked_cpp.cpp \
+            -o /tmp/r07-roi-checked-cpp
+          /tmp/r07-roi-checked-cpp
+
+      - name: Preserve linked consumer disassembly evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: r07-linked-codegen-${{ matrix.compiler }}
+          path: /tmp/r07-codegen/
+          if-no-files-found: warn
+          retention-days: 14
+
+      - name: Research checked strict-sum loop shapes
+        shell: bash
+        run: |
+          set -euo pipefail
+          root=experiments/r0_7_lifetime_models
+          options=(-O -release)
+          if [[ "$DC" == "dmd" ]]; then options+=(-inline); fi
+          "$DC" "${options[@]}" -of=/tmp/r07-loop-shapes \
+            "$root/strict_sum_loop_shapes.d"
+          /tmp/r07-loop-shapes
+          objdump -drwC /tmp/r07-loop-shapes > /tmp/r07-codegen-loop-shapes.txt
+          nm -anC /tmp/r07-loop-shapes > /tmp/r07-codegen-loop-shapes.symbols
+          grep -E 'strictSum|strict_sum_loop_shapes' /tmp/r07-codegen-loop-shapes.symbols | head -40 || true
+          echo "loop shapes binary sha256:"
+          sha256sum /tmp/r07-loop-shapes
+
+      - name: Preserve loop-shape linked codegen
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: r07-loop-shapes-codegen-${{ matrix.compiler }}
+          path: |
+            /tmp/r07-codegen-loop-shapes.txt
+            /tmp/r07-codegen-loop-shapes.symbols
+          if-no-files-found: warn
+          retention-days: 14
+
+      - name: Qualify frozen strict-sum checked-add candidate
+        shell: bash
+        run: |
+          set -euo pipefail
+          root=experiments/r0_7_lifetime_models
+          sha=cca63a9b2821cd26a98792d322207c8f07bd734f
+          for arm in baseline candidate; do
+            git clone --quiet https://github.com/alex-1974/raster-d.git "/tmp/r07-qualified-$arm"
+            git -C "/tmp/r07-qualified-$arm" checkout --quiet --detach "$sha"
+          done
+          python3 "$root/patch_strict_sum_ulong.py" /tmp/r07-qualified-candidate |
+            tee /tmp/r07-candidate-patch.txt
+          for arm in baseline candidate; do
+            # Inject the identical research-only regression fragment into
+            # each disposable checkout; do not modify the production repo.
+            cat "$root/strict_sum_ulong_regression.dfrag" \
+              >> "/tmp/r07-qualified-$arm/source/raster/internal/strict_sum.d"
+            echo "=== strict-sum unit tests: $arm ($DC) ==="
+            dub test --root="/tmp/r07-qualified-$arm" --compiler="$DC" --force
+          done
+          echo "=== compare candidate diff with frozen source ==="
+          git -C /tmp/r07-qualified-candidate diff --check
+          git -C /tmp/r07-qualified-candidate diff --stat
+      - name: Inspect linked production-source A/B codegen
+        shell: bash
+        run: |
+          set -euo pipefail
+          root=experiments/r0_7_lifetime_models
+          mkdir -p /tmp/r07-production-audit
+          for arm in baseline candidate; do
+            consumer="/tmp/r07-audit-consumer-$arm"
+            mkdir -p "$consumer"
+            cp "$root/real_consumer/dub.sdl" "$consumer/"
+            cp -r "$root/real_consumer/source" "$consumer/"
+            ln -s "/tmp/r07-qualified-$arm" "$consumer/raster-d-local"
+            dub build --root="$consumer" --compiler="$DC" --build=release
+            binary="$consumer/build/real-raster-consumer"
+            test -x "$binary"
+            sha256sum "$binary" >> /tmp/r07-production-audit/binaries.sha256
+            nm -anC "$binary" > "/tmp/r07-production-audit/$DC-$arm.symbols"
+            objdump -drwC "$binary" > "/tmp/r07-production-audit/$DC-$arm.disasm"
+          done
+          # The analyzer accepts both compiler arms; in CI supply the
+          # current compiler under its canonical name and inspect its subset.
+          python3 "$root/audit_production_codegen.py" \
+            /tmp/r07-production-audit --compiler "$DC"
+      - name: Preserve production-source A/B linked codegen
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: r07-production-ab-codegen-${{ matrix.compiler }}
+          path: /tmp/r07-production-audit/
+          if-no-files-found: warn
+          retention-days: 14
+
+      - name: Preserve checked-add qualification patch
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: r07-checked-add-patch-${{ matrix.compiler }}
+          path: /tmp/r07-candidate-patch.txt
+          if-no-files-found: warn
+          retention-days: 14

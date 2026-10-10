@@ -1,0 +1,7 @@
+name "r07-real-raster-consumer"
+description "Research-only consumer of frozen raster-d release/0.2"
+targetType "executable"
+targetPath "build"
+targetName "real-raster-consumer"
+sourcePaths "source"
+dependency "raster-d" path="raster-d-local"
