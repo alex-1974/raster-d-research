@@ -169,3 +169,31 @@ jobs:
             /tmp/r07-codegen-loop-shapes.symbols
           if-no-files-found: warn
           retention-days: 14
+
+      - name: Qualify frozen strict-sum checked-add candidate
+        shell: bash
+        run: |
+          set -euo pipefail
+          root=experiments/r0_7_lifetime_models
+          sha=cca63a9b2821cd26a98792d322207c8f07bd734f
+          for arm in baseline candidate; do
+            git clone --quiet https://github.com/alex-1974/raster-d.git "/tmp/r07-qualified-$arm"
+            git -C "/tmp/r07-qualified-$arm" checkout --quiet --detach "$sha"
+          done
+          python3 "$root/patch_strict_sum_ulong.py" /tmp/r07-qualified-candidate |
+            tee /tmp/r07-candidate-patch.txt
+          for arm in baseline candidate; do
+            echo "=== strict-sum unit tests: $arm ($DC) ==="
+            dub test --root="/tmp/r07-qualified-$arm" --compiler="$DC" --force
+          done
+          echo "=== compare candidate diff with frozen source ==="
+          git -C /tmp/r07-qualified-candidate diff --check
+          git -C /tmp/r07-qualified-candidate diff --stat
+      - name: Preserve checked-add qualification patch
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: r07-checked-add-patch-${{ matrix.compiler }}
+          path: /tmp/r07-candidate-patch.txt
+          if-no-files-found: warn
+          retention-days: 14
