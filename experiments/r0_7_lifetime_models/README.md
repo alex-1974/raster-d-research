@@ -715,3 +715,50 @@ matrix; retain existing frozen-source tests and extend candidate
 signed/unsigned overflow cases before any promotion. No XPS A/B
 numbers or production speedups are claimed before execution. This
 is a research-only copy; the production repository is untouched.
+
+
+## Compiler and architecture dispatch decision (2026-10-10)
+
+The XPS paired *public production-path* A/B experiment reported
+49 observations per compiler/arm. The local observed medians were:
+
+| Compiler | Frozen helper baseline (ns/ROI) | Inline-`ulong` candidate (ns/ROI) |
+| --- | ---: | ---: |
+| DMD 2.111.0 | 2293.22 | 1103.70 |
+| LDC 1.41.0 | 587.075 | 591.35 |
+
+All four groups reported checksum `391680000`. These results
+refer to **one XPS architecture, one integer operation and one
+compiler configuration**. They cannot establish results on AArch64,
+other x86 CPUs, other accumulator types or newer frontend versions.
+
+D `version (...)` can select a compiler-specific implementation
+(e.g. `version (LDC)` with an `else` for the default), and a
+separate architecture condition (e.g. `version (X86_64)`).
+These are **different dimensions**:
+a compiler branch must not implicitly stand for an architecture,
+and an architecture branch must not silently encode compiler
+performance assumptions. Use a single compile-time dispatch
+boundary within an internal kernel, **not scattered conditionals**
+across the public API or numeric contract.
+
+**Decision for now:** do not introduce version-specific production
+paths. The inline `ulong` candidate might outperform the helper
+for DMD without penalizing LDC, and a *single* source path should
+be preferred if it qualifies across the supported compiler and
+architecture matrix. If future compiler/CPU combinations require
+different implementations, isolate each behind one internal
+selection point, retain the same typed result/status and scalar
+fallback, and test every selected and unselected path explicitly
+before promotion. Neither CPU SIMD feature detection nor AArch64
+performance has been evaluated by the existing XPS data.
+
+CI now independently runs the frozen-source complete DUB unit
+tests for baseline and the one-site `ulong` candidate using DMD
+2.111.0 and LDC 1.41.0. This is a **new gate awaiting completion**,
+not a claim that the additional tests have passed. A successful
+job would still not substitute for a dedicated differential
+numeric oracle across all supported sample/accumulator pairs and
+stride/overflow boundaries. Retain the XPS `raw.csv`,
+`metadata.txt` and disassembly alongside this record before
+accepting performance evidence into production.
