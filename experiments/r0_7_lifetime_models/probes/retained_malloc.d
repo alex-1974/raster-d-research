@@ -129,3 +129,40 @@ unittest {
     }
     assert(finalReleases == before + 2);
 }
+
+
+// R0.7 lifecycle coverage: repeated assignment, alias retention and
+// final release count. The prototype remains @system and single-threaded.
+unittest {
+    const before = finalReleases;
+    {
+        auto original = RetainedStorage.allocate(4);
+        original.write(0, 42);
+        auto alias1 = original;
+        auto alias2 = alias1;
+        auto replacement = RetainedStorage.allocate(4);
+        replacement.write(0, 73);
+        alias1 = replacement;
+        assert(alias1.read(0) == 73);
+        assert(alias2.read(0) == 42);
+        assert(original.read(0) == 42);
+        alias2 = alias1;
+        assert(alias2.read(0) == 73);
+        assert(original.read(0) == 42);
+    }
+    assert(finalReleases == before + 2);
+}
+
+unittest {
+    const before = finalReleases;
+    {
+        auto first = RetainedStorage.allocate(4);
+        first.write(0, 31);
+        auto second = first;
+        // Self-assignment must preserve the live resource.
+        first = first;
+        assert(first.read(0) == 31);
+        assert(second.read(0) == 31);
+    }
+    assert(finalReleases == before + 1);
+}
