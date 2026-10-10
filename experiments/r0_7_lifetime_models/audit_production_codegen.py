@@ -37,10 +37,11 @@ def sections(path):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("evidence_directory", type=Path)
+    ap.add_argument("--compiler", choices=["dmd", "ldc2"], help="Audit one compiler in CI")
     args = ap.parse_args()
     root = args.evidence_directory
     report = {}
-    for compiler in ("dmd", "ldc2"):
+    for compiler in ((args.compiler,) if args.compiler else ("dmd", "ldc2")):
         for arm in ("baseline", "candidate"):
             prefix = f"{compiler}-{arm}"
             sym = root / (prefix + ".symbols")
