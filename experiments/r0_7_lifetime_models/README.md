@@ -1,7 +1,12 @@
 # R0.7 — Borrowed vs retained vs lexical raster access
 
-Status: **research only / not promoted**. Source baseline: raster-d release/0.2,
-PR #208 observations on DMD 2.111.0 and LDC 1.41.0 (2026-10-08).
+Status: **production checked-ulong subtask promoted** through raster-d PR #209;
+**borrow/retained/callback model comparison is research only**. The production
+contract audit is qualified on pinned DMD 2.111.0 / LDC 1.41.0; no new lifetime
+API is proposed. See `raster_lease_view_contract_audit.md` and
+`production_contract/README.md` for the narrower, current findings.
+Original source baseline: raster-d release/0.2, PR #208 observations
+(2026-10-08).
 
 ## Question
 
@@ -986,3 +991,36 @@ escape probe (rather than a signature mismatch), a separate
 settings and an explicit policy for ordinary mode versus DIP1000.
 The malloc-backed `@system` prototype is single-threaded, not a
 production ownership implementation.
+
+
+## R0.7 integration checkpoint (2026-10-10)
+
+The final real-production contract probe at commit `253f745d` passed
+[workflow 38042142621](https://github.com/alex-1974/raster-d-research/actions/runs/38042142621)
+for both DMD 2.111.0 and LDC 1.41.0, including the pinned unmodified
+`raster-d` production `dub test` suite. The companion observational
+research CI also passed:
+[workflow 38042142624](https://github.com/alex-1974/raster-d-research/actions/runs/38042142624).
+
+Qualified observed compile cases for both toolchains: valid view/ROI/copied
+lease ACCEPT; returning a borrow from a non-return-annotated parameter
+REJECT in both modes; globally storing a borrow or letting it escape
+through a closure ACCEPT under ordinary mode and REJECT with DIP1000,
+with the latter rejections attributable to lifetime diagnostics.
+
+**Disposition: stop expanding this ownership-model comparison unless an
+actual consumer need or reproducible failure emerges.** Retain the
+existing copyable, non-atomic `RasterLease` shared owner and cheap borrowed
+`RasterView`; do not add a new callback/unique-owner family, borrow checker
+or hot-path reference counting just to address hypothetical misuse.
+`@safe` does not imply a full cross-module borrow-lifetime proof
+under ordinary compiler settings. No unconditional concurrent shared
+owner guarantee is made.
+
+This statement closes the present *investigation tranche*, not the entire
+34-file research PR nor the general language/toolchain questions. Raw
+probes and historical observations stay in their original research branch.
+The research PR is intentionally kept draft against its existing `main`
+base: the workspace does not promote experimental history wholesale onto a
+qualified/released branch. A future production change must be separately
+selected, justified and gated.
