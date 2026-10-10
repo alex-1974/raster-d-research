@@ -183,6 +183,10 @@ jobs:
           python3 "$root/patch_strict_sum_ulong.py" /tmp/r07-qualified-candidate |
             tee /tmp/r07-candidate-patch.txt
           for arm in baseline candidate; do
+            # Inject the identical research-only regression fragment into
+            # each disposable checkout; do not modify the production repo.
+            cat "$root/strict_sum_ulong_regression.dfrag" \
+              >> "/tmp/r07-qualified-$arm/source/raster/internal/strict_sum.d"
             echo "=== strict-sum unit tests: $arm ($DC) ==="
             dub test --root="/tmp/r07-qualified-$arm" --compiler="$DC" --force
           done
