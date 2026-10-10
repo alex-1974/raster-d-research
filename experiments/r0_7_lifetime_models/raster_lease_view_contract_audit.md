@@ -106,3 +106,37 @@ as proof that consumers cannot violate borrowed-resource lifetime.
 **No production changes authorized by this audit.** Keep release/API-freeze
 branches untouched, preserve original research and perform selective promotion
 only on demonstrated defects. No `containers-d` repository writes.
+
+
+## Executable real-consumer tranche
+
+`production_contract/run.sh` checks out the exact integrated production
+merge `694c539fc54efe14fa9b8a015bcc52728bfa42b6` in a disposable
+directory, compiles external source importing the actual public raster API
+under ordinary and DIP1000 modes, and runs the unmodified production
+`dub test` suite. The dedicated research workflow
+`.github/workflows/r07-production-lifetime-contract.yml` covers
+DMD 2.111.0 and LDC 1.41.0.
+
+Cases:
+- `positive.d`: borrowed read-only view, ROI, value read, copied retained
+  lease with a second borrow. **Must compile**.
+- `escape_return.d`: attempts to return a view borrowed from a parameter.
+- `escape_global.d`: attempts to assign a borrowed view to a module-global.
+- `escape_closure.d`: attempts to store an escaping capturing delegate.
+
+The latter three are **observational** until both expected outcomes and
+specific failure reasons are verified from this production-consumer run.
+Do not mark acceptance as safe; do not misclassify unrelated errors as lifetime
+enforcement. This is intentionally a small matrix instead of a new generic
+borrow-checker framework.
+
+The production `dub test` invocation reuses existing lifecycle and resource
+release tests rather than introducing another owner implementation. After CI
+results are recorded, add *only* missing real-owner edge tests if concrete
+gaps remain; do not duplicate the already qualified toy retained-owner
+life-cycle model.
+
+This stage does **not** change the public lease/view ABI, do not alter
+`containers-d` ownership rules, and do not imply that non-atomic retained
+handles are cross-thread safe. CI qualification is pending as of this edit.
