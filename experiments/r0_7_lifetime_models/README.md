@@ -762,3 +762,30 @@ numeric oracle across all supported sample/accumulator pairs and
 stride/overflow boundaries. Retain the XPS `raw.csv`,
 `metadata.txt` and disassembly alongside this record before
 accepting performance evidence into production.
+
+
+## Added disposable-clone boundary regression matrix (2026-10-10)
+
+The previous full `dub test` CI run
+[38035879584](https://github.com/alex-1974/raster-d-research/actions/runs/38035879584)
+completed successfully with both DMD 2.111.0 and LDC 1.41.0
+for the frozen baseline and single-site `ulong` candidate.
+
+A new **research-only** fragment,
+`strict_sum_ulong_regression.dfrag`, is appended verbatim to the
+internal strict-sum module in **both disposable CI clones** before
+their existing `dub test` invocations. It probes:
+(1) actual overflow following a successful addition,
+(2) exactly `ulong.max` accepted without overflow,
+(3) simultaneously negative row and sample strides with expected
+logical sum, and (4) empty input with a null pointer and extreme
+strides. Production source remains untouched. The resulting new
+CI run must pass before these added test cases are credited.
+
+This is a deterministic expected-value matrix, **not yet** a
+wide randomized differential oracle; future qualification should
+cover validated public view construction, representative all-type
+accumulator legality, invalid plane ordering and architecture
+variation. The existing XPS performance evidence is x86-64-only;
+a `version (LDC)` or `version (X86_64)` path remains a contingent
+future engineering choice rather than an adopted implementation.
