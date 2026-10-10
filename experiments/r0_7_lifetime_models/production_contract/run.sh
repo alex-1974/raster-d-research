@@ -8,7 +8,8 @@ TMP="$(mktemp -d)"
 trap 'rm -rf "$TMP"' EXIT
 git clone --quiet https://github.com/alex-1974/raster-d.git "$TMP/raster-d"
 git -C "$TMP/raster-d" checkout --quiet --detach "$RASTER_SHA"
-"$COMPILER" --version | head -1
+"$COMPILER" --version >"$TMP/compiler-version.log" 2>&1
+sed -n "1,3p" "$TMP/compiler-version.log"
 printf 'compiler,mode,case,result\n'
 for mode in ordinary dip1000; do
     flags=()
