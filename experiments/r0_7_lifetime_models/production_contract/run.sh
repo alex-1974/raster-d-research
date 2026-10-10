@@ -23,6 +23,7 @@ for mode in ordinary dip1000; do
             outcome=rejected
         fi
         printf '%s,%s,%s,%s\n' "$COMPILER" "$mode" "$probe" "$outcome"
+        python3 "$ROOT/check_observations.py" "$mode" "$probe" "$outcome" "$log"
         if [[ "$probe" == positive && "$outcome" != accepted ]]; then
             echo 'FAIL: valid public view API consumer did not compile' >&2
             cat "$log" >&2
