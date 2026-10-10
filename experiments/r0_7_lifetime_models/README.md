@@ -907,3 +907,42 @@ contracts remain owned by `raster-d`.
 **Status:** checked-`ulong` optimization **promoted to develop**;
 R0.7 lifetime-model research **ongoing**; research PR #48 remains
 draft pending its independent research review.
+
+
+## R0.7 next qualification tranche: retained ownership and escape proofs
+
+The checked-`ulong` optimization has already been promoted to
+`raster-d/develop` (production PR #209); it is no longer a reason to
+close or merge unrelated lifetime research.
+
+**Current evidence boundary:** `compile-matrix.sh` observes ordinary
+and DIP1000 compiler decisions for toy escaped borrows, owned returns,
+and callback cases, but only **positive** callback acceptance is a
+hard CI gate. A rejected compilation is *not* a proven lifetime
+rejection without checking the diagnostic reason. The malloc-backed
+`RetainedStorage` model remains `@system`, single-threaded, and is
+not a contract for `RasterLease`.
+
+The following promotion gates remain:
+
+| Model | Evidence required | Not yet established |
+| --- | --- | --- |
+| Borrowed view | Positive legitimate borrow and negative return/global/closure escape, diagnostic-specific under ordinary and DIP1000 compilers | Uniform rejection of unsafe escape across compiler modes |
+| Retained owner | Real resource ownership, copy/move/assignment/self-assignment and exactly-one final free; disposal on allocation failure | Exception/OOM paths, concurrency, real raster descriptor parity |
+| Lexical callback | Positive scope use plus attempted closure/global/return escape under relevant compiler flags | General no-escape guarantee independent of caller discipline |
+| All models | Same underlying raster workload, peak storage and allocations, machine code, warm/cold and XPS cross-check | Broad cross-architecture performance and safety equivalence |
+
+**Added prototype tests:** alias chains with reassignment and resource
+release, plus explicit self-assignment, in
+`probes/retained_malloc.d`. They are run by the existing
+`compile-matrix.sh` unittest executable on both CI compiler
+families. This new revision must pass CI before these additional
+cases count as evidence. These are tests of the toy model, not of
+the released `RasterLease`.
+
+**Transition decision:** preserve research PR #48 as a Draft
+against its current base rather than merging the full experimental
+branch into a qualified integration line. Accepted performance
+work was selectively promoted through production PR #209. Future
+lifetime changes likewise need independent qualified promotion,
+not wholesale research merging.
