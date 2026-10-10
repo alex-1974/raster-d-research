@@ -89,3 +89,6 @@ for compiler in ("dmd","ldc2"):
         raise SystemExit(f"baseline/candidate checksum mismatch: {compiler}")
 print(f"Validated paired research observations: {sys.argv[2]}")
 PY
+
+# Read-only linked binary audit (baseline and candidate, both compilers).
+python3 "$SRC/audit_production_codegen.py" "$OUT"
