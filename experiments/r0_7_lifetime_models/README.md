@@ -946,3 +946,43 @@ branch into a qualified integration line. Accepted performance
 work was selectively promoted through production PR #209. Future
 lifetime changes likewise need independent qualified promotion,
 not wholesale research merging.
+
+
+## Diagnostic-qualified lifetime compile matrix (2026-10-10)
+
+CI [38040669297](https://github.com/alex-1974/raster-d-research/actions/runs/38040669297)
+passed the retained-owner alias/assignment and self-assignment
+unittests under DMD 2.111.0 and LDC 1.41.0. The compile-matrix
+observations for these versions showed:
+
+| Probe | Ordinary | `-preview=dip1000` |
+| --- | --- | --- |
+| `borrowed_escape` | accepted | rejected: scope parameter may not be returned |
+| `owned_return` | accepted | accepted |
+| `callback_local` / `callback_scope_positive` | accepted | accepted |
+| `callback_global_capture` | accepted | rejected: scope variable assigned to global |
+| `callback_closure_capture` | accepted | rejected: scope variable assigned to global |
+| `callback_escape` | rejected: callback signature incompatible | rejected: callback signature incompatible |
+
+**Correction:** `callback_escape` does *not* establish lexical
+lifetime protection; it is a callback-signature rejection. The
+ordinary-mode **acceptance** of global and closure escapes means the
+toy API does not prove no-escape safety there. These observations
+cannot be turned into unconditional safety claims or generalized to
+future compilers.
+
+The new `check_lifetime_diagnostics.py` asserts both the expected
+accept/reject outcome **and a matching diagnostic reason** for
+negative cases; it is called from `compile-matrix.sh` for every
+compiler/mode/probe combination. Unexpected errors (missing imports,
+syntax errors, mismatched types) cannot masquerade as passing
+lifetime failures. This pins the *observed compiler behavior* as an
+experimental regression contract, not as a general language contract.
+Its first run is pending qualification.
+
+Remaining research work includes a well-typed negative callback
+escape probe (rather than a signature mismatch), a separate
+`@safe` public API negative suite under the actual consumer compiler
+settings and an explicit policy for ordinary mode versus DIP1000.
+The malloc-backed `@system` prototype is single-threaded, not a
+production ownership implementation.
