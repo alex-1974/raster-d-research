@@ -789,3 +789,25 @@ accumulator legality, invalid plane ordering and architecture
 variation. The existing XPS performance evidence is x86-64-only;
 a `version (LDC)` or `version (X86_64)` path remains a contingent
 future engineering choice rather than an adopted implementation.
+
+
+## Linked production A/B call-site audit (2026-10-10)
+
+`audit_production_codegen.py` reads **linked** baseline/candidate
+`nm -anC` and `objdump -drwC` artifacts, separately scopes named
+`executeStrictSum` instantiations and lists calls into
+`tryAddChecked`. It produces `production-codegen-audit.json`.
+
+The XPS A/B runner now invokes this read-only audit after measurement.
+The CI workflow also rebuilds the identical real-consumer source
+against both frozen-source clones and retains per-compiler linked
+codegen artifacts. CI's per-compiler audit runs via `--compiler dmd`
+or `--compiler ldc2`.
+
+**Evidence boundary:** a call counted within a named function is a
+static call site, not a runtime call count; missing symbols may mean
+inlining or internalization, *not* removal of overflow tests.
+Compare matching `ubyte, ulong` instantiations only, and check the
+machine instruction path, compiler flags, and public status before
+promotion. The new CI codegen collection has not yet been qualified.
+No change to the raster-d v0.2 public API or production source.
