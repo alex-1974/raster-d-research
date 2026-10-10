@@ -193,6 +193,38 @@ jobs:
           echo "=== compare candidate diff with frozen source ==="
           git -C /tmp/r07-qualified-candidate diff --check
           git -C /tmp/r07-qualified-candidate diff --stat
+      - name: Inspect linked production-source A/B codegen
+        shell: bash
+        run: |
+          set -euo pipefail
+          root=experiments/r0_7_lifetime_models
+          mkdir -p /tmp/r07-production-audit
+          for arm in baseline candidate; do
+            consumer="/tmp/r07-audit-consumer-$arm"
+            mkdir -p "$consumer"
+            cp "$root/real_consumer/dub.sdl" "$consumer/"
+            cp -r "$root/real_consumer/source" "$consumer/"
+            ln -s "/tmp/r07-qualified-$arm" "$consumer/raster-d-local"
+            dub build --root="$consumer" --compiler="$DC" --build=release
+            binary="$consumer/build/real-raster-consumer"
+            test -x "$binary"
+            sha256sum "$binary" >> /tmp/r07-production-audit/binaries.sha256
+            nm -anC "$binary" > "/tmp/r07-production-audit/$DC-$arm.symbols"
+            objdump -drwC "$binary" > "/tmp/r07-production-audit/$DC-$arm.disasm"
+          done
+          # The analyzer accepts both compiler arms; in CI supply the
+          # current compiler under its canonical name and inspect its subset.
+          python3 "$root/audit_production_codegen.py" \
+            /tmp/r07-production-audit --compiler "$DC"
+      - name: Preserve production-source A/B linked codegen
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: r07-production-ab-codegen-${{ matrix.compiler }}
+          path: /tmp/r07-production-audit/
+          if-no-files-found: warn
+          retention-days: 14
+
       - name: Preserve checked-add qualification patch
         if: always()
         uses: actions/upload-artifact@v4
