@@ -38,6 +38,12 @@ A successful `positive_import.d` compilation is a prerequisite to interpreting e
 
 The workflow plans DMD 2.111.0, DMD 2.113.0, LDC 1.41.0 and LDC 1.43.0 on Ubuntu 24.04, both debug and release consumer builds, plus pinned release-native `dub test`. No workflow result should be marked PASS until its logs and exact commit have been independently inspected.
 
+## Additional impossibility boundary for a strong observer
+
+If an observer continues holding an ordinary `RasterLease` so it can safely query the count, **its own reference prevents the count from reaching zero**. It can observe `1` but not the final free. If it releases its owner, its ordinary public handle becomes inert, and it cannot safely inspect the former control block. Therefore a snapshot getter on an ordinary owner is not, by itself, a last-release detector even for an observer that polls. A non-owning observer of a freed control block would instead require a separate safe lifetime protocol (for example some form of weak state), which the published API does not have. This follows from the inspected ownership transitions; it is **reasoning**, not measured compiler behavior.
+
+This distinction is independent of a cache trying to infer noalias from `count == 1`: unique retained-owner count is neither physical-memory uniqueness nor thread exclusivity.
+
 ## Next research questions
 
 - If the lifetime negative behaves differently among compilers, isolate the language/toolchain boundary before drawing safety conclusions.
