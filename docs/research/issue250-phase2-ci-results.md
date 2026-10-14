@@ -68,11 +68,11 @@ Earlier runs had only required nonzero compiler exit status plus absence of miss
 
 | Negative | Mandatory compiler diagnostic fragment |
 |---|---|
-| `negative_has_backing` | `no property \`hasBacking\`` |
-| `negative_physical_bytes` | `no property \`tryPhysicalResourceBytes\`` |
-| `negative_owner_count` | `no property \`owner_\`` |
-| `negative_callback` | `member \`ResourceEntry\` is not visible` |
-| `negative_borrow_escape` | `escapes a reference to local variable \`local\`` |
+| `negative_has_backing` | `no property hasBacking` |
+| `negative_physical_bytes` | `no property tryPhysicalResourceBytes` |
+| `negative_owner_count` | `no property owner_` |
+| `negative_callback` | `member ResourceEntry is not visible` |
+| `negative_borrow_escape` | `escapes a reference to local variable local` |
 
 The final 4/4 green result therefore establishes that the intended package-visibility and DIP1000 lifetime errors—not merely unrelated warnings—caused rejection in all tested compilers. Both debug and release external runtime and pinned native unittests remained green.
 
