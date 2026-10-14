@@ -1,0 +1,6 @@
+name "raster-issue250-lease-consumer"
+description "Independent RasterLease lifetime API research consumer"
+license "MIT"
+targetType "executable"
+sourcePaths "source"
+dependency "raster-d" version="==0.2.0"

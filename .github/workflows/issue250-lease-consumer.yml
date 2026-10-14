@@ -1,0 +1,62 @@
+name: issue250 RasterLease external lifetime research
+
+on:
+  push:
+    branches:
+      - research/issue250-lease-observability
+    paths:
+      - 'experiments/issue250_lease_consumer/**'
+      - '.github/workflows/issue250-lease-consumer.yml'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'experiments/issue250_lease_consumer/**'
+      - '.github/workflows/issue250-lease-consumer.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  lease:
+    name: ${{ matrix.toolchain }} public/private lifecycle
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - toolchain: dmd-2.111.0
+            compiler: dmd
+          - toolchain: dmd-2.113.0
+            compiler: dmd
+          - toolchain: ldc-1.41.0
+            compiler: ldc2
+          - toolchain: ldc-1.43.0
+            compiler: ldc2
+    steps:
+      - name: Checkout research only
+        uses: actions/checkout@v4
+
+      - name: Install D toolchain
+        uses: dlang-community/setup-dlang@v2
+        with:
+          compiler: ${{ matrix.toolchain }}
+
+      - name: Verify published raster-d last-release unittests
+        shell: bash
+        run: |
+          set -euo pipefail
+          git clone --quiet --depth 1 --branch v0.2.0 \
+            https://github.com/alex-1974/raster-d.git \
+            "$RUNNER_TEMP/raster-d-v0.2.0"
+          test "$(git -C "$RUNNER_TEMP/raster-d-v0.2.0" rev-parse HEAD)" = \
+            "2f2415851e45001df92ce56dad409f680684ba8d"
+          cd "$RUNNER_TEMP/raster-d-v0.2.0"
+          dub test --compiler=${{ matrix.compiler }} --force
+
+      - name: Independent public DUB and compile-negative gates
+        shell: bash
+        run: |
+          bash experiments/issue250_lease_consumer/run_matrix.sh ${{ matrix.compiler }}
