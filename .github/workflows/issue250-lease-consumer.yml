@@ -7,6 +7,12 @@ on:
     paths:
       - 'experiments/issue250_lease_consumer/**'
       - '.github/workflows/issue250-lease-consumer.yml'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'experiments/issue250_lease_consumer/**'
+      - '.github/workflows/issue250-lease-consumer.yml'
   workflow_dispatch:
 
 permissions:
