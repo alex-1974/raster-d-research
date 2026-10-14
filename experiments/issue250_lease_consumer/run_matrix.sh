@@ -55,8 +55,27 @@ for probe in negative_has_backing negative_physical_bytes \
         cat "$tmp/$probe.log"
         exit 1
     fi
+    case "$probe" in
+        negative_has_backing)
+            expected='no property `hasBacking`'
+            ;;
+        negative_physical_bytes)
+            expected='no property `tryPhysicalResourceBytes`'
+            ;;
+        negative_owner_count)
+            expected='no property `owner_`'
+            ;;
+        negative_callback)
+            expected='member `ResourceEntry` is not visible'
+            ;;
+    esac
+    if ! grep -Fq "$expected" "$tmp/$probe.log"; then
+        echo "FAIL: $probe rejected for an unrelated reason"
+        cat "$tmp/$probe.log"
+        exit 1
+    fi
     echo "DIAGNOSTIC[$probe]:"
-    sed -n "1,6p" "$tmp/$probe.log"
+    tail -n 12 "$tmp/$probe.log"
     echo "PASS: $probe compile-negative"
 done
 
@@ -69,7 +88,13 @@ if "$compiler" -c -preview=dip1000 "${imports[@]}" \
     echo "FAIL: local borrowed RasterView escaped under DIP1000"
     exit 1
 fi
+if ! grep -Fq 'escapes a reference to local variable `local`' \
+    "$tmp/negative_borrow_escape.log"; then
+    echo "FAIL: borrowed-view negative rejected for an unrelated reason"
+    cat "$tmp/negative_borrow_escape.log"
+    exit 1
+fi
 echo "DIAGNOSTIC[negative_borrow_escape]:"
-sed -n "1,8p" "$tmp/negative_borrow_escape.log"
+tail -n 12 "$tmp/negative_borrow_escape.log"
 echo "PASS: negative_borrow_escape / DIP1000 compile-only"
 echo "PASS: external public-contract gates on $compiler"
