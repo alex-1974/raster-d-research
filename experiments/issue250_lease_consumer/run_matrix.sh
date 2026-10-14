@@ -55,6 +55,8 @@ for probe in negative_has_backing negative_physical_bytes \
         cat "$tmp/$probe.log"
         exit 1
     fi
+    echo "DIAGNOSTIC[$probe]:"
+    sed -n "1,6p" "$tmp/$probe.log"
     echo "PASS: $probe compile-negative"
 done
 
@@ -67,5 +69,7 @@ if "$compiler" -c -preview=dip1000 "${imports[@]}" \
     echo "FAIL: local borrowed RasterView escaped under DIP1000"
     exit 1
 fi
+echo "DIAGNOSTIC[negative_borrow_escape]:"
+sed -n "1,8p" "$tmp/negative_borrow_escape.log"
 echo "PASS: negative_borrow_escape / DIP1000 compile-only"
 echo "PASS: external public-contract gates on $compiler"
